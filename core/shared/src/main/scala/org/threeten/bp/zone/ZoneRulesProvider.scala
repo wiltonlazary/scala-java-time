@@ -183,16 +183,7 @@ object ZoneRulesProvider {
   }
 
   {
-    val providers: java.util.Iterator[ZoneRulesProvider] = ZoneRulesProviderPlatformHelper.loadAdditionalZoneRulesProviders
-    while(providers.hasNext) {
-      val provider = providers.next()
-      try registerProvider0(provider)
-      catch {
-        case ex: ServiceConfigurationError =>
-          if (!ex.getCause.isInstanceOf[SecurityException])
-            throw ex
-      }
-    }
+    ZoneRulesInitializer.initialize();
   }
 }
 

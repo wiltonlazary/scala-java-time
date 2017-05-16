@@ -38,7 +38,7 @@ import scala.scalajs.reflect._
   */
 class ServiceLoaderZoneRulesInitializer extends ZoneRulesInitializer {
 
-  override def initializeZoneProviders(): Unit = {
+  override def initializeProviders(): Unit = {
     // Load via reflection the tzdb
     // find the package name dynamically to support both org.threeten.bp and java.time packages
     val packageName = this.getClass.getName.split("\\.").init.mkString(".")

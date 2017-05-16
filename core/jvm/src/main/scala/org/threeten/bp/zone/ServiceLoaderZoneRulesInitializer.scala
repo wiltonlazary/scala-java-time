@@ -40,7 +40,7 @@ import scala.collection.JavaConverters._
   */
 class ServiceLoaderZoneRulesInitializer extends ZoneRulesInitializer {
 
-  override def initializeZoneProviders(): Unit = {
+  override def initializeProviders(): Unit = {
     val loader: ServiceLoader[ZoneRulesProvider] = ServiceLoader.load(classOf[ZoneRulesProvider],
                                     ZoneRulesProvider.getClass.getClassLoader())
     loader.iterator.asScala.foreach { provider =>

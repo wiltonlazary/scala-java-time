@@ -58,6 +58,23 @@ private[format] object TTBPDateTimeTextProvider {
     }
     result
   }
+
+  /**
+   * Sets the provider to use.
+   * <p>
+   * This can only be called once and before the first call to {@link #getInstance()}.
+   *
+   * @param provider the provider to use, not null
+   * @throws IllegalStateException if provider is already set
+   */
+  def setInstance(provider: TTBPDateTimeTextProvider): Unit = {
+    LOCK.synchronized {
+      if (INSTANCE != null) {
+        throw new IllegalStateException("Instance is already set")
+      }
+      INSTANCE = provider
+    }
+  }
 }
 
 /** The Service Provider Interface (SPI) to be implemented by classes providing

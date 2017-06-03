@@ -49,9 +49,6 @@ import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.TextStyle
 
 object TTBPSimpleDateTimeTextProvider {
-  /** Cache. */
-  private val CACHE: ConcurrentMap[java.util.Map.Entry[TemporalField, Locale], AnyRef] =
-    new ConcurrentHashMap[java.util.Map.Entry[TemporalField, Locale], AnyRef](16, 0.75f, 2)
   /** Comparator. */
   private val COMPARATOR: Comparator[java.util.Map.Entry[String, Long]] =
     new Comparator[java.util.Map.Entry[String, Long]] {
@@ -150,6 +147,10 @@ object TTBPSimpleDateTimeTextProvider {
   * This class is immutable and thread-safe.
   */
 final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
+  /** Cache. */
+  private val cache: ConcurrentMap[java.util.Map.Entry[TemporalField, Locale], AnyRef] =
+    new ConcurrentHashMap[java.util.Map.Entry[TemporalField, Locale], AnyRef](16, 0.75f, 2)
+
   /** {@inheritDoc} */
   override def getAvailableLocales: Array[Locale] = DateFormatSymbols.getAvailableLocales
 
@@ -171,11 +172,11 @@ final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
 
   private def findStore(field: TemporalField, locale: Locale): AnyRef = {
     val key: java.util.Map.Entry[TemporalField, Locale] = TTBPSimpleDateTimeTextProvider.createEntry(field, locale)
-    var store: AnyRef = TTBPSimpleDateTimeTextProvider.CACHE.get(key)
+    var store: AnyRef = cache.get(key)
     if (store == null) {
       store = createStore(field, locale)
-      TTBPSimpleDateTimeTextProvider.CACHE.putIfAbsent(key, store)
-      store = TTBPSimpleDateTimeTextProvider.CACHE.get(key)
+      cache.putIfAbsent(key, store)
+      store = cache.get(key)
     }
     store
   }

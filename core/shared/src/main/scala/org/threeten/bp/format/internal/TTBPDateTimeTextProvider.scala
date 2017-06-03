@@ -37,11 +37,27 @@ import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.TextStyle
 
 private[format] object TTBPDateTimeTextProvider {
+  @volatile
+  private var INSTANCE: TTBPDateTimeTextProvider = null
+  private val LOCK = new Object()
+
   /** Gets the provider.
     *
     * @return the provider, not null
     */
-  private[format] def getInstance: TTBPDateTimeTextProvider = new TTBPSimpleDateTimeTextProvider
+  private[format] def getInstance: TTBPDateTimeTextProvider = {
+    var result = INSTANCE
+    if (result == null) {
+        LOCK.synchronized {
+            result = INSTANCE;
+            if (result == null) {
+                result = new TTBPSimpleDateTimeTextProvider
+                INSTANCE = result
+            }
+        }
+    }
+    result
+  }
 }
 
 /** The Service Provider Interface (SPI) to be implemented by classes providing

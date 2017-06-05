@@ -10,6 +10,10 @@
   <body>
     <!-- types are add, fix, remove, update -->
     <release version="2.0.0-M14" date="" description="v2.0.0-M14">
+      <action dev="pamalyshev" type="add" >
+        Add DateTimeTextProvider.setInstance() to allow the provider to be replaced.
+        See #69 and #70.
+      </action>
       <action dev="cquiroz" type="upstream" >
         Avoid copying the set of available time-zone IDs
       </action>

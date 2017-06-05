@@ -33,30 +33,25 @@ package org.threeten.bp.format.internal
 
 import java.util.Locale
 import java.lang.Long
+import java.util.concurrent.atomic.AtomicReference
 import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.TextStyle
 
 private[format] object TTBPDateTimeTextProvider {
-  @volatile
-  private var INSTANCE: TTBPDateTimeTextProvider = null
-  private val LOCK = new Object()
+  val PROVIDER: AtomicReference[TTBPDateTimeTextProvider] = new AtomicReference[TTBPDateTimeTextProvider]()
 
   /** Gets the provider.
     *
     * @return the provider, not null
     */
   private[format] def getInstance: TTBPDateTimeTextProvider = {
-    var result = INSTANCE
-    if (result == null) {
-        LOCK.synchronized {
-            result = INSTANCE;
-            if (result == null) {
-                result = new TTBPSimpleDateTimeTextProvider
-                INSTANCE = result
-            }
-        }
+    var provider = PROVIDER.get()
+    if (provider == null) {
+      PROVIDER.compareAndSet(null, new TTBPSimpleDateTimeTextProvider())
+      // avoid race condition by getting again
+      provider = PROVIDER.get()
     }
-    result
+    provider
   }
 
   /**
@@ -68,11 +63,8 @@ private[format] object TTBPDateTimeTextProvider {
    * @throws IllegalStateException if provider is already set
    */
   def setInstance(provider: TTBPDateTimeTextProvider): Unit = {
-    LOCK.synchronized {
-      if (INSTANCE != null) {
-        throw new IllegalStateException("Instance is already set")
-      }
-      INSTANCE = provider
+    if (!PROVIDER.compareAndSet(null, new TTBPSimpleDateTimeTextProvider())) {
+        throw new IllegalStateException("Instance is already set");
     }
   }
 }

@@ -151,9 +151,6 @@ final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
   private val cache: ConcurrentMap[java.util.Map.Entry[TemporalField, Locale], AnyRef] =
     new ConcurrentHashMap[java.util.Map.Entry[TemporalField, Locale], AnyRef](16, 0.75f, 2)
 
-  /** {@inheritDoc} */
-  override def getAvailableLocales: Array[Locale] = DateFormatSymbols.getAvailableLocales
-
   override def getText(field: TemporalField, value: Long, style: TextStyle, locale: Locale): String = {
     val store: AnyRef = findStore(field, locale)
     if (store.isInstanceOf[TTBPSimpleDateTimeTextProvider.LocaleStore])

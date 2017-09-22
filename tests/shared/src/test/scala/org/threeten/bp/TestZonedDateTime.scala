@@ -709,6 +709,43 @@ class TestZonedDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     }
   }
 
+  val data_parseOverlapRoundtrip: List[String] =
+    List(
+      "2016-11-06T01:00-04:00[America/New_York]",
+      "2016-10-30T02:00+02:00[Europe/Berlin]")
+
+  test("test_parseFormatRoundtripWithZoneAndOffset") {
+    data_parseOverlapRoundtrip.foreach { s =>
+      val start = ZonedDateTime.parse(s)
+      for { min <- 0 to 60 by 15 } {
+        val t = start.plusMinutes(min)
+        assertEquals(t, ZonedDateTime.parse(t.toString()))
+      }
+    }
+  }
+
+  val data_parseOverlapToInstant: List[(String, String)] =
+    List(
+      ("2016-11-06T01:00-04:00[America/New_York]", "2016-11-06T05:00:00Z"),
+      ("2016-11-06T01:30-04:00[America/New_York]", "2016-11-06T05:30:00Z"),
+      ("2016-11-06T01:00-05:00[America/New_York]", "2016-11-06T06:00:00Z"),
+      ("2016-11-06T01:30-05:00[America/New_York]", "2016-11-06T06:30:00Z"),
+      ("2016-11-06T02:00-05:00[America/New_York]", "2016-11-06T07:00:00Z"),
+      ("2016-10-30T02:00+02:00[Europe/Berlin]", "2016-10-30T00:00:00Z"),
+      ("2016-10-30T02:30+02:00[Europe/Berlin]", "2016-10-30T00:30:00Z"),
+      ("2016-10-30T02:00+01:00[Europe/Berlin]", "2016-10-30T01:00:00Z"),
+      ("2016-10-30T02:30+01:00[Europe/Berlin]", "2016-10-30T01:30:00Z"),
+      ("2016-10-30T03:00+01:00[Europe/Berlin]", "2016-10-30T02:00:00Z"))
+
+  test("parseWithZoneAndOffsetToInstant") {
+    data_parseOverlapToInstant.foreach {
+      case (z, i) =>
+        val zdt = ZonedDateTime.parse(z)
+        val instant = Instant.parse(i)
+        assertEquals(zdt.toInstant, instant)
+    }
+  }
+
   test("factory_parse_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("u M d H m s VV")
     val test: ZonedDateTime = ZonedDateTime.parse("2010 12 3 11 30 0 Europe/London", f)

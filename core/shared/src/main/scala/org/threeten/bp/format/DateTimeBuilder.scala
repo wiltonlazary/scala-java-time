@@ -512,17 +512,14 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
 
   private def resolveInstant(): Unit = {
     if (date != null && time != null) {
-      if (zone != null) {
-        val instant: Long = date.atTime(time).atZone(zone).getLong(ChronoField.INSTANT_SECONDS)
+      val offsetSecs = fieldValues.get(OFFSET_SECONDS);
+      if (offsetSecs != null) {
+        val offset = ZoneOffset.ofTotalSeconds(offsetSecs.intValue())
+        var instant = date.atTime(time).atZone(offset).getLong(ChronoField.INSTANT_SECONDS)
         fieldValues.put(INSTANT_SECONDS, instant)
-      }
-      else {
-        val offsetSecs: java.lang.Long = fieldValues.get(OFFSET_SECONDS)
-        if (offsetSecs != null) {
-          val offset: ZoneOffset = ZoneOffset.ofTotalSeconds(offsetSecs.intValue)
-          val instant: Long = date.atTime(time).atZone(offset).getLong(ChronoField.INSTANT_SECONDS)
-          fieldValues.put(INSTANT_SECONDS, instant)
-        }
+      } else if (zone != null) {
+        val instant = date.atTime(time).atZone(zone).getLong(ChronoField.INSTANT_SECONDS)
+        fieldValues.put(INSTANT_SECONDS, instant)
       }
     }
   }

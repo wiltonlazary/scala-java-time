@@ -124,7 +124,7 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
   generatedFiles
 }
 
-lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("core"))
   .settings(commonSettings: _*)
@@ -151,6 +151,10 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       "io.github.cquiroz" %%% "scala-java-locales" % "0.3.16-cldr35"
     )
   )
+
+lazy val scalajavatimeJVM     = scalajavatime.jvm
+lazy val scalajavatimeJS      = scalajavatime.js
+lazy val scalajavatimeNative  = scalajavatime.native
 
 lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)

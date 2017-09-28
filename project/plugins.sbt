@@ -5,6 +5,12 @@ addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.2")
 
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
 
+addSbtPlugin("org.scala-native" % "sbt-crossproject"         % "0.2.2")
+
+addSbtPlugin("org.scala-native" % "sbt-scalajs-crossproject" % "0.2.2")
+
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.4.0-SNAPSHOT")
+
 val scalaJSVersion =
   Option(System.getenv("SCALAJS_VERSION")).getOrElse("0.6.28")
 

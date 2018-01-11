@@ -312,4 +312,8 @@ lazy val pomData =
       <name>Pavel Malyshev</name>
       <url>https://github.com/pamalyshev</url>
     </contributor>
+    <contributor>
+      <name>Philipp Thuerwaechter</name>
+      <url>https://github.com/pithu</url>
+    </contributor>
   </contributors>

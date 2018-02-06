@@ -94,7 +94,13 @@ Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.</p>
   <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
 </ul>
 
-<p>To get the latest snapshots add either:</p>
+<p>To get the latest snapshots add the repo</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resolvers +=
+  Resolver.sonatypeRepo("snapshots")
+</code></pre></div></div>
+
+<p>and either:</p>
 
 <ul>
   <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-M13-SNAPSHOT"</code> (for Scala)</li>
@@ -109,7 +115,7 @@ Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.</p>
 <a href="https://www.iana.org/time-zones">IANA Time Zone Database</a>. To use them you need to add the following dependency</p>
 
 <ul>
-  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-M13-SNAPSHOT_2018c"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
+  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-M13_2018c-SNAPSHOT"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
 </ul>
 
 <p>Note that the db is fairly large and due to the characteristics of the API it’s not very ammenable to optimization
@@ -127,7 +133,7 @@ This database is published every now and then so it maybe old. For current versi
 <p>To do that you need to:</p>
 
 <ul>
-  <li>Add <code class="highlighter-rouge">sbt-tzdb</code> to your list of plugins</li>
+  <li>Add <code class="highlighter-rouge">sbt-tzdb</code> to your list of plugins (Note you need sbt 1.x)</li>
 </ul>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">addSbtPlugin</span><span class="o">(</span><span class="s">"io.github.cquiroz"</span> <span class="o">%</span> <span class="s">"sbt-tzdb"</span> <span class="o">%</span> <span class="s">"0.1.0"</span><span class="o">)</span>

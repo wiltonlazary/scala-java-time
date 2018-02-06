@@ -82,7 +82,7 @@ The implementation is based on the original BSD-licensed reference implementatio
 <span class="c1">// res15: Boolean = true
 </span></code></pre></div></div>
 
-<h4 id="usage">Usage</h4>
+<h3 id="usage">Usage</h3>
 
 <p>The <em>scala-java-time</em> library is currently available for Scala (JVM, version 8 and later) and Scala.js (JavaScript).
 Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.</p>
@@ -101,35 +101,7 @@ Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.</p>
   <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M13-SNAPSHOT"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
 </ul>
 
-<h4 id="building">Building</h4>
-
-<p>This project builds using sbt.
-Run <code class="highlighter-rouge">sbt scalajavatimeCrossJVM/test</code> to run the test suite on the JVM and
-<code class="highlighter-rouge">sbt scalajavatimeCrossJS/test</code> to run the test suite in JavaScript.</p>
-
-<h4 id="status">Status</h4>
-
-<p>All parts of this library work perfectly fine with Scala.js in the browser.</p>
-
-<h4 id="contributing">Contributing</h4>
-
-<p>We welcome all contributions, including ideas, suggestions, bug reports, bug fixes and code!
-We are especially interested in contributions that tackle the following issues:</p>
-
-<ul>
-  <li>Modularize the tzdb database</li>
-  <li>Find ways to reduce the size of the library</li>
-</ul>
-
-<p>Have a look at the <a href="https://github.com/cquiroz/scala-java-time/issues">issues</a> or <a href="https://github.com/soc/scala-java-time/issues">issues</a> to find something to work on! Let us know if you need help!</p>
-
-<h4 id="plans">Plans</h4>
-
-<h5 id="20">2.0</h5>
-
-<p>The current version is published containing the code in both packages: <code class="highlighter-rouge">org.threeten.bp</code> and <code class="highlighter-rouge">java.time</code>.</p>
-
-<p>A stable release of 2.0 will be published with only <code class="highlighter-rouge">java.time</code> on its binary after a (hopefully) short RC phase.</p>
+<h3 id="time-zones">Time zones</h3>
 
 <h4 id="time-zone-data-js-alternative-1-all-timezones">Time-zone data (JS) alternative 1 (All timezones)</h4>
 
@@ -189,6 +161,32 @@ The version of the time-zone data used is stored within the dat file (near the s
 Updating the time-zone database involves using the <code class="highlighter-rouge">TzdbZoneRulesCompiler</code> class
 and re-compiling the jar file.
 Pull requests with later versions of the dat file will be accepted.</p>
+
+<h4 id="building">Building</h4>
+
+<p>This project builds using sbt.
+Run <code class="highlighter-rouge">sbt scalajavatimeTestsJVM/test</code> to run the test suite on the JVM and
+<code class="highlighter-rouge">sbt scalajavatimeTestsJS/test</code> to run the test suite in JavaScript.</p>
+
+<h4 id="contributing">Contributing</h4>
+
+<p>We welcome all contributions, including ideas, suggestions, bug reports, bug fixes and code!
+We are especially interested in contributions that tackle the following issues:</p>
+
+<ul>
+  <li>Find ways to reduce the size of the library</li>
+  <li>Implement missing methods</li>
+</ul>
+
+<p>Have a look at the <a href="https://github.com/cquiroz/scala-java-time/issues">issues</a> or <a href="https://github.com/soc/scala-java-time/issues">issues</a> to find something to work on! Let us know if you need help!</p>
+
+<h4 id="plans">Plans</h4>
+
+<h5 id="20">2.0</h5>
+
+<p>The current version is published containing the code in both packages: <code class="highlighter-rouge">org.threeten.bp</code> and <code class="highlighter-rouge">java.time</code>.</p>
+
+<p>A stable release of 2.0 will be published with only <code class="highlighter-rouge">java.time</code> on its binary after a (hopefully) short RC phase.</p>
 
 <h4 id="faqs">FAQs</h4>
 

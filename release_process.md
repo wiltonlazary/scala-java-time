@@ -9,9 +9,10 @@ docs/publishMicrosite
 
 Important: Remember to clean between different scala.js versions
 
-on 1.0.0-M2
+on 1.0.0-M3
+
 ```
-SCALAJS_VERSION=1.0.0-M2 sbt
+SCALAJS_VERSION=1.0.0-M3 sbt
 clean
 +publishSigned
 sonatyeRelease

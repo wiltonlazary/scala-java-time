@@ -9,77 +9,75 @@ The implementation is based on the original BSD-licensed reference implementatio
 
 <h4 id="example">Example</h4>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// On scala.js you can pick either java.time or org.threeten.bp package to import
-//import java.time._
-</span><span class="k">import</span> <span class="nn">org.threeten.bp._</span>
-<span class="c1">// import org.threeten.bp._
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">java.time._</span>
+<span class="c1">// import java.time._
 </span>
 <span class="c1">// always returns 2009-02-13T23:31:30
 </span><span class="k">val</span> <span class="n">fixedClock</span> <span class="k">=</span> <span class="nc">Clock</span><span class="o">.</span><span class="n">fixed</span><span class="o">(</span><span class="nc">Instant</span><span class="o">.</span><span class="n">ofEpochSecond</span><span class="o">(</span><span class="mi">1234567890L</span><span class="o">),</span> <span class="nc">ZoneOffset</span><span class="o">.</span><span class="n">ofHours</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span>
-<span class="c1">// fixedClock: org.threeten.bp.Clock = FixedClock[2009-02-13T23:31:30Z,Z]
+<span class="c1">// fixedClock: java.time.Clock = FixedClock[2009-02-13T23:31:30Z,Z]
 </span>
 <span class="k">val</span> <span class="n">date</span> <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(</span><span class="n">fixedClock</span><span class="o">)</span>
-<span class="c1">// date: org.threeten.bp.LocalDateTime = 2009-02-13T23:31:30
+<span class="c1">// date: java.time.LocalDateTime = 2009-02-13T23:31:30
 </span>
 <span class="n">date</span><span class="o">.</span><span class="n">getMonth</span>      <span class="o">==</span> <span class="nc">Month</span><span class="o">.</span><span class="nc">FEBRUARY</span>
-<span class="c1">// res3: Boolean = true
+<span class="c1">// res1: Boolean = true
 </span>
 <span class="n">date</span><span class="o">.</span><span class="n">getDayOfWeek</span>  <span class="o">==</span> <span class="nc">DayOfWeek</span><span class="o">.</span><span class="nc">FRIDAY</span>
-<span class="c1">// res4: Boolean = true
+<span class="c1">// res2: Boolean = true
 </span>
 <span class="n">date</span><span class="o">.</span><span class="n">getDayOfMonth</span> <span class="o">==</span> <span class="mi">13</span>
-<span class="c1">// res5: Boolean = true
+<span class="c1">// res3: Boolean = true
 </span>
 <span class="n">date</span><span class="o">.</span><span class="n">getHour</span>       <span class="o">==</span> <span class="mi">23</span>
-<span class="c1">// res6: Boolean = true
+<span class="c1">// res4: Boolean = true
 </span>
 <span class="k">val</span> <span class="n">tomorrow</span> <span class="k">=</span> <span class="n">date</span><span class="o">.</span><span class="n">plusDays</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-<span class="c1">// tomorrow: org.threeten.bp.LocalDateTime = 2009-02-14T23:31:30
+<span class="c1">// tomorrow: java.time.LocalDateTime = 2009-02-14T23:31:30
 </span>
 <span class="k">val</span> <span class="n">duration</span> <span class="k">=</span> <span class="nc">Duration</span><span class="o">.</span><span class="n">between</span><span class="o">(</span><span class="n">date</span><span class="o">,</span> <span class="n">tomorrow</span><span class="o">)</span>
-<span class="c1">// duration: org.threeten.bp.Duration = PT24H
+<span class="c1">// duration: java.time.Duration = PT24H
 </span>
 <span class="n">duration</span><span class="o">.</span><span class="n">toMinutes</span> <span class="o">==</span> <span class="mi">1440L</span>
-<span class="c1">// res7: Boolean = true
+<span class="c1">// res5: Boolean = true
 </span>
 <span class="k">val</span> <span class="n">period</span> <span class="k">=</span> <span class="nc">Period</span><span class="o">.</span><span class="n">between</span><span class="o">(</span><span class="n">date</span><span class="o">.</span><span class="n">toLocalDate</span><span class="o">,</span> <span class="n">tomorrow</span><span class="o">.</span><span class="n">toLocalDate</span><span class="o">)</span>
-<span class="c1">// period: org.threeten.bp.Period = P1D
+<span class="c1">// period: java.time.Period = P1D
 </span>
 <span class="n">period</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="n">temporal</span><span class="o">.</span><span class="nc">ChronoUnit</span><span class="o">.</span><span class="nc">DAYS</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1L</span>
-<span class="c1">// res8: Boolean = true
+<span class="c1">// res6: Boolean = true
 </span>
 <span class="k">val</span> <span class="n">date1</span> <span class="k">=</span> <span class="nc">LocalDate</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">2001</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">31</span><span class="o">)</span>
-<span class="c1">// date1: org.threeten.bp.LocalDate = 2001-01-31
+<span class="c1">// date1: java.time.LocalDate = 2001-01-31
 </span>
 <span class="n">date1</span><span class="o">.</span><span class="n">plusMonths</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="nc">LocalDate</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">2001</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">28</span><span class="o">)</span>
-<span class="c1">// res9: Boolean = true
+<span class="c1">// res7: Boolean = true
 </span>
 <span class="k">val</span> <span class="n">date2</span> <span class="k">=</span> <span class="n">date1</span><span class="o">.</span><span class="n">`with`</span><span class="o">(</span><span class="n">temporal</span><span class="o">.</span><span class="nc">TemporalAdjusters</span><span class="o">.</span><span class="n">next</span><span class="o">(</span><span class="nc">DayOfWeek</span><span class="o">.</span><span class="nc">SUNDAY</span><span class="o">))</span>
-<span class="c1">// date2: org.threeten.bp.LocalDate = 2001-02-04
+<span class="c1">// date2: java.time.LocalDate = 2001-02-04
 </span>
 <span class="n">date2</span> <span class="o">==</span> <span class="nc">LocalDate</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">2001</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
-<span class="c1">// res10: Boolean = true
+<span class="c1">// res8: Boolean = true
 </span>
 <span class="k">val</span> <span class="n">offsetTime</span> <span class="k">=</span> <span class="nc">OffsetTime</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="n">date</span><span class="o">.</span><span class="n">toLocalTime</span><span class="o">,</span> <span class="nc">ZoneOffset</span><span class="o">.</span><span class="n">ofHours</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
-<span class="c1">// offsetTime: org.threeten.bp.OffsetTime = 23:31:30+01:00
+<span class="c1">// offsetTime: java.time.OffsetTime = 23:31:30+01:00
 </span>
 <span class="n">offsetTime</span><span class="o">.</span><span class="n">isBefore</span><span class="o">(</span><span class="nc">OffsetTime</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="n">date</span><span class="o">.</span><span class="n">toLocalTime</span><span class="o">,</span> <span class="nc">ZoneOffset</span><span class="o">.</span><span class="n">ofHours</span><span class="o">(</span><span class="mi">0</span><span class="o">)))</span> <span class="o">==</span> <span class="kc">true</span>
-<span class="c1">// res11: Boolean = true
+<span class="c1">// res9: Boolean = true
 </span>
 <span class="k">val</span> <span class="n">format1</span> <span class="k">=</span> <span class="n">format</span><span class="o">.</span><span class="nc">DateTimeFormatter</span><span class="o">.</span><span class="n">ofPattern</span><span class="o">(</span><span class="s">"MMMM MM d HH mm ss EE EEEE yyyy G"</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="nc">Locale</span><span class="o">.</span><span class="nc">GERMAN</span><span class="o">)</span>
-<span class="c1">// format1: org.threeten.bp.format.DateTimeFormatter = Text(MonthOfYear)' 'Value(MonthOfYear,2)' 'Value(DayOfMonth)' 'Value(HourOfDay,2)' 'Value(MinuteOfHour,2)' 'Value(SecondOfMinute,2)' 'Text(DayOfWeek,SHORT)' 'Text(DayOfWeek)' 'Value(YearOfEra,4,19,EXCEEDS_PAD)' 'Text(Era,SHORT)
+<span class="c1">// format1: java.time.format.DateTimeFormatter = Text(MonthOfYear)' 'Value(MonthOfYear,2)' 'Value(DayOfMonth)' 'Value(HourOfDay,2)' 'Value(MinuteOfHour,2)' 'Value(SecondOfMinute,2)' 'Text(DayOfWeek,SHORT)' 'Text(DayOfWeek)' 'Value(YearOfEra,4,19,EXCEEDS_PAD)' 'Text(Era,SHORT)
 </span>
 <span class="n">date</span><span class="o">.</span><span class="n">format</span><span class="o">(</span><span class="n">format1</span><span class="o">)</span> <span class="o">==</span> <span class="s">"Februar 02 13 23 31 30 Fr. Freitag 2009 n. Chr."</span>
-<span class="c1">// res12: Boolean = false
+<span class="c1">// res10: Boolean = false
 </span>
 <span class="n">chrono</span><span class="o">.</span><span class="nc">JapaneseDate</span><span class="o">.</span><span class="n">now</span><span class="o">(</span><span class="n">fixedClock</span><span class="o">).</span><span class="n">toString</span>     <span class="o">==</span> <span class="s">"Japanese Heisei 21-02-13"</span>
-<span class="c1">// res13: Boolean = true
+<span class="c1">// res11: Boolean = true
 </span>
 <span class="n">chrono</span><span class="o">.</span><span class="nc">ThaiBuddhistDate</span><span class="o">.</span><span class="n">now</span><span class="o">(</span><span class="n">fixedClock</span><span class="o">).</span><span class="n">toString</span> <span class="o">==</span> <span class="s">"ThaiBuddhist BE 2552-02-13"</span>
-<span class="c1">// res14: Boolean = true
+<span class="c1">// res12: Boolean = true
 </span>
 <span class="n">chrono</span><span class="o">.</span><span class="nc">MinguoDate</span><span class="o">.</span><span class="n">now</span><span class="o">(</span><span class="n">fixedClock</span><span class="o">).</span><span class="n">toString</span>       <span class="o">==</span> <span class="s">"Minguo ROC 98-02-13"</span>
-<span class="c1">// res15: Boolean = true
+<span class="c1">// res13: Boolean = true
 </span></code></pre></div></div>
 
 <h3 id="usage">Usage</h3>
@@ -90,8 +88,8 @@ Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.</p>
 <p>To get started with SBT, add one of these dependencies:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-M12"</code> (for Scala)</li>
-  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
+  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-M13"</code> (for Scala)</li>
+  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M13"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
 </ul>
 
 <p>To get the latest snapshots add the repo</p>
@@ -103,11 +101,15 @@ Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.</p>
 <p>and either:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-M13-SNAPSHOT"</code> (for Scala)</li>
-  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M13-SNAPSHOT"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
+  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-M14-SNAPSHOT"</code> (for Scala)</li>
+  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M14-SNAPSHOT"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
 </ul>
 
 <h3 id="time-zones">Time zones</h3>
+
+<h4 id="no-timezones">No timezones</h4>
+
+<p>If you don’t need to use timezones in your application you can just stop here. By default <code class="highlighter-rouge">UTC</code> will always be available but otherwise the library will work fine and produce the smallest possible js file</p>
 
 <h4 id="time-zone-data-js-alternative-i-all-timezones">Time-zone data (JS) alternative I (All timezones)</h4>
 
@@ -115,7 +117,7 @@ Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.</p>
 <a href="https://www.iana.org/time-zones">IANA Time Zone Database</a>. To use them you need to add the following dependency</p>
 
 <ul>
-  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-M13_2018c-SNAPSHOT"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
+  <li><code class="highlighter-rouge">libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-M13_2018c"</code> (for Scala.js, <a href="http://www.scala-js.org/tutorial/basic/#sbt-setup">Scala.js plugin</a> required)</li>
 </ul>
 
 <p>Note that the db is fairly large and due to the characteristics of the API it’s not very ammenable to optimization
@@ -136,7 +138,7 @@ This database is published every now and then so it maybe old. For current versi
   <li>Add <code class="highlighter-rouge">sbt-tzdb</code> to your list of plugins (Note you need sbt 1.x)</li>
 </ul>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">addSbtPlugin</span><span class="o">(</span><span class="s">"io.github.cquiroz"</span> <span class="o">%</span> <span class="s">"sbt-tzdb"</span> <span class="o">%</span> <span class="s">"0.1.0"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">addSbtPlugin</span><span class="o">(</span><span class="s">"io.github.cquiroz"</span> <span class="o">%</span> <span class="s">"sbt-tzdb"</span> <span class="o">%</span> <span class="s">"0.1.2"</span><span class="o">)</span>
 </code></pre></div></div>
 
 <ul>
@@ -146,7 +148,7 @@ This database is published every now and then so it maybe old. For current versi
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="o">.</span><span class="n">enablePlugins</span><span class="o">(</span><span class="nc">TzdbPlugin</span><span class="o">)</span>
 </code></pre></div></div>
 
-<p>or for cross projects</p>
+<p>or for cross projects, enable it <strong>only</strong> one the js side</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">lazy</span> <span class="k">val</span> <span class="n">lib</span> <span class="k">=</span> <span class="n">crossProject</span><span class="o">(</span><span class="nc">JVMPlatform</span><span class="o">,</span> <span class="nc">JSPlatform</span><span class="o">)</span>
   <span class="o">...</span>
@@ -190,11 +192,18 @@ We are especially interested in contributions that tackle the following issues:<
 
 <h5 id="20">2.0</h5>
 
-<p>The current version is published containing the code in both packages: <code class="highlighter-rouge">org.threeten.bp</code> and <code class="highlighter-rouge">java.time</code>.</p>
-
 <p>A stable release of 2.0 will be published with only <code class="highlighter-rouge">java.time</code> on its binary after a (hopefully) short RC phase.</p>
 
 <h4 id="faqs">FAQs</h4>
+
+<h5 id="whats-with-the-packages-the-code-uses-orgthreetenbp-but-i-use-javatime">What’s with the packages? the code uses <code class="highlighter-rouge">org.threeten.bp</code> but I use <code class="highlighter-rouge">java.time</code></h5>
+
+<p>The original code was in the <code class="highlighter-rouge">org.threeten.bp</code> and that has been maintained, among other reasons, because writing
+code on the <code class="highlighter-rouge">java</code> namespace tends to produce issues with the security controls of the JVM</p>
+
+<p>Thus the code is on <code class="highlighter-rouge">org.threeten.bp</code> but during packaging the code is moved to <code class="highlighter-rouge">java.time</code> and <code class="highlighter-rouge">org.threeten.bp</code> is removed.</p>
+
+<p>Most applications would use the <code class="highlighter-rouge">java.time</code> package mirroring the JVM</p>
 
 <h5 id="is-this-project-derived-from-openjdk">Is this project derived from OpenJDK?</h5>
 

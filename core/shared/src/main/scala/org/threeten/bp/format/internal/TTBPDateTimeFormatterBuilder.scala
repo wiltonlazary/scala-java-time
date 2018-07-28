@@ -1265,8 +1265,19 @@ object TTBPDateTimeFormatterBuilder {
         ids(id) = id
         val tz: TimeZone = TimeZone.getTimeZone(id)
         val tzstyle: Int = if (textStyle.asNormal eq TextStyle.FULL) TimeZone.LONG else TimeZone.SHORT
-        ids(tz.getDisplayName(false, tzstyle, context.getLocale)) = id
-        ids(tz.getDisplayName(true, tzstyle, context.getLocale)) = id
+        val textWinter = tz.getDisplayName(false, tzstyle, context.getLocale)
+        // The null checks are needed as scalajs-locales doesn't include time zone strings
+        if (textWinter != null && id.startsWith("Etc/") || (!textWinter.startsWith("GMT+") && !textWinter.startsWith("GMT+"))) {
+            ids(textWinter) = id
+        } else if (textWinter == null) {
+          ids(tz.getDisplayName(false, tzstyle, context.getLocale)) = id
+        }
+        val textSummer = tz.getDisplayName(true, tzstyle, context.getLocale)
+        if (textSummer != null && id.startsWith("Etc/") || (!textSummer.startsWith("GMT+") && !textSummer.startsWith("GMT+"))) {
+            ids(textSummer) = id
+        } else if (textSummer == null) {
+          ids(tz.getDisplayName(true, tzstyle, context.getLocale)) = id
+        }
       }
       val orderedIds = TreeMap(ids.toArray: _*)(ZoneTextPrinterParser.LENGTH_COMPARATOR)
       orderedIds.foreach { case (key, value) =>

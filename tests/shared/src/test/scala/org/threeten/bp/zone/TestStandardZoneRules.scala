@@ -415,6 +415,180 @@ class TestStandardZoneRules extends FunSuite with AssertionsHelper {
     }
   }
 
+  private def europeDublin: ZoneRules =
+    ZoneId.of("Europe/Dublin").getRules
+
+  test("Dublin") {
+    val test: ZoneRules = europeDublin
+    assertEquals(test.isFixedOffset, false)
+  }
+  test("Dublin_getOffset") {
+    val test: ZoneRules = europeDublin
+    assertEquals(test.getOffset(createInstant(2008, 1, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 2, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 4, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 5, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 6, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 7, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 8, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 9, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 10, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 11, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 12, 1, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+  }
+
+  test("Dublin_getOffset_toDST") {
+    val test: ZoneRules = europeDublin
+    assertEquals(test.getOffset(createInstant(2008, 3, 24, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 25, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 26, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 27, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 28, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 29, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 30, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 31, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    // cutover at 01:00Z
+    assertEquals(test.getOffset(createInstant(2008, 3, 30, 0, 59, 59, 999999999, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 3, 30, 1, 0, 0, 0, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+  }
+
+  test("Dublin_getOffset_fromDST") {
+    val test: ZoneRules = europeDublin
+    assertEquals(test.getOffset(createInstant(2008, 10, 24, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 10, 25, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 10, 26, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 10, 27, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 10, 28, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 10, 29, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 10, 30, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(test.getOffset(createInstant(2008, 10, 31, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+    // cutover at 01:00Z
+    assertEquals(test.getOffset(createInstant(2008, 10, 26, 0, 59, 59, 999999999, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(test.getOffset(createInstant(2008, 10, 26, 1, 0, 0, 0, ZoneOffset.UTC)), TestStandardZoneRules.OFFSET_ZERO)
+  }
+
+  test("Dublin_getOffsetInfo") {
+    val test: ZoneRules = europeDublin
+    checkOffset(test, createLDT(2008, 1, 1), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 2, 1), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 3, 1), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 4, 1), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 5, 1), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 6, 1), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 7, 1), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 8, 1), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 9, 1), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 10, 1), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 11, 1), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 12, 1), TestStandardZoneRules.OFFSET_ZERO, 1)
+  }
+
+  test("Dublin_getOffsetInfo_toDST") {
+    val test: ZoneRules = europeDublin
+    checkOffset(test, createLDT(2008, 3, 24), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 3, 25), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 3, 26), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 3, 27), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 3, 28), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 3, 29), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 3, 30), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 3, 31), TestStandardZoneRules.OFFSET_PONE, 1)
+    // cutover at 01:00Z
+    checkOffset(test, LocalDateTime.of(2008, 3, 30, 0, 59, 59, 999999999), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, LocalDateTime.of(2008, 3, 30, 2, 0, 0, 0), TestStandardZoneRules.OFFSET_PONE, 1)
+  }
+
+  test("Dublin_getOffsetInfo_fromDST") {
+    val test: ZoneRules = europeDublin
+    checkOffset(test, createLDT(2008, 10, 24), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 10, 25), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 10, 26), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, createLDT(2008, 10, 27), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 10, 28), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 10, 29), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 10, 30), TestStandardZoneRules.OFFSET_ZERO, 1)
+    checkOffset(test, createLDT(2008, 10, 31), TestStandardZoneRules.OFFSET_ZERO, 1)
+    // cutover at 01:00Z
+    checkOffset(test, LocalDateTime.of(2008, 10, 26, 0, 59, 59, 999999999), TestStandardZoneRules.OFFSET_PONE, 1)
+    checkOffset(test, LocalDateTime.of(2008, 10, 26, 2, 0, 0, 0), TestStandardZoneRules.OFFSET_ZERO, 1)
+  }
+
+  test("Dublin_getOffsetInfo_gap") {
+    val test: ZoneRules = europeDublin
+    val dateTime = LocalDateTime.of(2008, 3, 30, 1, 0, 0, 0)
+    val trans = checkOffset(test, dateTime, TestStandardZoneRules.OFFSET_ZERO, TestStandardZoneRules.GAP)
+    assertEquals(trans.isGap, true)
+    assertEquals(trans.isOverlap, false)
+    assertEquals(trans.getOffsetBefore, TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(trans.getOffsetAfter, TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(trans.getInstant, createInstant(2008, 3, 30, 1, 0, ZoneOffset.UTC))
+    assertEquals(trans.getDateTimeBefore, LocalDateTime.of(2008, 3, 30, 1, 0))
+    assertEquals(trans.getDateTimeAfter, LocalDateTime.of(2008, 3, 30, 2, 0))
+    assertEquals(trans.isValidOffset(TestStandardZoneRules.OFFSET_ZERO), false)
+    assertEquals(trans.isValidOffset(TestStandardZoneRules.OFFSET_PONE), false)
+    assertEquals(trans.isValidOffset(TestStandardZoneRules.OFFSET_PTWO), false)
+    assertEquals(trans.toString, "Transition[Gap at 2008-03-30T01:00Z to +01:00]")
+  }
+
+  test("Dublin_getOffsetInfo_overlap") {
+    val test: ZoneRules = europeDublin
+    val dateTime = LocalDateTime.of(2008, 10, 26, 1, 0, 0, 0)
+    val trans = checkOffset(test, dateTime, TestStandardZoneRules.OFFSET_PONE, TestStandardZoneRules.OVERLAP)
+    assertEquals(trans.isGap, false)
+    assertEquals(trans.isOverlap, true)
+    assertEquals(trans.getOffsetBefore, TestStandardZoneRules.OFFSET_PONE)
+    assertEquals(trans.getOffsetAfter, TestStandardZoneRules.OFFSET_ZERO)
+    assertEquals(trans.getInstant, createInstant(2008, 10, 26, 1, 0, ZoneOffset.UTC))
+    assertEquals(trans.getDateTimeBefore, LocalDateTime.of(2008, 10, 26, 2, 0))
+    assertEquals(trans.getDateTimeAfter, LocalDateTime.of(2008, 10, 26, 1, 0))
+    assertEquals(trans.isValidOffset(ZoneOffset.ofHours(-1)), false)
+    assertEquals(trans.isValidOffset(TestStandardZoneRules.OFFSET_ZERO), true)
+    assertEquals(trans.isValidOffset(TestStandardZoneRules.OFFSET_PONE), true)
+    assertEquals(trans.isValidOffset(TestStandardZoneRules.OFFSET_PTWO), false)
+    assertEquals(trans.toString, "Transition[Overlap at 2008-10-26T02:00+01:00 to Z]")
+  }
+
+  test("Dublin_getStandardOffset") {
+    val test: ZoneRules = europeDublin
+    var zdt: ZonedDateTime = createZDT(1840, 1, 1, ZoneOffset.UTC)
+    while (zdt.getYear < 2010) {
+      val instant: Instant = zdt.toInstant
+      if (zdt.getYear < 1881) {
+          assertEquals(test.getStandardOffset(instant), ZoneOffset.ofHoursMinutes(0, -25))
+      } else if (zdt.getYear >= 1881 && zdt.getYear < 1917) {
+          assertEquals(test.getStandardOffset(instant), ZoneOffset.ofHoursMinutesSeconds(0, -25, -21))
+      } else if (zdt.getYear >= 1917 && zdt.getYear < 1969) {
+          assertEquals(test.getStandardOffset(instant), TestStandardZoneRules.OFFSET_ZERO, zdt.toString())
+      } else {
+          // assertEquals(test.getStandardOffset(instant), TestStandardZoneRules.OFFSET_PONE)  // negative DST
+      }
+      zdt = zdt.plusMonths(6)
+    }
+  }
+
+  test("Dublin_dst") {
+    val test = europeDublin
+    assertEquals(test.isDaylightSavings(createZDT(1960, 1, 1, ZoneOffset.UTC).toInstant), false)
+    assertEquals(test.getDaylightSavings(createZDT(1960, 1, 1, ZoneOffset.UTC).toInstant), Duration.ofHours(0))
+    assertEquals(test.isDaylightSavings(createZDT(1960, 7, 1, ZoneOffset.UTC).toInstant), true)
+    assertEquals(test.getDaylightSavings(createZDT(1960, 7, 1, ZoneOffset.UTC).toInstant), Duration.ofHours(1))
+    // negative DST causes isDaylightSavings() to reverse
+    // assertEquals(test.isDaylightSavings(createZDT(2016, 1, 1, ZoneOffset.UTC).toInstant), true)
+    // assertEquals(test.getDaylightSavings(createZDT(2016, 1, 1, ZoneOffset.UTC).toInstant), Duration.ofHours(-1))
+    // assertEquals(test.isDaylightSavings(createZDT(2016, 7, 1, ZoneOffset.UTC).toInstant), false)
+    // assertEquals(test.getDaylightSavings(createZDT(2016, 7, 1, ZoneOffset.UTC).toInstant), Duration.ofHours(0))
+
+    // TZDB data is messed up, comment out tests until better fix available
+//        DateTimeFormatter formatter1 = new DateTimeFormatterBuilder().appendZoneText(TextStyle.FULL).toFormatter();
+//        assertEquals(formatter1.format(createZDT(2016, 1, 1, ZoneId.of("Europe/Dublin"))), "Greenwich Mean Time");
+//        assertEquals(formatter1.format(createZDT(2016, 7, 1, ZoneId.of("Europe/Dublin"))), "Irish Standard Time");
+
+//        DateTimeFormatter formatter2 = new DateTimeFormatterBuilder().appendZoneText(TextStyle.SHORT).toFormatter();
+//        assertEquals(formatter2.format(createZDT(2016, 1, 1, ZoneId.of("Europe/Dublin"))), "GMT");
+//        assertEquals(formatter2.format(createZDT(2016, 7, 1, ZoneId.of("Europe/Dublin"))), "IST");
+  }
+
   private def europeParis: ZoneRules = {
     ZoneId.of("Europe/Paris").getRules
   }

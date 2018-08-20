@@ -148,7 +148,7 @@ object ZoneId {
     *
     * @return a modifiable copy of the set of zone IDs, not null
     */
-  def getAvailableZoneIds: java.util.Set[String] = ZoneRulesProvider.getAvailableZoneIds
+  def getAvailableZoneIds: java.util.Set[String] = new java.util.HashSet(ZoneRulesProvider.getAvailableZoneIds)
 
   /** Obtains an instance of {@code ZoneId} using its ID using a map
     * of aliases to supplement the standard zone IDs.

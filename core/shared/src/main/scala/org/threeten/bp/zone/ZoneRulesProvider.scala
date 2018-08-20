@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.zone
 
-import java.util.{Objects, ServiceConfigurationError}
+import java.util.{Collections, Objects, ServiceConfigurationError}
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.CopyOnWriteArrayList
@@ -47,9 +47,9 @@ object ZoneRulesProvider {
     *
     * These zone IDs are loaded and available for use by {@code ZoneId}.
     *
-    * @return a modifiable copy of the set of zone IDs, not null
+    * @return the unmodifiable copy of the set of zone IDs, not null
     */
-  def getAvailableZoneIds: java.util.Set[String] = new java.util.HashSet[String](ZONES.keySet)
+  def getAvailableZoneIds: java.util.Set[String] = Collections.unmodifiableSet(ZONES.keySet)
 
   /** Gets the rules for the zone ID.
     *

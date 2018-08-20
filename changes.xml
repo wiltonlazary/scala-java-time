@@ -9,7 +9,11 @@
   </properties>
   <body>
     <!-- types are add, fix, remove, update -->
-    <release version="2.0.0-M13" date="2018-02-21" description="v2.0.0-13">
+    <release version="2.0.0-M14" date="" description="v2.0.0-M14">
+      <action dev="cquiroz" type="upstream" >
+        Avoid copying the set of available time-zone IDs
+      </action>
+    <release version="2.0.0-M13" date="2018-02-21" description="v2.0.0-M13">
       <action dev="cquiroz" type="update" >
         Update to scala.js 0.6.22
       </action>

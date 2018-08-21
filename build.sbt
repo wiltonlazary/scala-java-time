@@ -180,6 +180,7 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
     version := scalaTZDBVersion
   )
   .jsSettings(
+    dbVersion := TzdbPlugin.Version(tzdbVersion),
     includeTTBP := true,
     sourceGenerators in Compile += Def.task {
       val srcDirs = (sourceManaged in Compile).value

@@ -2,7 +2,7 @@ import sbtcrossproject.{crossProject, CrossType}
 import sbt._
 import sbt.io.Using
 
-val scalaVer = "2.12.4"
+val scalaVer = "2.12.6"
 val tzdbVersion = "2018c"
 val scalaJavaTimeVer = "2.0.0-M13"
 val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
@@ -22,21 +22,12 @@ lazy val commonSettings = Seq(
   scalaVersion       := scalaVer,
   crossScalaVersions := {
     if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "2.12.4", "2.13.0-M2")
+      Seq("2.10.7", "2.11.12", "6.12.4", "2.13.0-M2")
     } else {
-      Seq("2.11.12", "2.12.4", "2.13.0-M2")
+      Seq("2.11.12", "2.12.6", "2.13.0-M2")
     }
   },
   autoAPIMappings    := true,
-
-  libraryDependencies ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 11 && scalaMajor <= 12 =>
-        compilerPlugin("org.scalameta" % "semanticdb-scalac" % "2.1.2" cross CrossVersion.full) :: Nil
-      case _ =>
-        Nil
-    }
-  },
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
@@ -50,7 +41,6 @@ lazy val commonSettings = Seq(
         scalacOptions.value ++ Seq(
           "-deprecation:false",
           "-Xfatal-warnings",
-          "-Xplugin-require:semanticdb",
           "-Yrangepos",
           "-target:jvm-1.8")
       case Some((2, 13)) =>
@@ -87,15 +77,13 @@ lazy val commonSettings = Seq(
   pomExtra := pomData,
   pomIncludeRepository := { _ => false },
   libraryDependencies ++= {
-    if (scalaJSVersion.startsWith("0.6.")) {
-      Seq(
-        "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
-      )
-    } else {
-      Nil
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, scalaMajor)) if scalaMajor >= 11 && scalaMajor <= 12 && (scalaJSVersion.startsWith("0.6.")) =>
+        Seq("org.scalatest" %%% "scalatest" % "3.0.5" % "test")
+      case _ => Seq.empty
     }
   }
-) ++ scalafixSettings
+)
 
 lazy val root = project.in(file("."))
   .aggregate(scalajavatimeJVM, scalajavatimeJS, scalajavatimeTZDBJVM, scalajavatimeTZDBJS, scalajavatimeTestsJVM, scalajavatimeTestsJVM)

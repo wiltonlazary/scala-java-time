@@ -66,13 +66,7 @@ class TestTTBPSimpleDateTimeTextProvider extends FunSuite with AssertionsHelper 
         Platform.setupLocales()
         val tp: TTBPDateTimeTextProvider = TTBPDateTimeTextProvider.getInstance
 
-        // Work around difference between JRE locale data and CLDR data:
-        // JRE specifies capitalized brazilian month and day-of-week names,
-        // while CLDR specifies lower-cased names.
-        if (locale == ptBR && (field == ChronoField.MONTH_OF_YEAR || field == ChronoField.DAY_OF_WEEK))
-          assertEquals(tp.getText(field, value, style, locale).capitalize, expected)
-        else
-          assertEquals(tp.getText(field, value, style, locale), expected)
+        assertTrue(tp.getText(field, value, style, locale).equalsIgnoreCase(expected))
       case _ =>
         fail()
     }

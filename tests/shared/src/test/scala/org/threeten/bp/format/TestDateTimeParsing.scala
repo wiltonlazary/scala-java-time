@@ -31,6 +31,7 @@
  */
 package org.threeten.bp.format
 
+import java.util.Locale
 import org.threeten.bp.temporal.ChronoField.EPOCH_DAY
 import org.threeten.bp.temporal.ChronoField.INSTANT_SECONDS
 import org.threeten.bp.temporal.ChronoField.MICRO_OF_SECOND
@@ -271,5 +272,13 @@ class TestDateTimeParsing extends FunSuite with GenTestPrinterParser with Assert
     assertEquals(acc.getLong(NANO_OF_SECOND), 123456789L)
     assertEquals(acc.getLong(MICRO_OF_SECOND), 123456L)
     assertEquals(acc.getLong(MILLI_OF_SECOND), 123L)
+  }
+
+  // Needs zone strings not available on scala-java-locales
+  ignore("test_parse_tzdbGmtZone") {
+    val dateString = "2015,7,21,0,0,0,GMT+02:00"
+    val formatter = DateTimeFormatter.ofPattern("yyyy,M,d,H,m,s,z", Locale.US)
+    val parsed = ZonedDateTime.parse(dateString, formatter)
+    assertEquals(parsed, ZonedDateTime.of(2015, 7, 21, 0, 0, 0, 0, ZoneId.of("Etc/GMT-2")))
   }
 }

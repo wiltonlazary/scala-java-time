@@ -144,7 +144,7 @@ object HijrahDate {
     val cycles = new Array[Long](MAX_ADJUSTED_CYCLE)
     var i: Int = 0
     while (i < MAX_ADJUSTED_CYCLE) {
-      cycles(i) = new java.lang.Long(10631 * i)
+      cycles(i) = java.lang.Long.valueOf(10631 * i)
       i += 1
     }
     cycles
@@ -155,7 +155,7 @@ object HijrahDate {
     val values = new Array[Integer](MIN_VALUES.length)
     var i: Int = 0
     while (i < MIN_VALUES.length) {
-      values(i) = new Integer(MIN_VALUES(i))
+      values(i) = Integer.valueOf(MIN_VALUES(i))
       i += 1
     }
     values
@@ -165,7 +165,7 @@ object HijrahDate {
     val values = new Array[Integer](LEAST_MAX_VALUES.length)
     var i: Int = 0
     while (i < LEAST_MAX_VALUES.length) {
-      values(i) = new Integer(LEAST_MAX_VALUES(i))
+      values(i) = Integer.valueOf(LEAST_MAX_VALUES(i))
       i += 1
     }
     values
@@ -175,7 +175,7 @@ object HijrahDate {
     val values = new Array[Integer](MAX_VALUES.length)
     var i: Int = 0
     while (i < MAX_VALUES.length) {
-      values(i) = new Integer(MAX_VALUES(i))
+      values(i) = Integer.valueOf(MAX_VALUES(i))
       i += 1
     }
     values
@@ -185,7 +185,7 @@ object HijrahDate {
     val days = new Array[Integer](NUM_DAYS.length)
     var i: Int = 0
     while (i < NUM_DAYS.length) {
-      days(i) = new Integer(NUM_DAYS(i))
+      days(i) = Integer.valueOf(NUM_DAYS(i))
       i += 1
     }
     days
@@ -196,7 +196,7 @@ object HijrahDate {
     val days = new Array[Integer](LEAP_NUM_DAYS.length)
     var i: Int = 0
     while (i < LEAP_NUM_DAYS.length) {
-      days(i) = new Integer(LEAP_NUM_DAYS(i))
+      days(i) = Integer.valueOf(LEAP_NUM_DAYS(i))
       i += 1
     }
     days
@@ -206,7 +206,7 @@ object HijrahDate {
     val lengths = new Array[Integer](MONTH_LENGTH.length)
     var i: Int = 0
     while (i < MONTH_LENGTH.length) {
-      lengths(i) = new Integer(MONTH_LENGTH(i))
+      lengths(i) = Integer.valueOf(MONTH_LENGTH(i))
       i += 1
     }
     lengths
@@ -216,7 +216,7 @@ object HijrahDate {
     val lengths = new Array[Integer](LEAP_MONTH_LENGTH.length)
     var i: Int = 0
     while (i < LEAP_MONTH_LENGTH.length) {
-      lengths(i) = new Integer(LEAP_MONTH_LENGTH(i))
+      lengths(i) = Integer.valueOf(LEAP_MONTH_LENGTH(i))
       i += 1
     }
     lengths
@@ -226,7 +226,7 @@ object HijrahDate {
     val years = new Array[Integer](CYCLEYEAR_START_DATE.length)
     var i: Int = 0
     while (i < CYCLEYEAR_START_DATE.length) {
-      years(i) = new Integer(CYCLEYEAR_START_DATE(i))
+      years(i) = Integer.valueOf(CYCLEYEAR_START_DATE(i))
       i += 1
     }
     years
@@ -468,7 +468,7 @@ object HijrahDate {
         cycleDays = null
     }
     if (cycleDays == null) {
-      cycleDays = new java.lang.Long(cycleNumber * 10631)
+      cycleDays = java.lang.Long.valueOf(cycleNumber * 10631)
     }
     (cycleDays.longValue + dayInCycle + HIJRAH_JAN_1_1_GREGORIAN_DAY - 1)
   }
@@ -509,7 +509,7 @@ object HijrahDate {
         day = null
     }
     if (day == null) {
-      day = new java.lang.Long(cycleNumber * 10631)
+      day = java.lang.Long.valueOf(cycleNumber * 10631)
     }
     (epochDay - day.longValue).toInt
   }
@@ -558,7 +558,7 @@ object HijrahDate {
     */
   private def getAdjustedCycle(cycleNumber: Int): Array[Integer] = {
     var cycles: Array[Integer] = null
-    try cycles = ADJUSTED_CYCLE_YEARS.get(new Integer(cycleNumber))
+    try cycles = ADJUSTED_CYCLE_YEARS.get(Integer.valueOf(cycleNumber))
     catch {
       case e: ArrayIndexOutOfBoundsException =>
         cycles = null
@@ -575,7 +575,7 @@ object HijrahDate {
     */
   private def getAdjustedMonthDays(year: Int): Array[Integer] = {
     var newMonths: Array[Integer] = null
-    try newMonths = ADJUSTED_MONTH_DAYS.get(new Integer(year))
+    try newMonths = ADJUSTED_MONTH_DAYS.get(Integer.valueOf(year))
     catch {
       case e: ArrayIndexOutOfBoundsException =>
         newMonths = null
@@ -596,7 +596,7 @@ object HijrahDate {
     */
   private def getAdjustedMonthLength(year: Int): Array[Integer] = {
     var newMonths: Array[Integer] = null
-    try newMonths = ADJUSTED_MONTH_LENGTHS.get(new Integer(year))
+    try newMonths = ADJUSTED_MONTH_LENGTHS.get(Integer.valueOf(year))
     catch {
       case e: ArrayIndexOutOfBoundsException =>
         newMonths = null
@@ -789,7 +789,7 @@ object HijrahDate {
     if (endYear == startYear && endMonth < startMonth)
       throw new IllegalArgumentException("startYear == endYear && endMonth < startMonth")
     val isStartYLeap: Boolean = isLeapYear(startYear)
-    var orgStartMonthNums: Array[Integer] = ADJUSTED_MONTH_DAYS.get(new Integer(startYear))
+    var orgStartMonthNums: Array[Integer] = ADJUSTED_MONTH_DAYS.get(Integer.valueOf(startYear))
     if (orgStartMonthNums == null) {
       if (isStartYLeap) {
         orgStartMonthNums = new Array[Integer](LEAP_NUM_DAYS.length)
@@ -797,7 +797,7 @@ object HijrahDate {
         {
           var l: Int = 0
           while (l < LEAP_NUM_DAYS.length) {
-            orgStartMonthNums(l) = new Integer(LEAP_NUM_DAYS(l))
+            orgStartMonthNums(l) = Integer.valueOf(LEAP_NUM_DAYS(l))
             l += 1
           }
         }
@@ -808,7 +808,7 @@ object HijrahDate {
         {
           var l: Int = 0
           while (l < NUM_DAYS.length) {
-            orgStartMonthNums(l) = new Integer(NUM_DAYS(l))
+            orgStartMonthNums(l) = Integer.valueOf(NUM_DAYS(l))
             l += 1
           }
         }
@@ -820,22 +820,22 @@ object HijrahDate {
       var month: Int = 0
       while (month < 12) {
         if (month > startMonth)
-          newStartMonthNums(month) = new Integer(orgStartMonthNums(month).intValue - offset)
+          newStartMonthNums(month) = Integer.valueOf(orgStartMonthNums(month).intValue - offset)
         else
-          newStartMonthNums(month) = new Integer(orgStartMonthNums(month).intValue)
+          newStartMonthNums(month) = Integer.valueOf(orgStartMonthNums(month).intValue)
         month += 1
       }
     }
 
-    ADJUSTED_MONTH_DAYS.put(new Integer(startYear), newStartMonthNums)
-    var orgStartMonthLengths: Array[Integer] = ADJUSTED_MONTH_LENGTHS.get(new Integer(startYear))
+    ADJUSTED_MONTH_DAYS.put(Integer.valueOf(startYear), newStartMonthNums)
+    var orgStartMonthLengths: Array[Integer] = ADJUSTED_MONTH_LENGTHS.get(Integer.valueOf(startYear))
     if (orgStartMonthLengths == null) {
       if (isStartYLeap) {
         orgStartMonthLengths = new Array[Integer](LEAP_MONTH_LENGTH.length)
 
         var l: Int = 0
         while (l < LEAP_MONTH_LENGTH.length) {
-          orgStartMonthLengths(l) = new Integer(LEAP_MONTH_LENGTH(l))
+          orgStartMonthLengths(l) = Integer.valueOf(LEAP_MONTH_LENGTH(l))
           l += 1
         }
       }
@@ -843,7 +843,7 @@ object HijrahDate {
         orgStartMonthLengths = new Array[Integer](MONTH_LENGTH.length)
         var l: Int = 0
         while (l < MONTH_LENGTH.length) {
-          orgStartMonthLengths(l) = new Integer(MONTH_LENGTH(l))
+          orgStartMonthLengths(l) = Integer.valueOf(MONTH_LENGTH(l))
           l += 1
         }
       }
@@ -854,60 +854,60 @@ object HijrahDate {
       var month: Int = 0
       while (month < 12) {
         if (month == startMonth)
-          newStartMonthLengths(month) = new Integer(orgStartMonthLengths(month).intValue - offset)
+          newStartMonthLengths(month) = Integer.valueOf(orgStartMonthLengths(month).intValue - offset)
         else
-          newStartMonthLengths(month) = new Integer(orgStartMonthLengths(month).intValue)
+          newStartMonthLengths(month) = Integer.valueOf(orgStartMonthLengths(month).intValue)
         month += 1
       }
     }
 
-    ADJUSTED_MONTH_LENGTHS.put(new Integer(startYear), newStartMonthLengths)
+    ADJUSTED_MONTH_LENGTHS.put(Integer.valueOf(startYear), newStartMonthLengths)
     if (startYear != endYear) {
       val sCycleNumber: Int = (startYear - 1) / 30
       val sYearInCycle: Int = (startYear - 1) % 30
-      var startCycles: Array[Integer] = ADJUSTED_CYCLE_YEARS.get(new Integer(sCycleNumber))
+      var startCycles: Array[Integer] = ADJUSTED_CYCLE_YEARS.get(Integer.valueOf(sCycleNumber))
       if (startCycles == null) {
         startCycles = new Array[Integer](CYCLEYEAR_START_DATE.length)
         var j: Int = 0
         while (j < startCycles.length) {
-          startCycles(j) = new Integer(CYCLEYEAR_START_DATE(j))
+          startCycles(j) = Integer.valueOf(CYCLEYEAR_START_DATE(j))
           j += 1
         }
       }
 
       var j: Int = sYearInCycle + 1
       while (j < CYCLEYEAR_START_DATE.length) {
-        startCycles(j) = new Integer(startCycles(j).intValue - offset)
+        startCycles(j) = Integer.valueOf(startCycles(j).intValue - offset)
         j += 1
       }
 
-      ADJUSTED_CYCLE_YEARS.put(new Integer(sCycleNumber), startCycles)
+      ADJUSTED_CYCLE_YEARS.put(Integer.valueOf(sCycleNumber), startCycles)
       val sYearInMaxY: Int = (startYear - 1) / 30
       val sEndInMaxY: Int = (endYear - 1) / 30
       if (sYearInMaxY != sEndInMaxY) {
         {
           var j: Int = sYearInMaxY + 1
           while (j < ADJUSTED_CYCLES.length) {
-            ADJUSTED_CYCLES(j) = new java.lang.Long(ADJUSTED_CYCLES(j).longValue - offset)
+            ADJUSTED_CYCLES(j) = java.lang.Long.valueOf(ADJUSTED_CYCLES(j).longValue - offset)
             j += 1
           }
         }
         {
           var j: Int = sEndInMaxY + 1
           while (j < ADJUSTED_CYCLES.length) {
-            ADJUSTED_CYCLES(j) = new java.lang.Long(ADJUSTED_CYCLES(j).longValue + offset)
+            ADJUSTED_CYCLES(j) = java.lang.Long.valueOf(ADJUSTED_CYCLES(j).longValue + offset)
             j += 1
           }
         }
       }
       val eCycleNumber: Int = (endYear - 1) / 30
       val sEndInCycle: Int = (endYear - 1) % 30
-      var endCycles: Array[Integer] = ADJUSTED_CYCLE_YEARS.get(new Integer(eCycleNumber))
+      var endCycles: Array[Integer] = ADJUSTED_CYCLE_YEARS.get(Integer.valueOf(eCycleNumber))
       if (endCycles == null) {
         endCycles = new Array[Integer](CYCLEYEAR_START_DATE.length)
         var j: Int = 0
         while (j < endCycles.length) {
-          endCycles(j) = new Integer(CYCLEYEAR_START_DATE(j))
+          endCycles(j) = Integer.valueOf(CYCLEYEAR_START_DATE(j))
           j += 1
         }
       }
@@ -915,20 +915,20 @@ object HijrahDate {
       {
         var j: Int = sEndInCycle + 1
         while (j < CYCLEYEAR_START_DATE.length) {
-          endCycles(j) = new Integer(endCycles(j).intValue + offset)
+          endCycles(j) = Integer.valueOf(endCycles(j).intValue + offset)
           j += 1
         }
       }
-      ADJUSTED_CYCLE_YEARS.put(new Integer(eCycleNumber), endCycles)
+      ADJUSTED_CYCLE_YEARS.put(Integer.valueOf(eCycleNumber), endCycles)
     }
     val isEndYLeap: Boolean = isLeapYear(endYear)
-    var orgEndMonthDays: Array[Integer] = ADJUSTED_MONTH_DAYS.get(new Integer(endYear))
+    var orgEndMonthDays: Array[Integer] = ADJUSTED_MONTH_DAYS.get(Integer.valueOf(endYear))
     if (orgEndMonthDays == null) {
       if (isEndYLeap) {
         orgEndMonthDays = new Array[Integer](LEAP_NUM_DAYS.length)
         var l: Int = 0
         while (l < LEAP_NUM_DAYS.length) {
-          orgEndMonthDays(l) = new Integer(LEAP_NUM_DAYS(l))
+          orgEndMonthDays(l) = Integer.valueOf(LEAP_NUM_DAYS(l))
           l += 1
         }
       }
@@ -938,7 +938,7 @@ object HijrahDate {
         {
           var l: Int = 0
           while (l < NUM_DAYS.length) {
-            orgEndMonthDays(l) = new Integer(NUM_DAYS(l))
+            orgEndMonthDays(l) = Integer.valueOf(NUM_DAYS(l))
             l += 1
           }
         }
@@ -950,14 +950,14 @@ object HijrahDate {
       var month: Int = 0
       while (month < 12) {
           if (month > endMonth)
-            newEndMonthDays(month) = new Integer(orgEndMonthDays(month).intValue + offset)
+            newEndMonthDays(month) = Integer.valueOf(orgEndMonthDays(month).intValue + offset)
           else
-            newEndMonthDays(month) = new Integer(orgEndMonthDays(month).intValue)
+            newEndMonthDays(month) = Integer.valueOf(orgEndMonthDays(month).intValue)
           month += 1
       }
     }
-    ADJUSTED_MONTH_DAYS.put(new Integer(endYear), newEndMonthDays)
-    var orgEndMonthLengths: Array[Integer] = ADJUSTED_MONTH_LENGTHS.get(new Integer(endYear))
+    ADJUSTED_MONTH_DAYS.put(Integer.valueOf(endYear), newEndMonthDays)
+    var orgEndMonthLengths: Array[Integer] = ADJUSTED_MONTH_LENGTHS.get(Integer.valueOf(endYear))
     if (orgEndMonthLengths == null) {
       if (isEndYLeap) {
         orgEndMonthLengths = new Array[Integer](LEAP_MONTH_LENGTH.length)
@@ -965,7 +965,7 @@ object HijrahDate {
         {
           var l: Int = 0
           while (l < LEAP_MONTH_LENGTH.length) {
-            orgEndMonthLengths(l) = new Integer(LEAP_MONTH_LENGTH(l))
+            orgEndMonthLengths(l) = Integer.valueOf(LEAP_MONTH_LENGTH(l))
             l += 1
           }
         }
@@ -976,7 +976,7 @@ object HijrahDate {
         {
           var l: Int = 0
           while (l < MONTH_LENGTH.length) {
-            orgEndMonthLengths(l) = new Integer(MONTH_LENGTH(l))
+            orgEndMonthLengths(l) = Integer.valueOf(MONTH_LENGTH(l))
             l += 1; l - 1
           }
         }
@@ -988,17 +988,17 @@ object HijrahDate {
       var month: Int = 0
       while (month < 12) {
         if (month == endMonth)
-          newEndMonthLengths(month) = new Integer(orgEndMonthLengths(month).intValue + offset)
+          newEndMonthLengths(month) = Integer.valueOf(orgEndMonthLengths(month).intValue + offset)
         else
-          newEndMonthLengths(month) = new Integer(orgEndMonthLengths(month).intValue)
+          newEndMonthLengths(month) = Integer.valueOf(orgEndMonthLengths(month).intValue)
         month += 1
       }
     }
-    ADJUSTED_MONTH_LENGTHS.put(new Integer(endYear), newEndMonthLengths)
-    val startMonthLengths: Array[Integer] = ADJUSTED_MONTH_LENGTHS.get(new Integer(startYear))
-    val endMonthLengths: Array[Integer] = ADJUSTED_MONTH_LENGTHS.get(new Integer(endYear))
-    val startMonthDays: Array[Integer] = ADJUSTED_MONTH_DAYS.get(new Integer(startYear))
-    val endMonthDays: Array[Integer] = ADJUSTED_MONTH_DAYS.get(new Integer(endYear))
+    ADJUSTED_MONTH_LENGTHS.put(Integer.valueOf(endYear), newEndMonthLengths)
+    val startMonthLengths: Array[Integer] = ADJUSTED_MONTH_LENGTHS.get(Integer.valueOf(startYear))
+    val endMonthLengths: Array[Integer] = ADJUSTED_MONTH_LENGTHS.get(Integer.valueOf(endYear))
+    val startMonthDays: Array[Integer] = ADJUSTED_MONTH_DAYS.get(Integer.valueOf(startYear))
+    val endMonthDays: Array[Integer] = ADJUSTED_MONTH_DAYS.get(Integer.valueOf(endYear))
     val startMonthLength: Int = startMonthLengths(startMonth).intValue
     val endMonthLength: Int = endMonthLengths(endMonth).intValue
     val startMonthDay: Int = startMonthDays(11).intValue + startMonthLengths(11).intValue
@@ -1011,14 +1011,14 @@ object HijrahDate {
     if (maxMonthLength < endMonthLength) {
       maxMonthLength = endMonthLength
     }
-    ADJUSTED_MAX_VALUES(POSITION_DAY_OF_MONTH) = new Integer(maxMonthLength)
+    ADJUSTED_MAX_VALUES(POSITION_DAY_OF_MONTH) = Integer.valueOf(maxMonthLength)
     if (leastMaxMonthLength > startMonthLength) {
       leastMaxMonthLength = startMonthLength
     }
     if (leastMaxMonthLength > endMonthLength) {
       leastMaxMonthLength = endMonthLength
     }
-    ADJUSTED_LEAST_MAX_VALUES(POSITION_DAY_OF_MONTH) = new Integer(leastMaxMonthLength)
+    ADJUSTED_LEAST_MAX_VALUES(POSITION_DAY_OF_MONTH) = Integer.valueOf(leastMaxMonthLength)
     var maxMonthDay: Int = ADJUSTED_MAX_VALUES(POSITION_DAY_OF_YEAR).intValue
     var leastMaxMonthDay: Int = ADJUSTED_LEAST_MAX_VALUES(POSITION_DAY_OF_YEAR).intValue
     if (maxMonthDay < startMonthDay) {
@@ -1027,14 +1027,14 @@ object HijrahDate {
     if (maxMonthDay < endMonthDay) {
       maxMonthDay = endMonthDay
     }
-    ADJUSTED_MAX_VALUES(POSITION_DAY_OF_YEAR) = new Integer(maxMonthDay)
+    ADJUSTED_MAX_VALUES(POSITION_DAY_OF_YEAR) = Integer.valueOf(maxMonthDay)
     if (leastMaxMonthDay > startMonthDay) {
       leastMaxMonthDay = startMonthDay
     }
     if (leastMaxMonthDay > endMonthDay) {
       leastMaxMonthDay = endMonthDay
     }
-    ADJUSTED_LEAST_MAX_VALUES(POSITION_DAY_OF_YEAR) = new Integer(leastMaxMonthDay)
+    ADJUSTED_LEAST_MAX_VALUES(POSITION_DAY_OF_YEAR) = Integer.valueOf(leastMaxMonthDay)
   }
 
   @throws[IOException]

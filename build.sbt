@@ -180,6 +180,7 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
     version := scalaTZDBVersion
   )
   .jsSettings(
+    dbVersion := TzdbPlugin.Version(tzdbVersion),
     includeTTBP := true,
     sourceGenerators in Compile += Def.task {
       val srcDirs = (sourceManaged in Compile).value
@@ -306,5 +307,13 @@ lazy val pomData =
     </contributor>
     <contributor>
       <name>Sherman Shen</name>
+    </contributor>
+    <contributor>
+      <name>Pavel Malyshev</name>
+      <url>https://github.com/pamalyshev</url>
+    </contributor>
+    <contributor>
+      <name>Philipp Thuerwaechter</name>
+      <url>https://github.com/pithu</url>
     </contributor>
   </contributors>

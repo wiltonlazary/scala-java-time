@@ -65,8 +65,13 @@ class TestZoneRulesProvider extends FunSuite with AssertionsHelper {
   test("getAvailableGroupIds") {
     val zoneIds: java.util.Set[String] = ZoneRulesProvider.getAvailableZoneIds
     assertTrue(zoneIds.contains("Europe/London"))
-    zoneIds.clear()
-    assertTrue(zoneIds.size == 0)
+    try {
+      zoneIds.clear()
+      fail()
+    } catch {
+      case _: UnsupportedOperationException =>
+      // ignore
+    }
     val zoneIds2: java.util.Set[String] = ZoneRulesProvider.getAvailableZoneIds
     assertTrue(zoneIds2.contains("Europe/London"))
   }
@@ -128,7 +133,6 @@ class TestZoneRulesProvider extends FunSuite with AssertionsHelper {
     val pre: java.util.Set[String] = ZoneRulesProvider.getAvailableZoneIds
     assertTrue(!pre.contains("FooLocation"))
     ZoneRulesProvider.registerProvider(new TestZoneRulesProvider.MockTempProvider)
-    assertTrue(!pre.contains("FooLocation"))
     val post: java.util.Set[String] = ZoneRulesProvider.getAvailableZoneIds
     assertTrue(post.contains("FooLocation"))
     assertTrue(ZoneRulesProvider.getRules("FooLocation",  false) == ZoneOffset.of("+01:45").getRules)

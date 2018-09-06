@@ -76,14 +76,7 @@ lazy val commonSettings = Seq(
       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
   },
   pomExtra := pomData,
-  pomIncludeRepository := { _ => false },
-  libraryDependencies ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 11 && scalaMajor <= 12 && (scalaJSVersion.startsWith("0.6.")) =>
-        Seq("org.scalatest" %%% "scalatest" % "3.0.5" % "test")
-      case _ => Seq.empty
-    }
-  }
+  pomIncludeRepository := { _ => false }
 )
 
 lazy val root = project.in(file("."))
@@ -192,7 +185,15 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     publish              := {},
     publishLocal         := {},
     publishArtifact      := false,
-    Keys.`package`       := file(""))
+    Keys.`package`       := file(""),
+    libraryDependencies ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, scalaMajor)) if scalaMajor <= 12 && (scalaJSVersion.startsWith("0.6.")) =>
+          Seq("org.scalatest" %%% "scalatest" % "3.0.5" % "test")
+        case _ => Seq.empty
+      }
+    }
+  )
   .jvmSettings(
     // Fork the JVM test to ensure that the custom flags are set
     fork in Test := true,

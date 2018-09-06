@@ -22,9 +22,9 @@ lazy val commonSettings = Seq(
   scalaVersion       := scalaVer,
   crossScalaVersions := {
     if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "6.12.4", "2.13.0-M2")
+      Seq("2.10.7", "2.11.12", "2.12.6", "2.13.0-M4")
     } else {
-      Seq("2.11.12", "2.12.6", "2.13.0-M2")
+      Seq("2.11.12", "2.12.6", "2.13.0-M4")
     }
   },
   autoAPIMappings    := true,
@@ -46,6 +46,7 @@ lazy val commonSettings = Seq(
       case Some((2, 13)) =>
         scalacOptions.value ++ Seq(
           "-deprecation:false",
+          "-Xsource:2.13",
           "-Xfatal-warnings",
           "-Yrangepos",
           "-target:jvm-1.8")
@@ -152,7 +153,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
         copyAndReplace(srcDirs, destinationDir)
       }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.10-cldr32"
+      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.11-cldr33"
     )
   )
 

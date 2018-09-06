@@ -10,20 +10,22 @@ language: scala
 
 jdk:
   - oraclejdk8
-  - oraclejdk9
+  # - oraclejdk9 Let's assume 8 and 10 is enough
+  - oraclejdk10
 
 scala:
   - 2.10.7
   - 2.11.12
-  - 2.12.4
+  - 2.12.6
+  - 2.13.0-M4
 
 before_install:
   - export PATH=${PATH}:./vendor/bundle
 
 env:
-  - TRAVIS_NODE_VERSION="7.10.1"
-  - TRAVIS_NODE_VERSION="8.9.1"
-  - TRAVIS_NODE_VERSION="9.2.0"
+  - TRAVIS_NODE_VERSION="8.11.4"
+  - TRAVIS_NODE_VERSION="9.11.2"
+  - TRAVIS_NODE_VERSION="10.9.0"
 
 install:
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
@@ -42,7 +44,8 @@ cache:
 
 script:
   - sudo chmod +x /usr/local/bin/sbt
-  - sbt ++$TRAVIS_SCALA_VERSION -J-Xmx4G clean scalajavatimeTestsJVM/test scalajavatimeTestsJS/test scalajavatimeJVM/publishLocal scalajavatimeJS/publishLocal scalajavatimeTZDBJVM/publishLocal scalajavatimeTZDBJS/publishLocal
+  - sbt ++$TRAVIS_SCALA_VERSION -J-Xmx4G clean scalajavatimeJVM/compile scalajavatimeTestsJVM/compile
+  - if [[ $TRAVIS_SCALA_VERSION != "2.13.0-M4" ]]; then sbt ++$TRAVIS_SCALA_VERSION -J-Xmx4G clean scalajavatimeTestsJVM/test scalajavatimeTestsJS/test scalajavatimeJVM/publishLocal scalajavatimeJS/publishLocal scalajavatimeTZDBJVM/publishLocal scalajavatimeTZDBJS/publishLocal; fi;
   # docs/makeMicrosite
   # Tricks to avoid unnecessary cache updates, from
   # http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html

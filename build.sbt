@@ -2,7 +2,7 @@ import sbtcrossproject.{crossProject, CrossType}
 import sbt._
 import sbt.io.Using
 
-val scalaVer = "2.12.4"
+val scalaVer = "2.12.6"
 val tzdbVersion = "2018c"
 val scalaJavaTimeVer = "2.0.0-M13"
 val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
@@ -22,21 +22,12 @@ lazy val commonSettings = Seq(
   scalaVersion       := scalaVer,
   crossScalaVersions := {
     if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "2.12.4", "2.13.0-M2")
+      Seq("2.10.7", "2.11.12", "2.12.6", "2.13.0-M4")
     } else {
-      Seq("2.11.12", "2.12.4", "2.13.0-M2")
+      Seq("2.11.12", "2.12.6", "2.13.0-M4")
     }
   },
   autoAPIMappings    := true,
-
-  libraryDependencies ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 11 && scalaMajor <= 12 =>
-        compilerPlugin("org.scalameta" % "semanticdb-scalac" % "2.1.2" cross CrossVersion.full) :: Nil
-      case _ =>
-        Nil
-    }
-  },
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
@@ -50,12 +41,12 @@ lazy val commonSettings = Seq(
         scalacOptions.value ++ Seq(
           "-deprecation:false",
           "-Xfatal-warnings",
-          "-Xplugin-require:semanticdb",
           "-Yrangepos",
           "-target:jvm-1.8")
       case Some((2, 13)) =>
         scalacOptions.value ++ Seq(
           "-deprecation:false",
+          "-Xsource:2.13",
           "-Xfatal-warnings",
           "-Yrangepos",
           "-target:jvm-1.8")
@@ -85,17 +76,8 @@ lazy val commonSettings = Seq(
       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
   },
   pomExtra := pomData,
-  pomIncludeRepository := { _ => false },
-  libraryDependencies ++= {
-    if (scalaJSVersion.startsWith("0.6.")) {
-      Seq(
-        "org.scalatest" %%% "scalatest" % "3.0.4" % "test"
-      )
-    } else {
-      Nil
-    }
-  }
-) ++ scalafixSettings
+  pomIncludeRepository := { _ => false }
+)
 
 lazy val root = project.in(file("."))
   .aggregate(scalajavatimeJVM, scalajavatimeJS, scalajavatimeTZDBJVM, scalajavatimeTZDBJS, scalajavatimeTestsJVM, scalajavatimeTestsJVM)
@@ -164,7 +146,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
         copyAndReplace(srcDirs, destinationDir)
       }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.10-cldr32"
+      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.11-cldr33"
     )
   )
 
@@ -203,7 +185,15 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     publish              := {},
     publishLocal         := {},
     publishArtifact      := false,
-    Keys.`package`       := file(""))
+    Keys.`package`       := file(""),
+    libraryDependencies ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, scalaMajor)) if scalaMajor <= 12 && (scalaJSVersion.startsWith("0.6.")) =>
+          Seq("org.scalatest" %%% "scalatest" % "3.0.5" % "test")
+        case _ => Seq.empty
+      }
+    }
+  )
   .jvmSettings(
     // Fork the JVM test to ensure that the custom flags are set
     fork in Test := true,

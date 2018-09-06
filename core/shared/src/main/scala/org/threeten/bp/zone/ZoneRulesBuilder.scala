@@ -34,7 +34,7 @@ package org.threeten.bp.zone
 import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.TemporalAdjusters.nextOrSame
 import org.threeten.bp.temporal.TemporalAdjusters.previousOrSame
-import java.util.{Objects, Collections}
+import java.util.{Objects, Comparator, Collections}
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -78,6 +78,8 @@ class ZoneRulesBuilder() {
   /** A map for deduplicating the output.
     */
   private var deduplicateMap: java.util.Map[AnyRef, AnyRef] = null
+
+  private val ruleComparator = new TZRuleComparator()
 
   /** Adds a window to the builder that can be used to filter a set of rules.
     *
@@ -447,8 +449,8 @@ class ZoneRulesBuilder() {
         lastRuleList.clear()
         maxLastRuleStartYear = Year.MAX_VALUE
       }
-      Collections.sort(ruleList)
-      Collections.sort(lastRuleList)
+      Collections.sort(ruleList, ruleComparator)
+      Collections.sort(lastRuleList, ruleComparator)
       if (ruleList.size == 0 && fixedSavingAmountSecs == null) {
         fixedSavingAmountSecs = 0
       }
@@ -502,8 +504,7 @@ class ZoneRulesBuilder() {
                                            private[zone] var time: LocalTime,
                                            private[zone] var timeEndOfDay: Boolean,
                                            private[zone] var timeDefinition: ZoneOffsetTransitionRule.TimeDefinition,
-                                           private[zone] var savingAmountSecs: Int)
-    extends Ordered[ZoneRulesBuilder#TZRule] {
+                                           private[zone] var savingAmountSecs: Int) {
 
     /** Converts this to a transition.
       *
@@ -546,19 +547,7 @@ class ZoneRulesBuilder() {
       new ZoneOffsetTransitionRule(month, dayOfMonthIndicator, dayOfWeek, time, timeEndOfDay, timeDefinition, standardOffset, trans.getOffsetBefore, trans.getOffsetAfter)
     }
 
-    def compare(other: ZoneRulesBuilder#TZRule): Int = {
-      var cmp: Int = year - other.year
-      cmp = if (cmp == 0) month.compareTo(other.month) else cmp
-      if (cmp == 0) {
-        val thisDate: LocalDate = toLocalDate
-        val otherDate: LocalDate = other.toLocalDate
-        cmp = thisDate.compareTo(otherDate)
-      }
-      cmp = if (cmp == 0) time.compareTo(other.time) else cmp
-      cmp
-    }
-
-    private def toLocalDate: LocalDate = {
+    private[zone] def toLocalDate: LocalDate = {
       var date: LocalDate = null
       if (dayOfMonthIndicator < 0) {
         val monthLen: Int = month.length(IsoChronology.INSTANCE.isLeapYear(year))
@@ -578,6 +567,23 @@ class ZoneRulesBuilder() {
       }
       date
     }
+
+  }
+
+  class TZRuleComparator extends Comparator[ZoneRulesBuilder#TZRule] {
+
+    override def compare(that: ZoneRulesBuilder#TZRule, other: ZoneRulesBuilder#TZRule): Int = {
+      var cmp: Int = that.year - other.year
+      cmp = if (cmp == 0) that.month.compareTo(other.month) else cmp
+      if (cmp == 0) {
+        val thisDate: LocalDate = that.toLocalDate
+        val otherDate: LocalDate = other.toLocalDate
+        cmp = thisDate.compareTo(otherDate)
+      }
+      cmp = if (cmp == 0) that.time.compareTo(other.time) else cmp
+      cmp
+    }
+
   }
 
 }

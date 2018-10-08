@@ -3,7 +3,7 @@ import sbt._
 import sbt.io.Using
 
 val scalaVer = "2.12.7"
-val tzdbVersion = "2018c"
+val tzdbVersion = "2018e"
 val scalaJavaTimeVer = "2.0.0-M13"
 val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
 val scalaTZDBVersion = s"${scalaJavaTimeVer}_$tzdbVersion"

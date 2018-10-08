@@ -10,8 +10,8 @@ language: scala
 
 jdk:
   - oraclejdk8
-  # - oraclejdk9 Let's assume 8 and 10 is enough
-  - oraclejdk10
+  # - oraclejdk9 Let's assume 8 and 11 are enough
+  - openjdk11
 
 scala:
   - 2.10.7

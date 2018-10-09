@@ -61,28 +61,27 @@ final class SimpleDateTimeFormatStyleProvider extends DateTimeFormatStyleProvide
     if (cached != null) {
       if (cached == "")
         throw new IllegalArgumentException("Unable to convert DateFormat to DateTimeFormatter")
-      return cached.asInstanceOf[DateTimeFormatter]
+      cached.asInstanceOf[DateTimeFormatter]
+    } else {
+      (if (dateStyle != null) {
+        if (timeStyle != null) {
+          DateFormat.getDateTimeInstance(convertStyle(dateStyle), convertStyle(timeStyle), locale)
+        } else {
+          DateFormat.getDateInstance(convertStyle(dateStyle), locale)
+        }
+      } else {
+        DateFormat.getTimeInstance(convertStyle(timeStyle), locale)
+      }) match {
+        case format: SimpleDateFormat =>
+          val pattern: String = format.toPattern
+          val formatter: DateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(pattern).toFormatter(locale)
+          SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.putIfAbsent(key, formatter)
+          formatter
+        case _ =>
+          SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.putIfAbsent(key, "")
+          throw new IllegalArgumentException("Unable to convert DateFormat to DateTimeFormatter")
+      }
     }
-    var dateFormat: DateFormat = null
-    if (dateStyle != null) {
-      if (timeStyle != null)
-        dateFormat = DateFormat.getDateTimeInstance(convertStyle(dateStyle), convertStyle(timeStyle), locale)
-      else
-        dateFormat = DateFormat.getDateInstance(convertStyle(dateStyle), locale)
-    }
-    else {
-      dateFormat = DateFormat.getTimeInstance(convertStyle(timeStyle), locale)
-    }
-    dateFormat match {
-      case format: SimpleDateFormat =>
-        val pattern: String = format.toPattern
-        val formatter: DateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(pattern).toFormatter(locale)
-        SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.putIfAbsent(key, formatter)
-        return formatter
-      case _ =>
-    }
-    SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.putIfAbsent(key, "")
-    throw new IllegalArgumentException("Unable to convert DateFormat to DateTimeFormatter")
   }
 
   /** Converts the enum style to the old format style.

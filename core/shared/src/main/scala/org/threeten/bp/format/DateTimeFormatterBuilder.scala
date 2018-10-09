@@ -77,18 +77,21 @@ object DateTimeFormatterBuilder {
     Objects.requireNonNull(chrono, "chrono")
     if (dateStyle == null && timeStyle == null)
       throw new IllegalArgumentException("Either dateStyle or timeStyle must be non-null")
-    var dateFormat: DateFormat = null
-    if (dateStyle != null)
-      if (timeStyle != null)
-        dateFormat = DateFormat.getDateTimeInstance(dateStyle.ordinal, timeStyle.ordinal, locale)
-      else
-        dateFormat = DateFormat.getDateInstance(dateStyle.ordinal, locale)
-    else
-      dateFormat = DateFormat.getTimeInstance(timeStyle.ordinal, locale)
-    if (dateFormat.isInstanceOf[SimpleDateFormat])
+    val dateFormat: DateFormat =
+      if (dateStyle != null) {
+        if (timeStyle != null) {
+          DateFormat.getDateTimeInstance(dateStyle.ordinal, timeStyle.ordinal, locale)
+        } else {
+          DateFormat.getDateInstance(dateStyle.ordinal, locale)
+        }
+      } else {
+        DateFormat.getTimeInstance(timeStyle.ordinal, locale)
+      }
+    if (dateFormat.isInstanceOf[SimpleDateFormat]) {
       dateFormat.asInstanceOf[SimpleDateFormat].toPattern
-    else
+    } else {
       throw new IllegalArgumentException("Unable to determine pattern")
+    }
   }
 
   /** Map of letters to fields. */

@@ -822,13 +822,13 @@ object TTBPDateTimeFormatterBuilder {
         throw new IndexOutOfBoundsException
       }
       val style: TextStyle = if (context.isStrict) textStyle else null
-      val it: java.util.Iterator[java.util.Map.Entry[String, Long]] = provider.getTextIterator(field, style, context.getLocale)
+      val it = provider.getTextIterator(field, style, context.getLocale)
       if (it != null) {
         while (it.hasNext) {
-          val entry: java.util.Map.Entry[String, Long] = it.next
-          val itText: String = entry.getKey
+          val entry = it.next
+          val itText: String = entry._1
           if (context.subSequenceEquals(itText, 0, parseText, position, itText.length)) {
-            return context.setParsedField(field, entry.getValue, position, position + itText.length)
+            return context.setParsedField(field, entry._2, position, position + itText.length)
           }
         }
         if (context.isStrict) {

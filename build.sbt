@@ -12,7 +12,6 @@ lazy val downloadFromZip: TaskKey[Unit] =
   taskKey[Unit]("Download the tzdb tarball and extract it")
 
 lazy val commonSettings = Seq(
-  name         := "scala-java-time",
   description  := "java.time API implementation in Scala and Scala.js",
   version      := scalaJavaTimeVersion,
   organization := "io.github.cquiroz",
@@ -27,7 +26,6 @@ lazy val commonSettings = Seq(
       Seq("2.11.12", "2.12.7", "2.13.0-M4")
     }
   },
-  autoAPIMappings    := true,
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
@@ -80,16 +78,16 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = project.in(file("."))
-  .aggregate(scalajavatimeJVM, scalajavatimeJS, scalajavatimeTZDBJVM, scalajavatimeTZDBJS, scalajavatimeTestsJVM, scalajavatimeTestsJVM)
-  .settings(commonSettings: _*)
   .settings(
-    name                 := "scala-java-time",
+    name                 := "scala-java-time-root",
     // No, SBT, we don't want any artifacts for root.
     // No, not even an empty jar.
     publish              := {},
     publishLocal         := {},
     publishArtifact      := false,
     Keys.`package`       := file(""))
+  .settings(commonSettings: _*)
+  .aggregate(scalajavatime.jvm, scalajavatime.js, scalajavatimeTZDBJVM, scalajavatimeTZDBJS, scalajavatimeTestsJVM, scalajavatimeTestsJVM)
 
 /**
   * Copy source files and translate them to the java.time package
@@ -129,6 +127,9 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)
   .in(file("core"))
   .settings(commonSettings: _*)
+  .settings(
+    name                 := "scala-java-time"
+  )
   .jsSettings(
     scalacOptions ++= {
       val tagOrHash =
@@ -149,9 +150,6 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       "io.github.cquiroz" %%% "scala-java-locales" % "0.3.11-cldr33"
     )
   )
-
-lazy val scalajavatimeJVM = scalajavatime.jvm
-lazy val scalajavatimeJS  = scalajavatime.js
 
 lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)
@@ -213,7 +211,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
 lazy val scalajavatimeTestsJVM = scalajavatimeTests.jvm
 lazy val scalajavatimeTestsJS  = scalajavatimeTests.js
 
-lazy val docs = project.in(file("docs")).dependsOn(scalajavatimeJVM, scalajavatimeJS)
+lazy val docs = project.in(file("docs")).dependsOn(scalajavatime.jvm, scalajavatime.js)
   .settings(commonSettings)
   .settings(name := "docs")
   .enablePlugins(MicrositesPlugin)

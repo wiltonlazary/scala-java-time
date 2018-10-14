@@ -652,15 +652,18 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
   def appendText(field: TemporalField, textLookup: java.util.Map[Long, String]): DateTimeFormatterBuilder = {
     Objects.requireNonNull(field, "field")
     Objects.requireNonNull(textLookup, "textLookup")
-    val copy: java.util.Map[Long, String] = new java.util.LinkedHashMap[Long, String](textLookup)
-    val map: java.util.Map[TextStyle, java.util.Map[Long, String]] = Collections.singletonMap(TextStyle.FULL, copy)
+    import scala.collection.JavaConverters._
+    val copy: Map[scala.Long, String] = textLookup.asScala.toMap.map {
+      case (x, i) => (x.toLong, i)
+    }
+    val map: Map[TextStyle, Map[scala.Long, String]] = Map(TextStyle.FULL -> copy)
     val store: TTBPSimpleDateTimeTextProvider.LocaleStore = new TTBPSimpleDateTimeTextProvider.LocaleStore(map)
     val provider: TTBPDateTimeTextProvider = new TTBPDateTimeTextProvider() {
-      def getText(field: TemporalField, value: Long, style: TextStyle, locale: Locale): String = {
+      override def getText(field: TemporalField, value: scala.Long, style: TextStyle, locale: Locale): String = {
         store.getText(value, style)
       }
 
-      def getTextIterator(field: TemporalField, style: TextStyle, locale: Locale): java.util.Iterator[java.util.Map.Entry[String, Long]] = {
+      override def getTextIterator(field: TemporalField, style: TextStyle, locale: Locale): Iterator[(String, scala.Long)] = {
         store.getTextIterator(style)
       }
     }

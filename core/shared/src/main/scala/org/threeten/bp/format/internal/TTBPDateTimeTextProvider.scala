@@ -32,7 +32,6 @@
 package org.threeten.bp.format.internal
 
 import java.util.Locale
-import java.lang.Long
 import java.util.concurrent.atomic.AtomicReference
 import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.TextStyle
@@ -115,5 +114,5 @@ abstract class TTBPDateTimeTextProvider {
     * @return the iterator of text to field pairs, in order from longest text to shortest text,
     *         null if the field or style is not parsable
     */
-  def getTextIterator(field: TemporalField, style: TextStyle, locale: Locale): java.util.Iterator[java.util.Map.Entry[String, Long]]
+  def getTextIterator(field: TemporalField, style: TextStyle, locale: Locale): Iterator[(String, Long)]
 }

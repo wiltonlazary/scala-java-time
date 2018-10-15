@@ -76,7 +76,7 @@ object TTBPDateTimeFormatterBuilder {
   /** Composite printer and parser. */
   private[format] final class CompositePrinterParser private[format](private val printerParsers: Array[DateTimePrinterParser], private val optional: Boolean) extends DateTimePrinterParser {
 
-    private[format] def this(printerParsers: java.util.List[DateTimePrinterParser], optional: Boolean) {
+    private[format] def this(printerParsers: List[DateTimePrinterParser], optional: Boolean) {
       this(printerParsers.toArray(new Array[DateTimePrinterParser](printerParsers.size)), optional)
     }
 
@@ -141,6 +141,8 @@ object TTBPDateTimeFormatterBuilder {
     }
 
     override def toString: String = {
+      // Doing this with mkString produces a bigger output
+      // Option(printerParsers).map(_.mkString(if (optional) "[" else "(", "", if (optional) "]" else ")")).getOrElse("")
       val buf: StringBuilder = new StringBuilder
       if (printerParsers != null) {
         buf.append(if (optional) "[" else "(")

@@ -201,10 +201,11 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     * @return true if equal
     */
    def charEquals(ch1: Char, ch2: Char): Boolean =
-    if (isCaseSensitive)
+    if (isCaseSensitive) {
       ch1 == ch2
-    else
+    } else {
       TTBPDateTimeParseContext.charEqualsIgnoreCase(ch1, ch2)
+    }
 
   /** Checks if parsing is strict.
     *
@@ -229,10 +230,11 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     * @param successful  whether the optional segment was successfully parsed
     */
    def endOptional(successful: Boolean): Unit =
-    if (successful)
+    if (successful) {
       parsed.remove(parsed.size - 2)
-    else
+    } else {
       parsed.remove(parsed.size - 1)
+    }
 
   /** Gets the currently active temporal objects.
     *

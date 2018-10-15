@@ -466,12 +466,17 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @return true if the field is supported on this date-time, false if not
     */
   def isSupported(field: TemporalField): Boolean =
-    if (field.isInstanceOf[ChronoField]) field.isDateBased || field.isTimeBased
-    else field != null && field.isSupportedBy(this)
+    field match {
+      case _: ChronoField =>
+        field.isDateBased || field.isTimeBased
+      case _ => field != null && field.isSupportedBy(this)
+    }
 
   def isSupported(unit: TemporalUnit): Boolean =
-    if (unit.isInstanceOf[ChronoUnit]) unit.isDateBased || unit.isTimeBased
-    else unit != null && unit.isSupportedBy(this)
+    unit match {
+      case _: ChronoUnit => unit.isDateBased || unit.isTimeBased
+      case _ => unit != null && unit.isSupportedBy(this)
+    }
 
   /** Gets the range of valid values for the specified field.
     *
@@ -495,11 +500,13 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @throws DateTimeException if the range for the field cannot be obtained
     */
   override def range(field: TemporalField): ValueRange =
-    if (field.isInstanceOf[ChronoField])
-      if (field.isTimeBased) time.range(field)
-      else date.range(field)
-    else
-      field.rangeRefinedBy(this)
+    field match {
+      case _: ChronoField =>
+        if (field.isTimeBased) time.range(field)
+        else date.range(field)
+      case _ =>
+        field.rangeRefinedBy(this)
+    }
 
   /** Gets the value of the specified field from this date-time as an {@code int}.
     *
@@ -526,11 +533,13 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @throws ArithmeticException if numeric overflow occurs
     */
   override def get(field: TemporalField): Int =
-    if (field.isInstanceOf[ChronoField])
-      if (field.isTimeBased) time.get(field)
-      else date.get(field)
-    else
-      super.get(field)
+    field match {
+      case _: ChronoField =>
+        if (field.isTimeBased) time.get(field)
+        else date.get(field)
+      case _ =>
+        super.get(field)
+    }
 
   /** Gets the value of the specified field from this date-time as a {@code long}.
     *
@@ -554,11 +563,13 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @throws ArithmeticException if numeric overflow occurs
     */
   def getLong(field: TemporalField): Long =
-    if (field.isInstanceOf[ChronoField])
-      if (field.isTimeBased) time.getLong(field)
-      else date.getLong(field)
-    else
-      field.getFrom(this)
+    field match {
+      case _: ChronoField =>
+        if (field.isTimeBased) time.getLong(field)
+        else date.getLong(field)
+      case _ =>
+        field.getFrom(this)
+    }
 
   /** Gets the year field.
     *
@@ -1308,6 +1319,7 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @throws ArithmeticException if numeric overflow occurs
     */
   def until(endExclusive: Temporal, unit: TemporalUnit): Long = {
+    // Size reduced
     val end: LocalDateTime = LocalDateTime.from(endExclusive)
     unit match {
       case f: ChronoUnit =>
@@ -1317,43 +1329,42 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
           if (daysUntil > 0 && timeUntil < 0) {
             daysUntil -= 1
             timeUntil += NANOS_PER_DAY
-          }
-          else if (daysUntil < 0 && timeUntil > 0) {
+          } else if (daysUntil < 0 && timeUntil > 0) {
             daysUntil += 1
             timeUntil -= NANOS_PER_DAY
           }
-          var amount: Long = daysUntil
           import ChronoUnit._
           f match {
-            case NANOS => amount = Math.multiplyExact(amount, NANOS_PER_DAY)
-              return Math.addExact(amount, timeUntil)
-            case MICROS => amount = Math.multiplyExact(amount, MICROS_PER_DAY)
-              return Math.addExact(amount, timeUntil / 1000)
-            case MILLIS => amount = Math.multiplyExact(amount, MILLIS_PER_DAY)
-              return Math.addExact(amount, timeUntil / 1000000)
-            case SECONDS => amount = Math.multiplyExact(amount, SECONDS_PER_DAY)
-              return Math.addExact(amount, timeUntil / NANOS_PER_SECOND)
-            case MINUTES => amount = Math.multiplyExact(amount, MINUTES_PER_DAY)
-              return Math.addExact(amount, timeUntil / NANOS_PER_MINUTE)
-            case HOURS => amount = Math.multiplyExact(amount, HOURS_PER_DAY)
-              return Math.addExact(amount, timeUntil / NANOS_PER_HOUR)
-            case HALF_DAYS => amount = Math.multiplyExact(amount, 2)
-              return Math.addExact(amount, timeUntil / (NANOS_PER_HOUR * 12))
+            case NANOS =>
+              return Math.addExact(Math.multiplyExact(daysUntil, NANOS_PER_DAY), timeUntil)
+            case MICROS =>
+              return Math.addExact(Math.multiplyExact(daysUntil, MICROS_PER_DAY), timeUntil / 1000)
+            case MILLIS =>
+              return Math.addExact(Math.multiplyExact(daysUntil, MILLIS_PER_DAY), timeUntil / 1000000)
+            case SECONDS =>
+              return Math.addExact(Math.multiplyExact(daysUntil, SECONDS_PER_DAY), timeUntil / NANOS_PER_SECOND)
+            case MINUTES =>
+              return Math.addExact(Math.multiplyExact(daysUntil, MINUTES_PER_DAY), timeUntil / NANOS_PER_MINUTE)
+            case HOURS =>
+              return Math.addExact(Math.multiplyExact(daysUntil, HOURS_PER_DAY), timeUntil / NANOS_PER_HOUR)
+            case HALF_DAYS =>
+              return Math.addExact(Math.multiplyExact(daysUntil, 2), timeUntil / (NANOS_PER_HOUR * 12))
             case _ => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
 
           }
         }
-        var endDate: LocalDate = end.date
-        if (endDate.isAfter(date) && end.time.isBefore(time)) {
-          endDate = endDate.minusDays(1)
-        }
-        else if (endDate.isBefore(date) && end.time.isAfter(time)) {
-          endDate = endDate.plusDays(1)
-        }
-        return date.until(endDate, unit)
+        val endDate =
+          if (end.date.isAfter(date) && end.time.isBefore(time)) {
+            end.date.minusDays(1)
+          } else if (end.date.isBefore(date) && end.time.isAfter(time)) {
+            end.date.plusDays(1)
+          } else {
+            end.date
+          }
+        date.until(endDate, unit)
       case _ =>
+        unit.between(this, end)
     }
-    unit.between(this, end)
   }
 
   /** Combines this date-time with an offset to create an {@code OffsetDateTime}.

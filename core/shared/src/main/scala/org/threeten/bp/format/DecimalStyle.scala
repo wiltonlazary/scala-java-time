@@ -80,13 +80,11 @@ object DecimalStyle {
     */
   def of(locale: Locale): DecimalStyle = {
     Objects.requireNonNull(locale, "locale")
-    var info: DecimalStyle = CACHE.get(locale)
-    if (info == null) {
-      info = create(locale)
-      CACHE.putIfAbsent(locale, info)
-      info = CACHE.get(locale)
+    // Size reduced
+    if (CACHE.get(locale) == null) {
+      CACHE.putIfAbsent(locale, create(locale))
     }
-    info
+    CACHE.get(locale)
   }
 
   private def create(locale: Locale): DecimalStyle = {
@@ -215,6 +213,7 @@ final class DecimalStyle private(val zeroDigit: Char, val positiveSign: Char, va
     * @return the internationalized text, not null
     */
   private[format] def convertNumberToI18N(numericText: String): String = {
+    // Size verified
     if (zeroDigit == '0')
       return numericText
     val diff: Int = zeroDigit - '0'

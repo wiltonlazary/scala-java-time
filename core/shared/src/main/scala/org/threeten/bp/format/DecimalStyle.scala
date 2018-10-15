@@ -35,6 +35,7 @@ import java.text.DecimalFormatSymbols
 import java.util.{Objects, Locale}
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
+import scala.collection.JavaConverters._
 
 /** Localized symbols used in date and time formatting.
   *
@@ -59,12 +60,8 @@ object DecimalStyle {
     *
     * @return an array of locales for which localization is supported
     */
-  def getAvailableLocales: java.util.Set[Locale] = {
-    val locales: Array[Locale] = DecimalFormatSymbols.getAvailableLocales
-    val set = new java.util.HashSet[Locale](locales.length)
-    java.util.Collections.addAll(set, locales: _*)
-    set
-  }
+  def getAvailableLocales: java.util.Set[Locale] =
+    DecimalFormatSymbols.getAvailableLocales.toSet.asJava
 
   /** Obtains symbols for the default locale.
     *

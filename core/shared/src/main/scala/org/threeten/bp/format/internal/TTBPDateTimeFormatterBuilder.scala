@@ -1546,9 +1546,9 @@ object TTBPDateTimeFormatterBuilder {
           matchLen = idLen
         }
       }
-      if (bestMatch == null)
+      if (bestMatch == null) {
         ~position
-      else {
+      } else {
         context.setParsed(bestMatch)
         position + matchLen
       }

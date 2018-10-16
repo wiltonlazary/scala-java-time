@@ -96,6 +96,7 @@ object DateTimeFormatterBuilder {
 
   /** Map of letters to fields. */
   private val FIELD_MAP: java.util.Map[Character, TemporalField] = {
+    // Size checked
     val map = new java.util.HashMap[Character, TemporalField]
     map.put('G', ChronoField.ERA)
     map.put('y', ChronoField.YEAR_OF_ERA)

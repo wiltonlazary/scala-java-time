@@ -40,6 +40,7 @@ lazy val commonSettings = Seq(
           "-deprecation:false",
           "-Xfatal-warnings",
           "-Yrangepos",
+          "-unchecked",
           "-target:jvm-1.8")
       case Some((2, 13)) =>
         scalacOptions.value ++ Seq(

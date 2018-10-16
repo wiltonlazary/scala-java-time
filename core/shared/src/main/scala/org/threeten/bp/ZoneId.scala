@@ -45,6 +45,7 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.zone.ZoneRules
 import org.threeten.bp.zone.ZoneRulesException
 import org.threeten.bp.zone.ZoneRulesProvider
+import scala.collection.JavaConverters._
 
 @SerialVersionUID(8352817235686L)
 object ZoneId {
@@ -93,36 +94,36 @@ object ZoneId {
     * The map is unmodifiable.
     */
   val SHORT_IDS: java.util.Map[String, String] = {
-    val base: java.util.Map[String, String] = new java.util.HashMap[String, String]
-    base.put("ACT", "Australia/Darwin")
-    base.put("AET", "Australia/Sydney")
-    base.put("AGT", "America/Argentina/Buenos_Aires")
-    base.put("ART", "Africa/Cairo")
-    base.put("AST", "America/Anchorage")
-    base.put("BET", "America/Sao_Paulo")
-    base.put("BST", "Asia/Dhaka")
-    base.put("CAT", "Africa/Harare")
-    base.put("CNT", "America/St_Johns")
-    base.put("CST", "America/Chicago")
-    base.put("CTT", "Asia/Shanghai")
-    base.put("EAT", "Africa/Addis_Ababa")
-    base.put("ECT", "Europe/Paris")
-    base.put("IET", "America/Indiana/Indianapolis")
-    base.put("IST", "Asia/Kolkata")
-    base.put("JST", "Asia/Tokyo")
-    base.put("MIT", "Pacific/Apia")
-    base.put("NET", "Asia/Yerevan")
-    base.put("NST", "Pacific/Auckland")
-    base.put("PLT", "Asia/Karachi")
-    base.put("PNT", "America/Phoenix")
-    base.put("PRT", "America/Puerto_Rico")
-    base.put("PST", "America/Los_Angeles")
-    base.put("SST", "Pacific/Guadalcanal")
-    base.put("VST", "Asia/Ho_Chi_Minh")
-    base.put("EST", "-05:00")
-    base.put("MST", "-07:00")
-    base.put("HST", "-10:00")
-    Collections.unmodifiableMap(base)
+    val base = Map[String, String](
+      "ACT" -> "Australia/Darwin",
+      "AET" -> "Australia/Sydney",
+      "AGT" -> "America/Argentina/Buenos_Aires",
+      "ART" -> "Africa/Cairo",
+      "AST" -> "America/Anchorage",
+      "BET" -> "America/Sao_Paulo",
+      "BST" -> "Asia/Dhaka",
+      "CAT" -> "Africa/Harare",
+      "CNT" -> "America/St_Johns",
+      "CST" -> "America/Chicago",
+      "CTT" -> "Asia/Shanghai",
+      "EAT" -> "Africa/Addis_Ababa",
+      "ECT" -> "Europe/Paris",
+      "IET" -> "America/Indiana/Indianapolis",
+      "IST" -> "Asia/Kolkata",
+      "JST" -> "Asia/Tokyo",
+      "MIT" -> "Pacific/Apia",
+      "NET" -> "Asia/Yerevan",
+      "NST" -> "Pacific/Auckland",
+      "PLT" -> "Asia/Karachi",
+      "PNT" -> "America/Phoenix",
+      "PRT" -> "America/Puerto_Rico",
+      "PST" -> "America/Los_Angeles",
+      "SST" -> "Pacific/Guadalcanal",
+      "VST" -> "Asia/Ho_Chi_Minh",
+      "EST" -> "-05:00",
+      "MST" -> "-07:00",
+      "HST" -> "-10:00")
+    base.asJava
   }
 
   /** Gets the system default time-zone.
@@ -214,27 +215,31 @@ object ZoneId {
     */
   def of(zoneId: String): ZoneId = {
     Objects.requireNonNull(zoneId, "zoneId")
-    if (zoneId == "Z")
-      return ZoneOffset.UTC
-    if (zoneId.length == 1)
+    if (zoneId == "Z") {
+      ZoneOffset.UTC
+    } else if (zoneId.length == 1) {
       throw new DateTimeException(s"Invalid zone: $zoneId")
-    if (zoneId.startsWith("+") || zoneId.startsWith("-"))
-      return ZoneOffset.of(zoneId)
-    if ((zoneId == "UTC") || (zoneId == "GMT") || (zoneId == "UT"))
-      return new ZoneRegion(zoneId, ZoneOffset.UTC.getRules)
-    if (zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId.startsWith("GMT-")) {
+    } else if (zoneId.startsWith("+") || zoneId.startsWith("-")) {
+      ZoneOffset.of(zoneId)
+    } else if ((zoneId == "UTC") || (zoneId == "GMT") || (zoneId == "UT")) {
+      new ZoneRegion(zoneId, ZoneOffset.UTC.getRules)
+    } else if (zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId.startsWith("GMT-")) {
       val offset: ZoneOffset = ZoneOffset.of(zoneId.substring(3))
-      if (offset.getTotalSeconds == 0)
-        return new ZoneRegion(zoneId.substring(0, 3), offset.getRules)
-      return new ZoneRegion(zoneId.substring(0, 3) + offset.getId, offset.getRules)
-    }
-    if (zoneId.startsWith("UT+") || zoneId.startsWith("UT-")) {
+      if (offset.getTotalSeconds == 0) {
+        new ZoneRegion(zoneId.substring(0, 3), offset.getRules)
+      } else {
+        new ZoneRegion(zoneId.substring(0, 3) + offset.getId, offset.getRules)
+      }
+    } else if (zoneId.startsWith("UT+") || zoneId.startsWith("UT-")) {
       val offset: ZoneOffset = ZoneOffset.of(zoneId.substring(2))
-      if (offset.getTotalSeconds == 0)
-        return new ZoneRegion("UT", offset.getRules)
-      return new ZoneRegion(s"UT${offset.getId}", offset.getRules)
+      if (offset.getTotalSeconds == 0) {
+        new ZoneRegion("UT", offset.getRules)
+      } else {
+        new ZoneRegion(s"UT${offset.getId}", offset.getRules)
+      }
+    } else {
+      ZoneRegion.ofId(zoneId, true)
     }
-    ZoneRegion.ofId(zoneId, true)
   }
 
   /** Obtains an instance of {@code ZoneId} wrapping an offset.

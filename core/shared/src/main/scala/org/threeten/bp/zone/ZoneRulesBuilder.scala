@@ -277,14 +277,15 @@ class ZoneRulesBuilder() {
       var effectiveSavings: Integer = window.fixedSavingAmountSecs
       if (effectiveSavings == null) {
         effectiveSavings = 0
-        scala.util.control.Breaks.breakable {
-          val rules = window.ruleList.iterator
-          while (rules.hasNext) {
-            val rule = rules.next()
-            val trans: ZoneOffsetTransition = rule.toTransition(loopStandardOffset, loopSavings)
-            if (trans.toEpochSecond > loopWindowStart.toEpochSecond(loopWindowOffset)) {
-              scala.util.control.Breaks.break()
-            }
+        var break = false
+        val rules = window.ruleList.iterator
+        while (!break && rules.hasNext) {
+          val rule = rules.next()
+          val trans: ZoneOffsetTransition = rule.toTransition(loopStandardOffset, loopSavings)
+          if (trans.toEpochSecond > loopWindowStart.toEpochSecond(loopWindowOffset)) {
+            break = true
+          }
+          if (!break) {
             effectiveSavings = rule.savingAmountSecs
           }
         }

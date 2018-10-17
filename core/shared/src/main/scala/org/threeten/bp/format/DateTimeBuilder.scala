@@ -172,47 +172,41 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
 
   private def resolveFields(resolverStyle: ResolverStyle): Boolean = {
     var changes: Int = 0
-    scala.util.control.Breaks.breakable {
-      while (changes < 100) {
-        scala.util.control.Breaks.breakable {
-          val entries = fieldValues.entrySet.iterator
-          while (entries.hasNext) {
-            val entry = entries.next()
-            val targetField: TemporalField = entry.getKey
-            var resolvedObject: TemporalAccessor = targetField.resolve(fieldValues, this, resolverStyle)
-            resolvedObject match {
-              case czdt: ChronoZonedDateTime[_] =>
-                if (zone == null)
-                  zone = czdt.getZone
-                else if (!(zone == czdt.getZone))
-                  throw new DateTimeException(s"ChronoZonedDateTime must use the effective parsed zone: $zone")
-                resolvedObject = czdt.toLocalDateTime
-              case cld: ChronoLocalDate =>
-                resolveMakeChanges(targetField, cld)
-                changes += 1
-                scala.util.control.Breaks.break()
-              case lt: LocalTime =>
-                resolveMakeChanges(targetField, lt)
-                changes += 1
-                scala.util.control.Breaks.break()
-              case cldt: ChronoLocalDateTime[_] =>
-                resolveMakeChanges(targetField, cldt.toLocalDate)
-                resolveMakeChanges(targetField, cldt.toLocalTime)
-                changes += 1
-                scala.util.control.Breaks.break()
-              case null =>
-                if (!fieldValues.containsKey(targetField)) {
-                  changes += 1
-                  scala.util.control.Breaks.break()
-                }
-              case _ =>
-                throw new DateTimeException(s"Unknown type: ${resolvedObject.getClass.getName}")
-            }
+    val entries = fieldValues.entrySet.iterator
+    var break = false
+    while (!break && entries.hasNext) {
+      val entry = entries.next()
+      val targetField: TemporalField = entry.getKey
+      var resolvedObject: TemporalAccessor = targetField.resolve(fieldValues, this, resolverStyle)
+      resolvedObject match {
+        case czdt: ChronoZonedDateTime[_] =>
+          if (zone == null)
+            zone = czdt.getZone
+          else if (!(zone == czdt.getZone))
+            throw new DateTimeException(s"ChronoZonedDateTime must use the effective parsed zone: $zone")
+          resolvedObject = czdt.toLocalDateTime
+        case cld: ChronoLocalDate =>
+          resolveMakeChanges(targetField, cld)
+          changes += 1
+          break = true
+        case lt: LocalTime =>
+          resolveMakeChanges(targetField, lt)
+          changes += 1
+          break = true
+        case cldt: ChronoLocalDateTime[_] =>
+          resolveMakeChanges(targetField, cldt.toLocalDate)
+          resolveMakeChanges(targetField, cldt.toLocalTime)
+          changes += 1
+          break = true
+        case null =>
+          if (!fieldValues.containsKey(targetField)) {
+            changes += 1
+            break = true
           }
-        }
-        scala.util.control.Breaks.break()
+        case _ =>
+          throw new DateTimeException(s"Unknown type: ${resolvedObject.getClass.getName}")
       }
-    } //todo: labels is not supported
+    }
     if (changes == 100)
       throw new DateTimeException("Badly written field")
     changes > 0
@@ -245,16 +239,18 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     if (date != null) {
       addObject(date)
       val fields = fieldValues.keySet.iterator
-      while (fields.hasNext) {
+      var break = false
+      while (!break && fields.hasNext) {
         val field = fields.next()
-        scala.util.control.Breaks.breakable {
-          if (field.isInstanceOf[ChronoField]) {
-            if (field.isDateBased) {
-              var val1: Long = 0L
-              try val1 = date.getLong(field)
-              catch {
-                case ex: DateTimeException => scala.util.control.Breaks.break()
-              }
+        if (field.isInstanceOf[ChronoField]) {
+          if (field.isDateBased) {
+            var val1: Long = 0L
+            try val1 = date.getLong(field)
+            catch {
+              case ex: DateTimeException =>
+              break = true
+            }
+            if (!break) {
               val val2: Long = fieldValues.get(field)
               if (val1 != val2)
                 throw new DateTimeException(s"Conflict found: Field $field $val1 differs from $field $val2 derived from $date")
@@ -476,8 +472,8 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
 
   private def crossCheck(temporal: TemporalAccessor): Unit = {
     val it: java.util.Iterator[java.util.Map.Entry[TemporalField, java.lang.Long]] = fieldValues.entrySet.iterator
-    while (it.hasNext) {
-      scala.util.control.Breaks.breakable {
+    var break = false
+    while (!break && it.hasNext) {
         val entry: java.util.Map.Entry[TemporalField, java.lang.Long] = it.next
         val field: TemporalField = entry.getKey
         val value: Long = entry.getValue
@@ -485,13 +481,15 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
           var temporalValue: Long = 0L
           try temporalValue = temporal.getLong(field)
           catch {
-            case ex: RuntimeException => scala.util.control.Breaks.break()
+            case ex: RuntimeException =>
+              break
           }
-          if (temporalValue != value)
-            throw new DateTimeException(s"Cross check failed: $field $temporalValue vs $field $value")
-          it.remove()
+          if (!break) {
+            if (temporalValue != value)
+              throw new DateTimeException(s"Cross check failed: $field $temporalValue vs $field $value")
+            it.remove()
+          }
         }
-      }
     }
   }
 

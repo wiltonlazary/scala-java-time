@@ -372,6 +372,7 @@ object DateTimeFormatter {
     * Parsing is case insensitive.
     */
   val RFC_1123_DATE_TIME: DateTimeFormatter = {
+    // Size checked
     val dow: java.util.Map[Long, String] = new java.util.HashMap[Long, String]
     dow.put(1L, "Mon")
     dow.put(2L, "Tue")
@@ -1062,13 +1063,16 @@ final class DateTimeFormatter private[format](private val printerParser: Composi
     * @return a formatter based on this formatter with the requested resolver style, not null
     */
   def withResolverFields(resolverFields: TemporalField*): DateTimeFormatter = {
-    if (resolverFields == null)
-      return new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, null, chrono, zone)
-    var fields: java.util.Set[TemporalField] = new java.util.HashSet[TemporalField](Arrays.asList(resolverFields: _*))
-    if (Objects.equals(this.resolverFields, fields))
-      return this
-    fields = Collections.unmodifiableSet(fields)
-    new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, fields, chrono, zone)
+    if (resolverFields == null) {
+      new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, null, chrono, zone)
+    } else {
+      val fields: java.util.Set[TemporalField] = new java.util.HashSet[TemporalField](Arrays.asList(resolverFields: _*))
+      if (Objects.equals(this.resolverFields, fields)) {
+        this
+      } else {
+        new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, Collections.unmodifiableSet(fields), chrono, zone)
+      }
+    }
   }
 
   /** Returns a copy of this formatter with a new set of resolver fields.
@@ -1110,13 +1114,16 @@ final class DateTimeFormatter private[format](private val printerParser: Composi
     * @return a formatter based on this formatter with the requested resolver style, not null
     */
   def withResolverFields(resolverFields: java.util.Set[TemporalField]): DateTimeFormatter = {
-    var _resolverFields = resolverFields
-    if (_resolverFields == null)
-      return new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, null, chrono, zone)
-    if (Objects.equals(this.resolverFields, _resolverFields))
-      return this
-    _resolverFields = Collections.unmodifiableSet(new java.util.HashSet[TemporalField](_resolverFields))
-    new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, _resolverFields, chrono, zone)
+    if (resolverFields == null) {
+      new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, null, chrono, zone)
+    } else {
+      if (Objects.equals(this.resolverFields, resolverFields)) {
+        this
+      } else {
+        val _resolverFields = Collections.unmodifiableSet(new java.util.HashSet[TemporalField](resolverFields))
+        new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, _resolverFields, chrono, zone)
+      }
+    }
   }
 
   /** Formats a date-time object using this formatter.
@@ -1309,11 +1316,12 @@ final class DateTimeFormatter private[format](private val printerParser: Composi
   }
 
   private def createError(text: CharSequence, ex: RuntimeException): DateTimeParseException = {
-    var abbr: String = ""
-    if (text.length > 64)
-      abbr = text.subSequence(0, 64).toString + "..."
-    else
-      abbr = text.toString
+    val abbr =
+      if (text.length > 64) {
+        text.subSequence(0, 64).toString + "..."
+      } else {
+        text.toString
+      }
     new DateTimeParseException(s"Text '$abbr' could not be parsed: ${ex.getMessage}", text, 0, ex)
   }
 
@@ -1333,11 +1341,11 @@ final class DateTimeFormatter private[format](private val printerParser: Composi
     val pos: ParsePosition = if (position != null) position else new ParsePosition(0)
     val result: TTBPDateTimeParseContext#Parsed = parseUnresolved0(text, pos)
     if (result == null || pos.getErrorIndex >= 0 || (position == null && pos.getIndex < text.length)) {
-      var abbr: String = ""
-      if (text.length > 64)
-        abbr = text.subSequence(0, 64).toString + "..."
-      else
-        abbr = text.toString
+      val abbr =
+        if (text.length > 64)
+          text.subSequence(0, 64).toString + "..."
+        else
+          text.toString
       if (pos.getErrorIndex >= 0)
         throw new DateTimeParseException(s"Text '$abbr' could not be parsed at index ${pos.getErrorIndex}", text, pos.getErrorIndex)
       else

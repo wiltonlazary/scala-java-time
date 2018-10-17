@@ -54,77 +54,75 @@ object TTBPDateTimePrintContext {
     var overrideChrono: Chronology = formatter.getChronology
     var overrideZone: ZoneId = formatter.getZone
     if (overrideChrono == null && overrideZone == null) {
-      return temporal
-    }
-    val temporalChrono: Chronology = temporal.query(TemporalQueries.chronology)
-    val temporalZone: ZoneId = temporal.query(TemporalQueries.zoneId)
-    if (Objects.equals(temporalChrono, overrideChrono)) {
-      overrideChrono = null
-    }
-    if (Objects.equals(temporalZone, overrideZone)) {
-      overrideZone = null
-    }
-    if (overrideChrono == null && overrideZone == null) {
-      return temporal
-    }
-    val effectiveChrono: Chronology = if (overrideChrono != null) overrideChrono else temporalChrono
-    val effectiveZone: ZoneId = if (overrideZone != null) overrideZone else temporalZone
-    if (overrideZone != null) {
-      if (temporal.isSupported(ChronoField.INSTANT_SECONDS)) {
-        val chrono: Chronology = if (effectiveChrono != null) effectiveChrono else IsoChronology.INSTANCE
-        return chrono.zonedDateTime(Instant.from(temporal), overrideZone)
+      temporal
+    } else {
+      val temporalChrono: Chronology = temporal.query(TemporalQueries.chronology)
+      val temporalZone: ZoneId = temporal.query(TemporalQueries.zoneId)
+      if (Objects.equals(temporalChrono, overrideChrono)) {
+        overrideChrono = null
       }
-      val normalizedOffset: ZoneId = overrideZone.normalized
-      val temporalOffset: ZoneOffset = temporal.query(TemporalQueries.offset)
-      if (normalizedOffset.isInstanceOf[ZoneOffset] && temporalOffset != null && !(normalizedOffset == temporalOffset))
-        throw new DateTimeException(s"Invalid override zone for temporal: $overrideZone $temporal")
-    }
-    var effectiveDate: ChronoLocalDate = null
-    if (overrideChrono != null) {
-      if (temporal.isSupported(ChronoField.EPOCH_DAY)) {
-        effectiveDate = effectiveChrono.date(temporal)
+      if (Objects.equals(temporalZone, overrideZone)) {
+        overrideZone = null
       }
-      else {
-        if (!((overrideChrono eq IsoChronology.INSTANCE) && temporalChrono == null)) {
-          for (f <- ChronoField.values) {
-            if (f.isDateBased && temporal.isSupported(f))
-              throw new DateTimeException(s"Invalid override chronology for temporal: $overrideChrono $temporal")
-          }
+      if (overrideChrono == null && overrideZone == null) {
+        return temporal
+      }
+      val effectiveChrono: Chronology = if (overrideChrono != null) overrideChrono else temporalChrono
+      val effectiveZone: ZoneId = if (overrideZone != null) overrideZone else temporalZone
+      if (overrideZone != null) {
+        if (temporal.isSupported(ChronoField.INSTANT_SECONDS)) {
+          val chrono: Chronology = if (effectiveChrono != null) effectiveChrono else IsoChronology.INSTANCE
+          return chrono.zonedDateTime(Instant.from(temporal), overrideZone)
         }
-        effectiveDate = null
+        val normalizedOffset: ZoneId = overrideZone.normalized
+        val temporalOffset: ZoneOffset = temporal.query(TemporalQueries.offset)
+        if (normalizedOffset.isInstanceOf[ZoneOffset] && temporalOffset != null && !(normalizedOffset == temporalOffset))
+          throw new DateTimeException(s"Invalid override zone for temporal: $overrideZone $temporal")
       }
-    }
-    else {
-      effectiveDate = null
-    }
-    new TemporalAccessor() {
-      def isSupported(field: TemporalField): Boolean =
-        if (effectiveDate != null && field.isDateBased)
-          effectiveDate.isSupported(field)
-        else
-          temporal.isSupported(field)
+      val effectiveDate: ChronoLocalDate = if (overrideChrono != null) {
+        if (temporal.isSupported(ChronoField.EPOCH_DAY)) {
+          effectiveChrono.date(temporal)
+        } else {
+          if (!((overrideChrono eq IsoChronology.INSTANCE) && temporalChrono == null)) {
+            for (f <- ChronoField.values) {
+              if (f.isDateBased && temporal.isSupported(f))
+                throw new DateTimeException(s"Invalid override chronology for temporal: $overrideChrono $temporal")
+            }
+          }
+          null
+        }
+      } else {
+        null
+      }
+      new TemporalAccessor() {
+        def isSupported(field: TemporalField): Boolean =
+          if (effectiveDate != null && field.isDateBased)
+            effectiveDate.isSupported(field)
+          else
+            temporal.isSupported(field)
 
-      override def range(field: TemporalField): ValueRange =
-        if (effectiveDate != null && field.isDateBased)
-          effectiveDate.range(field)
-        else
-          temporal.range(field)
+        override def range(field: TemporalField): ValueRange =
+          if (effectiveDate != null && field.isDateBased)
+            effectiveDate.range(field)
+          else
+            temporal.range(field)
 
-      def getLong(field: TemporalField): Long =
-        if (effectiveDate != null && field.isDateBased)
-          effectiveDate.getLong(field)
-        else
-          temporal.getLong(field)
+        def getLong(field: TemporalField): Long =
+          if (effectiveDate != null && field.isDateBased)
+            effectiveDate.getLong(field)
+          else
+            temporal.getLong(field)
 
-      override def query[R](query: TemporalQuery[R]): R =
-        if (query eq TemporalQueries.chronology)
-          effectiveChrono.asInstanceOf[R]
-        else if (query eq TemporalQueries.zoneId)
-          effectiveZone.asInstanceOf[R]
-        else if (query eq TemporalQueries.precision)
-          temporal.query(query)
-        else
-          query.queryFrom(this)
+        override def query[R](query: TemporalQuery[R]): R =
+          if (query eq TemporalQueries.chronology)
+            effectiveChrono.asInstanceOf[R]
+          else if (query eq TemporalQueries.zoneId)
+            effectiveZone.asInstanceOf[R]
+          else if (query eq TemporalQueries.precision)
+            temporal.query(query)
+          else
+            query.queryFrom(this)
+      }
     }
   }
 }

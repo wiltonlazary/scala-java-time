@@ -9,7 +9,10 @@
   </properties>
   <body>
     <!-- types are add, fix, remove, update -->
-    <release version="2.0.0-M14" date="" description="v2.0.0-M14">
+    <release version="2.0.0-RC1" date="" description="v2.0.0-RC1">
+      <action dev="cquiroz" type="fix" >
+        Fix for parsing the new tzdb db with negative offsets and save
+      </action>
       <action dev="pithu" type="fix" >
         Fix for parsing during DST overlap.
         See #77.

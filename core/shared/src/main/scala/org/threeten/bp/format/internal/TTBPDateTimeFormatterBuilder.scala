@@ -76,7 +76,7 @@ object TTBPDateTimeFormatterBuilder {
   /** Composite printer and parser. */
   private[format] final class CompositePrinterParser private[format](private val printerParsers: Array[DateTimePrinterParser], private val optional: Boolean) extends DateTimePrinterParser {
 
-    private[format] def this(printerParsers: java.util.List[DateTimePrinterParser], optional: Boolean) {
+    private[format] def this(printerParsers: List[DateTimePrinterParser], optional: Boolean) {
       this(printerParsers.toArray(new Array[DateTimePrinterParser](printerParsers.size)), optional)
     }
 
@@ -128,19 +128,18 @@ object TTBPDateTimeFormatterBuilder {
         pos
       }
       else {
-        scala.util.control.Breaks.breakable {
-          for (pp <- printerParsers) {
-            _position = pp.parse(context, text, _position)
-            if (_position < 0) {
-              scala.util.control.Breaks.break()
-            }
-          }
+        printerParsers.foldLeft(_position) {
+          case (pos, _) if pos < 0 =>
+            pos
+          case (pos, pp) =>
+            pp.parse(context, text, pos)
         }
-        _position
       }
     }
 
     override def toString: String = {
+      // Doing this with mkString produces a bigger output
+      // Option(printerParsers).map(_.mkString(if (optional) "[" else "(", "", if (optional) "]" else ")")).getOrElse("")
       val buf: StringBuilder = new StringBuilder
       if (printerParsers != null) {
         buf.append(if (optional) "[" else "(")
@@ -441,43 +440,41 @@ object TTBPDateTimeFormatterBuilder {
       var pos: Int = _position
 
       var pass: Int = 0
-      scala.util.control.Breaks.breakable {
-        while (pass < 2) {
-          val maxEndPos: Int = Math.min(pos + effMaxWidth, length)
-          scala.util.control.Breaks.breakable {
-            while (pos < maxEndPos) {
-              val ch: Char = text.charAt(pos)
-              pos += 1
-              val digit: Int = context.getSymbols.convertToDigit(ch)
-              if (digit < 0) {
-                pos -= 1
-                if (pos < minEndPos) {
-                  return ~_position
-                }
-                scala.util.control.Breaks.break()
+      var outerBreak = false
+      while (!outerBreak && pass < 2) {
+        val maxEndPos: Int = Math.min(pos + effMaxWidth, length)
+        var break = false
+        while (!break && pos < maxEndPos) {
+          val ch: Char = text.charAt(pos)
+          pos += 1
+          val digit: Int = context.getSymbols.convertToDigit(ch)
+          if (digit < 0) {
+            pos -= 1
+            if (pos < minEndPos) {
+              return ~_position
+            }
+            break = true
+          }
+          if (!break) {
+            if ((pos - _position) > 18) {
+              if (totalBig == null) {
+                totalBig = BigInteger.valueOf(total)
               }
-              if ((pos - _position) > 18) {
-                if (totalBig == null) {
-                  totalBig = BigInteger.valueOf(total)
-                }
-                totalBig = totalBig.multiply(BigInteger.TEN).add(BigInteger.valueOf(digit))
-              }
-              else {
-                total = total * 10 + digit
-              }
+              totalBig = totalBig.multiply(BigInteger.TEN).add(BigInteger.valueOf(digit))
+            } else {
+              total = total * 10 + digit
             }
           }
-          if (subsequentWidth > 0 && pass == 0) {
-            val parseLen: Int = pos - _position
-            effMaxWidth = Math.max(effMinWidth, parseLen - subsequentWidth)
-            pos = _position
-            total = 0
-            totalBig = null
-          }
-          else {
-            scala.util.control.Breaks.break()
-          }
+        }
+        if (subsequentWidth > 0 && pass == 0) {
+          val parseLen: Int = pos - _position
+          effMaxWidth = Math.max(effMinWidth, parseLen - subsequentWidth)
+          pos = _position
+          total = 0
+          totalBig = null
           pass += 1
+        } else {
+          outerBreak = true
         }
       }
       if (negative) {
@@ -712,18 +709,19 @@ object TTBPDateTimeFormatterBuilder {
       val maxEndPos: Int = Math.min(_position + effectiveMax, length)
       var total: Int = 0
       var pos: Int = _position
-      scala.util.control.Breaks.breakable {
-        while (pos < maxEndPos) {
-          val ch: Char = text.charAt(pos)
-          pos += 1
-          val digit: Int = context.getSymbols.convertToDigit(ch)
-          if (digit < 0) {
-            if (pos < minEndPos) {
-              return ~_position
-            }
-            pos -= 1
-            scala.util.control.Breaks.break()
+      var break = false
+      while (!break && pos < maxEndPos) {
+        val ch: Char = text.charAt(pos)
+        pos += 1
+        val digit: Int = context.getSymbols.convertToDigit(ch)
+        if (digit < 0) {
+          if (pos < minEndPos) {
+            return ~_position
           }
+          pos -= 1
+          break = true
+        }
+        if (!break) {
           total = total * 10 + digit
         }
       }
@@ -776,8 +774,7 @@ object TTBPDateTimeFormatterBuilder {
       val range: ValueRange = field.range
       val minBD: BigDecimal = BigDecimal.valueOf(range.getMinimum)
       val rangeBD: BigDecimal = BigDecimal.valueOf(range.getMaximum).subtract(minBD).add(BigDecimal.ONE)
-      val valueBD: BigDecimal = fraction.multiply(rangeBD).setScale(0, RoundingMode.FLOOR).add(minBD)
-      valueBD.longValueExact
+      fraction.multiply(rangeBD).setScale(0, RoundingMode.FLOOR).add(minBD).longValueExact
     }
 
     override def toString: String = {
@@ -822,13 +819,13 @@ object TTBPDateTimeFormatterBuilder {
         throw new IndexOutOfBoundsException
       }
       val style: TextStyle = if (context.isStrict) textStyle else null
-      val it: java.util.Iterator[java.util.Map.Entry[String, Long]] = provider.getTextIterator(field, style, context.getLocale)
+      val it = provider.getTextIterator(field, style, context.getLocale)
       if (it != null) {
         while (it.hasNext) {
-          val entry: java.util.Map.Entry[String, Long] = it.next
-          val itText: String = entry.getKey
+          val entry = it.next
+          val itText: String = entry._1
           if (context.subSequenceEquals(itText, 0, parseText, position, itText.length)) {
-            return context.setParsedField(field, entry.getValue, position, position + itText.length)
+            return context.setParsedField(field, entry._2, position, position + itText.length)
           }
         }
         if (context.isStrict) {
@@ -1216,12 +1213,12 @@ object TTBPDateTimeFormatterBuilder {
   /** Prints or parses a zone ID. */
   private[format] object ZoneTextPrinterParser {
     /** The text style to output. */
-    private val LENGTH_COMPARATOR: Ordering[String] =
-    new Ordering[String] {
-      override def compare(str1: String, str2: String): Int = {
-        var cmp: Int = str2.length - str1.length
+    private val LENGTH_COMPARATOR: Ordering[Map.Entry[String, String]] =
+    new Ordering[Map.Entry[String, String]] {
+      override def compare(str1: Map.Entry[String, String], str2: Map.Entry[String, String]): Int = {
+        var cmp: Int = str2.getKey.length - str1.getKey.length
         if (cmp == 0)
-          cmp = str1.compareTo(str2)
+          cmp = str1.getKey.compareTo(str2.getKey)
         cmp
       }
     }
@@ -1256,34 +1253,35 @@ object TTBPDateTimeFormatterBuilder {
       //    1. Consider whether we should keep the Java-based implementation on the JVM
       //       and provide this alternative implementation only on other platforms?
       //    2. We need to write tests for this. I flipped LENGTH_COMPARATOR and no test broke.
-      import scala.collection.immutable.TreeMap
-      import scala.collection.mutable.{Map => MutableMap}
-      val ids = MutableMap[String, String]()
+      val ids = new java.util.HashMap[String, String]()
       val idIterator = ZoneId.getAvailableZoneIds.iterator()
       while (idIterator.hasNext) {
         val id = idIterator.next()
-        ids(id) = id
+        ids.put(id, id)
         val tz: TimeZone = TimeZone.getTimeZone(id)
         val tzstyle: Int = if (textStyle.asNormal eq TextStyle.FULL) TimeZone.LONG else TimeZone.SHORT
         val textWinter = tz.getDisplayName(false, tzstyle, context.getLocale)
         // The null checks are needed as scalajs-locales doesn't include time zone strings
         if (textWinter != null && id.startsWith("Etc/") || (!textWinter.startsWith("GMT+") && !textWinter.startsWith("GMT+"))) {
-            ids(textWinter) = id
+            ids.put(textWinter, id)
         } else if (textWinter == null) {
-          ids(tz.getDisplayName(false, tzstyle, context.getLocale)) = id
+          ids.put(tz.getDisplayName(false, tzstyle, context.getLocale), id)
         }
         val textSummer = tz.getDisplayName(true, tzstyle, context.getLocale)
         if (textSummer != null && id.startsWith("Etc/") || (!textSummer.startsWith("GMT+") && !textSummer.startsWith("GMT+"))) {
-            ids(textSummer) = id
+            ids.put(textSummer, id)
         } else if (textSummer == null) {
-          ids(tz.getDisplayName(true, tzstyle, context.getLocale)) = id
+          ids.put(tz.getDisplayName(true, tzstyle, context.getLocale), id)
         }
       }
-      val orderedIds = TreeMap(ids.toArray: _*)(ZoneTextPrinterParser.LENGTH_COMPARATOR)
-      orderedIds.foreach { case (key, value) =>
-        val name: String = key
+      val tmpIds = new java.util.ArrayList(ids.entrySet)
+      Collections.sort[Map.Entry[String, String]](tmpIds, ZoneTextPrinterParser.LENGTH_COMPARATOR)
+      val i = tmpIds.iterator
+      while (i.hasNext()) {
+        val v = i.next()
+        val name: String = v.getKey
         if (context.subSequenceEquals(text, position, name, 0, name.length)) {
-          context.setParsed(ZoneId.of(value))
+          context.setParsed(ZoneId.of(v.getValue))
           return position + name.length
         }
       }
@@ -1324,7 +1322,7 @@ object TTBPDateTimeFormatterBuilder {
       * @param length  The length of the substring this node of the tree contains.
       *                Subtrees will have a longer length.
       */
-    private final class SubstringTree private[format](private[format] val length: Int) {
+    private final class SubstringTree(val length: Int) {
       /** Map of a substring to a set of substrings that contain the key. */
       private val substringMap: java.util.Map[CharSequence, SubstringTree] = new java.util.HashMap[CharSequence, SubstringTree]
       /** Map of a substring to a set of substrings that contain the key. */
@@ -1411,8 +1409,7 @@ object TTBPDateTimeFormatterBuilder {
         if (endPos < 0)
           return endPos
         val offset: Int = newContext.getParsed(ChronoField.OFFSET_SECONDS).longValue.toInt
-        val zone: ZoneId = ZoneOffset.ofTotalSeconds(offset)
-        context.setParsed(zone)
+        context.setParsed(ZoneOffset.ofTotalSeconds(offset))
         return endPos
       }
       else if (length >= position + 2) {
@@ -1442,11 +1439,12 @@ object TTBPDateTimeFormatterBuilder {
       var tree: SubstringTree = cached.getValue
       var parsedZoneId: String = null
       var lastZoneId: String = null
-      scala.util.control.Breaks.breakable {
-        while (tree != null) {
-          val nodeLength: Int = tree.length
-          if (position + nodeLength > length)
-            scala.util.control.Breaks.break()
+      var break = false
+      while (!break && tree != null) {
+        val nodeLength: Int = tree.length
+        if (position + nodeLength > length) {
+          break = true
+        } else {
           lastZoneId = parsedZoneId
           parsedZoneId = text.subSequence(position, position + nodeLength).toString
           tree = tree.get(parsedZoneId, context.isCaseSensitive)
@@ -1544,9 +1542,9 @@ object TTBPDateTimeFormatterBuilder {
           matchLen = idLen
         }
       }
-      if (bestMatch == null)
+      if (bestMatch == null) {
         ~position
-      else {
+      } else {
         context.setParsed(bestMatch)
         position + matchLen
       }
@@ -1588,37 +1586,28 @@ object TTBPDateTimeFormatterBuilder {
   /** Prints or parses a localized pattern. */
   private[format] final class WeekFieldsPrinterParser(private val letter: Char, private val count: Int) extends DateTimePrinterParser {
 
-    def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
-      val weekFields: WeekFields = WeekFields.of(context.getLocale)
-      val pp: DateTimePrinterParser = evaluate(weekFields)
-      pp.print(context, buf)
-    }
+    def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean =
+      evaluate(WeekFields.of(context.getLocale)).print(context, buf)
 
-    def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int = {
-      val weekFields: WeekFields = WeekFields.of(context.getLocale)
-      val pp: DateTimePrinterParser = evaluate(weekFields)
-      pp.parse(context, text, position)
-    }
+    def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int =
+      evaluate(WeekFields.of(context.getLocale)).parse(context, text, position)
 
-    private def evaluate(weekFields: WeekFields): DateTimePrinterParser = {
-      var pp: DateTimePrinterParser = null
+    private def evaluate(weekFields: WeekFields): DateTimePrinterParser =
       letter match {
         case 'e' =>
-          pp = new NumberPrinterParser(weekFields.dayOfWeek, count, 2, SignStyle.NOT_NEGATIVE)
+          new NumberPrinterParser(weekFields.dayOfWeek, count, 2, SignStyle.NOT_NEGATIVE)
         case 'c' =>
-          pp = new NumberPrinterParser(weekFields.dayOfWeek, count, 2, SignStyle.NOT_NEGATIVE)
+          new NumberPrinterParser(weekFields.dayOfWeek, count, 2, SignStyle.NOT_NEGATIVE)
         case 'w' =>
-          pp = new NumberPrinterParser(weekFields.weekOfWeekBasedYear, count, 2, SignStyle.NOT_NEGATIVE)
+          new NumberPrinterParser(weekFields.weekOfWeekBasedYear, count, 2, SignStyle.NOT_NEGATIVE)
         case 'W' =>
-          pp = new NumberPrinterParser(weekFields.weekOfMonth, 1, 2, SignStyle.NOT_NEGATIVE)
+          new NumberPrinterParser(weekFields.weekOfMonth, 1, 2, SignStyle.NOT_NEGATIVE)
         case 'Y' =>
           if (count == 2)
-            pp = new ReducedPrinterParser(weekFields.weekBasedYear, 2, 2, 0, ReducedPrinterParser.BASE_DATE)
+            new ReducedPrinterParser(weekFields.weekBasedYear, 2, 2, 0, ReducedPrinterParser.BASE_DATE)
           else
-            pp = new NumberPrinterParser(weekFields.weekBasedYear, count, 19, if (count < 4) SignStyle.NORMAL else SignStyle.EXCEEDS_PAD, -1)
+            new NumberPrinterParser(weekFields.weekBasedYear, count, 19, if (count < 4) SignStyle.NORMAL else SignStyle.EXCEEDS_PAD, -1)
       }
-      pp
-    }
 
     override def toString: String = {
       val sb: StringBuilder = new StringBuilder(30)

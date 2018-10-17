@@ -35,6 +35,7 @@ import java.text.DecimalFormatSymbols
 import java.util.{Objects, Locale}
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
+import scala.collection.JavaConverters._
 
 /** Localized symbols used in date and time formatting.
   *
@@ -59,12 +60,8 @@ object DecimalStyle {
     *
     * @return an array of locales for which localization is supported
     */
-  def getAvailableLocales: java.util.Set[Locale] = {
-    val locales: Array[Locale] = DecimalFormatSymbols.getAvailableLocales
-    val set = new java.util.HashSet[Locale](locales.length)
-    java.util.Collections.addAll(set, locales: _*)
-    set
-  }
+  def getAvailableLocales: java.util.Set[Locale] =
+    DecimalFormatSymbols.getAvailableLocales.toSet.asJava
 
   /** Obtains symbols for the default locale.
     *
@@ -83,13 +80,11 @@ object DecimalStyle {
     */
   def of(locale: Locale): DecimalStyle = {
     Objects.requireNonNull(locale, "locale")
-    var info: DecimalStyle = CACHE.get(locale)
-    if (info == null) {
-      info = create(locale)
-      CACHE.putIfAbsent(locale, info)
-      info = CACHE.get(locale)
+    // Size reduced
+    if (CACHE.get(locale) == null) {
+      CACHE.putIfAbsent(locale, create(locale))
     }
-    info
+    CACHE.get(locale)
   }
 
   private def create(locale: Locale): DecimalStyle = {
@@ -218,6 +213,7 @@ final class DecimalStyle private(val zeroDigit: Char, val positiveSign: Char, va
     * @return the internationalized text, not null
     */
   private[format] def convertNumberToI18N(numericText: String): String = {
+    // Size verified
     if (zeroDigit == '0')
       return numericText
     val diff: Int = zeroDigit - '0'

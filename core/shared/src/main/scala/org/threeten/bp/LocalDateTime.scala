@@ -742,6 +742,7 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @throws ArithmeticException if numeric overflow occurs
     */
   def `with`(field: TemporalField, newValue: Long): LocalDateTime =
+    // Size checked
     if (field.isInstanceOf[ChronoField])
       if (field.isTimeBased) `with`(date, time.`with`(field, newValue))
       else `with`(date.`with`(field, newValue), time)
@@ -805,10 +806,9 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @return a { @code LocalDateTime} based on this date-time with the requested hour, not null
     * @throws DateTimeException if the hour value is invalid
     */
-  def withHour(hour: Int): LocalDateTime = {
-    val newTime: LocalTime = time.withHour(hour)
-    `with`(date, newTime)
-  }
+  def withHour(hour: Int): LocalDateTime =
+    `with`(date, time.withHour(hour))
+
 
   /** Returns a copy of this {@code LocalDateTime} with the minute-of-hour value altered.
     *

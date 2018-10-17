@@ -234,14 +234,13 @@ object ZonedDateTime {
         val rules: ZoneRules = zone.getRules
         val validOffsets: java.util.List[ZoneOffset] = rules.getValidOffsets(_localDateTime)
         var offset: ZoneOffset = null
-        if (validOffsets.size == 1)
+        if (validOffsets.size == 1) {
           offset = validOffsets.get(0)
-        else if (validOffsets.size == 0) {
+        } else if (validOffsets.size == 0) {
           val trans: ZoneOffsetTransition = rules.getTransition(_localDateTime)
           _localDateTime = _localDateTime.plusSeconds(trans.getDuration.getSeconds)
           offset = trans.getOffsetAfter
-        }
-        else {
+        } else {
           if (preferredOffset != null && validOffsets.contains(preferredOffset))
             offset = preferredOffset
           else
@@ -309,8 +308,7 @@ object ZonedDateTime {
     val rules: ZoneRules = zone.getRules
     val instant: Instant = Instant.ofEpochSecond(epochSecond, nanoOfSecond)
     val offset: ZoneOffset = rules.getOffset(instant)
-    val ldt: LocalDateTime = LocalDateTime.ofEpochSecond(epochSecond, nanoOfSecond, offset)
-    new ZonedDateTime(ldt, offset, zone)
+    new ZonedDateTime(LocalDateTime.ofEpochSecond(epochSecond, nanoOfSecond, offset), offset, zone)
   }
 
   /** Obtains an instance of {@code ZonedDateTime} strictly validating the
@@ -335,8 +333,9 @@ object ZonedDateTime {
       if (trans != null && trans.isGap)
         throw new DateTimeException(s"LocalDateTime '$localDateTime' does not exist in zone '$zone' due to a gap in the local time-line, typically caused by daylight savings")
       throw new DateTimeException(s"ZoneOffset '$offset' is not valid for LocalDateTime '$localDateTime' in zone '$zone'")
+    } else {
+      new ZonedDateTime(localDateTime, offset, zone)
     }
-    new ZonedDateTime(localDateTime, offset, zone)
   }
 
   /** Obtains an instance of {@code ZonedDateTime} leniently, for advanced use cases,
@@ -363,9 +362,11 @@ object ZonedDateTime {
     Objects.requireNonNull(localDateTime, "localDateTime")
     Objects.requireNonNull(offset, "offset")
     Objects.requireNonNull(zone, "zone")
-    if (zone.isInstanceOf[ZoneOffset] && offset != zone)
+    if (zone.isInstanceOf[ZoneOffset] && offset != zone) {
       throw new IllegalArgumentException("ZoneId must match ZoneOffset")
-    new ZonedDateTime(localDateTime, offset, zone)
+    } else {
+      new ZonedDateTime(localDateTime, offset, zone)
+    }
   }
 
   /** Obtains an instance of {@code ZonedDateTime} from a temporal object.
@@ -587,11 +588,19 @@ final class ZonedDateTime(private val dateTime: LocalDateTime, private val offse
     * @return true if the field is supported on this date-time, false if not
     */
   def isSupported(field: TemporalField): Boolean =
-    field.isInstanceOf[ChronoField] || (field != null && field.isSupportedBy(this))
+    field match {
+      case _: ChronoField => true
+      case _ =>
+        (field != null && field.isSupportedBy(this))
+    }
 
   def isSupported(unit: TemporalUnit): Boolean =
-    if (unit.isInstanceOf[ChronoUnit]) unit.isDateBased || unit.isTimeBased
-    else unit != null && unit.isSupportedBy(this)
+    unit match {
+      case _: ChronoUnit =>
+        unit.isDateBased || unit.isTimeBased
+      case _ =>
+        unit != null && unit.isSupportedBy(this)
+    }
 
   /** Gets the range of valid values for the specified field.
     *
@@ -1033,8 +1042,8 @@ final class ZonedDateTime(private val dateTime: LocalDateTime, private val offse
       case f: ChronoField =>
         f match {
           case INSTANT_SECONDS => ZonedDateTime.create(newValue, getNano, zone)
-          case OFFSET_SECONDS => val offset: ZoneOffset = ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue))
-            resolveOffset(offset)
+          case OFFSET_SECONDS =>
+            resolveOffset(ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue)))
           case _ => resolveLocal(dateTime.`with`(field, newValue))
         }
       case _ =>

@@ -43,15 +43,15 @@ import org.threeten.bp.chrono.internal.TTBPJapaneseEra
 
 /** Test. */
 class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
-  test("test_chrono_byName") {
-    val c: Chronology    = JapaneseChronology.INSTANCE
-    val test: Chronology = Chronology.of("Japanese")
-    assertNotNull(test, "The Japanese calendar could not be found byName")
-    assertEquals(test.getId, "Japanese", "ID mismatch")
-    assertEquals(test.getCalendarType, "japanese", "Type mismatch")
-    assertEquals(test, c)
-  }
-
+  // test("test_chrono_byName") {
+  //   val c: Chronology    = JapaneseChronology.INSTANCE
+  //   val test: Chronology = Chronology.of("Japanese")
+  //   assertNotNull(test, "The Japanese calendar could not be found byName")
+  //   assertEquals(test.getId, "Japanese", "ID mismatch")
+  //   assertEquals(test.getCalendarType, "japanese", "Type mismatch")
+  //   assertEquals(test, c)
+  // }
+  //
   val data_samples: List[(ChronoLocalDate, LocalDate)] =
     List(
       (JapaneseChronology.INSTANCE.date(1890, 3, 3), LocalDate.of(1890, 3, 3)),

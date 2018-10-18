@@ -158,7 +158,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
   val data_of_calendars: List[Chronology] = {
     List((HijrahChronology.INSTANCE),
          (IsoChronology.INSTANCE),
-         (JapaneseChronology.INSTANCE),
+         // (JapaneseChronology.INSTANCE),
          (MinguoChronology.INSTANCE),
          (ThaiBuddhistChronology.INSTANCE))
   }
@@ -315,9 +315,9 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
         .date(LocalDate.of(1900, 1, 1))
         .atTime(LocalTime.MIN)
         .asInstanceOf[ChronoLocalDateTime[_ <: ChronoLocalDate]]
-      if (chrono ne JapaneseChronology.INSTANCE) {
-        dates.add(date.minus(100, ChronoUnit.YEARS))
-      }
+      // if (chrono ne JapaneseChronology.INSTANCE) {
+      //   dates.add(date.minus(100, ChronoUnit.YEARS))
+      // }
       dates.add(date.minus(1, ChronoUnit.YEARS))
       dates.add(date.minus(1, ChronoUnit.MONTHS))
       dates.add(date.minus(1, ChronoUnit.WEEKS))
@@ -340,9 +340,9 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
         scala.util.control.Breaks.breakable {
           val otherDates: java.util.List[ChronoLocalDateTime[_ <: ChronoLocalDate]] =
             new java.util.ArrayList[ChronoLocalDateTime[_ <: ChronoLocalDate]]
-          if (chrono2 eq JapaneseChronology.INSTANCE) {
-            scala.util.control.Breaks.break()
-          }
+          // if (chrono2 eq JapaneseChronology.INSTANCE) {
+          //   scala.util.control.Breaks.break()
+          // }
           import scala.collection.JavaConverters._
           for (d <- dates.asScala) {
             otherDates.add(

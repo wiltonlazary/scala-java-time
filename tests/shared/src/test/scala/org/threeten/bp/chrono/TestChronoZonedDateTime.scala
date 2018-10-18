@@ -159,7 +159,7 @@ class TestChronoZonedDateTime extends AnyFunSuite with AssertionsHelper {
   val data_of_calendars: List[Chronology] = {
     List((HijrahChronology.INSTANCE),
          (IsoChronology.INSTANCE),
-         (JapaneseChronology.INSTANCE),
+         // (JapaneseChronology.INSTANCE),
          (MinguoChronology.INSTANCE),
          (ThaiBuddhistChronology.INSTANCE))
   }
@@ -329,8 +329,8 @@ class TestChronoZonedDateTime extends AnyFunSuite with AssertionsHelper {
         .atTime(LocalTime.MIN)
         .atZone(ZoneOffset.UTC)
         .asInstanceOf[ChronoZonedDateTime[_ <: ChronoLocalDate]]
-      if (chrono ne JapaneseChronology.INSTANCE)
-        dates.add(date.minus(100, ChronoUnit.YEARS))
+      // if (chrono ne JapaneseChronology.INSTANCE)
+      //   dates.add(date.minus(100, ChronoUnit.YEARS))
       dates.add(date.minus(1, ChronoUnit.YEARS))
       dates.add(date.minus(1, ChronoUnit.MONTHS))
       dates.add(date.minus(1, ChronoUnit.WEEKS))

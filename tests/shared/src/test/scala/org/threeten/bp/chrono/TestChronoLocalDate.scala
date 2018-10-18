@@ -159,7 +159,7 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
   val data_of_calendars: List[Chronology] = {
     List[Chronology]((HijrahChronology.INSTANCE),
                      (IsoChronology.INSTANCE),
-                     (JapaneseChronology.INSTANCE),
+                     // (JapaneseChronology.INSTANCE),
                      (MinguoChronology.INSTANCE),
                      (ThaiBuddhistChronology.INSTANCE))
   }
@@ -306,10 +306,10 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
     data_of_calendars.foreach { chrono =>
       val dates: java.util.List[ChronoLocalDate] = new java.util.ArrayList[ChronoLocalDate]
       val date: ChronoLocalDate                  = chrono.date(LocalDate.of(1900, 1, 1))
-      if (chrono ne JapaneseChronology.INSTANCE) {
-        dates.add(date.minus(1000, ChronoUnit.YEARS))
-        dates.add(date.minus(100, ChronoUnit.YEARS))
-      }
+      // if (chrono ne JapaneseChronology.INSTANCE) {
+      //   dates.add(date.minus(1000, ChronoUnit.YEARS))
+      //   dates.add(date.minus(100, ChronoUnit.YEARS))
+      // }
       dates.add(date.minus(10, ChronoUnit.YEARS))
       dates.add(date.minus(1, ChronoUnit.YEARS))
       dates.add(date.minus(1, ChronoUnit.MONTHS))
@@ -326,8 +326,8 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         scala.util.control.Breaks.breakable {
           val otherDates: java.util.List[ChronoLocalDate] = new java.util.ArrayList[ChronoLocalDate]
-          if (chrono2 eq JapaneseChronology.INSTANCE)
-            scala.util.control.Breaks.break()
+          // if (chrono2 eq JapaneseChronology.INSTANCE)
+          //   scala.util.control.Breaks.break()
           import scala.collection.JavaConverters._
           for (d <- dates.asScala) {
             otherDates.add(chrono2.date(d))

@@ -41,7 +41,7 @@ import org.threeten.bp.temporal.ChronoUnit.MONTHS
 import org.threeten.bp.temporal.ChronoUnit.WEEKS
 import org.threeten.bp.temporal.ChronoUnit.YEARS
 import java.io.Serializable
-import java.util.{ GregorianCalendar, Locale, Objects }
+import java.util.{ Locale, Objects }
 import java.util.HashMap
 import java.util.Map
 import org.threeten.bp.DateTimeException
@@ -90,11 +90,11 @@ object WeekFields {
     */
   def of(locale: Locale): WeekFields = {
     Objects.requireNonNull(locale, "locale")
-    val newLocale               = new Locale(locale.getLanguage, locale.getCountry)
-    val gcal: GregorianCalendar = new GregorianCalendar(newLocale)
-    val calDow: Int             = gcal.getFirstDayOfWeek
-    val dow: DayOfWeek          = DayOfWeek.SUNDAY.plus(calDow.toLong - 1)
-    val minDays: Int            = gcal.getMinimalDaysInFirstWeek
+    // val newLocale = new Locale(locale.getLanguage, locale.getCountry)
+    // val gcal: GregorianCalendar = new GregorianCalendar(newLocale)
+    // val calDow: Int = 1 // gcal.getFirstDayOfWeek Calendar.SUNDAY in GregorianCalendar
+    val dow: DayOfWeek = DayOfWeek.SUNDAY //.plus(calDow - 1)
+    val minDays: Int   = 1 // gcal.getMinimalDaysInFirstWeek
     WeekFields.of(dow, minDays)
   }
 

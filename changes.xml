@@ -10,6 +10,12 @@
   <body>
     <!-- types are add, fix, remove, update -->
     <release version="2.0.0-RC1" date="" description="v2.0.0-RC1">
+      <action dev="cquiroz" type="update" >
+        Revode DateTimeUtils
+      </action>
+      <action dev="cquiroz" type="update" >
+        Internal refactorings to reduce size
+      </action>
       <action dev="cquiroz" type="fix" >
         Fix for parsing the new tzdb db with negative offsets and save
       </action>

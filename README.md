@@ -17,8 +17,8 @@ Scala 2.11, Scala 2.12 and Scala 2.13-M4 are supported.
 
 To get started with SBT, add one (or both) of these dependencies:
 
-- `libraryDependencies += "io.github.cquiroz" %%  "scala-java-time" % "2.0.0-RC1"` (for Scala)
-- `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC1` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+- `libraryDependencies += "io.github.cquiroz" %%  "scala-java-time" % "2.0.0-M13"` (for Scala)
+- `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M13"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 #### Documentation
 

@@ -74,20 +74,15 @@ abstract class TimeZone extends Serializable with Cloneable {
   private var ID: String = null
 
   /* abstract methods */
-  def getOffset(era: Int, year: Int, month: Int, day: Int, dayOfWeek: Int, milliseconds: Int): Int
+  // def getOffset(era: Int, year: Int, month: Int, day: Int, dayOfWeek: Int, milliseconds: Int): Int
   def getRawOffset: Int
-  def inDaylightTime(date: Date): Boolean
-  def setRawOffset(offsetMillis: Int): Unit
-  def useDaylightTime: Boolean
+  // def inDaylightTime(date: Date): Boolean
+  // def setRawOffset(offsetMillis: Int): Unit
+  // def useDaylightTime: Boolean
 
   /* concrete methods */
   def getID: String = ID
   def setID(id: String): Unit = ID = id
-
-  def hasSameRules(that: TimeZone): Boolean = that match {
-    case null => false
-    case _    => this.useDaylightTime == that.useDaylightTime && this.getRawOffset == that.getRawOffset
-  }
 
   def getDisplayName(daylight: Boolean, style: Int, locale: Locale): String = {
     if (style != TimeZone.SHORT && style != TimeZone.LONG)
@@ -128,14 +123,6 @@ abstract class TimeZone extends Serializable with Cloneable {
 
   def getDisplayName: String =
     getDisplayName(daylight = false, TimeZone.LONG, Locale.getDefault(Locale.Category.DISPLAY))
-
-  def getDSTSavings: Int =
-    if (useDaylightTime) 3600000
-    else 0
-
-  def getOffset(date: Long) = ???
-
-  def observesDaylightTime: Boolean = ???
 
   def toZoneId: ZoneId = ZoneId.of(getID)
 

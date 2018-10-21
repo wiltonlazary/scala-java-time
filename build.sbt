@@ -21,9 +21,9 @@ lazy val commonSettings = Seq(
   scalaVersion       := scalaVer,
   crossScalaVersions := {
     if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "2.12.7", "2.13.0-M4")
+      Seq("2.10.7", "2.11.12", "2.12.7", "2.13.0-M5")
     } else {
-      Seq("2.11.12", "2.12.7", "2.13.0-M4")
+      Seq("2.11.12", "2.12.7", "2.13.0-M5")
     }
   },
   scalacOptions ++= Seq(
@@ -148,7 +148,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
         copyAndReplace(srcDirs, destinationDir)
       }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.11-cldr33"
+      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.12-cldr34"
     )
   )
 

@@ -11,7 +11,19 @@
     <!-- types are add, fix, remove, update -->
     <release version="2.0.0-RC1" date="" description="v2.0.0-RC1">
       <action dev="cquiroz" type="update" >
-        Revode DateTimeUtils
+        Support scala.js 1.0.0-M6
+      </action>
+      <action dev="cquiroz" type="update" >
+        Support scala 2.13.0-M6
+      </action>
+      <action dev="cquiroz" type="update" >
+        Update scala-java-locales to v0.3.12-cldr34
+      </action>
+      <action dev="cquiroz" type="update" >
+        Remove DateTimeUtils
+      </action>
+      <action dev="cquiroz" type="fix" >
+        Support tzdb 2018f
       </action>
       <action dev="cquiroz" type="update" >
         Internal refactorings to reduce size

@@ -1,5 +1,9 @@
 package org.threeten.bp
 
+import java.util.NavigableMap
+import java.util.TreeMap
+import scala.collection.JavaConverters._
+
 object Platform {
   type NPE = NullPointerException
   type DFE = IndexOutOfBoundsException
@@ -11,4 +15,6 @@ object Platform {
   final val executingInJVM = false
 
   def setupLocales(): Unit = ()
+
+  def zoneMap(m: scala.collection.immutable.TreeMap[Int, String]): NavigableMap[Int, String] = new TreeMap(m.asJava)
 }

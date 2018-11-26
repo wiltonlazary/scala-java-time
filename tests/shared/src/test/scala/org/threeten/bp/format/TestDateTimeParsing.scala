@@ -69,7 +69,10 @@ object TestDateTimeParsing {
   private val INSTANTSECONDS_NOS: DateTimeFormatter = new DateTimeFormatterBuilder().appendValue(INSTANT_SECONDS).appendLiteral('.').appendValue(NANO_OF_SECOND).toFormatter
   private val INSTANTSECONDS_NOS_WITH_PARIS: DateTimeFormatter = INSTANTSECONDS_NOS.withZone(PARIS)
   private val INSTANTSECONDS_OFFSETSECONDS: DateTimeFormatter = new DateTimeFormatterBuilder().appendValue(INSTANT_SECONDS).appendLiteral(' ').appendValue(OFFSET_SECONDS).toFormatter
-  //private val INSTANT_OFFSETSECONDS_ZONE = new DateTimeFormatterBuilder().appendInstant.appendLiteral(' ').appendValue(OFFSET_SECONDS).appendLiteral(' ').appendZoneId.toFormatter
+  private val INSTANT_OFFSETSECONDS_ZONE: DateTimeFormatter  = new DateTimeFormatterBuilder()
+        .appendInstant.appendLiteral(' ')
+        .appendValue(OFFSET_SECONDS).appendLiteral(' ')
+        .appendZoneId.toFormatter;
 }
 
 class TestDateTimeParsing extends FunSuite with GenTestPrinterParser with AssertionsHelper {
@@ -86,9 +89,9 @@ class TestDateTimeParsing extends FunSuite with GenTestPrinterParser with Assert
       (TestDateTimeParsing.INSTANT_OFFSETSECONDS, "2014-06-30T01:02:03Z 9000", ZonedDateTime.of(2014, 6, 30, 1, 2, 3, 0, ZoneOffset.UTC).withZoneSameInstant(TestDateTimeParsing.OFFSET_0230)),
       (TestDateTimeParsing.INSTANTSECONDS_WITH_PARIS, "86402", Instant.ofEpochSecond(86402).atZone(TestDateTimeParsing.PARIS)),
       (TestDateTimeParsing.INSTANTSECONDS_NOS_WITH_PARIS, "86402.123456789", Instant.ofEpochSecond(86402, 123456789).atZone(TestDateTimeParsing.PARIS)),
-      (TestDateTimeParsing.INSTANTSECONDS_OFFSETSECONDS, "86402 9000", Instant.ofEpochSecond(86402).atZone(TestDateTimeParsing.OFFSET_0230))/*,
+      (TestDateTimeParsing.INSTANTSECONDS_OFFSETSECONDS, "86402 9000", Instant.ofEpochSecond(86402).atZone(TestDateTimeParsing.OFFSET_0230)),
       (TestDateTimeParsing.INSTANT_OFFSETSECONDS_ZONE, "2016-10-30T00:30:00Z 7200 Europe/Paris", ZonedDateTime.ofStrict(LocalDateTime.of(2016, 10, 30, 2, 30), ZoneOffset.ofHours(2), TestDateTimeParsing.PARIS)),
-      (TestDateTimeParsing.INSTANT_OFFSETSECONDS_ZONE, "2016-10-30T01:30:00Z 3600 Europe/Paris", ZonedDateTime.ofStrict(LocalDateTime.of(2016, 10, 30, 2, 30), ZoneOffset.ofHours(1), TestDateTimeParsing.PARIS))*/)
+      (TestDateTimeParsing.INSTANT_OFFSETSECONDS_ZONE, "2016-10-30T01:30:00Z 3600 Europe/Paris", ZonedDateTime.ofStrict(LocalDateTime.of(2016, 10, 30, 2, 30), ZoneOffset.ofHours(1), TestDateTimeParsing.PARIS)))
   }
 
   test("test_parse_instantZones_ZDT") {

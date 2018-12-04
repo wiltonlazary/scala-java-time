@@ -2,9 +2,9 @@ import sbtcrossproject.{crossProject, CrossType}
 import sbt._
 import sbt.io.Using
 
-val scalaVer = "2.12.7"
+val scalaVer = "2.12.8"
 val tzdbVersion = "2018f"
-val scalaJavaTimeVer = "2.0.0-RC1-SNAPSHOT"
+val scalaJavaTimeVer = "2.0.0-RC1"
 val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
 val scalaTZDBVersion = s"${scalaJavaTimeVer}_$tzdbVersion"
 

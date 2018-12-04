@@ -11,10 +11,16 @@
     <!-- types are add, fix, remove, update -->
     <release version="2.0.0-RC1" date="" description="v2.0.0-RC1">
       <action dev="cquiroz" type="update" >
+        Improved implementation of ZoneMap
+      </action>
+      <action dev="cquiroz" type="update" >
+        Support scala.js 0.6.26
+      </action>
+      <action dev="cquiroz" type="update" >
         Support scala.js 1.0.0-M6
       </action>
       <action dev="cquiroz" type="update" >
-        Support scala 2.13.0-M6
+        Support scala 2.13.0-M5
       </action>
       <action dev="cquiroz" type="update" >
         Update scala-java-locales to v0.3.12-cldr34

@@ -29,7 +29,7 @@ object TimeZone {
     // This is supported since EcmaScript 1
     def offsetInMillis: Int = {
       val browserDate = new scalajs.js.Date()
-      browserDate.getTimezoneOffset() * 60 * 1000
+      browserDate.getTimezoneOffset().toInt * 60 * 1000
     }
 
     def timeZone: String = {

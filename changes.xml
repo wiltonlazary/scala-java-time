@@ -9,6 +9,18 @@
   </properties>
   <body>
     <!-- types are add, fix, remove, update -->
+    <release version="2.0.0-RC2" date="" description="v2.0.0-RC2">
+      <action dev="cquiroz" type="update" >
+        Support scala.js 0.6.27
+      </action>
+      <action dev="cquiroz" type="update" >
+        Support scala.js 1.0.0-M7
+      </action>
+      <action dev="cquiroz" type="update" >
+        Support scala 2.13.0-RC2
+      </action>
+    </release>
+    <!-- types are add, fix, remove, update -->
     <release version="2.0.0-RC1" date="" description="v2.0.0-RC1">
       <action dev="cquiroz" type="update" >
         Improved implementation of ZoneMap
@@ -48,6 +60,7 @@
       <action dev="cquiroz" type="upstream" >
         Avoid copying the set of available time-zone IDs
       </action>
+    </release>
     <release version="2.0.0-M13" date="2018-02-21" description="v2.0.0-M13">
       <action dev="cquiroz" type="update" >
         Update to scala.js 0.6.22

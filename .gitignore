@@ -36,3 +36,5 @@ tzdb/js/src/main/resources/
 /.idea/
 /threetenbp.iml
 .metaserver/
+.bloop/
+.metals/

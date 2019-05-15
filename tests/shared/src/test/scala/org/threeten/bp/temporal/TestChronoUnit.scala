@@ -315,7 +315,6 @@ class TestChronoUnit extends FunSuite with AssertionsHelper {
   }
 
   test("test_isDateBased") {
-    import scala.collection.JavaConversions._
     for (unit <- ChronoUnit.values) {
       if (unit.getDuration.getSeconds < 86400) {
         assertEquals(unit.isDateBased, false)
@@ -330,7 +329,6 @@ class TestChronoUnit extends FunSuite with AssertionsHelper {
   }
 
   test("test_isTimeBased") {
-    import scala.collection.JavaConversions._
     for (unit <- ChronoUnit.values) {
       if (unit.getDuration.getSeconds < 86400) {
         assertEquals(unit.isTimeBased, true)

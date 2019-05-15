@@ -1152,8 +1152,8 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
   }
 
   private def assertParseMatch(parsed: TemporalAccessor, expected: TestDateTimeFormatters.Expected): Unit = {
-    import scala.collection.JavaConversions._
-    for (field <- expected.fieldValues.keySet) {
+    import scala.collection.JavaConverters._
+    for (field <- expected.fieldValues.keySet.asScala) {
       assertEquals(parsed.isSupported(field), true)
       parsed.getLong(field)
     }

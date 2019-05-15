@@ -488,8 +488,8 @@ class TestDateTimeFormatter extends FunSuite with GenTestPrinterParser with Asse
   }
 
   test("test_parse_allZones") {
-    import scala.collection.JavaConversions._
-    for (zoneStr <- ZoneId.getAvailableZoneIds) {
+    import scala.collection.JavaConverters._
+    for (zoneStr <- ZoneId.getAvailableZoneIds.asScala) {
       val zone: ZoneId = ZoneId.of(zoneStr)
       val base: ZonedDateTime = ZonedDateTime.of(2014, 12, 31, 12, 0, 0, 0, zone)
       val test: ZonedDateTime = ZonedDateTime.parse(base.toString)

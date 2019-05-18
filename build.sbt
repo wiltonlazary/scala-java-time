@@ -1,4 +1,4 @@
-import sbtcrossproject.{crossProject, CrossType}
+import sbtcrossproject.CrossPlugin.autoImport.{ crossProject, CrossType }
 import sbt._
 import sbt.io.Using
 

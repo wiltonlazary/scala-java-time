@@ -21,9 +21,9 @@ lazy val commonSettings = Seq(
   scalaVersion       := scalaVer,
   crossScalaVersions := {
     if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0-M5")
+      Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC2")
     } else {
-      Seq("2.11.12", "2.12.8", "2.13.0-M5")
+      Seq("2.11.12", "2.12.8", "2.13.0-RC2")
     }
   },
   scalacOptions ++= Seq(
@@ -188,7 +188,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     libraryDependencies ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, scalaMajor)) if scalaMajor <= 12 && (scalaJSVersion.startsWith("0.6.")) =>
-          Seq("org.scalatest" %%% "scalatest" % "3.0.5" % "test")
+          Seq("org.scalatest" %%% "scalatest" % "3.0.7" % "test")
         case _ => Seq.empty
       }
     }

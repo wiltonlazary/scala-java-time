@@ -83,8 +83,8 @@ object FluentAPIChecker {
     dow = dow.plus(1)
     val offset: ZoneOffset = ZoneOffset.ofHours(1)
     val paris: ZoneId = ZoneId.of("Europe/Paris")
-    import scala.collection.JavaConversions._
-    for (trans <- paris.getRules.getTransitions) {
+    import scala.collection.JavaConverters._
+    for (trans <- paris.getRules.getTransitions.asScala) {
       System.out.println("Paris transition: " + trans)
     }
     System.out.println("Summer time Paris starts: " + paris.getRules.getTransitionRules.get(0))

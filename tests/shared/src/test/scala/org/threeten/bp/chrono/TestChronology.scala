@@ -87,8 +87,8 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
   test("test_calendar_list") {
     val chronos: java.util.Set[Chronology] = Chronology.getAvailableChronologies
     assertNotNull(chronos, "Required list of calendars must be non-null")
-    import scala.collection.JavaConversions._
-    for (chrono <- chronos) {
+    import scala.collection.JavaConverters._
+    for (chrono <- chronos.asScala) {
       val lookup: Chronology = Chronology.of(chrono.getId)
       assertNotNull(lookup, "Required calendar not found: " + chrono)
     }

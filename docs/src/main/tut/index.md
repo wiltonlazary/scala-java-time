@@ -58,8 +58,8 @@ Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.
 
 To get started with SBT, add one of these dependencies:
 
-* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-RC1"` (for Scala)
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC1"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-RC2"` (for Scala)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC2"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 To get the latest snapshots add the repo
 
@@ -70,8 +70,8 @@ resolvers +=
 
 and either:
 
-* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-RC2-SNAPSHOT"` (for Scala)
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC2-SNAPSHOT"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-RC3-SNAPSHOT"` (for Scala)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC3-SNAPSHOT"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 ### Time zones
 
@@ -84,7 +84,7 @@ If you don't need to use timezones in your application you can just stop here. B
 The timezone for js is provided in a separate bundle which contains all time zones available from
 [IANA Time Zone Database](https://www.iana.org/time-zones). To use them you need to add the following dependency
 
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-RC1_2018f"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-RC2_2019a"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 Note that the db is fairly large and due to the characteristics of the API it's not very ammenable to optimization
 This database is published every now and then so it maybe old. For current version see the following section.
@@ -101,7 +101,7 @@ To do that you need to:
 * Add `sbt-tzdb` to your list of plugins (Note you need sbt 1.x)
 
 ```scala
-addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "0.3.1")
+addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "0.3.2")
 ```
 
 * Enable the plugin for your `Scala.js` project:
@@ -154,7 +154,7 @@ Have a look at the [issues](https://github.com/cquiroz/scala-java-time/issues) o
 
 ##### 2.0
 
-A stable release of 2.0 will be published with only `java.time` on its binary after RC-2 is published.
+A stable release of 2.0 will be published with only `java.time` on its binary after RC3 is published.
 
 #### FAQs
 

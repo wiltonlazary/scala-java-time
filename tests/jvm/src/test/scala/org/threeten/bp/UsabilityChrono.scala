@@ -114,8 +114,8 @@ object UsabilityChrono {
     System.out.printf("  1st of year: %s; end of year: %s%n", first, last)
     val before: LocalDate = LocalDate.of(-500, 1, 1)
     val chronos: java.util.Set[Chronology] = Chronology.getAvailableChronologies
-    import scala.collection.JavaConversions._
-    for (chrono <- chronos) {
+    import scala.collection.JavaConverters._
+    for (chrono <- chronos.asScala) {
       val date: ChronoLocalDate = chrono.dateNow
       val date2: ChronoLocalDate = chrono.date(before)
       System.out.printf("   %20s: %22s, %22s%n", chrono.getId, date, date2)

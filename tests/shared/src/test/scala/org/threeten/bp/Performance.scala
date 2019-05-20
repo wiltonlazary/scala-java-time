@@ -53,6 +53,7 @@ import java.util.Map
 import java.util.Random
 import java.util.TreeMap
 import org.threeten.bp.format.DateTimeFormatter
+import scala.collection.JavaConverters._
 
 /** Test Performance. */
 object Performance {
@@ -88,13 +89,11 @@ object Performance {
       }
     }
     System.out.println()
-    import scala.collection.JavaConversions._
-    for (name <- RESULTS.keySet) {
+    for (name <- RESULTS.keySet.asScala) {
       System.out.println(name + " " + Arrays.toString(RESULTS.get(name)))
     }
     System.out.println()
-    import scala.collection.JavaConversions._
-    for (name <- RESULTS.keySet) {
+    for (name <- RESULTS.keySet.asScala) {
       val r: Array[Long] = RESULTS.get(name)
       val percent: BigDecimal = BigDecimal.valueOf(r(6), 1)
       var max: String = "           " + NF.format(r(0))
@@ -167,8 +166,7 @@ object Performance {
   private def queryListDateTime(list: java.util.List[LocalDateTime]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       total += dt.getYear
       total += dt.getMonth.getValue
       total += dt.getDayOfMonth
@@ -185,8 +183,7 @@ object Performance {
     val buf: StringBuilder = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_DATE.withLocale(Locale.ENGLISH)
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(dt))
     }
@@ -198,8 +195,7 @@ object Performance {
   private def deriveDateTime(list: java.util.List[LocalDateTime]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       total += dt.get(YEAR)
       total += dt.get(MONTH_OF_YEAR)
       total += dt.get(DAY_OF_MONTH)
@@ -238,8 +234,7 @@ object Performance {
   private def queryListLocalDate(list: java.util.List[LocalDate]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       total += dt.getYear
       total += dt.getMonth.getValue
       total += dt.getDayOfMonth
@@ -253,8 +248,7 @@ object Performance {
     val buf: StringBuilder = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_DATE.withLocale(Locale.ENGLISH)
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(dt))
     }
@@ -290,8 +284,7 @@ object Performance {
   private def queryListTime(list: java.util.List[LocalTime]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       total += dt.getHour
       total += dt.getMinute
       total += dt.getSecond
@@ -306,8 +299,7 @@ object Performance {
     val buf: StringBuilder = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_TIME.withLocale(Locale.ENGLISH)
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(dt))
     }
@@ -319,8 +311,7 @@ object Performance {
   private def deriveTime(list: java.util.List[LocalTime]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       total += dt.get(HOUR_OF_DAY)
       total += dt.get(MINUTE_OF_HOUR)
       total += dt.get(SECOND_OF_MINUTE)
@@ -359,8 +350,7 @@ object Performance {
   private def queryListZonedDateTime(list: java.util.List[ZonedDateTime]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       total += dt.getYear
       total += dt.getMonth.getValue
       total += dt.getDayOfMonth
@@ -377,8 +367,7 @@ object Performance {
     val buf: StringBuilder = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_DATE.withLocale(Locale.ENGLISH)
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(dt))
     }
@@ -414,8 +403,7 @@ object Performance {
   private def queryListInstant(list: java.util.List[Instant]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       total += dt.getEpochSecond
       total += dt.getNano
     }
@@ -427,8 +415,7 @@ object Performance {
   private def formatListInstant(list: java.util.List[Instant]): Unit = {
     val buf: StringBuilder = new StringBuilder
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(dt.toString)
     }
@@ -464,8 +451,7 @@ object Performance {
   private def queryListDate(list: java.util.List[Date]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       total += dt.getTime
     }
     val end: Long = System.nanoTime
@@ -476,8 +462,7 @@ object Performance {
   private def formatListDate(list: java.util.List[Date]): Unit = {
     val buf: StringBuilder = new StringBuilder
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (dt <- list) {
+    for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(dt.toString)
     }
@@ -516,8 +501,7 @@ object Performance {
   private def queryListGCal(list: java.util.List[GregorianCalendar]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (gcal <- list) {
+    for (gcal <- list.asScala) {
       total += gcal.get(Calendar.YEAR)
       total += gcal.get(Calendar.MONTH + 1)
       total += gcal.get(Calendar.DAY_OF_MONTH)
@@ -535,8 +519,7 @@ object Performance {
     val buf: StringBuilder = new StringBuilder
     val format: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
     val start: Long = System.nanoTime
-    import scala.collection.JavaConversions._
-    for (gcal <- list) {
+    for (gcal <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(gcal.getTime))
     }

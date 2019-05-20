@@ -164,8 +164,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
             date.`with`(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException")
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoLocalDate = date.`with`(adjuster)
@@ -187,8 +186,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
             date.plus(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException")
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoLocalDate = date.plus(adjuster)
@@ -210,8 +208,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
             date.minus(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException")
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case cce: Throwable =>
           }
         } else {
           val result: ChronoLocalDate = date.minus(adjuster)
@@ -233,8 +230,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
             date.plus(1, adjuster)
             fail("PeriodUnit.doAdd plus should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass)
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case cce: Throwable =>
           }
         } else {
           val result: ChronoLocalDate = date.plus(1, adjuster)
@@ -256,8 +252,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
             date.minus(1, adjuster)
             fail("PeriodUnit.doAdd minus should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass)
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case cce: Throwable =>
           }
         } else {
           val result: ChronoLocalDate = date.minus(1, adjuster)
@@ -315,8 +310,8 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
           val otherDates: java.util.List[ChronoLocalDate] = new java.util.ArrayList[ChronoLocalDate]
           if (chrono2 eq JapaneseChronology.INSTANCE)
             scala.util.control.Breaks.break()
-          import scala.collection.JavaConversions._
-          for (d <- dates) {
+          import scala.collection.JavaConverters._
+          for (d <- dates.asScala) {
             otherDates.add(chrono2.date(d))
           }
           var i: Int = 0

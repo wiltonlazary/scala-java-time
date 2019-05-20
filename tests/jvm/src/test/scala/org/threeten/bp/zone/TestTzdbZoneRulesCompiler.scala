@@ -77,6 +77,8 @@ object TestTzdbZoneRulesCompiler {
         "org$threeten$bp$zone$TzdbZoneRulesCompiler$$parseLeapSecondRule" // !!! WTF?
       else if (scalaVersion.startsWith("2.12"))
         "parseLeapSecondRule"
+      else if (scalaVersion.startsWith("2.13"))
+        "parseLeapSecondRule"
       else
         ???
     PARSE_LSR = classOf[TzdbZoneRulesCompiler].getDeclaredMethod(methodName, classOf[String])

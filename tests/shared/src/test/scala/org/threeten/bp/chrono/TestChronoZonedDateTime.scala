@@ -197,8 +197,7 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
             czdt.`with`(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2)
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoZonedDateTime[_] = czdt.`with`(adjuster)
@@ -220,8 +219,7 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
             czdt.plus(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2)
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoZonedDateTime[_] = czdt.plus(adjuster)
@@ -243,8 +241,7 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
             czdt.minus(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2)
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoZonedDateTime[_] = czdt.minus(adjuster)
@@ -266,8 +263,7 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
             czdt.plus(1, adjuster)
             fail("PeriodUnit.doPlus plus should have thrown a ClassCastException, " + czdt + " can not be cast to " + czdt2)
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoZonedDateTime[_] = czdt.plus(1, adjuster)
@@ -289,8 +285,7 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
             czdt.minus(1, adjuster)
             fail("PeriodUnit.doPlus minus should have thrown a ClassCastException, " + czdt.getClass + " can not be cast to " + czdt2.getClass)
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoZonedDateTime[_] = czdt.minus(1, adjuster)
@@ -312,8 +307,7 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
             czdt.`with`(adjuster, 1)
             fail("DateTimeField adjustInto() should have thrown a ClassCastException, " + czdt.getClass + " can not be cast to " + czdt2.getClass)
           } catch {
-            case cce: ClassCastException =>
-            case cce: Platform.CCE =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoZonedDateTime[_] = czdt.`with`(adjuster, 1)
@@ -350,8 +344,8 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
       for (clist <- data_of_calendars) {
         val otherDates: java.util.List[ChronoZonedDateTime[_ <: ChronoLocalDate]] = new java.util.ArrayList[ChronoZonedDateTime[_ <: ChronoLocalDate]]
         val chrono2: Chronology = IsoChronology.INSTANCE
-        import scala.collection.JavaConversions._
-        for (d <- dates) {
+        import scala.collection.JavaConverters._
+        for (d <- dates.asScala) {
           otherDates.add(chrono2.date(d).atTime(d.toLocalTime).atZone(d.getZone).asInstanceOf[ChronoZonedDateTime[_ <: ChronoLocalDate]])
         }
         var i: Int = 0

@@ -3,8 +3,8 @@ import sbt._
 import sbt.io.Using
 
 val scalaVer = "2.12.8"
-val tzdbVersion = "2018f"
-val scalaJavaTimeVer = "2.0.0-RC1"
+val tzdbVersion = "2019a"
+val scalaJavaTimeVer = "2.0.0-RC2"
 val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
 val scalaTZDBVersion = s"${scalaJavaTimeVer}_$tzdbVersion"
 
@@ -148,7 +148,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
         copyAndReplace(srcDirs, destinationDir)
       }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.12-cldr34"
+      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.14-cldr35"
     )
   )
 
@@ -187,6 +187,8 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     Keys.`package`       := file(""),
     libraryDependencies ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, scalaMajor)) if scalaMajor == 13 =>
+          Seq("org.scalatest" %%% "scalatest" % "3.1.0-SNAP11" % "test")
         case Some((2, scalaMajor)) if scalaMajor <= 12 && (scalaJSVersion.startsWith("0.6.")) =>
           Seq("org.scalatest" %%% "scalatest" % "3.0.7" % "test")
         case _ => Seq.empty

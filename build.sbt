@@ -4,7 +4,7 @@ import sbt.io.Using
 
 val scalaVer = "2.12.8"
 val tzdbVersion = "2019a"
-val scalaJavaTimeVer = "2.0.0-RC2"
+val scalaJavaTimeVer = "2.0.0-RC3-SNAPSHOT"
 val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
 val scalaTZDBVersion = s"${scalaJavaTimeVer}_$tzdbVersion"
 
@@ -21,9 +21,9 @@ lazy val commonSettings = Seq(
   scalaVersion       := scalaVer,
   crossScalaVersions := {
     if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0-RC2")
+      Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0")
     } else {
-      Seq("2.11.12", "2.12.8", "2.13.0-RC2")
+      Seq("2.11.12", "2.12.8", "2.13.0")
     }
   },
   scalacOptions ++= Seq(
@@ -32,7 +32,7 @@ lazy val commonSettings = Seq(
     "-encoding", "UTF-8",
   ),
   // Don't include threeten on the binaries
-  mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter { case (f, s) => !s.contains("semanticdb") && !s.contains("threeten") },
+  mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter { case (f, s) => !s.contains("threeten") },
   scalacOptions := {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, scalaMajor)) if scalaMajor >= 11 && scalaMajor <= 12 =>
@@ -148,7 +148,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
         copyAndReplace(srcDirs, destinationDir)
       }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.14-cldr35"
+      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.16-cldr35"
     )
   )
 
@@ -188,7 +188,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     libraryDependencies ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, scalaMajor)) if scalaMajor == 13 =>
-          Seq("org.scalatest" %%% "scalatest" % "3.1.0-SNAP11" % "test")
+          Seq("org.scalatest" %%% "scalatest" % "3.1.0-SNAP12" % "test")
         case Some((2, scalaMajor)) if scalaMajor <= 12 && (scalaJSVersion.startsWith("0.6.")) =>
           Seq("org.scalatest" %%% "scalatest" % "3.0.7" % "test")
         case _ => Seq.empty

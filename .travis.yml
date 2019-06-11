@@ -17,14 +17,12 @@ scala:
   - 2.10.7
   - 2.11.12
   - 2.12.8
-  - 2.13.0-RC2
+  - 2.13.0
 
 before_install:
   - export PATH=${PATH}:./vendor/bundle
 
 env:
-  - TRAVIS_NODE_VERSION="8.11.4"
-    SCALAJS_VERSION="0.6.28"
   - TRAVIS_NODE_VERSION="9.11.2"
     SCALAJS_VERSION="0.6.28"
   - TRAVIS_NODE_VERSION="10.9.0"

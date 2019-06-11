@@ -9,6 +9,18 @@
   </properties>
   <body>
     <!-- types are add, fix, remove, update -->
+    <release version="2.0.0-RC3" date="" description="v2.0.0-RC3">
+      <action dev="cquiroz" type="update" >
+        Support scala.js 0.6.28
+      </action>
+      <action dev="cquiroz" type="update" >
+        Support scala.js 1.0.0-M8
+      </action>
+      <action dev="cquiroz" type="update" >
+        Support scala 2.13.0
+      </action>
+    </release>
+    <!-- types are add, fix, remove, update -->
     <release version="2.0.0-RC2" date="" description="v2.0.0-RC2">
       <action dev="cquiroz" type="update" >
         Support scala.js 0.6.27

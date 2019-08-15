@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{ crossProject, CrossType }
 import sbt._
 import sbt.io.Using
 
-val scalaVer = "2.12.8"
+val scalaVer = "2.12.9"
 val tzdbVersion = "2019a"
 val scalaJavaTimeVer = "2.0.0-RC3"
 val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
@@ -21,9 +21,9 @@ lazy val commonSettings = Seq(
   scalaVersion       := scalaVer,
   crossScalaVersions := {
     if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "2.12.8", "2.13.0")
+      Seq("2.10.7", "2.11.12", "2.12.9", "2.13.0")
     } else {
-      Seq("2.11.12", "2.12.8", "2.13.0")
+      Seq("2.11.12", "2.12.9", "2.13.0")
     }
   },
   scalacOptions ++= Seq(

@@ -1,7 +1,7 @@
 
 addSbtPlugin("com.47deg"  % "sbt-microsites" % "0.9.3")
 
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.2")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.6")
 
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2")
 

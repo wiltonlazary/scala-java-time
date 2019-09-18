@@ -24,9 +24,9 @@ before_install:
 
 env:
   - TRAVIS_NODE_VERSION="9.11.2"
-    SCALAJS_VERSION="0.6.28"
+    SCALAJS_VERSION="0.6.29"
   - TRAVIS_NODE_VERSION="10.9.0"
-    SCALAJS_VERSION="0.6.28"
+    SCALAJS_VERSION="0.6.29"
 
 install:
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION

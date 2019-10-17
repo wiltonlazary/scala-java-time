@@ -39,15 +39,15 @@ object IsoEra {
     * era in the Gregorian calendar system.
     * This has the numeric value of {@code 0}.
     */
-  val BCE = new IsoEra("BCE", 0)
+  lazy val BCE = new IsoEra("BCE", 0)
   /** The singleton instance for the era CE, 'Current Era'.
     * The 'ISO' part of the name emphasizes that this differs from the CE
     * era in the Gregorian calendar system.
     * This has the numeric value of {@code 1}.
     */
-  val CE  = new IsoEra("CE", 1)
+  lazy val CE  = new IsoEra("CE", 1)
 
-  val values: Array[IsoEra] = Array(BCE, CE)
+  lazy val values: Array[IsoEra] = Array(BCE, CE)
 
   /** Obtains an instance of {@code IsoEra} from an {@code int} value.
     *

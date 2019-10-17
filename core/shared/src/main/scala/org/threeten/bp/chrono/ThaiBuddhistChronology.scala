@@ -53,7 +53,7 @@ import org.threeten.bp.temporal.ValueRange
 @SerialVersionUID(2775954514031616474L)
 object ThaiBuddhistChronology {
   /** Singleton instance of the Buddhist chronology. */
-  val INSTANCE: ThaiBuddhistChronology = new ThaiBuddhistChronology
+  lazy val INSTANCE: ThaiBuddhistChronology = new ThaiBuddhistChronology
   /** Containing the offset to add to the ISO year. */
   private[chrono] val YEARS_DIFFERENCE: Int = 543
 
@@ -63,21 +63,21 @@ object ThaiBuddhistChronology {
   private val TARGET_LANGUAGE: String = "th"
 
   /** Narrow names for eras. */
-  private val ERA_NARROW_NAMES: java.util.HashMap[String, Array[String]] = {
+  private lazy val ERA_NARROW_NAMES: java.util.HashMap[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("BB", "BE"))
     names.put(TARGET_LANGUAGE, Array[String]("BB", "BE"))
     names
   }
   /** Short names for eras. */
-  private val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
+  private lazy val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("B.B.", "B.E."))
     names.put(TARGET_LANGUAGE, Array[String]("\u0e1e.\u0e28.", "\u0e1b\u0e35\u0e01\u0e48\u0e2d\u0e19\u0e04\u0e23\u0e34\u0e2a\u0e15\u0e4c\u0e01\u0e32\u0e25\u0e17\u0e35\u0e48"))
     names
   }
   /** Full names for eras. */
-  private val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
+  private lazy val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("Before Buddhist", "Budhhist Era"))
     names.put(TARGET_LANGUAGE, Array[String]("\u0e1e\u0e38\u0e17\u0e18\u0e28\u0e31\u0e01\u0e23\u0e32\u0e0a", "\u0e1b\u0e35\u0e01\u0e48\u0e2d\u0e19\u0e04\u0e23\u0e34\u0e2a\u0e15\u0e4c\u0e01\u0e32\u0e25\u0e17\u0e35\u0e48"))

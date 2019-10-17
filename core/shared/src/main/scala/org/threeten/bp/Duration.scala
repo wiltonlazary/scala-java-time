@@ -63,15 +63,15 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 @SerialVersionUID(3078945930695997490L)
 object Duration {
   /** Constant for a duration of zero. */
-  val ZERO: Duration = new Duration(0, 0)
+  lazy val ZERO: Duration = new Duration(0, 0)
   /** Constant for nanos per second. */
   private val NANOS_PER_SECOND: Int = 1000000000
   /** Constant for nanos per milli. */
   private val NANOS_PER_MILLI: Int = 1000000
   /** Constant for nanos per second. */
-  private val BI_NANOS_PER_SECOND: BigInteger = BigInteger.valueOf(NANOS_PER_SECOND)
+  private lazy val BI_NANOS_PER_SECOND: BigInteger = BigInteger.valueOf(NANOS_PER_SECOND)
   /** The pattern for parsing. */
-  private val PATTERN: Pattern = Pattern.compile("([-+]?)P(?:([-+]?[0-9]+)D)?" + "(T(?:([-+]?[0-9]+)H)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)(?:[.,]([0-9]{0,9}))?S)?)?", Pattern.CASE_INSENSITIVE)
+  private lazy val PATTERN: Pattern = Pattern.compile("([-+]?)P(?:([-+]?[0-9]+)D)?" + "(T(?:([-+]?[0-9]+)H)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)(?:[.,]([0-9]{0,9}))?S)?)?", Pattern.CASE_INSENSITIVE)
 
   /** Obtains an instance of {@code Duration} from a number of standard 24 hour days.
     *

@@ -132,7 +132,7 @@ object IsoFields {
     *
     * This unit is an immutable and thread-safe singleton.
     */
-  val DAY_OF_QUARTER: TemporalField = Field.DAY_OF_QUARTER
+  lazy val DAY_OF_QUARTER: TemporalField = Field.DAY_OF_QUARTER
   /** The field that represents the quarter-of-year.
     *
     * This field allows the quarter-of-year value to be queried and set.
@@ -142,21 +142,21 @@ object IsoFields {
     *
     * This unit is an immutable and thread-safe singleton.
     */
-  val QUARTER_OF_YEAR: TemporalField = Field.QUARTER_OF_YEAR
+  lazy val QUARTER_OF_YEAR: TemporalField = Field.QUARTER_OF_YEAR
   /** The field that represents the week-of-week-based-year.
     *
     * This field allows the week of the week-based-year value to be queried and set.
     *
     * This unit is an immutable and thread-safe singleton.
     */
-  val WEEK_OF_WEEK_BASED_YEAR: TemporalField = Field.WEEK_OF_WEEK_BASED_YEAR
+  lazy val WEEK_OF_WEEK_BASED_YEAR: TemporalField = Field.WEEK_OF_WEEK_BASED_YEAR
   /** The field that represents the week-based-year.
     *
     * This field allows the week-based-year value to be queried and set.
     *
     * This unit is an immutable and thread-safe singleton.
     */
-  val WEEK_BASED_YEAR: TemporalField = Field.WEEK_BASED_YEAR
+  lazy val WEEK_BASED_YEAR: TemporalField = Field.WEEK_BASED_YEAR
   /** The unit that represents week-based-years for the purpose of addition and subtraction.
     *
     * This allows a number of week-based-years to be added to, or subtracted from, a date.
@@ -170,18 +170,18 @@ object IsoFields {
     *
     * This unit is an immutable and thread-safe singleton.
     */
-  val WEEK_BASED_YEARS: TemporalUnit = Unit.WEEK_BASED_YEARS
+  lazy val WEEK_BASED_YEARS: TemporalUnit = Unit.WEEK_BASED_YEARS
   /** Unit that represents the concept of a quarter-year.
     * For the ISO calendar system, it is equal to 3 months.
     * The estimated duration of a quarter-year is one quarter of {@code 365.2425 Days}.
     *
     * This unit is an immutable and thread-safe singleton.
     */
-  val QUARTER_YEARS: TemporalUnit = Unit.QUARTER_YEARS
+  lazy val QUARTER_YEARS: TemporalUnit = Unit.QUARTER_YEARS
 
   /** Implementation of the field. */
   private object Field {
-    val DAY_OF_QUARTER: Field = new Field("DAY_OF_QUARTER", 0) {
+      lazy val DAY_OF_QUARTER: Field = new Field("DAY_OF_QUARTER", 0) {
       override def toString: String = "DayOfQuarter"
       def getBaseUnit: TemporalUnit = DAYS
       def getRangeUnit: TemporalUnit = QUARTER_YEARS
@@ -255,7 +255,7 @@ object IsoFields {
       }
     }
 
-    val QUARTER_OF_YEAR: Field = new Field("QUARTER_OF_YEAR", 1) {
+    lazy val QUARTER_OF_YEAR: Field = new Field("QUARTER_OF_YEAR", 1) {
       override def toString: String = "QuarterOfYear"
       def getBaseUnit: TemporalUnit = QUARTER_YEARS
       def getRangeUnit: TemporalUnit = YEARS
@@ -275,7 +275,7 @@ object IsoFields {
       }
     }
 
-    val WEEK_OF_WEEK_BASED_YEAR: Field = new Field("WEEK_OF_WEEK_BASED_YEAR", 2) {
+    lazy val WEEK_OF_WEEK_BASED_YEAR: Field = new Field("WEEK_OF_WEEK_BASED_YEAR", 2) {
       override def toString: String = "WeekOfWeekBasedYear"
       def getBaseUnit: TemporalUnit = WEEKS
       def getRangeUnit: TemporalUnit = WEEK_BASED_YEARS
@@ -339,7 +339,7 @@ object IsoFields {
       }
     }
 
-    val WEEK_BASED_YEAR: Field = new Field("WEEK_BASED_YEAR", 3) {
+    lazy val WEEK_BASED_YEAR: Field = new Field("WEEK_BASED_YEAR", 3) {
       override def toString: String = "WeekBasedYear"
       def getBaseUnit: TemporalUnit = WEEK_BASED_YEARS
       def getRangeUnit: TemporalUnit = FOREVER
@@ -366,7 +366,7 @@ object IsoFields {
       }
     }
 
-    private val QUARTER_DAYS: Array[Int] = Array(0, 90, 181, 273, 0, 91, 182, 274)
+    private lazy val QUARTER_DAYS: Array[Int] = Array(0, 90, 181, 273, 0, 91, 182, 274)
 
     private def isIso(temporal: TemporalAccessor): Boolean = Chronology.from(temporal) == IsoChronology.INSTANCE
 
@@ -435,8 +435,8 @@ object IsoFields {
 
   /** Implementation of the period unit. */
   private object Unit {
-    val WEEK_BASED_YEARS = new Unit("WeekBasedYears", 0, Duration.ofSeconds(31556952L))
-    val QUARTER_YEARS    = new Unit("QuarterYears", 1, Duration.ofSeconds(31556952L / 4))
+    lazy val WEEK_BASED_YEARS = new Unit("WeekBasedYears", 0, Duration.ofSeconds(31556952L))
+    lazy val QUARTER_YEARS    = new Unit("QuarterYears", 1, Duration.ofSeconds(31556952L / 4))
   }
 
   /// !!! FIXME: Passing of name to the Enum constructor is not quite right.

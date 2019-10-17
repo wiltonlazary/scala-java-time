@@ -51,9 +51,9 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 @SerialVersionUID(-8290556941213247973L)
 object Period {
   /** A constant for a period of zero. */
-  val ZERO: Period = new Period(0, 0, 0)
+  lazy val ZERO: Period = new Period(0, 0, 0)
   /** The pattern for parsing. */
-  private val PATTERN: Pattern = Pattern.compile("([-+]?)P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?", Pattern.CASE_INSENSITIVE)
+  private lazy val PATTERN: Pattern = Pattern.compile("([-+]?)P(?:([-+]?[0-9]+)Y)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)W)?(?:([-+]?[0-9]+)D)?", Pattern.CASE_INSENSITIVE)
 
   /** Obtains a {@code Period} representing a number of years.
     *

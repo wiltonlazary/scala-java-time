@@ -50,9 +50,9 @@ object DecimalStyle {
     *
     * This uses standard ASCII characters for zero, positive, negative and a dot for the decimal point.
     */
-  val STANDARD: DecimalStyle = new DecimalStyle('0', '+', '-', '.')
+  lazy val STANDARD: DecimalStyle = new DecimalStyle('0', '+', '-', '.')
   /** The cache of symbols instances. */
-  private val CACHE: ConcurrentMap[Locale, DecimalStyle] = new ConcurrentHashMap[Locale, DecimalStyle](16, 0.75f, 2)
+  private lazy  val CACHE: ConcurrentMap[Locale, DecimalStyle] = new ConcurrentHashMap[Locale, DecimalStyle](16, 0.75f, 2)
 
   /** Lists all the locales that are supported.
     *

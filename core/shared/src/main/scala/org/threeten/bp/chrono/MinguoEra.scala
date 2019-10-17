@@ -42,13 +42,13 @@ object MinguoEra {
   /** The singleton instance for the era BEFORE_ROC, 'Before Republic of China'.
     * This has the numeric value of {@code 0}.
     */
-  val BEFORE_ROC = new MinguoEra("BEFORE_ROC", 0)
+  lazy val BEFORE_ROC = new MinguoEra("BEFORE_ROC", 0)
   /** The singleton instance for the era ROC, 'Republic of China'.
     * This has the numeric value of {@code 1}.
     */
-  val ROC        = new MinguoEra("ROC", 1)
+  lazy val ROC        = new MinguoEra("ROC", 1)
 
-  val values: Array[MinguoEra] = Array(BEFORE_ROC, ROC)
+  lazy val values: Array[MinguoEra] = Array(BEFORE_ROC, ROC)
 
   /** Obtains an instance of {@code MinguoEra} from an {@code int} value.
     *

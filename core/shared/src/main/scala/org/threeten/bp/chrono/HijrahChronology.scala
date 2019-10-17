@@ -65,25 +65,25 @@ import org.threeten.bp.temporal.ValueRange
 @SerialVersionUID(3127340209035924785L)
 object HijrahChronology {
   /** Singleton instance of the Hijrah chronology. */
-  val INSTANCE: HijrahChronology = new HijrahChronology
+  lazy val INSTANCE: HijrahChronology = new HijrahChronology
 
   /** Fallback language for the era names. */
   private val FALLBACK_LANGUAGE: String = "en"
 
   /** Narrow names for eras. */
-  private val ERA_NARROW_NAMES: java.util.HashMap[String, Array[String]] = {
+  private lazy val ERA_NARROW_NAMES: java.util.HashMap[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("BH", "HE"))
     names
   }
   /** Short names for eras. */
-  private val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
+  private lazy val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("B.H.", "H.E."))
     names
   }
   /** Full names for eras. */
-  private val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
+  private lazy val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("Before Hijrah", "Hijrah Era"))
     names

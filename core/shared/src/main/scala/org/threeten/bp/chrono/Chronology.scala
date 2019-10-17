@@ -60,9 +60,9 @@ import org.threeten.bp.temporal.ValueRange
 object Chronology {
 
   /** Map of available calendars by ID. */
-  private val CHRONOS_BY_ID: ConcurrentHashMap[String, Chronology] = new ConcurrentHashMap[String, Chronology]
+  private lazy val CHRONOS_BY_ID: ConcurrentHashMap[String, Chronology] = new ConcurrentHashMap[String, Chronology]
   /** Map of available calendars by calendar type. */
-  private val CHRONOS_BY_TYPE: ConcurrentHashMap[String, Chronology] = new ConcurrentHashMap[String, Chronology]
+  private lazy val CHRONOS_BY_TYPE: ConcurrentHashMap[String, Chronology] = new ConcurrentHashMap[String, Chronology]
 
   /** Obtains an instance of {@code Chronology} from a temporal object.
     *

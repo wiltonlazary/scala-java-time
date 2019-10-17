@@ -68,7 +68,7 @@ object ChronoLocalDateTime {
     */
   def timeLineOrder: Comparator[ChronoLocalDateTime[_ <: ChronoLocalDate]] = DATE_TIME_COMPARATOR
 
-  private val DATE_TIME_COMPARATOR: Comparator[ChronoLocalDateTime[_ <: ChronoLocalDate]] =
+  private lazy val DATE_TIME_COMPARATOR: Comparator[ChronoLocalDateTime[_ <: ChronoLocalDate]] =
     new Comparator[ChronoLocalDateTime[_ <: ChronoLocalDate]] {
       override def compare(datetime1: ChronoLocalDateTime[_ <: ChronoLocalDate], datetime2: ChronoLocalDateTime[_ <: ChronoLocalDate]): Int = {
         var cmp: Int = java.lang.Long.compare(datetime1.toLocalDate.toEpochDay, datetime2.toLocalDate.toEpochDay)

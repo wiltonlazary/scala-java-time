@@ -37,7 +37,7 @@ import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.TextStyle
 
 private[format] object TTBPDateTimeTextProvider {
-  val MUTABLE_PROVIDER: AtomicReference[TTBPDateTimeTextProvider] = new AtomicReference[TTBPDateTimeTextProvider]()
+  lazy val MUTABLE_PROVIDER: AtomicReference[TTBPDateTimeTextProvider] = new AtomicReference[TTBPDateTimeTextProvider]()
 
   /** Gets the provider.
     *
@@ -63,7 +63,7 @@ private[format] object TTBPDateTimeTextProvider {
   //-----------------------------------------------------------------------
   // use JVM class initializtion to lock the singleton without additional synchronization
   object ProviderSingleton {
-      val PROVIDER: TTBPDateTimeTextProvider = initialize()
+      lazy val PROVIDER: TTBPDateTimeTextProvider = initialize()
       // initialize the provider
       def initialize(): TTBPDateTimeTextProvider = {
         // Set the default initializer if none has been provided yet

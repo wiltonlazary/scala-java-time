@@ -77,11 +77,11 @@ object LocalDate {
   /** The minimum supported {@code LocalDate}, '-999999999-01-01'.
     * This could be used by an application as a "far past" date.
     */
-  val MIN: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 1)
+  lazy val MIN: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 1)
   /** The maximum supported {@code LocalDate}, '+999999999-12-31'.
     * This could be used by an application as a "far future" date.
     */
-  val MAX: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 31)
+  lazy val MAX: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 31)
 
   /** The number of days in a 400 year cycle. */
   private val DAYS_PER_CYCLE: Int = 146097

@@ -56,9 +56,9 @@ import org.threeten.bp.zone.ZoneRules
 object ZoneOffset {
 
   /** Cache of time-zone offset by offset in seconds. */
-  private val SECONDS_CACHE: ConcurrentMap[Integer, ZoneOffset] = new ConcurrentHashMap[Integer, ZoneOffset](16, 0.75f, 4)
+  private lazy val SECONDS_CACHE: ConcurrentMap[Integer, ZoneOffset] = new ConcurrentHashMap[Integer, ZoneOffset](16, 0.75f, 4)
   /** Cache of time-zone offset by ID. */
-  private val ID_CACHE: ConcurrentMap[String, ZoneOffset] = new ConcurrentHashMap[String, ZoneOffset](16, 0.75f, 4)
+  private lazy val ID_CACHE: ConcurrentMap[String, ZoneOffset] = new ConcurrentHashMap[String, ZoneOffset](16, 0.75f, 4)
 
   /** The number of seconds per hour. */
   private val SECONDS_PER_HOUR: Int = 60 * 60
@@ -69,11 +69,11 @@ object ZoneOffset {
   /** The abs maximum seconds. */
   private val MAX_SECONDS: Int = 18 * SECONDS_PER_HOUR
   /** The time-zone offset for UTC, with an ID of 'Z'. */
-  val UTC: ZoneOffset = ZoneOffset.ofTotalSeconds(0)
+  lazy val UTC: ZoneOffset = ZoneOffset.ofTotalSeconds(0)
   /** Constant for the maximum supported offset. */
-  val MIN: ZoneOffset = ZoneOffset.ofTotalSeconds(-MAX_SECONDS)
+  lazy val MIN: ZoneOffset = ZoneOffset.ofTotalSeconds(-MAX_SECONDS)
   /** Constant for the maximum supported offset. */
-  val MAX: ZoneOffset = ZoneOffset.ofTotalSeconds(MAX_SECONDS)
+  lazy val MAX: ZoneOffset = ZoneOffset.ofTotalSeconds(MAX_SECONDS)
 
   /** Obtains an instance of {@code ZoneOffset} using the ID.
     *

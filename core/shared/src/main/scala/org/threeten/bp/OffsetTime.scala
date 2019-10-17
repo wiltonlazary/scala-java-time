@@ -70,14 +70,14 @@ object OffsetTime {
     * This combines {@link LocalTime#MIN} and {@link ZoneOffset#MAX}.
     * This could be used by an application as a "far past" date.
     */
-  val MIN: OffsetTime = LocalTime.MIN.atOffset(ZoneOffset.MAX)
+  lazy val MIN: OffsetTime = LocalTime.MIN.atOffset(ZoneOffset.MAX)
   /** The maximum supported {@code OffsetTime}, '23:59:59.999999999-18:00'.
     * This is the time just before midnight at the end of the day in the minimum offset
     * (larger negative offsets are later on the time-line).
     * This combines {@link LocalTime#MAX} and {@link ZoneOffset#MIN}.
     * This could be used by an application as a "far future" date.
     */
-  val MAX: OffsetTime = LocalTime.MAX.atOffset(ZoneOffset.MIN)
+  lazy val MAX: OffsetTime = LocalTime.MAX.atOffset(ZoneOffset.MIN)
 
   /** Obtains the current time from the system clock in the default time-zone.
     *

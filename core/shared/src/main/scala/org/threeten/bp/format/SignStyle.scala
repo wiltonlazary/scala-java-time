@@ -46,26 +46,26 @@ object SignStyle {
     * In strict parsing, the negative sign will be accepted and the positive sign rejected.
     * In lenient parsing, any sign will be accepted.
     */
-  val NORMAL       = new SignStyle("NORMAL", 0)
+  lazy val NORMAL       = new SignStyle("NORMAL", 0)
   /** Style to always output the sign, where zero will output '+'.
     *
     * In strict parsing, the absence of a sign will be rejected.
     * In lenient parsing, any sign will be accepted, with the absence
     * of a sign treated as a positive number.
     */
-  val ALWAYS       = new SignStyle("ALWAYS", 1)
+  lazy val ALWAYS       = new SignStyle("ALWAYS", 1)
   /** Style to never output sign, only outputting the absolute value.
     *
     * In strict parsing, any sign will be rejected.
     * In lenient parsing, any sign will be accepted unless the width is fixed.
     */
-  val NEVER        = new SignStyle("NEVER", 2)
+  lazy val NEVER        = new SignStyle("NEVER", 2)
   /** Style to block negative values, throwing an exception on printing.
     *
     * In strict parsing, any sign will be rejected.
     * In lenient parsing, any sign will be accepted unless the width is fixed.
     */
-  val NOT_NEGATIVE = new SignStyle("NOT_NEGATIVE", 3)
+  lazy val NOT_NEGATIVE = new SignStyle("NOT_NEGATIVE", 3)
   /** Style to always output the sign if the value exceeds the pad width.
     * A negative value will always output the '-' sign.
     *
@@ -73,7 +73,7 @@ object SignStyle {
     * In lenient parsing, any sign will be accepted, with the absence
     * of a sign treated as a positive number.
     */
-  val EXCEEDS_PAD  = new SignStyle("EXCEEDS_PAD", 4)
+  lazy val EXCEEDS_PAD  = new SignStyle("EXCEEDS_PAD", 4)
 }
 
 final class SignStyle(name: String, ordinal: Int) extends Enum[SignStyle](name, ordinal) {

@@ -68,14 +68,14 @@ object OffsetDateTime {
     * This combines {@link LocalDateTime#MIN} and {@link ZoneOffset#MAX}.
     * This could be used by an application as a "far past" date-time.
     */
-  val MIN: OffsetDateTime = LocalDateTime.MIN.atOffset(ZoneOffset.MAX)
+  lazy val MIN: OffsetDateTime = LocalDateTime.MIN.atOffset(ZoneOffset.MAX)
   /** The maximum supported {@code OffsetDateTime}, '+999999999-12-31T23:59:59.999999999-18:00'.
     * This is the local date-time just before midnight at the end of the maximum date
     * in the minimum offset (larger negative offsets are later on the time-line).
     * This combines {@link LocalDateTime#MAX} and {@link ZoneOffset#MIN}.
     * This could be used by an application as a "far future" date-time.
     */
-  val MAX: OffsetDateTime = LocalDateTime.MAX.atOffset(ZoneOffset.MIN)
+  lazy val MAX: OffsetDateTime = LocalDateTime.MAX.atOffset(ZoneOffset.MIN)
 
   /** Gets a comparator that compares two {@code OffsetDateTime} instances
     * based solely on the instant.
@@ -90,7 +90,7 @@ object OffsetDateTime {
     */
   def timeLineOrder: Comparator[OffsetDateTime] = INSTANT_COMPARATOR
 
-  private val INSTANT_COMPARATOR: Comparator[OffsetDateTime] =
+  private lazy val INSTANT_COMPARATOR: Comparator[OffsetDateTime] =
     new Comparator[OffsetDateTime] {
       override def compare(datetime1: OffsetDateTime, datetime2: OffsetDateTime): Int = {
           var cmp: Int = java.lang.Long.compare(datetime1.toEpochSecond, datetime2.toEpochSecond)

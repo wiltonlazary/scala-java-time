@@ -66,27 +66,27 @@ import org.threeten.bp.temporal.ValueRange
 object JapaneseChronology {
   private[chrono] val LOCALE: Locale = new Locale("ja", "JP", "JP")
   /** Singleton instance for Japanese chronology. */
-  val INSTANCE: JapaneseChronology = new JapaneseChronology
+  lazy val INSTANCE: JapaneseChronology = new JapaneseChronology
   /** Fallback language for the era names. */
   private val FALLBACK_LANGUAGE: String = "en"
   /** Language that has the era names. */
   private val TARGET_LANGUAGE: String = "ja"
   /** Narrow names for eras. */
-  private val ERA_NARROW_NAMES: java.util.Map[String, Array[String]] = {
+  private lazy val ERA_NARROW_NAMES: java.util.Map[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
     names.put(TARGET_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
     names
   }
   /** Short names for eras. */
-  private val ERA_SHORT_NAMES: java.util.Map[String, Array[String]] = {
+  private lazy val ERA_SHORT_NAMES: java.util.Map[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
     names.put(TARGET_LANGUAGE, Array[String]("Unknown", "\u6176", "\u660e", "\u5927", "\u662d", "\u5e73"))
     names
   }
   /** Full names for eras. */
-  private val ERA_FULL_NAMES: java.util.Map[String, Array[String]] = {
+  private lazy val ERA_FULL_NAMES: java.util.Map[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("Unknown", "Keio", "Meiji", "Taisho", "Showa", "Heisei"))
     names.put(TARGET_LANGUAGE, Array[String]("Unknown", "\u6176\u5fdc", "\u660e\u6cbb", "\u5927\u6b63", "\u662d\u548c", "\u5e73\u6210"))

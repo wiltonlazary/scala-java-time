@@ -60,7 +60,7 @@ import org.threeten.bp.temporal.ValueRange
 object MonthDay {
 
   /** Parser. */
-  private val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder().appendLiteral("--").appendValue(MONTH_OF_YEAR, 2).appendLiteral('-').appendValue(DAY_OF_MONTH, 2).toFormatter
+  private lazy val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder().appendLiteral("--").appendValue(MONTH_OF_YEAR, 2).appendLiteral('-').appendValue(DAY_OF_MONTH, 2).toFormatter
 
   /** Obtains the current month-day from the system clock in the default time-zone.
     *

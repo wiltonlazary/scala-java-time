@@ -39,9 +39,9 @@ import org.threeten.bp.DateTimeException
 
 object ZoneRulesProvider {
   /** The set of loaded providers. */
-  private val PROVIDERS: CopyOnWriteArrayList[ZoneRulesProvider] = new CopyOnWriteArrayList[ZoneRulesProvider]
+  private lazy val PROVIDERS: CopyOnWriteArrayList[ZoneRulesProvider] = new CopyOnWriteArrayList[ZoneRulesProvider]
   /** The lookup from zone region ID to provider. */
-  private val ZONES: ConcurrentMap[String, ZoneRulesProvider] = new ConcurrentHashMap[String, ZoneRulesProvider](512, 0.75f, 2)
+  private lazy val ZONES: ConcurrentMap[String, ZoneRulesProvider] = new ConcurrentHashMap[String, ZoneRulesProvider](512, 0.75f, 2)
 
   /** Gets the set of available zone IDs.
     *

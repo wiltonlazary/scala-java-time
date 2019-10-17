@@ -71,7 +71,7 @@ object ChronoZonedDateTime {
     */
   def timeLineOrder: Comparator[ChronoZonedDateTime[_]] = INSTANT_COMPARATOR
 
-  private val INSTANT_COMPARATOR: Comparator[ChronoZonedDateTime[_]] =
+  private lazy val INSTANT_COMPARATOR: Comparator[ChronoZonedDateTime[_]] =
     new Comparator[ChronoZonedDateTime[_]] {
       override def compare(datetime1: ChronoZonedDateTime[_], datetime2: ChronoZonedDateTime[_]): Int = {
         var cmp: Int = java.lang.Long.compare(datetime1.toEpochSecond, datetime2.toEpochSecond)

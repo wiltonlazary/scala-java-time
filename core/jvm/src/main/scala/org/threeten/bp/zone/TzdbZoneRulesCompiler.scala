@@ -45,7 +45,7 @@ import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
 object TzdbZoneRulesCompiler {
   /** Time parser. */
-  private val TIME_PARSER: DateTimeFormatter =  new DateTimeFormatterBuilder().appendValue(HOUR_OF_DAY).optionalStart().appendLiteral(':').appendValue(MINUTE_OF_HOUR, 2).optionalStart().appendLiteral(':').appendValue(SECOND_OF_MINUTE, 2).toFormatter
+  private lazy val TIME_PARSER: DateTimeFormatter =  new DateTimeFormatterBuilder().appendValue(HOUR_OF_DAY).optionalStart().appendLiteral(':').appendValue(MINUTE_OF_HOUR, 2).optionalStart().appendLiteral(':').appendValue(SECOND_OF_MINUTE, 2).toFormatter
 
   /** Reads a set of TZDB files and builds a single combined data file.
     *

@@ -77,7 +77,7 @@ object ChronoField {
     * For example, if the {@code TemporalAccessor} stores time to millisecond precision,
     * then the nano-of-second must be divided by 1,000,000 before replacing the milli-of-second.
     */
-  val NANO_OF_SECOND = new ChronoField("NanoOfSecond", 0, NANOS, SECONDS, ValueRange.of(0, 999999999))
+  lazy val NANO_OF_SECOND = new ChronoField("NanoOfSecond", 0, NANOS, SECONDS, ValueRange.of(0, 999999999))
 
   /** The nano-of-day.
     *
@@ -88,7 +88,7 @@ object ChronoField {
     * Implementations of {@code TemporalAccessor} should provide a value for this field if
     * they can return a value for {@link #SECOND_OF_DAY} filling unknown precision with zero.
     */
-  val NANO_OF_DAY = new ChronoField("NanoOfDay", 1, NANOS, DAYS, ValueRange.of(0, 86400L * 1000000000L - 1))
+  lazy val NANO_OF_DAY = new ChronoField("NanoOfDay", 1, NANOS, DAYS, ValueRange.of(0, 86400L * 1000000000L - 1))
   /** The micro-of-second.
     *
     * This counts the microsecond within the second, from 0 to 999,999.
@@ -102,7 +102,7 @@ object ChronoField {
     * When this field is used for setting a value, it should behave in the same way as
     * setting {@link #NANO_OF_SECOND} with the value multiplied by 1,000.
     */
-  val MICRO_OF_SECOND = new ChronoField("MicroOfSecond", 2, MICROS, SECONDS, ValueRange.of(0, 999999))
+  lazy val MICRO_OF_SECOND = new ChronoField("MicroOfSecond", 2, MICROS, SECONDS, ValueRange.of(0, 999999))
   /** The micro-of-day.
     *
     * This counts the microsecond within the day, from 0 to (24 * 60 * 60 * 1,000,000) - 1.
@@ -115,7 +115,7 @@ object ChronoField {
     * When this field is used for setting a value, it should behave in the same way as
     * setting {@link #NANO_OF_DAY} with the value multiplied by 1,000.
     */
-  val MICRO_OF_DAY = new ChronoField("MicroOfDay", 3, MICROS, DAYS, ValueRange.of(0, 86400L * 1000000L - 1))
+  lazy val MICRO_OF_DAY = new ChronoField("MicroOfDay", 3, MICROS, DAYS, ValueRange.of(0, 86400L * 1000000L - 1))
   /** The milli-of-second.
     *
     * This counts the millisecond within the second, from 0 to 999.
@@ -129,7 +129,7 @@ object ChronoField {
     * When this field is used for setting a value, it should behave in the same way as
     * setting {@link #NANO_OF_SECOND} with the value multiplied by 1,000,000.
     */
-  val MILLI_OF_SECOND = new ChronoField("MilliOfSecond", 4, MILLIS, SECONDS, ValueRange.of(0, 999))
+  lazy val MILLI_OF_SECOND = new ChronoField("MilliOfSecond", 4, MILLIS, SECONDS, ValueRange.of(0, 999))
   /** The milli-of-day.
     *
     * This counts the millisecond within the day, from 0 to (24 * 60 * 60 * 1,000) - 1.
@@ -142,65 +142,65 @@ object ChronoField {
     * When this field is used for setting a value, it should behave in the same way as
     * setting {@link #NANO_OF_DAY} with the value multiplied by 1,000,000.
     */
-  val MILLI_OF_DAY = new ChronoField("MilliOfDay", 5, MILLIS, DAYS, ValueRange.of(0, 86400L * 1000L - 1))
+  lazy val MILLI_OF_DAY = new ChronoField("MilliOfDay", 5, MILLIS, DAYS, ValueRange.of(0, 86400L * 1000L - 1))
   /** The second-of-minute.
     *
     * This counts the second within the minute, from 0 to 59.
     * This field has the same meaning for all calendar systems.
     */
-  val SECOND_OF_MINUTE = new ChronoField("SecondOfMinute", 6, SECONDS, MINUTES, ValueRange.of(0, 59))
+  lazy val SECOND_OF_MINUTE = new ChronoField("SecondOfMinute", 6, SECONDS, MINUTES, ValueRange.of(0, 59))
   /** The second-of-day.
     *
     * This counts the second within the day, from 0 to (24 * 60 * 60) - 1.
     * This field has the same meaning for all calendar systems.
     */
-  val SECOND_OF_DAY = new ChronoField("SecondOfDay", 7, SECONDS, DAYS, ValueRange.of(0, 86400L - 1))
+  lazy val SECOND_OF_DAY = new ChronoField("SecondOfDay", 7, SECONDS, DAYS, ValueRange.of(0, 86400L - 1))
   /** The minute-of-hour.
     *
     * This counts the minute within the hour, from 0 to 59.
     * This field has the same meaning for all calendar systems.
     */
-  val MINUTE_OF_HOUR = new ChronoField("MinuteOfHour", 8, MINUTES, HOURS, ValueRange.of(0, 59))
+  lazy val MINUTE_OF_HOUR = new ChronoField("MinuteOfHour", 8, MINUTES, HOURS, ValueRange.of(0, 59))
   /** The minute-of-day.
     *
     * This counts the minute within the day, from 0 to (24 * 60) - 1.
     * This field has the same meaning for all calendar systems.
     */
-  val MINUTE_OF_DAY = new ChronoField("MinuteOfDay", 9, MINUTES, DAYS, ValueRange.of(0, (24 * 60) - 1))
+  lazy val MINUTE_OF_DAY = new ChronoField("MinuteOfDay", 9, MINUTES, DAYS, ValueRange.of(0, (24 * 60) - 1))
   /** The hour-of-am-pm.
     *
     * This counts the hour within the AM/PM, from 0 to 11.
     * This is the hour that would be observed on a standard 12-hour digital clock.
     * This field has the same meaning for all calendar systems.
     */
-  val HOUR_OF_AMPM = new ChronoField("HourOfAmPm", 10, HOURS, HALF_DAYS, ValueRange.of(0, 11))
+  lazy val HOUR_OF_AMPM = new ChronoField("HourOfAmPm", 10, HOURS, HALF_DAYS, ValueRange.of(0, 11))
   /** The clock-hour-of-am-pm.
     *
     * This counts the hour within the AM/PM, from 1 to 12.
     * This is the hour that would be observed on a standard 12-hour analog wall clock.
     * This field has the same meaning for all calendar systems.
     */
-  val CLOCK_HOUR_OF_AMPM = new ChronoField("ClockHourOfAmPm", 11, HOURS, HALF_DAYS, ValueRange.of(1, 12))
+  lazy val CLOCK_HOUR_OF_AMPM = new ChronoField("ClockHourOfAmPm", 11, HOURS, HALF_DAYS, ValueRange.of(1, 12))
   /** The hour-of-day.
     *
     * This counts the hour within the day, from 0 to 23.
     * This is the hour that would be observed on a standard 24-hour digital clock.
     * This field has the same meaning for all calendar systems.
     */
-  val HOUR_OF_DAY = new ChronoField("HourOfDay", 12, HOURS, DAYS, ValueRange.of(0, 23))
+  lazy val HOUR_OF_DAY = new ChronoField("HourOfDay", 12, HOURS, DAYS, ValueRange.of(0, 23))
   /** The clock-hour-of-day.
     *
     * This counts the hour within the AM/PM, from 1 to 24.
     * This is the hour that would be observed on a 24-hour analog wall clock.
     * This field has the same meaning for all calendar systems.
     */
-  val CLOCK_HOUR_OF_DAY = new ChronoField("ClockHourOfDay", 13, HOURS, DAYS, ValueRange.of(1, 24))
+  lazy val CLOCK_HOUR_OF_DAY = new ChronoField("ClockHourOfDay", 13, HOURS, DAYS, ValueRange.of(1, 24))
   /** The am-pm-of-day.
     *
     * This counts the AM/PM within the day, from 0 (AM) to 1 (PM).
     * This field has the same meaning for all calendar systems.
     */
-  val AMPM_OF_DAY = new ChronoField("AmPmOfDay", 14, HALF_DAYS, DAYS, ValueRange.of(0, 1))
+  lazy val AMPM_OF_DAY = new ChronoField("AmPmOfDay", 14, HALF_DAYS, DAYS, ValueRange.of(0, 1))
   /** The day-of-week, such as Tuesday.
     *
     * This represents the standard concept of the day of the week.
@@ -215,7 +215,7 @@ object ChronoField {
     * if they have a similar concept of named or numbered days within a period similar
     * to a week. It is recommended that the numbering starts from 1.
     */
-  val DAY_OF_WEEK = new ChronoField("DayOfWeek", 15, DAYS, WEEKS, ValueRange.of(1, 7))
+  lazy val DAY_OF_WEEK = new ChronoField("DayOfWeek", 15, DAYS, WEEKS, ValueRange.of(1, 7))
   /** The aligned day-of-week within a month.
     *
     * This represents concept of the count of days within the period of a week
@@ -232,7 +232,7 @@ object ChronoField {
     * Calendar systems that do not have a seven day week should typically implement this
     * field in the same way, but using the alternate week length.
     */
-  val ALIGNED_DAY_OF_WEEK_IN_MONTH = new ChronoField("AlignedDayOfWeekInMonth", 16, DAYS, WEEKS, ValueRange.of(1, 7))
+  lazy val ALIGNED_DAY_OF_WEEK_IN_MONTH = new ChronoField("AlignedDayOfWeekInMonth", 16, DAYS, WEEKS, ValueRange.of(1, 7))
   /** The aligned day-of-week within a year.
     *
     * This represents concept of the count of days within the period of a week
@@ -249,7 +249,7 @@ object ChronoField {
     * Calendar systems that do not have a seven day week should typically implement this
     * field in the same way, but using the alternate week length.
     */
-  val ALIGNED_DAY_OF_WEEK_IN_YEAR = new ChronoField("AlignedDayOfWeekInYear", 17, DAYS, WEEKS, ValueRange.of(1, 7))
+  lazy val ALIGNED_DAY_OF_WEEK_IN_YEAR = new ChronoField("AlignedDayOfWeekInYear", 17, DAYS, WEEKS, ValueRange.of(1, 7))
   /** The day-of-month.
     *
     * This represents the concept of the day within the month.
@@ -261,7 +261,7 @@ object ChronoField {
     * day-of-month values for users of the calendar system.
     * Normally, this is a count of days from 1 to the length of the month.
     */
-  val DAY_OF_MONTH = new ChronoField("DayOfMonth", 18, DAYS, MONTHS, ValueRange.of(1, 28, 31))
+  lazy val DAY_OF_MONTH = new ChronoField("DayOfMonth", 18, DAYS, MONTHS, ValueRange.of(1, 28, 31))
   /** The day-of-year.
     *
     * This represents the concept of the day within the year.
@@ -272,7 +272,7 @@ object ChronoField {
     * day-of-year values for users of the calendar system.
     * Normally, this is a count of days from 1 to the length of the year.
     */
-  val DAY_OF_YEAR = new ChronoField("DayOfYear", 19, DAYS, YEARS, ValueRange.of(1, 365, 366))
+  lazy val DAY_OF_YEAR = new ChronoField("DayOfYear", 19, DAYS, YEARS, ValueRange.of(1, 365, 366))
   /** The epoch-day, based on the Java epoch of 1970-01-01 (ISO).
     *
     * This field is the sequential count of days where 1970-01-01 (ISO) is zero.
@@ -281,7 +281,7 @@ object ChronoField {
     * This field is strictly defined to have the same meaning in all calendar systems.
     * This is necessary to ensure interoperability between calendars.
     */
-  val EPOCH_DAY = new ChronoField("EpochDay", 20, DAYS, FOREVER, ValueRange.of(-365243219162L, 365241780471L))
+  lazy val EPOCH_DAY = new ChronoField("EpochDay", 20, DAYS, FOREVER, ValueRange.of(-365243219162L, 365241780471L))
   /** The aligned week within a month.
     *
     * This represents concept of the count of weeks within the period of a month
@@ -296,7 +296,7 @@ object ChronoField {
     * Calendar systems that do not have a seven day week should typically implement this
     * field in the same way, but using the alternate week length.
     */
-  val ALIGNED_WEEK_OF_MONTH = new ChronoField("AlignedWeekOfMonth", 21, WEEKS, MONTHS, ValueRange.of(1, 4, 5))
+  lazy val ALIGNED_WEEK_OF_MONTH = new ChronoField("AlignedWeekOfMonth", 21, WEEKS, MONTHS, ValueRange.of(1, 4, 5))
   /** The aligned week within a year.
     *
     * This represents concept of the count of weeks within the period of a year
@@ -311,7 +311,7 @@ object ChronoField {
     * Calendar systems that do not have a seven day week should typically implement this
     * field in the same way, but using the alternate week length.
     */
-  val ALIGNED_WEEK_OF_YEAR = new ChronoField("AlignedWeekOfYear", 22, WEEKS, YEARS, ValueRange.of(1, 53))
+  lazy val ALIGNED_WEEK_OF_YEAR = new ChronoField("AlignedWeekOfYear", 22, WEEKS, YEARS, ValueRange.of(1, 53))
   /** The month-of-year, such as March.
     *
     * This represents the concept of the month within the year.
@@ -321,7 +321,7 @@ object ChronoField {
     * month-of-year values for users of the calendar system.
     * Normally, this is a count of months starting from 1.
     */
-  val MONTH_OF_YEAR = new ChronoField("MonthOfYear", 23, MONTHS, YEARS, ValueRange.of(1, 12))
+  lazy val MONTH_OF_YEAR = new ChronoField("MonthOfYear", 23, MONTHS, YEARS, ValueRange.of(1, 12))
   /** The proleptic-month, which counts months sequentially from year 0.
     *
     * The first month in year zero has the value zero.
@@ -331,7 +331,7 @@ object ChronoField {
     * This field is defined to have the same meaning in all calendar systems.
     * It is simply a count of months from whatever the calendar defines as year 0.
     */
-  val PROLEPTIC_MONTH = new ChronoField("ProlepticMonth", 24, MONTHS, FOREVER, ValueRange.of(Year.MIN_VALUE * 12L, Year.MAX_VALUE * 12L + 11))
+  lazy val PROLEPTIC_MONTH = new ChronoField("ProlepticMonth", 24, MONTHS, FOREVER, ValueRange.of(Year.MIN_VALUE * 12L, Year.MAX_VALUE * 12L + 11))
   /** The year within the era.
     *
     * This represents the concept of the year within the era.
@@ -365,7 +365,7 @@ object ChronoField {
     * will typically be the same as that used by the ISO calendar system.
     * The year-of-era value should typically always be positive, however this is not required.
     */
-  val YEAR_OF_ERA = new ChronoField("YearOfEra", 25, YEARS, FOREVER, ValueRange.of(1, Year.MAX_VALUE, Year.MAX_VALUE + 1))
+  lazy val YEAR_OF_ERA = new ChronoField("YearOfEra", 25, YEARS, FOREVER, ValueRange.of(1, Year.MAX_VALUE, Year.MAX_VALUE + 1))
   /** The proleptic year, such as 2012.
     *
     * This represents the concept of the year, counting sequentially and using negative numbers.
@@ -388,7 +388,7 @@ object ChronoField {
     * defined with any appropriate value, although defining it to be the same as ISO may be
     * the best option.
     */
-  val YEAR = new ChronoField("Year", 26, YEARS, FOREVER, ValueRange.of(Year.MIN_VALUE, Year.MAX_VALUE))
+  lazy val YEAR = new ChronoField("Year", 26, YEARS, FOREVER, ValueRange.of(Year.MIN_VALUE, Year.MAX_VALUE))
   /** The era.
     *
     * This represents the concept of the era, which is the largest division of the time-line.
@@ -404,7 +404,7 @@ object ChronoField {
     * Earlier eras must have sequentially smaller values.
     * Later eras must have sequentially larger values,
     */
-  val ERA = new ChronoField("Era", 27, ERAS, FOREVER, ValueRange.of(0, 1))
+  lazy val ERA = new ChronoField("Era", 27, ERAS, FOREVER, ValueRange.of(0, 1))
   /** The instant epoch-seconds.
     *
     * This represents the concept of the sequential count of seconds where
@@ -419,7 +419,7 @@ object ChronoField {
     * This field is strictly defined to have the same meaning in all calendar systems.
     * This is necessary to ensure interoperation between calendars.
     */
-  val INSTANT_SECONDS = new ChronoField("InstantSeconds", 28, SECONDS, FOREVER, ValueRange.of(Long.MinValue, Long.MaxValue))
+  lazy val INSTANT_SECONDS = new ChronoField("InstantSeconds", 28, SECONDS, FOREVER, ValueRange.of(Long.MinValue, Long.MaxValue))
   /** The offset from UTC/Greenwich.
     *
     * This represents the concept of the offset in seconds of local time from UTC/Greenwich.
@@ -432,9 +432,9 @@ object ChronoField {
     * This field is strictly defined to have the same meaning in all calendar systems.
     * This is necessary to ensure interoperation between calendars.
     */
-  val OFFSET_SECONDS = new ChronoField("OffsetSeconds", 29, SECONDS, FOREVER, ValueRange.of(-18 * 3600, 18 * 3600))
+  lazy val OFFSET_SECONDS = new ChronoField("OffsetSeconds", 29, SECONDS, FOREVER, ValueRange.of(-18 * 3600, 18 * 3600))
 
-  val values: Array[ChronoField] = Array(
+  lazy val values: Array[ChronoField] = Array(
     NANO_OF_SECOND, NANO_OF_DAY,
     MICRO_OF_SECOND, MICRO_OF_DAY,
     MILLI_OF_SECOND, MILLI_OF_DAY,

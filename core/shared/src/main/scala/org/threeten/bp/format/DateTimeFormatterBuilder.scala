@@ -53,7 +53,7 @@ import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 
 object DateTimeFormatterBuilder {
   /** Query for a time-zone that is region-only. */
-  private val QUERY_REGION_ONLY: TemporalQuery[ZoneId] =
+  private lazy val QUERY_REGION_ONLY: TemporalQuery[ZoneId] =
   new TemporalQuery[ZoneId] {
     override def queryFrom(temporal: TemporalAccessor): ZoneId = {
       val zone: ZoneId = temporal.query(TemporalQueries.zoneId)
@@ -95,7 +95,7 @@ object DateTimeFormatterBuilder {
   }
 
   /** Map of letters to fields. */
-  private val FIELD_MAP: java.util.Map[Character, TemporalField] = {
+  private lazy val FIELD_MAP: java.util.Map[Character, TemporalField] = {
     // Size checked
     val map = new java.util.HashMap[Character, TemporalField]
     map.put('G', ChronoField.ERA)
@@ -127,9 +127,7 @@ object DateTimeFormatterBuilder {
 
 
   /** Length comparator. */
-
-  private[format] val LENGTH_SORT: Comparator[String] =
-  new Comparator[String] {
+  private[format] lazy val LENGTH_SORT: Comparator[String] = new Comparator[String] {
     override def compare(str1: String, str2: String): Int =
       if (str1.length == str2.length) str1.compareTo(str2) else str1.length - str2.length
   }

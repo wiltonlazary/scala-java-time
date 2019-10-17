@@ -40,7 +40,7 @@ import org.threeten.bp.chrono.Chronology
 
 private object SimpleDateTimeFormatStyleProvider {
   /** Cache of formatters. */
-  private val FORMATTER_CACHE: ConcurrentMap[String, AnyRef] = new ConcurrentHashMap[String, AnyRef](16, 0.75f, 2)
+  private lazy val FORMATTER_CACHE: ConcurrentMap[String, AnyRef] = new ConcurrentHashMap[String, AnyRef](16, 0.75f, 2)
 }
 
 /** The Service Provider Implementation to obtain date-time formatters for a style.

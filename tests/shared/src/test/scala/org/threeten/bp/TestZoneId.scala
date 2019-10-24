@@ -153,7 +153,7 @@ class TestZoneId extends FunSuite with AssertionsHelper {
   test("of_string_Map_badFormat") {
     assertThrows[DateTimeException] {
       val map: java.util.Map[String, String] = new java.util.HashMap[String, String]
-      ZoneId.of("Not kknown", map)
+      ZoneId.of("Not known", map)
     }
   }
 
@@ -344,6 +344,13 @@ class TestZoneId extends FunSuite with AssertionsHelper {
         ZoneId.of("UTC" + id)
       }
     }
+  }
+
+  test("unknown id zone") {
+    val caught = intercept[DateTimeException] {
+      ZoneId.of("X")
+    }
+    assert(caught.getMessage == "Invalid ID for ZoneOffset, invalid format: X")
   }
 
   test("of_string_GMT_invalid") {

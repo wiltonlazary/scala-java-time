@@ -218,7 +218,7 @@ object ZoneId {
     if (zoneId == "Z") {
       ZoneOffset.UTC
     } else if (zoneId.length == 1) {
-      throw new DateTimeException(s"Invalid zone: $zoneId")
+      throw new DateTimeException(s"Invalid ID for ZoneOffset, invalid format: $zoneId")
     } else if (zoneId.startsWith("+") || zoneId.startsWith("-")) {
       ZoneOffset.of(zoneId)
     } else if ((zoneId == "UTC") || (zoneId == "GMT") || (zoneId == "UT")) {

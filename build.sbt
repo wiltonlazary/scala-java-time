@@ -21,9 +21,9 @@ lazy val commonSettings = Seq(
   scalaVersion       := scalaVer,
   crossScalaVersions := {
     if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "2.12.9", "2.13.0")
+      Seq("2.10.7", "2.11.12", "2.12.10", "2.13.1")
     } else {
-      Seq("2.11.12", "2.12.9", "2.13.0")
+      Seq("2.11.12", "2.12.10", "2.13.1")
     }
   },
   scalacOptions ++= Seq(

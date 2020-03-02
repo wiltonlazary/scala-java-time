@@ -60,6 +60,7 @@ import org.threeten.bp.DateTimeException
   * however immutability is strongly recommended.
   */
 trait TemporalAmount {
+
   /** Gets the list of units, from largest to smallest, that fully define this amount.
     *
     * @return the list of units.

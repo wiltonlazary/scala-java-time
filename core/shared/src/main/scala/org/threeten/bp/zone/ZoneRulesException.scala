@@ -47,7 +47,9 @@ import org.threeten.bp.DateTimeException
   * @param cause  the cause of the exception, may be null
   */
 @SerialVersionUID(-1632418723876261839L)
-class ZoneRulesException(message: String, cause: Throwable) extends DateTimeException(message, cause) {
+class ZoneRulesException(message: String, cause: Throwable)
+    extends DateTimeException(message, cause) {
+
   /** Constructs a new date-time exception with the specified message.
     *
     * @param message  the message to use for this exception, may be null

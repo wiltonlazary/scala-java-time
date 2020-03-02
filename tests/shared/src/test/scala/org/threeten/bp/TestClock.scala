@@ -36,7 +36,10 @@ import org.scalatest.FunSuite
 /** Test Clock. */
 object TestClock {
 
-  private[bp] class MockInstantClock private[bp](override val millis: Long, private[bp] val zone: ZoneId) extends Clock {
+  private[bp] class MockInstantClock private[bp] (
+    override val millis:  Long,
+    private[bp] val zone: ZoneId
+  ) extends Clock {
 
     def instant: Instant = Instant.ofEpochMilli(millis)
 
@@ -51,8 +54,8 @@ object TestClock {
     override def toString: String = "Mock"
   }
 
-  private val INSTANT: Instant = Instant.ofEpochSecond(1873687, 357000000)
-  private val ZONE: ZoneId = ZoneId.of("Europe/Paris")
+  private val INSTANT: Instant    = Instant.ofEpochSecond(1873687, 357000000)
+  private val ZONE: ZoneId        = ZoneId.of("Europe/Paris")
   private val MOCK_INSTANT: Clock = new TestClock.MockInstantClock(INSTANT.toEpochMilli, ZONE)
 }
 

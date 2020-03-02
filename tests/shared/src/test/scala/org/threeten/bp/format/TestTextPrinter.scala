@@ -53,14 +53,20 @@ object TestTextPrinter {
 class TestTextPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_print_emptyCalendrical") {
     assertThrows[DateTimeException] {
-      val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, TestTextPrinter.PROVIDER)
+      val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+        new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                           TextStyle.FULL,
+                                                           TestTextPrinter.PROVIDER)
       pp.print(printEmptyContext, buf)
     }
   }
 
   test("test_print_append") {
     printContext.setDateTime(LocalDate.of(2012, 4, 18))
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, TestTextPrinter.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                         TextStyle.FULL,
+                                                         TestTextPrinter.PROVIDER)
     buf.append("EXISTING")
     pp.print(printContext, buf)
     assertEquals(buf.toString, "EXISTINGWednesday")
@@ -99,7 +105,8 @@ class TestTextPrinter extends FunSuite with GenTestPrinterParser with Assertions
       (MONTH_OF_YEAR, TextStyle.FULL, 1, "January"),
       (MONTH_OF_YEAR, TextStyle.FULL, 12, "December"),
       (MONTH_OF_YEAR, TextStyle.SHORT, 1, "Jan"),
-      (MONTH_OF_YEAR, TextStyle.SHORT, 12, "Dec"))
+      (MONTH_OF_YEAR, TextStyle.SHORT, 12, "Dec")
+    )
   }
 
   test("test_print") {
@@ -107,7 +114,8 @@ class TestTextPrinter extends FunSuite with GenTestPrinterParser with Assertions
       case (field, style, value, expected) =>
         super.beforeEach()
         printContext.setDateTime(new MockFieldValue(field, value))
-        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextPrinter.PROVIDER)
+        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+          new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextPrinter.PROVIDER)
         pp.print(printContext, buf)
         assertEquals(buf.toString, expected)
       case _ =>
@@ -118,7 +126,10 @@ class TestTextPrinter extends FunSuite with GenTestPrinterParser with Assertions
   test("test_print_french_long") {
     printContext.setLocale(Locale.FRENCH)
     printContext.setDateTime(LocalDate.of(2012, 1, 1))
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, TestTextPrinter.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.FULL,
+                                                         TestTextPrinter.PROVIDER)
     pp.print(printContext, buf)
     assertEquals(buf.toString, "janvier")
   }
@@ -126,18 +137,27 @@ class TestTextPrinter extends FunSuite with GenTestPrinterParser with Assertions
   test("test_print_french_short") {
     printContext.setLocale(Locale.FRENCH)
     printContext.setDateTime(LocalDate.of(2012, 1, 1))
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextPrinter.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextPrinter.PROVIDER)
     pp.print(printContext, buf)
     assertEquals(buf.toString, "janv.")
   }
 
   test("test_toString1") {
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, TestTextPrinter.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.FULL,
+                                                         TestTextPrinter.PROVIDER)
     assertEquals(pp.toString, "Text(MonthOfYear)")
   }
 
   test("test_toString2") {
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextPrinter.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextPrinter.PROVIDER)
     assertEquals(pp.toString, "Text(MonthOfYear,SHORT)")
   }
 }

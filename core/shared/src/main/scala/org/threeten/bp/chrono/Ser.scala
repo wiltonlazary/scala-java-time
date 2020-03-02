@@ -40,15 +40,15 @@ import java.io.StreamCorruptedException
 
 @SerialVersionUID(7857518227608961174L)
 private object Ser {
-  private[chrono] val JAPANESE_DATE_TYPE: Byte = 1
-  private[chrono] val JAPANESE_ERA_TYPE: Byte = 2
-  private[chrono] val HIJRAH_DATE_TYPE: Byte = 3
-  private[chrono] val HIJRAH_ERA_TYPE: Byte = 4
-  private[chrono] val MINGUO_DATE_TYPE: Byte = 5
-  private[chrono] val MINGUO_ERA_TYPE: Byte = 6
-  private[chrono] val THAIBUDDHIST_DATE_TYPE: Byte = 7
-  private[chrono] val THAIBUDDHIST_ERA_TYPE: Byte = 8
-  private[chrono] val CHRONO_TYPE: Byte = 11
+  private[chrono] val JAPANESE_DATE_TYPE: Byte        = 1
+  private[chrono] val JAPANESE_ERA_TYPE: Byte         = 2
+  private[chrono] val HIJRAH_DATE_TYPE: Byte          = 3
+  private[chrono] val HIJRAH_ERA_TYPE: Byte           = 4
+  private[chrono] val MINGUO_DATE_TYPE: Byte          = 5
+  private[chrono] val MINGUO_ERA_TYPE: Byte           = 6
+  private[chrono] val THAIBUDDHIST_DATE_TYPE: Byte    = 7
+  private[chrono] val THAIBUDDHIST_ERA_TYPE: Byte     = 8
+  private[chrono] val CHRONO_TYPE: Byte               = 11
   private[chrono] val CHRONO_LOCALDATETIME_TYPE: Byte = 12
   private[chrono] val CHRONO_ZONEDDATETIME_TYPE: Byte = 13
 
@@ -56,18 +56,20 @@ private object Ser {
   private def writeInternal(`type`: Byte, `object`: AnyRef, out: ObjectOutput): Unit = {
     out.writeByte(`type`)
     `type` match {
-      case JAPANESE_DATE_TYPE        => `object`.asInstanceOf[JapaneseDate].writeExternal(out)
-      case JAPANESE_ERA_TYPE         => `object`.asInstanceOf[JapaneseEra].writeExternal(out)
-      case HIJRAH_DATE_TYPE          => `object`.asInstanceOf[HijrahDate].writeExternal(out)
-      case HIJRAH_ERA_TYPE           => `object`.asInstanceOf[HijrahEra].writeExternal(out)
-      case MINGUO_DATE_TYPE          => `object`.asInstanceOf[MinguoDate].writeExternal(out)
-      case MINGUO_ERA_TYPE           => `object`.asInstanceOf[MinguoEra].writeExternal(out)
-      case THAIBUDDHIST_DATE_TYPE    => `object`.asInstanceOf[ThaiBuddhistDate].writeExternal(out)
-      case THAIBUDDHIST_ERA_TYPE     => `object`.asInstanceOf[ThaiBuddhistEra].writeExternal(out)
-      case CHRONO_TYPE               => `object`.asInstanceOf[Chronology].writeExternal(out)
-      case CHRONO_LOCALDATETIME_TYPE => `object`.asInstanceOf[ChronoLocalDateTimeImpl[_]].writeExternal(out)
-      case CHRONO_ZONEDDATETIME_TYPE => `object`.asInstanceOf[ChronoZonedDateTimeImpl[_]].writeExternal(out)
-      case _                         => throw new InvalidClassException("Unknown serialized type")
+      case JAPANESE_DATE_TYPE     => `object`.asInstanceOf[JapaneseDate].writeExternal(out)
+      case JAPANESE_ERA_TYPE      => `object`.asInstanceOf[JapaneseEra].writeExternal(out)
+      case HIJRAH_DATE_TYPE       => `object`.asInstanceOf[HijrahDate].writeExternal(out)
+      case HIJRAH_ERA_TYPE        => `object`.asInstanceOf[HijrahEra].writeExternal(out)
+      case MINGUO_DATE_TYPE       => `object`.asInstanceOf[MinguoDate].writeExternal(out)
+      case MINGUO_ERA_TYPE        => `object`.asInstanceOf[MinguoEra].writeExternal(out)
+      case THAIBUDDHIST_DATE_TYPE => `object`.asInstanceOf[ThaiBuddhistDate].writeExternal(out)
+      case THAIBUDDHIST_ERA_TYPE  => `object`.asInstanceOf[ThaiBuddhistEra].writeExternal(out)
+      case CHRONO_TYPE            => `object`.asInstanceOf[Chronology].writeExternal(out)
+      case CHRONO_LOCALDATETIME_TYPE =>
+        `object`.asInstanceOf[ChronoLocalDateTimeImpl[_]].writeExternal(out)
+      case CHRONO_ZONEDDATETIME_TYPE =>
+        `object`.asInstanceOf[ChronoZonedDateTimeImpl[_]].writeExternal(out)
+      case _ => throw new InvalidClassException("Unknown serialized type")
     }
   }
 
@@ -122,7 +124,8 @@ private object Ser {
   * @param object  the object being serialized
   */
 @SerialVersionUID(7857518227608961174L)
-final class Ser private[chrono](private var `type`: Byte, private var `object`: AnyRef) extends Externalizable {
+final class Ser private[chrono] (private var `type`: Byte, private var `object`: AnyRef)
+    extends Externalizable {
 
   /** @constructor Constructor for deserialization. */
   def this() {
@@ -143,7 +146,7 @@ final class Ser private[chrono](private var `type`: Byte, private var `object`: 
   @throws[IOException]
   @throws[ClassNotFoundException]
   def readExternal(in: ObjectInput): Unit = {
-    `type` = in.readByte
+    `type`   = in.readByte
     `object` = Ser.readInternal(`type`, in)
   }
 

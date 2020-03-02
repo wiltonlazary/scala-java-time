@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format.internal
 
-import java.util.{Locale, Objects}
+import java.util.{ Locale, Objects }
 
 import org.threeten.bp.Period
 import org.threeten.bp.ZoneId
@@ -47,15 +47,17 @@ import org.threeten.bp.format.DecimalStyle
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder.ReducedPrinterParser
 
- object TTBPDateTimeParseContext {
+object TTBPDateTimeParseContext {
+
   /** Compares two characters ignoring case.
     *
     * @param c1  the first
     * @param c2  the second
     * @return true if equal
     */
-   def charEqualsIgnoreCase(c1: Char, c2: Char): Boolean =
-    c1 == c2 || Character.toUpperCase(c1) == Character.toUpperCase(c2) || Character.toLowerCase(c1) == Character.toLowerCase(c2)
+  def charEqualsIgnoreCase(c1: Char, c2: Char): Boolean =
+    c1 == c2 || Character.toUpperCase(c1) == Character.toUpperCase(c2) || Character.toLowerCase(c1) == Character
+      .toLowerCase(c2)
 }
 
 /** Context object used during date and time parsing.
@@ -72,12 +74,15 @@ import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder.ReducedPrint
   * Usage of the class is thread-safe within standard parsing as a new instance of this class
   * is automatically created for each parse and parsing is single-threaded
   */
-final class TTBPDateTimeParseContext (private var locale: Locale,
-                                                     private var symbols: DecimalStyle,
-                                                     private var overrideChronology: Chronology,
-                                                     private var overrideZone: ZoneId,
-                                                     private var caseSensitive: Boolean = true,
-                                                     private var strict: Boolean = true) {
+final class TTBPDateTimeParseContext(
+  private var locale:             Locale,
+  private var symbols:            DecimalStyle,
+  private var overrideChronology: Chronology,
+  private var overrideZone:       ZoneId,
+  private var caseSensitive:      Boolean = true,
+  private var strict:             Boolean = true
+) {
+
   /** The list of parsed data.
     */
   private val parsed: java.util.ArrayList[TTBPDateTimeParseContext#Parsed] = {
@@ -90,21 +95,26 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     *
     * @param formatter  the formatter controlling the parse, not null
     */
-   def this(formatter: DateTimeFormatter) {
+  def this(formatter: DateTimeFormatter) {
     this(formatter.getLocale, formatter.getDecimalStyle, formatter.getChronology, formatter.getZone)
   }
 
-   def this(locale: Locale, symbols: DecimalStyle, chronology: Chronology) {
+  def this(locale: Locale, symbols: DecimalStyle, chronology: Chronology) {
     this(locale, symbols, chronology, null)
   }
 
-   def this(other: TTBPDateTimeParseContext) {
-    this(other.locale, other.symbols, other.overrideChronology, other.overrideZone, other.caseSensitive, other.strict)
+  def this(other: TTBPDateTimeParseContext) {
+    this(other.locale,
+         other.symbols,
+         other.overrideChronology,
+         other.overrideZone,
+         other.caseSensitive,
+         other.strict)
   }
 
   /** Creates a copy of this context.
     */
-   def copy: TTBPDateTimeParseContext = new TTBPDateTimeParseContext(this)
+  def copy: TTBPDateTimeParseContext = new TTBPDateTimeParseContext(this)
 
   /** Gets the locale.
     *
@@ -113,7 +123,7 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     *
     * @return the locale, not null
     */
-   def getLocale: Locale = locale
+  def getLocale: Locale = locale
 
   /** Gets the formatting symbols.
     *
@@ -121,13 +131,13 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     *
     * @return the formatting symbols, not null
     */
-   def getSymbols: DecimalStyle = symbols
+  def getSymbols: DecimalStyle = symbols
 
   /** Gets the effective chronology during parsing.
     *
     * @return the effective parsing chronology, not null
     */
-   def getEffectiveChronology: Chronology = {
+  def getEffectiveChronology: Chronology = {
     var chrono: Chronology = currentParsed.chrono
     if (chrono == null) {
       chrono = overrideChronology
@@ -142,13 +152,13 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     *
     * @return true if parsing is case sensitive, false if case insensitive
     */
-   def isCaseSensitive: Boolean = caseSensitive
+  def isCaseSensitive: Boolean = caseSensitive
 
   /** Sets whether the parsing is case sensitive or not.
     *
     * @param caseSensitive  changes the parsing to be case sensitive or not from now on
     */
-   def setCaseSensitive(caseSensitive: Boolean): Unit = this.caseSensitive = caseSensitive
+  def setCaseSensitive(caseSensitive: Boolean): Unit = this.caseSensitive = caseSensitive
 
   /** Helper to compare two {@code CharSequence} instances.
     * This uses {@link #isCaseSensitive()}.
@@ -160,7 +170,13 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     * @param length  the length to check, valid
     * @return true if equal
     */
-   def subSequenceEquals(cs1: CharSequence, offset1: Int, cs2: CharSequence, offset2: Int, length: Int): Boolean = {
+  def subSequenceEquals(
+    cs1:     CharSequence,
+    offset1: Int,
+    cs2:     CharSequence,
+    offset2: Int,
+    length:  Int
+  ): Boolean = {
     if (offset1 + length > cs1.length || offset2 + length > cs2.length) {
       return false
     }
@@ -176,14 +192,14 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
           i += 1
         }
       }
-    }
-    else {
+    } else {
       {
         var i: Int = 0
         while (i < length) {
           val ch1: Char = cs1.charAt(offset1 + i)
           val ch2: Char = cs2.charAt(offset2 + i)
-          if (ch1 != ch2 && Character.toUpperCase(ch1) != Character.toUpperCase(ch2) && Character.toLowerCase(ch1) != Character.toLowerCase(ch2)) {
+          if (ch1 != ch2 && Character.toUpperCase(ch1) != Character.toUpperCase(ch2) && Character
+                .toLowerCase(ch1) != Character.toLowerCase(ch2)) {
             return false
           }
           i += 1
@@ -200,7 +216,7 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     * @param ch2  the second character
     * @return true if equal
     */
-   def charEquals(ch1: Char, ch2: Char): Boolean =
+  def charEquals(ch1: Char, ch2: Char): Boolean =
     if (isCaseSensitive) {
       ch1 == ch2
     } else {
@@ -213,23 +229,23 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     *
     * @return true if parsing is strict, false if lenient
     */
-   def isStrict: Boolean = strict
+  def isStrict: Boolean = strict
 
   /** Sets whether parsing is strict or lenient.
     *
     * @param strict  changes the parsing to be strict or lenient from now on
     */
-   def setStrict(strict: Boolean): Unit = this.strict = strict
+  def setStrict(strict: Boolean): Unit = this.strict = strict
 
   /** Starts the parsing of an optional segment of the input.
     */
-   def startOptional(): Unit = parsed.add(currentParsed.copy)
+  def startOptional(): Unit = parsed.add(currentParsed.copy)
 
   /** Ends the parsing of an optional segment of the input.
     *
     * @param successful  whether the optional segment was successfully parsed
     */
-   def endOptional(successful: Boolean): Unit =
+  def endOptional(successful: Boolean): Unit =
     if (successful) {
       parsed.remove(parsed.size - 2)
     } else {
@@ -252,7 +268,7 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     * @param field  the field to query from the map, null returns null
     * @return the value mapped to the specified field, null if field was not parsed
     */
-   def getParsed(field: TemporalField): java.lang.Long = currentParsed.fieldValues.get(field)
+  def getParsed(field: TemporalField): java.lang.Long = currentParsed.fieldValues.get(field)
 
   /** Stores the parsed field.
     *
@@ -265,7 +281,7 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     * @param successPos  the position after the field being parsed
     * @return the new position
     */
-   def setParsedField(field: TemporalField, value: Long, errorPos: Int, successPos: Int): Int = {
+  def setParsedField(field: TemporalField, value: Long, errorPos: Int, successPos: Int): Int = {
     Objects.requireNonNull(field, "field")
     val old: java.lang.Long = currentParsed.fieldValues.put(field, value)
     if (old != null && old.longValue != value) ~errorPos else successPos
@@ -278,26 +294,40 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     *
     * @param chrono  the parsed chronology, not null
     */
-   def setParsed(chrono: Chronology): Unit = {
+  def setParsed(chrono: Chronology): Unit = {
     Objects.requireNonNull(chrono, "chrono")
     val _currentParsed: TTBPDateTimeParseContext#Parsed = currentParsed
     _currentParsed.chrono = chrono
     if (_currentParsed.callbacks != null) {
-      val callbacks: java.util.Iterator[Array[AnyRef]] = new java.util.ArrayList[Array[AnyRef]](_currentParsed.callbacks).iterator
+      val callbacks: java.util.Iterator[Array[AnyRef]] =
+        new java.util.ArrayList[Array[AnyRef]](_currentParsed.callbacks).iterator
       _currentParsed.callbacks.clear()
       while (callbacks.hasNext) {
-        val objects = callbacks.next()
+        val objects                  = callbacks.next()
         val pp: ReducedPrinterParser = objects(0).asInstanceOf[ReducedPrinterParser]
-        pp.setValue(this, objects(1).asInstanceOf[java.lang.Long], objects(2).asInstanceOf[Integer], objects(3).asInstanceOf[Integer])
+        pp.setValue(this,
+                    objects(1).asInstanceOf[java.lang.Long],
+                    objects(2).asInstanceOf[Integer],
+                    objects(3).asInstanceOf[Integer])
       }
     }
   }
 
-   def addChronologyChangedParser(reducedPrinterParser: ReducedPrinterParser, value: Long, errorPos: Int, successPos: Int): Unit = {
+  def addChronologyChangedParser(
+    reducedPrinterParser: ReducedPrinterParser,
+    value:                Long,
+    errorPos:             Int,
+    successPos:           Int
+  ): Unit = {
     val _currentParsed: TTBPDateTimeParseContext#Parsed = currentParsed
     if (_currentParsed.callbacks == null)
       _currentParsed.callbacks = new java.util.ArrayList[Array[AnyRef]](2)
-    _currentParsed.callbacks.add(Array[AnyRef](reducedPrinterParser, value.asInstanceOf[AnyRef], errorPos.asInstanceOf[AnyRef], successPos.asInstanceOf[AnyRef]))
+    _currentParsed.callbacks.add(
+      Array[AnyRef](reducedPrinterParser,
+                    value.asInstanceOf[AnyRef],
+                    errorPos.asInstanceOf[AnyRef],
+                    successPos.asInstanceOf[AnyRef])
+    )
   }
 
   /** Stores the parsed zone.
@@ -307,21 +337,21 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     *
     * @param zone  the parsed zone, not null
     */
-   def setParsed(zone: ZoneId): Unit = {
+  def setParsed(zone: ZoneId): Unit = {
     Objects.requireNonNull(zone, "zone")
     currentParsed.zone = zone
   }
 
   /** Stores the leap second.
     */
-   def setParsedLeapSecond(): Unit = currentParsed.leapSecond = true
+  def setParsedLeapSecond(): Unit = currentParsed.leapSecond = true
 
   /** Returns a {@code TemporalAccessor} that can be used to interpret
     * the results of the parse.
     *
     * @return an accessor with the results of the parse, not null
     */
-   def toParsed: TTBPDateTimeParseContext#Parsed = currentParsed
+  def toParsed: TTBPDateTimeParseContext#Parsed = currentParsed
 
   /** Returns a string version of the context for debugging.
     *
@@ -331,18 +361,19 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
 
   /** Temporary store of parsed data.
     */
-   final class Parsed () extends TemporalAccessor {
-     var chrono: Chronology = null
-     var zone: ZoneId = null
-     val fieldValues: java.util.Map[TemporalField, java.lang.Long] = new java.util.HashMap[TemporalField, java.lang.Long]
-     var leapSecond: Boolean = false
-     var excessDays: Period = Period.ZERO
-     var callbacks: java.util.List[Array[AnyRef]] = null
+  final class Parsed() extends TemporalAccessor {
+    var chrono: Chronology = null
+    var zone: ZoneId       = null
+    val fieldValues: java.util.Map[TemporalField, java.lang.Long] =
+      new java.util.HashMap[TemporalField, java.lang.Long]
+    var leapSecond: Boolean                      = false
+    var excessDays: Period                       = Period.ZERO
+    var callbacks: java.util.List[Array[AnyRef]] = null
 
     protected[format] def copy: TTBPDateTimeParseContext#Parsed = {
       val cloned: TTBPDateTimeParseContext#Parsed = new Parsed
       cloned.chrono = this.chrono
-      cloned.zone = this.zone
+      cloned.zone   = this.zone
       cloned.fieldValues.putAll(this.fieldValues)
       cloned.leapSecond = this.leapSecond
       cloned
@@ -384,9 +415,11 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
       *
       * @return a new builder with the results of the parse, not null
       */
-     def toBuilder: DateTimeBuilder = {
+    def toBuilder: DateTimeBuilder = {
       val builder: DateTimeBuilder = new DateTimeBuilder
-      builder.fieldValues.putAll(fieldValues.asInstanceOf[java.util.Map[_ <: TemporalField, _ <: java.lang.Long]])
+      builder.fieldValues.putAll(
+        fieldValues.asInstanceOf[java.util.Map[_ <: TemporalField, _ <: java.lang.Long]]
+      )
       builder.chrono = getEffectiveChronology
       if (zone != null)
         builder.zone = zone
@@ -405,7 +438,7 @@ final class TTBPDateTimeParseContext (private var locale: Locale,
     *
     * @param locale  the locale, not null
     */
-   def setLocale(locale: Locale): Unit = {
+  def setLocale(locale: Locale): Unit = {
     Objects.requireNonNull(locale, "locale")
     this.locale = locale
   }

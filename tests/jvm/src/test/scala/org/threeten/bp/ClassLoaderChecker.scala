@@ -77,8 +77,7 @@ object ClassLoaderChecker {
     a.toString
     try {
       a = new DataInputStream(new ZipInputStream(new FileInputStream("/a.zip")))
-    }
-    catch {
+    } catch {
       case ex: FileNotFoundException =>
     }
     a.toString

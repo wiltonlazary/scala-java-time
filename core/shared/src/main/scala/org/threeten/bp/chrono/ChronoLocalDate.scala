@@ -37,7 +37,7 @@ import org.threeten.bp.temporal.ChronoField.ERA
 import org.threeten.bp.temporal.ChronoField.MONTH_OF_YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR_OF_ERA
-import java.util.{Objects, Comparator}
+import java.util.{ Comparator, Objects }
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
@@ -54,6 +54,7 @@ import org.threeten.bp.temporal.TemporalQuery
 import org.threeten.bp.temporal.TemporalUnit
 
 object ChronoLocalDate {
+
   /** Gets a comparator that compares {@code ChronoLocalDate} in
     * time-line order ignoring the chronology.
     *
@@ -102,7 +103,9 @@ object ChronoLocalDate {
       return temporal.asInstanceOf[ChronoLocalDate]
     val chrono: Chronology = temporal.query(TemporalQueries.chronology)
     if (chrono == null)
-      throw new DateTimeException(s"No Chronology found to create ChronoLocalDate: ${temporal.getClass}")
+      throw new DateTimeException(
+        s"No Chronology found to create ChronoLocalDate: ${temporal.getClass}"
+      )
     chrono.date(temporal)
   }
 }
@@ -265,6 +268,7 @@ object ChronoLocalDate {
   * See {@link Chronology} for more details.
   */
 trait ChronoLocalDate extends Temporal with TemporalAdjuster with Ordered[ChronoLocalDate] {
+
   /** Gets the chronology of this date.
     *
     * The {@code Chronology} represents the calendar system in use.
@@ -326,28 +330,31 @@ trait ChronoLocalDate extends Temporal with TemporalAdjuster with Ordered[Chrono
     if (unit.isInstanceOf[ChronoUnit]) unit.isDateBased
     else unit != null && unit.isSupportedBy(this)
 
-  override def `with`(adjuster: TemporalAdjuster): ChronoLocalDate = getChronology.ensureChronoLocalDate(super.`with`(adjuster))
+  override def `with`(adjuster: TemporalAdjuster): ChronoLocalDate =
+    getChronology.ensureChronoLocalDate(super.`with`(adjuster))
 
   def `with`(field: TemporalField, newValue: Long): ChronoLocalDate
 
-  override def plus(amount: TemporalAmount): ChronoLocalDate = getChronology.ensureChronoLocalDate(super.plus(amount))
+  override def plus(amount: TemporalAmount): ChronoLocalDate =
+    getChronology.ensureChronoLocalDate(super.plus(amount))
 
   def plus(amountToAdd: Long, unit: TemporalUnit): ChronoLocalDate
 
-  override def minus(amount: TemporalAmount): ChronoLocalDate = getChronology.ensureChronoLocalDate(super.minus(amount))
+  override def minus(amount: TemporalAmount): ChronoLocalDate =
+    getChronology.ensureChronoLocalDate(super.minus(amount))
 
-  override def minus(amountToSubtract: Long, unit: TemporalUnit): ChronoLocalDate = getChronology.ensureChronoLocalDate(super.minus(amountToSubtract, unit))
+  override def minus(amountToSubtract: Long, unit: TemporalUnit): ChronoLocalDate =
+    getChronology.ensureChronoLocalDate(super.minus(amountToSubtract, unit))
 
   override def query[R](query: TemporalQuery[R]): R =
     query match {
       case TemporalQueries.chronology => getChronology.asInstanceOf[R]
       case TemporalQueries.precision  => ChronoUnit.DAYS.asInstanceOf[R]
-      case TemporalQueries.localDate  => LocalDate.ofEpochDay (toEpochDay).asInstanceOf[R]
-      case TemporalQueries.localTime
-         | TemporalQueries.zone
-         | TemporalQueries.zoneId
-         | TemporalQueries.offset     => null.asInstanceOf[R]
-      case _                          => super.query (query)
+      case TemporalQueries.localDate  => LocalDate.ofEpochDay(toEpochDay).asInstanceOf[R]
+      case TemporalQueries.localTime | TemporalQueries.zone | TemporalQueries.zoneId |
+          TemporalQueries.offset =>
+        null.asInstanceOf[R]
+      case _ => super.query(query)
     }
 
   def adjustInto(temporal: Temporal): Temporal = temporal.`with`(EPOCH_DAY, toEpochDay)
@@ -400,7 +407,8 @@ trait ChronoLocalDate extends Temporal with TemporalAdjuster with Ordered[Chrono
     * @param localTime  the local time to use, not null
     * @return the local date-time formed from this date and the specified time, not null
     */
-  def atTime(localTime: LocalTime): ChronoLocalDateTime[_ <: ChronoLocalDate] = ChronoLocalDateTimeImpl.of(this, localTime)
+  def atTime(localTime: LocalTime): ChronoLocalDateTime[_ <: ChronoLocalDate] =
+    ChronoLocalDateTimeImpl.of(this, localTime)
 
   /** Converts this date to the Epoch Day.
     *
@@ -515,12 +523,20 @@ trait ChronoLocalDate extends Temporal with TemporalAdjuster with Ordered[Chrono
     * @return the formatted date, not null
     */
   override def toString: String = {
-    val yoe: Long = getLong(YEAR_OF_ERA)
-    val moy: Long = getLong(MONTH_OF_YEAR)
-    val dom: Long = getLong(DAY_OF_MONTH)
+    val yoe: Long          = getLong(YEAR_OF_ERA)
+    val moy: Long          = getLong(MONTH_OF_YEAR)
+    val dom: Long          = getLong(DAY_OF_MONTH)
     val buf: StringBuilder = new StringBuilder(30)
-    buf.append(getChronology.toString).append(" ").append(getEra).append(" ").append(yoe)
-       .append(if (moy < 10) "-0" else "-").append(moy).append(if (dom < 10) "-0" else "-").append(dom)
+    buf
+      .append(getChronology.toString)
+      .append(" ")
+      .append(getEra)
+      .append(" ")
+      .append(yoe)
+      .append(if (moy < 10) "-0" else "-")
+      .append(moy)
+      .append(if (dom < 10) "-0" else "-")
+      .append(dom)
     buf.toString()
   }
 }

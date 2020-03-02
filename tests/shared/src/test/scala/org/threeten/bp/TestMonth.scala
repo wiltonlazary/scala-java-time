@@ -34,7 +34,7 @@ package org.threeten.bp
 import java.util.Locale
 
 import org.scalatest.FunSuite
-import org.threeten.bp.Month.{DECEMBER, JANUARY, JUNE}
+import org.threeten.bp.Month.{ DECEMBER, JANUARY, JUNE }
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.ChronoField.MONTH_OF_YEAR
@@ -46,17 +46,16 @@ object TestMonth {
 }
 
 class TestMonth extends FunSuite with GenDateTimeTest with AssertionsHelper {
-  protected def samples: List[TemporalAccessor] = {
+  protected def samples: List[TemporalAccessor] =
     List(JANUARY, JUNE, DECEMBER)
-  }
 
-  protected def validFields: List[TemporalField] = {
+  protected def validFields: List[TemporalField] =
     List(MONTH_OF_YEAR)
-  }
 
   protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
-    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE).filterNot(validFields.contains)
+    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
+      .filterNot(validFields.contains)
   }
 
   test("factory_int_singleton") {
@@ -137,7 +136,59 @@ class TestMonth extends FunSuite with GenDateTimeTest with AssertionsHelper {
   }
 
   def data_plus: List[List[Int]] =
-    List(List(1, -13, 12), List(1, -12, 1), List(1, -11, 2), List(1, -10, 3), List(1, -9, 4), List(1, -8, 5), List(1, -7, 6), List(1, -6, 7), List(1, -5, 8), List(1, -4, 9), List(1, -3, 10), List(1, -2, 11), List(1, -1, 12), List(1, 0, 1), List(1, 1, 2), List(1, 2, 3), List(1, 3, 4), List(1, 4, 5), List(1, 5, 6), List(1, 6, 7), List(1, 7, 8), List(1, 8, 9), List(1, 9, 10), List(1, 10, 11), List(1, 11, 12), List(1, 12, 1), List(1, 13, 2), List(1, 1, 2), List(2, 1, 3), List(3, 1, 4), List(4, 1, 5), List(5, 1, 6), List(6, 1, 7), List(7, 1, 8), List(8, 1, 9), List(9, 1, 10), List(10, 1, 11), List(11, 1, 12), List(12, 1, 1), List(1, -1, 12), List(2, -1, 1), List(3, -1, 2), List(4, -1, 3), List(5, -1, 4), List(6, -1, 5), List(7, -1, 6), List(8, -1, 7), List(9, -1, 8), List(10, -1, 9), List(11, -1, 10), List(12, -1, 11))
+    List(
+      List(1, -13, 12),
+      List(1, -12, 1),
+      List(1, -11, 2),
+      List(1, -10, 3),
+      List(1, -9, 4),
+      List(1, -8, 5),
+      List(1, -7, 6),
+      List(1, -6, 7),
+      List(1, -5, 8),
+      List(1, -4, 9),
+      List(1, -3, 10),
+      List(1, -2, 11),
+      List(1, -1, 12),
+      List(1, 0, 1),
+      List(1, 1, 2),
+      List(1, 2, 3),
+      List(1, 3, 4),
+      List(1, 4, 5),
+      List(1, 5, 6),
+      List(1, 6, 7),
+      List(1, 7, 8),
+      List(1, 8, 9),
+      List(1, 9, 10),
+      List(1, 10, 11),
+      List(1, 11, 12),
+      List(1, 12, 1),
+      List(1, 13, 2),
+      List(1, 1, 2),
+      List(2, 1, 3),
+      List(3, 1, 4),
+      List(4, 1, 5),
+      List(5, 1, 6),
+      List(6, 1, 7),
+      List(7, 1, 8),
+      List(8, 1, 9),
+      List(9, 1, 10),
+      List(10, 1, 11),
+      List(11, 1, 12),
+      List(12, 1, 1),
+      List(1, -1, 12),
+      List(2, -1, 1),
+      List(3, -1, 2),
+      List(4, -1, 3),
+      List(5, -1, 4),
+      List(6, -1, 5),
+      List(7, -1, 6),
+      List(8, -1, 7),
+      List(9, -1, 8),
+      List(10, -1, 9),
+      List(11, -1, 10),
+      List(12, -1, 11)
+    )
 
   test("plus_long") {
     data_plus.foreach {
@@ -149,7 +200,35 @@ class TestMonth extends FunSuite with GenDateTimeTest with AssertionsHelper {
   }
 
   def data_minus: List[List[Int]] =
-    List(List(1, -13, 2), List(1, -12, 1), List(1, -11, 12), List(1, -10, 11), List(1, -9, 10), List(1, -8, 9), List(1, -7, 8), List(1, -6, 7), List(1, -5, 6), List(1, -4, 5), List(1, -3, 4), List(1, -2, 3), List(1, -1, 2), List(1, 0, 1), List(1, 1, 12), List(1, 2, 11), List(1, 3, 10), List(1, 4, 9), List(1, 5, 8), List(1, 6, 7), List(1, 7, 6), List(1, 8, 5), List(1, 9, 4), List(1, 10, 3), List(1, 11, 2), List(1, 12, 1), List(1, 13, 12))
+    List(
+      List(1, -13, 2),
+      List(1, -12, 1),
+      List(1, -11, 12),
+      List(1, -10, 11),
+      List(1, -9, 10),
+      List(1, -8, 9),
+      List(1, -7, 8),
+      List(1, -6, 7),
+      List(1, -5, 6),
+      List(1, -4, 5),
+      List(1, -3, 4),
+      List(1, -2, 3),
+      List(1, -1, 2),
+      List(1, 0, 1),
+      List(1, 1, 12),
+      List(1, 2, 11),
+      List(1, 3, 10),
+      List(1, 4, 9),
+      List(1, 5, 8),
+      List(1, 6, 7),
+      List(1, 7, 6),
+      List(1, 8, 5),
+      List(1, 9, 4),
+      List(1, 10, 3),
+      List(1, 11, 2),
+      List(1, 12, 1),
+      List(1, 13, 12)
+    )
 
   test("minus_long") {
     data_minus.foreach {
@@ -230,9 +309,12 @@ class TestMonth extends FunSuite with GenDateTimeTest with AssertionsHelper {
     assertEquals(Month.JULY.firstDayOfYear(false), 1 + 31 + 28 + 31 + 30 + 31 + 30)
     assertEquals(Month.AUGUST.firstDayOfYear(false), 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31)
     assertEquals(Month.SEPTEMBER.firstDayOfYear(false), 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)
-    assertEquals(Month.OCTOBER.firstDayOfYear(false), 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30)
-    assertEquals(Month.NOVEMBER.firstDayOfYear(false), 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31)
-    assertEquals(Month.DECEMBER.firstDayOfYear(false), 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30)
+    assertEquals(Month.OCTOBER.firstDayOfYear(false),
+                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30)
+    assertEquals(Month.NOVEMBER.firstDayOfYear(false),
+                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31)
+    assertEquals(Month.DECEMBER.firstDayOfYear(false),
+                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30)
   }
 
   test("firstDayOfYear_leapYear") {
@@ -246,8 +328,10 @@ class TestMonth extends FunSuite with GenDateTimeTest with AssertionsHelper {
     assertEquals(Month.AUGUST.firstDayOfYear(true), 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31)
     assertEquals(Month.SEPTEMBER.firstDayOfYear(true), 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31)
     assertEquals(Month.OCTOBER.firstDayOfYear(true), 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30)
-    assertEquals(Month.NOVEMBER.firstDayOfYear(true), 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31)
-    assertEquals(Month.DECEMBER.firstDayOfYear(true), 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30)
+    assertEquals(Month.NOVEMBER.firstDayOfYear(true),
+                 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31)
+    assertEquals(Month.DECEMBER.firstDayOfYear(true),
+                 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30)
   }
 
   test("firstMonthOfQuarter") {

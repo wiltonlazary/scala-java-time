@@ -42,7 +42,7 @@ import org.threeten.bp.temporal.ChronoUnit.WEEKS
 import org.threeten.bp.temporal.ChronoUnit.YEARS
 import java.io.InvalidObjectException
 import java.io.Serializable
-import java.util.{Objects, GregorianCalendar, Locale}
+import java.util.{ GregorianCalendar, Locale, Objects }
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import org.threeten.bp.DateTimeException
@@ -54,10 +54,13 @@ import org.threeten.bp.format.ResolverStyle
 
 @SerialVersionUID(-1177360819670808121L)
 object WeekFields {
+
   /** The cache of rules by firstDayOfWeek plus minimalDays.
     * Initialized first to be available for definition of ISO, etc.
     */
-  private val CACHE: ConcurrentMap[String, WeekFields] = new ConcurrentHashMap[String, WeekFields](4, 0.75f, 2)
+  private val CACHE: ConcurrentMap[String, WeekFields] =
+    new ConcurrentHashMap[String, WeekFields](4, 0.75f, 2)
+
   /** The ISO-8601 definition, where a week starts on Monday and the first week
     * has a minimum of 4 days.
     *
@@ -70,6 +73,7 @@ object WeekFields {
     * week-based-year corresponding to the previous calendar year.
     */
   val ISO: WeekFields = new WeekFields(DayOfWeek.MONDAY, 4)
+
   /** The common definition of a week that starts on Sunday.
     *
     * Defined as starting on Sunday and with a minimum of 1 day in the month.
@@ -87,11 +91,11 @@ object WeekFields {
     */
   def of(locale: Locale): WeekFields = {
     Objects.requireNonNull(locale, "locale")
-    val newLocale = new Locale(locale.getLanguage, locale.getCountry)
+    val newLocale               = new Locale(locale.getLanguage, locale.getCountry)
     val gcal: GregorianCalendar = new GregorianCalendar(newLocale)
-    val calDow: Int = gcal.getFirstDayOfWeek
-    val dow: DayOfWeek = DayOfWeek.SUNDAY.plus(calDow - 1)
-    val minDays: Int = gcal.getMinimalDaysInFirstWeek
+    val calDow: Int             = gcal.getFirstDayOfWeek
+    val dow: DayOfWeek          = DayOfWeek.SUNDAY.plus(calDow - 1)
+    val minDays: Int            = gcal.getMinimalDaysInFirstWeek
     WeekFields.of(dow, minDays)
   }
 
@@ -115,7 +119,7 @@ object WeekFields {
     *                                  or greater than 7
     */
   def of(firstDayOfWeek: DayOfWeek, minimalDaysInFirstWeek: Int): WeekFields = {
-    val key: String = firstDayOfWeek.toString + minimalDaysInFirstWeek
+    val key: String       = firstDayOfWeek.toString + minimalDaysInFirstWeek
     var rules: WeekFields = CACHE.get(key)
     if (rules == null) {
       rules = new WeekFields(firstDayOfWeek, minimalDaysInFirstWeek)
@@ -133,6 +137,7 @@ object WeekFields {
     * and WeekOfYear.
     */
   private[temporal] object ComputedDayOfField {
+
     /** Returns a field to access the day of week,
       * computed based on a WeekFields.
       *
@@ -140,62 +145,88 @@ object WeekFields {
       * the ISO DAY_OF_WEEK field to compute week boundaries.
       */
     private[temporal] def ofDayOfWeekField(weekDef: WeekFields): WeekFields.ComputedDayOfField =
-      new WeekFields.ComputedDayOfField("DayOfWeek", weekDef, ChronoUnit.DAYS, ChronoUnit.WEEKS, DAY_OF_WEEK_RANGE)
+      new WeekFields.ComputedDayOfField("DayOfWeek",
+                                        weekDef,
+                                        ChronoUnit.DAYS,
+                                        ChronoUnit.WEEKS,
+                                        DAY_OF_WEEK_RANGE)
 
     /** Returns a field to access the week of month,
       * computed based on a WeekFields.
       * @see WeekFields#weekOfMonth()
       */
     private[temporal] def ofWeekOfMonthField(weekDef: WeekFields): WeekFields.ComputedDayOfField =
-      new WeekFields.ComputedDayOfField("WeekOfMonth", weekDef, ChronoUnit.WEEKS, ChronoUnit.MONTHS, WEEK_OF_MONTH_RANGE)
+      new WeekFields.ComputedDayOfField("WeekOfMonth",
+                                        weekDef,
+                                        ChronoUnit.WEEKS,
+                                        ChronoUnit.MONTHS,
+                                        WEEK_OF_MONTH_RANGE)
 
     /** Returns a field to access the week of year,
       * computed based on a WeekFields.
       * @see WeekFields#weekOfYear()
       */
     private[temporal] def ofWeekOfYearField(weekDef: WeekFields): WeekFields.ComputedDayOfField =
-      new WeekFields.ComputedDayOfField("WeekOfYear", weekDef, ChronoUnit.WEEKS, ChronoUnit.YEARS, WEEK_OF_YEAR_RANGE)
+      new WeekFields.ComputedDayOfField("WeekOfYear",
+                                        weekDef,
+                                        ChronoUnit.WEEKS,
+                                        ChronoUnit.YEARS,
+                                        WEEK_OF_YEAR_RANGE)
 
     /** Returns a field to access the week of week-based-year,
       * computed based on a WeekFields.
       * @see WeekFields#weekOfWeekBasedYear()
       */
-    private[temporal] def ofWeekOfWeekBasedYearField(weekDef: WeekFields): WeekFields.ComputedDayOfField =
-      new WeekFields.ComputedDayOfField("WeekOfWeekBasedYear", weekDef, ChronoUnit.WEEKS, IsoFields.WEEK_BASED_YEARS, WEEK_OF_WEEK_BASED_YEAR_RANGE)
+    private[temporal] def ofWeekOfWeekBasedYearField(
+      weekDef: WeekFields
+    ): WeekFields.ComputedDayOfField =
+      new WeekFields.ComputedDayOfField("WeekOfWeekBasedYear",
+                                        weekDef,
+                                        ChronoUnit.WEEKS,
+                                        IsoFields.WEEK_BASED_YEARS,
+                                        WEEK_OF_WEEK_BASED_YEAR_RANGE)
 
     /** Returns a field to access the week-based-year,
       * computed based on a WeekFields.
       * @see WeekFields#weekBasedYear()
       */
     private[temporal] def ofWeekBasedYearField(weekDef: WeekFields): WeekFields.ComputedDayOfField =
-      new WeekFields.ComputedDayOfField("WeekBasedYear", weekDef, IsoFields.WEEK_BASED_YEARS, ChronoUnit.FOREVER, WEEK_BASED_YEAR_RANGE)
+      new WeekFields.ComputedDayOfField("WeekBasedYear",
+                                        weekDef,
+                                        IsoFields.WEEK_BASED_YEARS,
+                                        ChronoUnit.FOREVER,
+                                        WEEK_BASED_YEAR_RANGE)
 
-    private val DAY_OF_WEEK_RANGE: ValueRange = ValueRange.of(1, 7)
-    private val WEEK_OF_MONTH_RANGE: ValueRange = ValueRange.of(0, 1, 4, 6)
-    private val WEEK_OF_YEAR_RANGE: ValueRange = ValueRange.of(0, 1, 52, 54)
+    private val DAY_OF_WEEK_RANGE: ValueRange             = ValueRange.of(1, 7)
+    private val WEEK_OF_MONTH_RANGE: ValueRange           = ValueRange.of(0, 1, 4, 6)
+    private val WEEK_OF_YEAR_RANGE: ValueRange            = ValueRange.of(0, 1, 52, 54)
     private val WEEK_OF_WEEK_BASED_YEAR_RANGE: ValueRange = ValueRange.of(1, 52, 53)
-    private val WEEK_BASED_YEAR_RANGE: ValueRange = YEAR.range
+    private val WEEK_BASED_YEAR_RANGE: ValueRange         = YEAR.range
   }
 
-  private[temporal] class ComputedDayOfField(val name: String, val weekDef: WeekFields, val baseUnit: TemporalUnit, val rangeUnit: TemporalUnit, val range: ValueRange) extends TemporalField {
+  private[temporal] class ComputedDayOfField(
+    val name:      String,
+    val weekDef:   WeekFields,
+    val baseUnit:  TemporalUnit,
+    val rangeUnit: TemporalUnit,
+    val range:     ValueRange
+  ) extends TemporalField {
 
     def getFrom(temporal: TemporalAccessor): Long = {
-      val sow: Int = weekDef.getFirstDayOfWeek.getValue
+      val sow: Int    = weekDef.getFirstDayOfWeek.getValue
       val isoDow: Int = temporal.get(ChronoField.DAY_OF_WEEK)
-      val dow: Int = Math.floorMod(isoDow - sow, 7) + 1
+      val dow: Int    = Math.floorMod(isoDow - sow, 7) + 1
       if (rangeUnit eq ChronoUnit.WEEKS)
         dow
       else if (rangeUnit eq ChronoUnit.MONTHS) {
-        val dom: Int = temporal.get(ChronoField.DAY_OF_MONTH)
+        val dom: Int    = temporal.get(ChronoField.DAY_OF_MONTH)
         val offset: Int = startOfWeekOffset(dom, dow)
         computeWeek(offset, dom)
-      }
-      else if (rangeUnit eq ChronoUnit.YEARS) {
-        val doy: Int = temporal.get(ChronoField.DAY_OF_YEAR)
+      } else if (rangeUnit eq ChronoUnit.YEARS) {
+        val doy: Int    = temporal.get(ChronoField.DAY_OF_YEAR)
         val offset: Int = startOfWeekOffset(doy, dow)
         computeWeek(offset, doy)
-      }
-      else if (rangeUnit eq IsoFields.WEEK_BASED_YEARS)
+      } else if (rangeUnit eq IsoFields.WEEK_BASED_YEARS)
         localizedWOWBY(temporal)
       else if (rangeUnit eq ChronoUnit.FOREVER)
         localizedWBY(temporal)
@@ -209,31 +240,32 @@ object WeekFields {
     }
 
     private def localizedWeekOfMonth(temporal: TemporalAccessor, dow: Int): Long = {
-      val dom: Int = temporal.get(DAY_OF_MONTH)
+      val dom: Int    = temporal.get(DAY_OF_MONTH)
       val offset: Int = startOfWeekOffset(dom, dow)
       computeWeek(offset, dom)
     }
 
     private def localizedWeekOfYear(temporal: TemporalAccessor, dow: Int): Long = {
-      val doy: Int = temporal.get(DAY_OF_YEAR)
+      val doy: Int    = temporal.get(DAY_OF_YEAR)
       val offset: Int = startOfWeekOffset(doy, dow)
       computeWeek(offset, doy)
     }
 
     private def localizedWOWBY(temporal: TemporalAccessor): Int = {
-      val sow: Int = weekDef.getFirstDayOfWeek.getValue
+      val sow: Int    = weekDef.getFirstDayOfWeek.getValue
       val isoDow: Int = temporal.get(DAY_OF_WEEK)
-      val dow: Int = Math.floorMod(isoDow - sow, 7) + 1
-      val woy: Long = localizedWeekOfYear(temporal, dow)
+      val dow: Int    = Math.floorMod(isoDow - sow, 7) + 1
+      val woy: Long   = localizedWeekOfYear(temporal, dow)
       if (woy == 0) {
-        val previous: ChronoLocalDate = Chronology.from(temporal).date(temporal).minus(1, ChronoUnit.WEEKS)
+        val previous: ChronoLocalDate =
+          Chronology.from(temporal).date(temporal).minus(1, ChronoUnit.WEEKS)
         return localizedWeekOfYear(previous, dow).toInt + 1
-      }
-      else if (woy >= 53) {
-        val offset: Int = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
-        val year: Int = temporal.get(YEAR)
+      } else if (woy >= 53) {
+        val offset: Int  = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
+        val year: Int    = temporal.get(YEAR)
         val yearLen: Int = if (Year.isLeap(year)) 366 else 365
-        val weekIndexOfFirstWeekNextYear: Int = computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
+        val weekIndexOfFirstWeekNextYear: Int =
+          computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
         if (woy >= weekIndexOfFirstWeekNextYear) {
           return (woy - (weekIndexOfFirstWeekNextYear - 1)).toInt
         }
@@ -242,18 +274,19 @@ object WeekFields {
     }
 
     private def localizedWBY(temporal: TemporalAccessor): Int = {
-      val sow: Int = weekDef.getFirstDayOfWeek.getValue
+      val sow: Int    = weekDef.getFirstDayOfWeek.getValue
       val isoDow: Int = temporal.get(DAY_OF_WEEK)
-      val dow: Int = Math.floorMod(isoDow - sow, 7) + 1
-      val year: Int = temporal.get(YEAR)
-      val woy: Long = localizedWeekOfYear(temporal, dow)
+      val dow: Int    = Math.floorMod(isoDow - sow, 7) + 1
+      val year: Int   = temporal.get(YEAR)
+      val woy: Long   = localizedWeekOfYear(temporal, dow)
       if (woy == 0)
         return year - 1
       else if (woy < 53)
         return year
-      val offset: Int = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
+      val offset: Int  = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
       val yearLen: Int = if (Year.isLeap(year)) 366 else 365
-      val weekIndexOfFirstWeekNextYear: Int = computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
+      val weekIndexOfFirstWeekNextYear: Int =
+        computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
       if (woy >= weekIndexOfFirstWeekNextYear)
         return year + 1
       year
@@ -267,7 +300,7 @@ object WeekFields {
       */
     private def startOfWeekOffset(day: Int, dow: Int): Int = {
       val weekStart: Int = Math.floorMod(day - dow, 7)
-      var offset: Int = -weekStart
+      var offset: Int    = -weekStart
       if (weekStart + 1 > weekDef.getMinimalDaysInFirstWeek)
         offset = 7 - weekStart
       offset
@@ -283,19 +316,18 @@ object WeekFields {
     private def computeWeek(offset: Int, day: Int): Int = (7 + offset + (day - 1)) / 7
 
     def adjustInto[R <: Temporal](temporal: R, newValue: Long): R = {
-      val newVal: Int = range.checkValidIntValue(newValue, this)
+      val newVal: Int     = range.checkValidIntValue(newValue, this)
       val currentVal: Int = temporal.get(this)
       if (newVal == currentVal)
         return temporal
       if (rangeUnit eq ChronoUnit.FOREVER) {
-        val baseWowby: Int = temporal.get(weekDef.weekOfWeekBasedYear)
-        val diffWeeks: Long = ((newValue - currentVal) * 52.1775).toLong
+        val baseWowby: Int   = temporal.get(weekDef.weekOfWeekBasedYear)
+        val diffWeeks: Long  = ((newValue - currentVal) * 52.1775).toLong
         var result: Temporal = temporal.plus(diffWeeks, ChronoUnit.WEEKS)
         if (result.get(this) > newVal) {
           val newWowby: Int = result.get(weekDef.weekOfWeekBasedYear)
           result = result.minus(newWowby, ChronoUnit.WEEKS)
-        }
-        else {
+        } else {
           if (result.get(this) < newVal)
             result = result.plus(2, ChronoUnit.WEEKS)
           val newWowby: Int = result.get(weekDef.weekOfWeekBasedYear)
@@ -309,12 +341,16 @@ object WeekFields {
       temporal.plus(delta, baseUnit).asInstanceOf[R]
     }
 
-    def resolve(fieldValues: java.util.Map[TemporalField, java.lang.Long], partialTemporal: TemporalAccessor, resolverStyle: ResolverStyle): TemporalAccessor = {
+    def resolve(
+      fieldValues:     java.util.Map[TemporalField, java.lang.Long],
+      partialTemporal: TemporalAccessor,
+      resolverStyle:   ResolverStyle
+    ): TemporalAccessor = {
       val sow: Int = weekDef.getFirstDayOfWeek.getValue
       if (rangeUnit eq WEEKS) {
-        val value: Long = fieldValues.remove(this)
+        val value: Long   = fieldValues.remove(this)
         val localDow: Int = range.checkValidIntValue(value, this)
-        val isoDow: Int = Math.floorMod((sow - 1) + (localDow - 1), 7) + 1
+        val isoDow: Int   = Math.floorMod((sow - 1) + (localDow - 1), 7) + 1
         fieldValues.put(DAY_OF_WEEK, isoDow.toLong)
         return null
       }
@@ -323,24 +359,26 @@ object WeekFields {
       if (rangeUnit eq ChronoUnit.FOREVER) {
         if (!fieldValues.containsKey(weekDef.weekOfWeekBasedYear))
           return null
-        val chrono: Chronology = Chronology.from(partialTemporal)
-        val isoDow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.get(DAY_OF_WEEK))
-        val dow: Int = Math.floorMod(isoDow - sow, 7) + 1
-        val wby: Int = range.checkValidIntValue(fieldValues.get(this), this)
+        val chrono: Chronology    = Chronology.from(partialTemporal)
+        val isoDow: Int           = DAY_OF_WEEK.checkValidIntValue(fieldValues.get(DAY_OF_WEEK))
+        val dow: Int              = Math.floorMod(isoDow - sow, 7) + 1
+        val wby: Int              = range.checkValidIntValue(fieldValues.get(this), this)
         var date: ChronoLocalDate = null
-        var days: Long = 0L
+        var days: Long            = 0L
         if (resolverStyle eq ResolverStyle.LENIENT) {
           date = chrono.date(wby, 1, weekDef.getMinimalDaysInFirstWeek)
-          val wowby: Long = fieldValues.get(weekDef.weekOfWeekBasedYear)
+          val wowby: Long  = fieldValues.get(weekDef.weekOfWeekBasedYear)
           val dateDow: Int = localizedDayOfWeek(date, sow)
-          val weeks: Long = wowby - localizedWeekOfYear(date, dateDow)
+          val weeks: Long  = wowby - localizedWeekOfYear(date, dateDow)
           days = weeks * 7 + (dow - dateDow)
-        }
-        else {
+        } else {
           date = chrono.date(wby, 1, weekDef.getMinimalDaysInFirstWeek)
-          val wowby: Long = weekDef.weekOfWeekBasedYear.range.checkValidIntValue(fieldValues.get(weekDef.weekOfWeekBasedYear), weekDef.weekOfWeekBasedYear)
+          val wowby: Long = weekDef.weekOfWeekBasedYear.range.checkValidIntValue(
+            fieldValues.get(weekDef.weekOfWeekBasedYear),
+            weekDef.weekOfWeekBasedYear
+          )
           val dateDow: Int = localizedDayOfWeek(date, sow)
-          val weeks: Long = wowby - localizedWeekOfYear(date, dateDow)
+          val weeks: Long  = wowby - localizedWeekOfYear(date, dateDow)
           days = weeks * 7 + (dow - dateDow)
         }
         date = date.plus(days, DAYS)
@@ -355,30 +393,29 @@ object WeekFields {
       }
       if (!fieldValues.containsKey(YEAR))
         return null
-      val isoDow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.get(DAY_OF_WEEK))
-      val dow: Int = Math.floorMod(isoDow - sow, 7) + 1
-      val year: Int = YEAR.checkValidIntValue(fieldValues.get(YEAR))
+      val isoDow: Int        = DAY_OF_WEEK.checkValidIntValue(fieldValues.get(DAY_OF_WEEK))
+      val dow: Int           = Math.floorMod(isoDow - sow, 7) + 1
+      val year: Int          = YEAR.checkValidIntValue(fieldValues.get(YEAR))
       val chrono: Chronology = Chronology.from(partialTemporal)
       if (rangeUnit eq MONTHS) {
         if (!fieldValues.containsKey(MONTH_OF_YEAR))
           return null
-        val value: Long = fieldValues.remove(this)
+        val value: Long           = fieldValues.remove(this)
         var date: ChronoLocalDate = null
-        var days: Long = 0L
+        var days: Long            = 0L
         if (resolverStyle eq ResolverStyle.LENIENT) {
           val month: Long = fieldValues.get(MONTH_OF_YEAR)
           date = chrono.date(year, 1, 1)
           date = date.plus(month - 1, MONTHS)
           val dateDow: Int = localizedDayOfWeek(date, sow)
-          val weeks: Long = value - localizedWeekOfMonth(date, dateDow)
+          val weeks: Long  = value - localizedWeekOfMonth(date, dateDow)
           days = weeks * 7 + (dow - dateDow)
-        }
-        else {
+        } else {
           val month: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.get(MONTH_OF_YEAR))
           date = chrono.date(year, month, 8)
           val dateDow: Int = localizedDayOfWeek(date, sow)
-          val wom: Int = range.checkValidIntValue(value, this)
-          val weeks: Long = wom - localizedWeekOfMonth(date, dateDow)
+          val wom: Int     = range.checkValidIntValue(value, this)
+          val weeks: Long  = wom - localizedWeekOfMonth(date, dateDow)
           days = weeks * 7 + (dow - dateDow)
         }
         date = date.plus(days, DAYS)
@@ -391,20 +428,18 @@ object WeekFields {
         fieldValues.remove(MONTH_OF_YEAR)
         fieldValues.remove(DAY_OF_WEEK)
         date
-      }
-      else if (rangeUnit eq YEARS) {
-        val value: Long = fieldValues.remove(this)
+      } else if (rangeUnit eq YEARS) {
+        val value: Long           = fieldValues.remove(this)
         var date: ChronoLocalDate = chrono.date(year, 1, 1)
-        var days: Long = 0L
+        var days: Long            = 0L
         if (resolverStyle eq ResolverStyle.LENIENT) {
           val dateDow: Int = localizedDayOfWeek(date, sow)
-          val weeks: Long = value - localizedWeekOfYear(date, dateDow)
+          val weeks: Long  = value - localizedWeekOfYear(date, dateDow)
           days = weeks * 7 + (dow - dateDow)
-        }
-        else {
+        } else {
           val dateDow: Int = localizedDayOfWeek(date, sow)
-          val woy: Int = range.checkValidIntValue(value, this)
-          val weeks: Long = woy - localizedWeekOfYear(date, dateDow)
+          val woy: Int     = range.checkValidIntValue(value, this)
+          val weeks: Long  = woy - localizedWeekOfYear(date, dateDow)
           days = weeks * 7 + (dow - dateDow)
         }
         date = date.plus(days, DAYS)
@@ -416,8 +451,7 @@ object WeekFields {
         fieldValues.remove(YEAR)
         fieldValues.remove(DAY_OF_WEEK)
         date
-      }
-      else
+      } else
         throw new IllegalStateException("unreachable")
     }
 
@@ -459,25 +493,27 @@ object WeekFields {
         return temporal.range(YEAR)
       else
         throw new IllegalStateException("unreachable")
-      val sow: Int = weekDef.getFirstDayOfWeek.getValue
-      val isoDow: Int = temporal.get(ChronoField.DAY_OF_WEEK)
-      val dow: Int = Math.floorMod(isoDow - sow, 7) + 1
-      val offset: Int = startOfWeekOffset(temporal.get(field), dow)
+      val sow: Int               = weekDef.getFirstDayOfWeek.getValue
+      val isoDow: Int            = temporal.get(ChronoField.DAY_OF_WEEK)
+      val dow: Int               = Math.floorMod(isoDow - sow, 7) + 1
+      val offset: Int            = startOfWeekOffset(temporal.get(field), dow)
       val fieldRange: ValueRange = temporal.range(field)
-      ValueRange.of(computeWeek(offset, fieldRange.getMinimum.toInt), computeWeek(offset, fieldRange.getMaximum.toInt))
+      ValueRange.of(computeWeek(offset, fieldRange.getMinimum.toInt),
+                    computeWeek(offset, fieldRange.getMaximum.toInt))
     }
 
     private def rangeWOWBY(temporal: TemporalAccessor): ValueRange = {
-      val sow: Int = weekDef.getFirstDayOfWeek.getValue
+      val sow: Int    = weekDef.getFirstDayOfWeek.getValue
       val isoDow: Int = temporal.get(DAY_OF_WEEK)
-      val dow: Int = Math.floorMod(isoDow - sow, 7) + 1
-      val woy: Long = localizedWeekOfYear(temporal, dow)
+      val dow: Int    = Math.floorMod(isoDow - sow, 7) + 1
+      val woy: Long   = localizedWeekOfYear(temporal, dow)
       if (woy == 0)
         return rangeWOWBY(Chronology.from(temporal).date(temporal).minus(2, ChronoUnit.WEEKS))
-      val offset: Int = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
-      val year: Int = temporal.get(YEAR)
+      val offset: Int  = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
+      val year: Int    = temporal.get(YEAR)
       val yearLen: Int = if (Year.isLeap(year)) 366 else 365
-      val weekIndexOfFirstWeekNextYear: Int = computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
+      val weekIndexOfFirstWeekNextYear: Int =
+        computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
       if (woy >= weekIndexOfFirstWeekNextYear)
         return rangeWOWBY(Chronology.from(temporal).date(temporal).plus(2, ChronoUnit.WEEKS))
       ValueRange.of(1, weekIndexOfFirstWeekNextYear - 1)
@@ -558,7 +594,8 @@ object WeekFields {
   * @throws IllegalArgumentException if the minimal days value is invalid
   */
 @SerialVersionUID(-1177360819670808121L)
-final class WeekFields private(private val firstDayOfWeek: DayOfWeek, private val minimalDays: Int) extends Serializable {
+final class WeekFields private (private val firstDayOfWeek: DayOfWeek, private val minimalDays: Int)
+    extends Serializable {
   Objects.requireNonNull(firstDayOfWeek, "firstDayOfWeek")
   if (minimalDays < 1 || minimalDays > 7)
     throw new IllegalArgumentException("Minimal number of days is invalid")
@@ -716,7 +753,8 @@ final class WeekFields private(private val firstDayOfWeek: DayOfWeek, private va
     * @return a field providing access to the week-of-week-based-year, not null
     */
   @transient
-  val weekOfWeekBasedYear: TemporalField = WeekFields.ComputedDayOfField.ofWeekOfWeekBasedYearField(this)
+  val weekOfWeekBasedYear: TemporalField =
+    WeekFields.ComputedDayOfField.ofWeekOfWeekBasedYearField(this)
 
   /** Returns a field to access the year of a week-based-year based on this {@code WeekFields}.
     *
@@ -764,13 +802,12 @@ final class WeekFields private(private val firstDayOfWeek: DayOfWeek, private va
     * @throws InvalidObjectException if invalid
     */
   @throws[InvalidObjectException]
-  private def readResolve: AnyRef = {
+  private def readResolve: AnyRef =
     try WeekFields.of(firstDayOfWeek, minimalDays)
     catch {
       case ex: IllegalArgumentException =>
         throw new InvalidObjectException(s"Invalid WeekFields${ex.getMessage}")
     }
-  }
 
   /** Gets the first day-of-week.
     *

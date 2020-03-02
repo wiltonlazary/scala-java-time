@@ -36,7 +36,7 @@ import java.io.DataOutput
 import java.io.IOException
 import java.io.InvalidObjectException
 import java.io.ObjectStreamException
-import java.util.{Objects, Locale, ServiceLoader}
+import java.util.{ Locale, Objects, ServiceLoader }
 import java.util.concurrent.ConcurrentHashMap
 
 import org.threeten.bp.Clock
@@ -60,9 +60,12 @@ import org.threeten.bp.temporal.ValueRange
 object Chronology {
 
   /** Map of available calendars by ID. */
-  private val CHRONOS_BY_ID: ConcurrentHashMap[String, Chronology] = new ConcurrentHashMap[String, Chronology]
+  private val CHRONOS_BY_ID: ConcurrentHashMap[String, Chronology] =
+    new ConcurrentHashMap[String, Chronology]
+
   /** Map of available calendars by calendar type. */
-  private val CHRONOS_BY_TYPE: ConcurrentHashMap[String, Chronology] = new ConcurrentHashMap[String, Chronology]
+  private val CHRONOS_BY_TYPE: ConcurrentHashMap[String, Chronology] =
+    new ConcurrentHashMap[String, Chronology]
 
   /** Obtains an instance of {@code Chronology} from a temporal object.
     *
@@ -179,7 +182,7 @@ object Chronology {
     new java.util.HashSet[Chronology](CHRONOS_BY_ID.values)
   }
 
-  private def init(): Unit = {
+  private def init(): Unit =
     if (CHRONOS_BY_ID.isEmpty) {
       register(IsoChronology.INSTANCE)
       register(ThaiBuddhistChronology.INSTANCE)
@@ -188,8 +191,9 @@ object Chronology {
       register(HijrahChronology.INSTANCE)
       CHRONOS_BY_ID.putIfAbsent("Hijrah", HijrahChronology.INSTANCE)
       CHRONOS_BY_TYPE.putIfAbsent("islamic", HijrahChronology.INSTANCE)
-      val chronologies: java.util.Iterator[Chronology] = ChronologyPlatformHelper.loadAdditionalChronologies
-      while(chronologies.hasNext) {
+      val chronologies: java.util.Iterator[Chronology] =
+        ChronologyPlatformHelper.loadAdditionalChronologies
+      while (chronologies.hasNext) {
         val chrono = chronologies.next()
         CHRONOS_BY_ID.putIfAbsent(chrono.getId, chrono)
         val `type`: String = chrono.getCalendarType
@@ -197,7 +201,6 @@ object Chronology {
           CHRONOS_BY_TYPE.putIfAbsent(`type`, chrono)
       }
     }
-  }
 
   private def register(chrono: Chronology): Unit = {
     CHRONOS_BY_ID.putIfAbsent(chrono.getId, chrono)
@@ -292,7 +295,9 @@ trait Chronology extends Ordered[Chronology] {
   private[chrono] def ensureChronoLocalDate[D <: ChronoLocalDate](temporal: Temporal): D = {
     val other: D = temporal.asInstanceOf[D]
     if (this != other.getChronology)
-      throw new ClassCastException(s"Chrono mismatch, expected: $getId, actual: ${other.getChronology.getId}")
+      throw new ClassCastException(
+        s"Chrono mismatch, expected: $getId, actual: ${other.getChronology.getId}"
+      )
     other
   }
 
@@ -303,10 +308,14 @@ trait Chronology extends Ordered[Chronology] {
     * @throws ClassCastException if the date-time cannot be cast to ChronoLocalDateTimeImpl
     *                            or the chronology is not equal this Chrono
     */
-  private[chrono] def ensureChronoLocalDateTime[D <: ChronoLocalDate](temporal: Temporal): ChronoLocalDateTimeImpl[D] = {
+  private[chrono] def ensureChronoLocalDateTime[D <: ChronoLocalDate](
+    temporal: Temporal
+  ): ChronoLocalDateTimeImpl[D] = {
     val other: ChronoLocalDateTimeImpl[D] = temporal.asInstanceOf[ChronoLocalDateTimeImpl[D]]
     if (this != other.toLocalDate.getChronology)
-      throw new ClassCastException(s"Chrono mismatch, required: $getId, supplied: ${other.toLocalDate.getChronology.getId}")
+      throw new ClassCastException(
+        s"Chrono mismatch, required: $getId, supplied: ${other.toLocalDate.getChronology.getId}"
+      )
     other
   }
 
@@ -317,10 +326,14 @@ trait Chronology extends Ordered[Chronology] {
     * @throws ClassCastException if the date-time cannot be cast to ChronoZonedDateTimeImpl
     *                            or the chronology is not equal this Chrono
     */
-  private[chrono] def ensureChronoZonedDateTime[D <: ChronoLocalDate](temporal: Temporal): ChronoZonedDateTimeImpl[D] = {
+  private[chrono] def ensureChronoZonedDateTime[D <: ChronoLocalDate](
+    temporal: Temporal
+  ): ChronoZonedDateTimeImpl[D] = {
     val other: ChronoZonedDateTimeImpl[D] = temporal.asInstanceOf[ChronoZonedDateTimeImpl[D]]
     if (this != other.toLocalDate.getChronology)
-      throw new ClassCastException(s"Chrono mismatch, required: $getId, supplied: ${other.toLocalDate.getChronology.getId}")
+      throw new ClassCastException(
+        s"Chrono mismatch, required: $getId, supplied: ${other.toLocalDate.getChronology.getId}"
+      )
     other
   }
 
@@ -482,7 +495,10 @@ trait Chronology extends Ordered[Chronology] {
       clDate.atTime(LocalTime.from(temporal))
     } catch {
       case ex: DateTimeException =>
-        throw new DateTimeException(s"Unable to obtain ChronoLocalDateTime from TemporalAccessor: ${temporal.getClass}", ex)
+        throw new DateTimeException(
+          s"Unable to obtain ChronoLocalDateTime from TemporalAccessor: ${temporal.getClass}",
+          ex
+        )
     }
 
   /** Obtains a zoned date-time in this chronology from another temporal object.
@@ -497,25 +513,28 @@ trait Chronology extends Ordered[Chronology] {
     * @return the zoned date-time in this chronology, not null
     * @throws DateTimeException if unable to create the date-time
     */
-  def zonedDateTime(temporal: TemporalAccessor): ChronoZonedDateTime[_] = {
+  def zonedDateTime(temporal: TemporalAccessor): ChronoZonedDateTime[_] =
     try {
       val zone: ZoneId = ZoneId.from(temporal)
       try {
         val instant: Instant = Instant.from(temporal)
         zonedDateTime(instant, zone)
-      }
-      catch {
+      } catch {
         case ex1: DateTimeException =>
-          val cldt: ChronoLocalDateTime[_] = localDateTime(temporal) /// !!! was _ <: ChronoLocalDate
-          val cldtImpl: ChronoLocalDateTimeImpl[_ <: ChronoLocalDate] = ensureChronoLocalDateTime(cldt)
+          val cldt
+            : ChronoLocalDateTime[_] = localDateTime(temporal) /// !!! was _ <: ChronoLocalDate
+          val cldtImpl: ChronoLocalDateTimeImpl[_ <: ChronoLocalDate] = ensureChronoLocalDateTime(
+            cldt
+          )
           ChronoZonedDateTimeImpl.ofBest(cldtImpl, zone, null)
       }
-    }
-    catch {
+    } catch {
       case ex: DateTimeException =>
-        throw new DateTimeException(s"Unable to obtain ChronoZonedDateTime from TemporalAccessor: ${temporal.getClass}", ex)
+        throw new DateTimeException(
+          s"Unable to obtain ChronoZonedDateTime from TemporalAccessor: ${temporal.getClass}",
+          ex
+        )
     }
-  }
 
   /** Obtains a zoned date-time in this chronology from an {@code Instant}.
     *
@@ -554,7 +573,8 @@ trait Chronology extends Ordered[Chronology] {
     * @param days  the number of years, may be negative
     * @return the period in terms of this chronology, not null
     */
-  def period(years: Int, months: Int, days: Int): ChronoPeriod = new ChronoPeriodImpl(this, years, months, days)
+  def period(years: Int, months: Int, days: Int): ChronoPeriod =
+    new ChronoPeriodImpl(this, years, months, days)
 
   /** Checks if the specified year is a leap year.
     *
@@ -638,17 +658,20 @@ trait Chronology extends Ordered[Chronology] {
     * @param locale  the locale to use, not null
     * @return the text value of the chronology, not null
     */
-  def getDisplayName(style: TextStyle, locale: Locale): String = {
-    new DateTimeFormatterBuilder().appendChronologyText(style).toFormatter(locale).format(new TemporalAccessor() {
-      def isSupported(field: TemporalField): Boolean = false
+  def getDisplayName(style: TextStyle, locale: Locale): String =
+    new DateTimeFormatterBuilder()
+      .appendChronologyText(style)
+      .toFormatter(locale)
+      .format(new TemporalAccessor() {
+        def isSupported(field: TemporalField): Boolean = false
 
-      def getLong(field: TemporalField): Long = throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+        def getLong(field: TemporalField): Long =
+          throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
 
-      override def query[R](query: TemporalQuery[R]): R =
-        if (query eq TemporalQueries.chronology) this.asInstanceOf[R]
-        else super.query(query)
-    })
-  }
+        override def query[R](query: TemporalQuery[R]): R =
+          if (query eq TemporalQueries.chronology) this.asInstanceOf[R]
+          else super.query(query)
+      })
 
   /** Resolves parsed {@code ChronoField} values into a date during parsing.
     *
@@ -667,7 +690,10 @@ trait Chronology extends Ordered[Chronology] {
     * @throws DateTimeException if the date cannot be resolved, typically
     *                           because of a conflict in the input data
     */
-  def resolveDate(fieldValues: java.util.Map[TemporalField, java.lang.Long], resolverStyle: ResolverStyle): ChronoLocalDate
+  def resolveDate(
+    fieldValues:   java.util.Map[TemporalField, java.lang.Long],
+    resolverStyle: ResolverStyle
+  ): ChronoLocalDate
 
   /** Updates the map of field-values during resolution.
     *
@@ -675,9 +701,16 @@ trait Chronology extends Ordered[Chronology] {
     * @param value  the value to update, not null
     * @throws DateTimeException if a conflict occurs
     */
-  private[chrono] def updateResolveMap(fieldValues: java.util.Map[TemporalField, java.lang.Long], field: ChronoField, value: Long): Unit = {
+  private[chrono] def updateResolveMap(
+    fieldValues: java.util.Map[TemporalField, java.lang.Long],
+    field:       ChronoField,
+    value:       Long
+  ): Unit = {
     val current: java.lang.Long = fieldValues.get(field)
-    if (current != null && current.longValue != value) throw new DateTimeException(s"Invalid state, field: $field $current conflicts with $field $value")
+    if (current != null && current.longValue != value)
+      throw new DateTimeException(
+        s"Invalid state, field: $field $current conflicts with $field $value"
+      )
     else fieldValues.put(field, value)
   }
 
@@ -732,7 +765,8 @@ trait Chronology extends Ordered[Chronology] {
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[chrono] def writeExternal(out: DataOutput): Unit = out.writeUTF(getId)

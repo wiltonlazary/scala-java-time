@@ -33,7 +33,7 @@ package org.threeten.bp.format
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.{Collections, Comparator, Locale, Objects}
+import java.util.{ Collections, Comparator, Locale, Objects }
 import java.lang.StringBuilder
 import java.lang.Long
 
@@ -52,14 +52,15 @@ import org.threeten.bp.format.internal.TTBPSimpleDateTimeTextProvider
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 
 object DateTimeFormatterBuilder {
+
   /** Query for a time-zone that is region-only. */
   private val QUERY_REGION_ONLY: TemporalQuery[ZoneId] =
-  new TemporalQuery[ZoneId] {
-    override def queryFrom(temporal: TemporalAccessor): ZoneId = {
-      val zone: ZoneId = temporal.query(TemporalQueries.zoneId)
-      if (zone != null && !zone.isInstanceOf[ZoneOffset]) zone else null
+    new TemporalQuery[ZoneId] {
+      override def queryFrom(temporal: TemporalAccessor): ZoneId = {
+        val zone: ZoneId = temporal.query(TemporalQueries.zoneId)
+        if (zone != null && !zone.isInstanceOf[ZoneOffset]) zone else null
+      }
     }
-  }
 
   /** Gets the formatting pattern for date and time styles for a locale and chronology.
     * The locale and chronology are used to lookup the locale specific format
@@ -72,7 +73,12 @@ object DateTimeFormatterBuilder {
     * @return the locale and Chronology specific formatting pattern
     * @throws IllegalArgumentException if both dateStyle and timeStyle are null
     */
-  def getLocalizedDateTimePattern(dateStyle: FormatStyle, timeStyle: FormatStyle, chrono: Chronology, locale: Locale): String = {
+  def getLocalizedDateTimePattern(
+    dateStyle: FormatStyle,
+    timeStyle: FormatStyle,
+    chrono:    Chronology,
+    locale:    Locale
+  ): String = {
     Objects.requireNonNull(locale, "locale")
     Objects.requireNonNull(chrono, "chrono")
     if (dateStyle == null && timeStyle == null)
@@ -125,14 +131,12 @@ object DateTimeFormatterBuilder {
     map
   }
 
-
   /** Length comparator. */
-
   private[format] val LENGTH_SORT: Comparator[String] =
-  new Comparator[String] {
-    override def compare(str1: String, str2: String): Int =
-      if (str1.length == str2.length) str1.compareTo(str2) else str1.length - str2.length
-  }
+    new Comparator[String] {
+      override def compare(str1: String, str2: String): Int =
+        if (str1.length == str2.length) str1.compareTo(str2) else str1.length - str2.length
+    }
 }
 
 /** Builder to create date-time formatters.
@@ -167,7 +171,11 @@ object DateTimeFormatterBuilder {
   * @param parent  the parent builder, not null
   * @param optional  whether the formatter is optional, not null
   */
-final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatterBuilder, private val optional: Boolean) {
+final class DateTimeFormatterBuilder private (
+  private val parent:   DateTimeFormatterBuilder,
+  private val optional: Boolean
+) {
+
   /** Constructs a new instance of the builder. */
   def this() {
     this(null, false)
@@ -175,12 +183,17 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
 
   /** The currently active builder, used by the outermost builder. */
   private var active: DateTimeFormatterBuilder = this
+
   /** The list of printers that will be used. */
-  private val printerParsers: java.util.List[TTBPDateTimeFormatterBuilder.DateTimePrinterParser] = new java.util.ArrayList[TTBPDateTimeFormatterBuilder.DateTimePrinterParser]
+  private val printerParsers: java.util.List[TTBPDateTimeFormatterBuilder.DateTimePrinterParser] =
+    new java.util.ArrayList[TTBPDateTimeFormatterBuilder.DateTimePrinterParser]
+
   /** The width to pad the next field to. */
   private var padNextWidth: Int = 0
+
   /** The character to pad the next field with. */
   private var padNextChar: Char = 0
+
   /** The index of the last variable width value parser. */
   private var valueParserIndex: Int = -1
 
@@ -311,7 +324,9 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     */
   def appendValue(field: TemporalField): DateTimeFormatterBuilder = {
     Objects.requireNonNull(field, "field")
-    appendValue(new TTBPDateTimeFormatterBuilder.NumberPrinterParser(field, 1, 19, SignStyle.NORMAL))
+    appendValue(
+      new TTBPDateTimeFormatterBuilder.NumberPrinterParser(field, 1, 19, SignStyle.NORMAL)
+    )
     this
   }
 
@@ -366,7 +381,12 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     Objects.requireNonNull(field, "field")
     if (width < 1 || width > 19)
       throw new IllegalArgumentException(s"The width must be from 1 to 19 inclusive but was $width")
-    appendValue(new TTBPDateTimeFormatterBuilder.NumberPrinterParser(field, width, width, SignStyle.NOT_NEGATIVE))
+    appendValue(
+      new TTBPDateTimeFormatterBuilder.NumberPrinterParser(field,
+                                                           width,
+                                                           width,
+                                                           SignStyle.NOT_NEGATIVE)
+    )
     this
   }
 
@@ -398,18 +418,31 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @return this, for chaining, not null
     * @throws IllegalArgumentException if the widths are invalid
     */
-  def appendValue(field: TemporalField, minWidth: Int, maxWidth: Int, signStyle: SignStyle): DateTimeFormatterBuilder = {
+  def appendValue(
+    field:     TemporalField,
+    minWidth:  Int,
+    maxWidth:  Int,
+    signStyle: SignStyle
+  ): DateTimeFormatterBuilder = {
     if (minWidth == maxWidth && (signStyle eq SignStyle.NOT_NEGATIVE))
       return appendValue(field, maxWidth)
     Objects.requireNonNull(field, "field")
     Objects.requireNonNull(signStyle, "signStyle")
     if (minWidth < 1 || minWidth > 19)
-      throw new IllegalArgumentException(s"The minimum width must be from 1 to 19 inclusive but was $minWidth")
+      throw new IllegalArgumentException(
+        s"The minimum width must be from 1 to 19 inclusive but was $minWidth"
+      )
     if (maxWidth < 1 || maxWidth > 19)
-      throw new IllegalArgumentException(s"The maximum width must be from 1 to 19 inclusive but was $maxWidth")
+      throw new IllegalArgumentException(
+        s"The maximum width must be from 1 to 19 inclusive but was $maxWidth"
+      )
     if (maxWidth < minWidth)
-      throw new IllegalArgumentException(s"The maximum width must exceed or equal the minimum width but $maxWidth < $minWidth")
-    appendValue(new TTBPDateTimeFormatterBuilder.NumberPrinterParser(field, minWidth, maxWidth, signStyle))
+      throw new IllegalArgumentException(
+        s"The maximum width must exceed or equal the minimum width but $maxWidth < $minWidth"
+      )
+    appendValue(
+      new TTBPDateTimeFormatterBuilder.NumberPrinterParser(field, minWidth, maxWidth, signStyle)
+    )
     this
   }
 
@@ -450,9 +483,16 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @return this, for chaining, not null
     * @throws IllegalArgumentException if the width or base value is invalid
     */
-  def appendValueReduced(field: TemporalField, width: Int, maxWidth: Int, baseValue: Int): DateTimeFormatterBuilder = {
+  def appendValueReduced(
+    field:     TemporalField,
+    width:     Int,
+    maxWidth:  Int,
+    baseValue: Int
+  ): DateTimeFormatterBuilder = {
     Objects.requireNonNull(field, "field")
-    appendValue(new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(field, width, maxWidth, baseValue, null))
+    appendValue(
+      new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(field, width, maxWidth, baseValue, null)
+    )
     this
   }
 
@@ -507,10 +547,17 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @return this, for chaining, not null
     * @throws IllegalArgumentException if the width or base value is invalid
     */
-  def appendValueReduced(field: TemporalField, width: Int, maxWidth: Int, baseDate: ChronoLocalDate): DateTimeFormatterBuilder = {
+  def appendValueReduced(
+    field:    TemporalField,
+    width:    Int,
+    maxWidth: Int,
+    baseDate: ChronoLocalDate
+  ): DateTimeFormatterBuilder = {
     Objects.requireNonNull(field, "field")
     Objects.requireNonNull(baseDate, "baseDate")
-    appendValue(new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(field, width, maxWidth, 0, baseDate))
+    appendValue(
+      new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(field, width, maxWidth, 0, baseDate)
+    )
     this
   }
 
@@ -519,23 +566,27 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @param pp  the printer-parser, not null
     * @return this, for chaining, not null
     */
-  private def appendValue(pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser): DateTimeFormatterBuilder = {
+  private def appendValue(
+    pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser
+  ): DateTimeFormatterBuilder = {
     // Size checked
-    if (active.valueParserIndex >= 0 && active.printerParsers.get(active.valueParserIndex).isInstanceOf[TTBPDateTimeFormatterBuilder.NumberPrinterParser]) {
+    if (active.valueParserIndex >= 0 && active.printerParsers
+          .get(active.valueParserIndex)
+          .isInstanceOf[TTBPDateTimeFormatterBuilder.NumberPrinterParser]) {
       val activeValueParser: Int = active.valueParserIndex
-      var basePP: TTBPDateTimeFormatterBuilder.NumberPrinterParser = active.printerParsers.get(activeValueParser).asInstanceOf[TTBPDateTimeFormatterBuilder.NumberPrinterParser]
+      var basePP: TTBPDateTimeFormatterBuilder.NumberPrinterParser = active.printerParsers
+        .get(activeValueParser)
+        .asInstanceOf[TTBPDateTimeFormatterBuilder.NumberPrinterParser]
       if (pp.minWidth == pp.maxWidth && (pp.signStyle eq SignStyle.NOT_NEGATIVE)) {
         basePP = basePP.withSubsequentWidth(pp.maxWidth)
         appendInternal(pp.withFixedWidth)
         active.valueParserIndex = activeValueParser
-      }
-      else {
-        basePP = basePP.withFixedWidth
+      } else {
+        basePP                  = basePP.withFixedWidth
         active.valueParserIndex = appendInternal(pp)
       }
       active.printerParsers.set(activeValueParser, basePP)
-    }
-    else {
+    } else {
       active.valueParserIndex = appendInternal(pp)
     }
     this
@@ -572,8 +623,18 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @throws IllegalArgumentException if the field has a variable set of valid values or
     *                                  either width is invalid
     */
-  def appendFraction(field: TemporalField, minWidth: Int, maxWidth: Int, decimalPoint: Boolean): DateTimeFormatterBuilder = {
-    appendInternal(new TTBPDateTimeFormatterBuilder.FractionPrinterParser(field, minWidth, maxWidth, decimalPoint))
+  def appendFraction(
+    field:        TemporalField,
+    minWidth:     Int,
+    maxWidth:     Int,
+    decimalPoint: Boolean
+  ): DateTimeFormatterBuilder = {
+    appendInternal(
+      new TTBPDateTimeFormatterBuilder.FractionPrinterParser(field,
+                                                             minWidth,
+                                                             maxWidth,
+                                                             decimalPoint)
+    )
     this
   }
 
@@ -610,7 +671,11 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
   def appendText(field: TemporalField, textStyle: TextStyle): DateTimeFormatterBuilder = {
     Objects.requireNonNull(field, "field")
     Objects.requireNonNull(textStyle, "textStyle")
-    appendInternal(new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, textStyle, TTBPDateTimeTextProvider.getInstance))
+    appendInternal(
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(field,
+                                                         textStyle,
+                                                         TTBPDateTimeTextProvider.getInstance)
+    )
     this
   }
 
@@ -647,7 +712,10 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @param textLookup  the map from the value to the text
     * @return this, for chaining, not null
     */
-  def appendText(field: TemporalField, textLookup: java.util.Map[Long, String]): DateTimeFormatterBuilder = {
+  def appendText(
+    field:      TemporalField,
+    textLookup: java.util.Map[Long, String]
+  ): DateTimeFormatterBuilder = {
     Objects.requireNonNull(field, "field")
     Objects.requireNonNull(textLookup, "textLookup")
     import scala.collection.JavaConverters._
@@ -655,17 +723,27 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
       case (x, i) => (x.toLong, i)
     }
     val map: Map[TextStyle, Map[scala.Long, String]] = Map(TextStyle.FULL -> copy)
-    val store: TTBPSimpleDateTimeTextProvider.LocaleStore = new TTBPSimpleDateTimeTextProvider.LocaleStore(map)
+    val store: TTBPSimpleDateTimeTextProvider.LocaleStore =
+      new TTBPSimpleDateTimeTextProvider.LocaleStore(map)
     val provider: TTBPDateTimeTextProvider = new TTBPDateTimeTextProvider() {
-      override def getText(field: TemporalField, value: scala.Long, style: TextStyle, locale: Locale): String = {
+      override def getText(
+        field:  TemporalField,
+        value:  scala.Long,
+        style:  TextStyle,
+        locale: Locale
+      ): String =
         store.getText(value, style)
-      }
 
-      override def getTextIterator(field: TemporalField, style: TextStyle, locale: Locale): Iterator[(String, scala.Long)] = {
+      override def getTextIterator(
+        field:  TemporalField,
+        style:  TextStyle,
+        locale: Locale
+      ): Iterator[(String, scala.Long)] =
         store.getTextIterator(style)
-      }
     }
-    appendInternal(new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, TextStyle.FULL, provider))
+    appendInternal(
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, TextStyle.FULL, provider)
+    )
     this
   }
 
@@ -820,7 +898,7 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @param style  the format style to use, not null
     * @return this, for chaining, not null
     * @throws IllegalArgumentException if style is neither { @link TextStyle#FULL
-     * full} nor { @link TextStyle#SHORT short}
+    * full} nor { @link TextStyle#SHORT short}
     */
   def appendLocalizedOffset(style: TextStyle): DateTimeFormatterBuilder = {
     Objects.requireNonNull(style, "style")
@@ -851,7 +929,9 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @see #appendZoneRegionId()
     */
   def appendZoneId: DateTimeFormatterBuilder = {
-    appendInternal(new TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser(TemporalQueries.zoneId, "ZoneId()"))
+    appendInternal(
+      new TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser(TemporalQueries.zoneId, "ZoneId()")
+    )
     this
   }
 
@@ -878,7 +958,12 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @see #appendZoneId()
     */
   def appendZoneRegionId: DateTimeFormatterBuilder = {
-    appendInternal(new TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser(DateTimeFormatterBuilder.QUERY_REGION_ONLY, "ZoneRegionId()"))
+    appendInternal(
+      new TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser(
+        DateTimeFormatterBuilder.QUERY_REGION_ONLY,
+        "ZoneRegionId()"
+      )
+    )
     this
   }
 
@@ -908,7 +993,9 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @see #appendZoneId()
     */
   def appendZoneOrOffsetId: DateTimeFormatterBuilder = {
-    appendInternal(new TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser(TemporalQueries.zone, "ZoneOrOffsetId()"))
+    appendInternal(
+      new TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser(TemporalQueries.zone, "ZoneOrOffsetId()")
+    )
     this
   }
 
@@ -974,7 +1061,10 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     * @param preferredZones  the set of preferred zone ids, not null
     * @return this, for chaining, not null
     */
-  def appendZoneText(textStyle: TextStyle, preferredZones: java.util.Set[ZoneId]): DateTimeFormatterBuilder = {
+  def appendZoneText(
+    textStyle:      TextStyle,
+    preferredZones: java.util.Set[ZoneId]
+  ): DateTimeFormatterBuilder = {
     Objects.requireNonNull(preferredZones, "preferredZones")
     appendInternal(new TTBPDateTimeFormatterBuilder.ZoneTextPrinterParser(textStyle))
     this
@@ -1301,7 +1391,7 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
           if (pos < pattern.length) {
             cur = pattern.charAt(pos)
             if ((cur >= 'A' && cur <= 'Z') || (cur >= 'a' && cur <= 'z')) {
-              pad = count
+              pad   = count
               start = pos
               pos += 1
               while (pos < pattern.length && pattern.charAt(pos) == cur) {
@@ -1311,7 +1401,9 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
             }
           }
           if (pad == 0)
-            throw new IllegalArgumentException(s"Pad letter 'p' must be followed by valid pad pattern: $pattern")
+            throw new IllegalArgumentException(
+              s"Pad letter 'p' must be followed by valid pad pattern: $pattern"
+            )
           padNext(pad)
         }
         val field: TemporalField = DateTimeFormatterBuilder.FIELD_MAP.get(cur)
@@ -1324,13 +1416,11 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
             appendZoneText(TextStyle.FULL)
           else
             appendZoneText(TextStyle.SHORT)
-        }
-        else if (cur == 'V') {
+        } else if (cur == 'V') {
           if (count != 2)
             throw new IllegalArgumentException(s"Pattern letter count must be 2: $cur")
           appendZoneId
-        }
-        else if (cur == 'Z') {
+        } else if (cur == 'Z') {
           if (count < 4)
             appendOffset("+HHMM", "+0000")
           else if (count == 4)
@@ -1339,45 +1429,41 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
             appendOffset("+HH:MM:ss", "Z")
           else
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
-        }
-        else if (cur == 'O') {
+        } else if (cur == 'O') {
           if (count == 1)
             appendLocalizedOffset(TextStyle.SHORT)
           else if (count == 4)
             appendLocalizedOffset(TextStyle.FULL)
           else
             throw new IllegalArgumentException(s"Pattern letter count must be 1 or 4: $cur")
-        }
-        else if (cur == 'X') {
+        } else if (cur == 'X') {
           if (count > 5)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
-          appendOffset(TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser.PATTERNS(count + (if (count == 1) 0 else 1)), "Z")
-        }
-        else if (cur == 'x') {
+          appendOffset(TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser
+                         .PATTERNS(count + (if (count == 1) 0 else 1)),
+                       "Z")
+        } else if (cur == 'x') {
           if (count > 5)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
           val zero: String = if (count == 1) "+00" else if (count % 2 == 0) "+0000" else "+00:00"
-          appendOffset(TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser.PATTERNS(count + (if (count == 1) 0 else 1)), zero)
-        }
-        else if (cur == 'W') {
+          appendOffset(TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser
+                         .PATTERNS(count + (if (count == 1) 0 else 1)),
+                       zero)
+        } else if (cur == 'W') {
           if (count > 1)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
           appendInternal(new TTBPDateTimeFormatterBuilder.WeekFieldsPrinterParser('W', count))
-        }
-        else if (cur == 'w') {
+        } else if (cur == 'w') {
           if (count > 2)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
           appendInternal(new TTBPDateTimeFormatterBuilder.WeekFieldsPrinterParser('w', count))
-        }
-        else if (cur == 'Y') {
+        } else if (cur == 'Y') {
           appendInternal(new TTBPDateTimeFormatterBuilder.WeekFieldsPrinterParser('Y', count))
-        }
-        else {
+        } else {
           throw new IllegalArgumentException(s"Unknown pattern letter: $cur")
         }
         pos -= 1
-      }
-      else if (cur == '\'') {
+      } else if (cur == '\'') {
         val start: Int = pos
         pos += 1
         // Size improved
@@ -1395,21 +1481,21 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
         }
 
         if (pos >= pattern.length)
-          throw new IllegalArgumentException(s"Pattern ends with an incomplete string literal: $pattern")
+          throw new IllegalArgumentException(
+            s"Pattern ends with an incomplete string literal: $pattern"
+          )
         val str: String = pattern.substring(start + 1, pos)
         if (str.length == 0)
           appendLiteral('\'')
         else
           appendLiteral(str.replace("''", "'"))
-      }
-      else if (cur == '[')
+      } else if (cur == '[')
         optionalStart()
       else if (cur == ']') {
         if (active.parent == null)
           throw new IllegalArgumentException("Pattern invalid as it contains ] without previous [")
         optionalEnd()
-      }
-      else if (cur == '{' || cur == '}' || cur == '#')
+      } else if (cur == '{' || cur == '}' || cur == '#')
         throw new IllegalArgumentException(s"Pattern includes reserved character: '$cur'")
       else
         appendLiteral(cur)
@@ -1422,7 +1508,10 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     cur match {
       case 'u' | 'y' =>
         if (count == 2)
-          appendValueReduced(field, 2, 2, TTBPDateTimeFormatterBuilder.ReducedPrinterParser.BASE_DATE)
+          appendValueReduced(field,
+                             2,
+                             2,
+                             TTBPDateTimeFormatterBuilder.ReducedPrinterParser.BASE_DATE)
         else if (count < 4)
           appendValue(field, count, 19, SignStyle.NORMAL)
         else
@@ -1573,8 +1662,8 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
   def padNext(padWidth: Int, padChar: Char): DateTimeFormatterBuilder = {
     if (padWidth < 1)
       throw new IllegalArgumentException(s"The pad width must be at least one but was $padWidth")
-    active.padNextWidth = padWidth
-    active.padNextChar = padChar
+    active.padNextWidth     = padWidth
+    active.padNextChar      = padChar
     active.valueParserIndex = -1
     this
   }
@@ -1600,7 +1689,7 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     */
   def optionalStart(): DateTimeFormatterBuilder = {
     active.valueParserIndex = -1
-    active = new DateTimeFormatterBuilder(active, true)
+    active                  = new DateTimeFormatterBuilder(active, true)
     this
   }
 
@@ -1630,9 +1719,13 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     */
   def optionalEnd(): DateTimeFormatterBuilder = {
     if (active.parent == null)
-      throw new IllegalStateException("Cannot call optionalEnd() as there was no previous call to optionalStart()")
+      throw new IllegalStateException(
+        "Cannot call optionalEnd() as there was no previous call to optionalStart()"
+      )
     if (active.printerParsers.size > 0) {
-      val cpp: TTBPDateTimeFormatterBuilder.CompositePrinterParser = new TTBPDateTimeFormatterBuilder.CompositePrinterParser(active.printerParsers, active.optional)
+      val cpp: TTBPDateTimeFormatterBuilder.CompositePrinterParser =
+        new TTBPDateTimeFormatterBuilder.CompositePrinterParser(active.printerParsers,
+                                                                active.optional)
       active = active.parent
       appendInternal(cpp)
     } else {
@@ -1651,9 +1744,11 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
     Objects.requireNonNull(_pp, "pp")
     if (active.padNextWidth > 0) {
       if (_pp != null)
-        _pp = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(_pp, active.padNextWidth, active.padNextChar)
+        _pp = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(_pp,
+                                                                         active.padNextWidth,
+                                                                         active.padNextChar)
       active.padNextWidth = 0
-      active.padNextChar = 0
+      active.padNextChar  = 0
     }
     active.printerParsers.add(_pp)
     active.valueParserIndex = -1
@@ -1692,9 +1787,11 @@ final class DateTimeFormatterBuilder private(private val parent: DateTimeFormatt
   def toFormatter(locale: Locale): DateTimeFormatter = {
     Objects.requireNonNull(locale, "locale")
     while (active.parent != null) optionalEnd()
-    val pp: TTBPDateTimeFormatterBuilder.CompositePrinterParser = new TTBPDateTimeFormatterBuilder.CompositePrinterParser(printerParsers, false)
+    val pp: TTBPDateTimeFormatterBuilder.CompositePrinterParser =
+      new TTBPDateTimeFormatterBuilder.CompositePrinterParser(printerParsers, false)
     new DateTimeFormatter(pp, locale, DecimalStyle.STANDARD, ResolverStyle.SMART, null, null, null)
   }
 
-  private[format] def toFormatter(style: ResolverStyle): DateTimeFormatter = toFormatter.withResolverStyle(style)
+  private[format] def toFormatter(style: ResolverStyle): DateTimeFormatter =
+    toFormatter.withResolverStyle(style)
 }

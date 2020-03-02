@@ -38,18 +38,17 @@ import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
 import org.threeten.bp.temporal._
 
 /** Test ZoneOffset. */
-class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper  {
-  protected def samples: List[TemporalAccessor] = {
+class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper {
+  protected def samples: List[TemporalAccessor] =
     List(ZoneOffset.ofHours(1), ZoneOffset.ofHoursMinutesSeconds(-5, -6, -30))
-  }
 
-  protected def validFields: List[TemporalField] = {
+  protected def validFields: List[TemporalField] =
     List(OFFSET_SECONDS)
-  }
 
   protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
-    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE).filterNot(validFields.contains)
+    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
+      .filterNot(validFields.contains)
   }
 
   test("constant_UTC") {
@@ -68,7 +67,18 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("factory_string_UTC") {
-    val values: Array[String] = Array[String]("Z", "+0", "+00", "+0000", "+00:00", "+000000", "+00:00:00", "-00", "-0000", "-00:00", "-000000", "-00:00:00")
+    val values: Array[String] = Array[String]("Z",
+                                              "+0",
+                                              "+00",
+                                              "+0000",
+                                              "+00:00",
+                                              "+000000",
+                                              "+00:00:00",
+                                              "-00",
+                                              "-0000",
+                                              "-00:00",
+                                              "-000000",
+                                              "-00:00:00")
 
     var i: Int = 0
     while (i < values.length) {
@@ -79,7 +89,82 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("factory_string_invalid") {
-    val values: Array[String] = Array[String]("", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "ZZ", "0", "+0:00", "+00:0", "+0:0", "+000", "+00000", "+0:00:00", "+00:0:00", "+00:00:0", "+0:0:0", "+0:0:00", "+00:0:0", "+0:00:0", "1", "+01_00", "+01;00", "+01@00", "+01:AA", "+19", "+19:00", "+18:01", "+18:00:01", "+1801", "+180001", "-0:00", "-00:0", "-0:0", "-000", "-00000", "-0:00:00", "-00:0:00", "-00:00:0", "-0:0:0", "-0:0:00", "-00:0:0", "-0:00:0", "-19", "-19:00", "-18:01", "-18:00:01", "-1801", "-180001", "-01_00", "-01;00", "-01@00", "-01:AA", "@01:00")
+    val values: Array[String] = Array[String](
+      "",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "ZZ",
+      "0",
+      "+0:00",
+      "+00:0",
+      "+0:0",
+      "+000",
+      "+00000",
+      "+0:00:00",
+      "+00:0:00",
+      "+00:00:0",
+      "+0:0:0",
+      "+0:0:00",
+      "+00:0:0",
+      "+0:00:0",
+      "1",
+      "+01_00",
+      "+01;00",
+      "+01@00",
+      "+01:AA",
+      "+19",
+      "+19:00",
+      "+18:01",
+      "+18:00:01",
+      "+1801",
+      "+180001",
+      "-0:00",
+      "-00:0",
+      "-0:0",
+      "-000",
+      "-00000",
+      "-0:00:00",
+      "-00:0:00",
+      "-00:00:0",
+      "-0:0:0",
+      "-0:0:00",
+      "-00:0:0",
+      "-0:00:0",
+      "-19",
+      "-19:00",
+      "-18:01",
+      "-18:00:01",
+      "-1801",
+      "-180001",
+      "-01_00",
+      "-01;00",
+      "-01@00",
+      "-01:AA",
+      "@01:00"
+    )
 
     var i: Int = 0
     while (i < values.length) {
@@ -102,7 +187,7 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
   test("factory_string_singleDigitHours") {
     var i: Int = -9
     while (i <= 9) {
-      val str: String = (if (i < 0) "-" else "+") + Math.abs(i)
+      val str: String      = (if (i < 0) "-" else "+") + Math.abs(i)
       val test: ZoneOffset = ZoneOffset.of(str)
       doTestOffset(test, i, 0, 0)
       i += 1
@@ -112,7 +197,7 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
   test("factory_string_hours") {
     var i: Int = -18
     while (i <= 18) {
-      val str: String = (if (i < 0) "-" else "+") + Integer.toString(Math.abs(i) + 100).substring(1)
+      val str: String      = (if (i < 0) "-" else "+") + Integer.toString(Math.abs(i) + 100).substring(1)
       val test: ZoneOffset = ZoneOffset.of(str)
       doTestOffset(test, i, 0, 0)
       i += 1
@@ -125,7 +210,9 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
       var j: Int = -59
       while (j <= 59) {
         if ((i < 0 && j <= 0) || (i > 0 && j >= 0) || i == 0) {
-          val str: String = (if (i < 0 || j < 0) "-" else "+") + Integer.toString(Math.abs(i) + 100).substring(1) + Integer.toString(Math.abs(j) + 100).substring(1)
+          val str: String = (if (i < 0 || j < 0) "-" else "+") + Integer
+            .toString(Math.abs(i) + 100)
+            .substring(1) + Integer.toString(Math.abs(j) + 100).substring(1)
           val test: ZoneOffset = ZoneOffset.of(str)
           doTestOffset(test, i, j, 0)
         }
@@ -146,7 +233,9 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
       var j: Int = -59
       while (j <= 59) {
         if ((i < 0 && j <= 0) || (i > 0 && j >= 0) || i == 0) {
-          val str: String = (if (i < 0 || j < 0) "-" else "+") + Integer.toString(Math.abs(i) + 100).substring(1) + ":" + Integer.toString(Math.abs(j) + 100).substring(1)
+          val str: String = (if (i < 0 || j < 0) "-" else "+") + Integer
+            .toString(Math.abs(i) + 100)
+            .substring(1) + ":" + Integer.toString(Math.abs(j) + 100).substring(1)
           val test: ZoneOffset = ZoneOffset.of(str)
           doTestOffset(test, i, j, 0)
         }
@@ -169,7 +258,11 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
         var k: Int = -59
         while (k <= 59) {
           if ((i < 0 && j <= 0 && k <= 0) || (i > 0 && j >= 0 && k >= 0) || (i == 0 && ((j < 0 && k <= 0) || (j > 0 && k >= 0) || j == 0))) {
-            val str: String = (if (i < 0 || j < 0 || k < 0) "-" else "+") + Integer.toString(Math.abs(i) + 100).substring(1) + Integer.toString(Math.abs(j) + 100).substring(1) + Integer.toString(Math.abs(k) + 100).substring(1)
+            val str: String = (if (i < 0 || j < 0 || k < 0) "-" else "+") + Integer
+              .toString(Math.abs(i) + 100)
+              .substring(1) + Integer.toString(Math.abs(j) + 100).substring(1) + Integer
+              .toString(Math.abs(k) + 100)
+              .substring(1)
             val test: ZoneOffset = ZoneOffset.of(str)
             doTestOffset(test, i, j, k)
           }
@@ -194,7 +287,11 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
         var k: Int = -59
         while (k <= 59) {
           if ((i < 0 && j <= 0 && k <= 0) || (i > 0 && j >= 0 && k >= 0) || (i == 0 && ((j < 0 && k <= 0) || (j > 0 && k >= 0) || j == 0))) {
-            val str: String = (if (i < 0 || j < 0 || k < 0) "-" else "+") + Integer.toString(Math.abs(i) + 100).substring(1) + ":" + Integer.toString(Math.abs(j) + 100).substring(1) + ":" + Integer.toString(Math.abs(k) + 100).substring(1)
+            val str: String = (if (i < 0 || j < 0 || k < 0) "-" else "+") + Integer
+              .toString(Math.abs(i) + 100)
+              .substring(1) + ":" + Integer.toString(Math.abs(j) + 100).substring(1) + ":" + Integer
+              .toString(Math.abs(k) + 100)
+              .substring(1)
             val test: ZoneOffset = ZoneOffset.of(str)
             doTestOffset(test, i, j, k)
           }
@@ -379,8 +476,15 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("factory_TemporalAccessor") {
-    assertEquals(ZoneOffset.from(OffsetTime.of(LocalTime.of(12, 30), ZoneOffset.ofHours(6))), ZoneOffset.ofHours(6))
-    assertEquals(ZoneOffset.from(ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2007, 7, 15), LocalTime.of(17, 30)), ZoneOffset.ofHours(2))), ZoneOffset.ofHours(2))
+    assertEquals(ZoneOffset.from(OffsetTime.of(LocalTime.of(12, 30), ZoneOffset.ofHours(6))),
+                 ZoneOffset.ofHours(6))
+    assertEquals(
+      ZoneOffset.from(
+        ZonedDateTime.of(LocalDateTime.of(LocalDate.of(2007, 7, 15), LocalTime.of(17, 30)),
+                         ZoneOffset.ofHours(2))
+      ),
+      ZoneOffset.ofHours(2)
+    )
   }
 
   test("factory_TemporalAccessor_invalid_noDerive") {
@@ -418,10 +522,12 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
     assertEquals(offset.getRules.nextTransition(null.asInstanceOf[Instant]), null)
     assertEquals(offset.getRules.previousTransition(null.asInstanceOf[Instant]), null)
     assertEquals(offset.getRules.isValidOffset(null.asInstanceOf[LocalDateTime], offset), true)
-    assertEquals(offset.getRules.isValidOffset(null.asInstanceOf[LocalDateTime], ZoneOffset.UTC), false)
+    assertEquals(offset.getRules.isValidOffset(null.asInstanceOf[LocalDateTime], ZoneOffset.UTC),
+                 false)
     assertEquals(offset.getRules.isValidOffset(null.asInstanceOf[LocalDateTime], null), false)
     assertEquals(offset.getRules.getOffset(null.asInstanceOf[LocalDateTime]), offset)
-    assertEquals(offset.getRules.getValidOffsets(null.asInstanceOf[LocalDateTime]), Arrays.asList(offset))
+    assertEquals(offset.getRules.getValidOffsets(null.asInstanceOf[LocalDateTime]),
+                 Arrays.asList(offset))
     assertEquals(offset.getRules.getTransition(null.asInstanceOf[LocalDateTime]), null)
     assertEquals(offset.getRules.getTransitions.size, 0)
     assertEquals(offset.getRules.getTransitionRules.size, 0)
@@ -465,8 +571,8 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("equals") {
-    val offset1: ZoneOffset = ZoneOffset.ofHoursMinutesSeconds(1, 2, 3)
-    val offset2: ZoneOffset = ZoneOffset.ofHoursMinutesSeconds(2, 3, 4)
+    val offset1: ZoneOffset  = ZoneOffset.ofHoursMinutesSeconds(1, 2, 3)
+    val offset2: ZoneOffset  = ZoneOffset.ofHoursMinutesSeconds(2, 3, 4)
     val offset2b: ZoneOffset = ZoneOffset.ofHoursMinutesSeconds(2, 3, 4)
     assertEquals(offset1 == offset2, false)
     assertEquals(offset2 == offset1, false)

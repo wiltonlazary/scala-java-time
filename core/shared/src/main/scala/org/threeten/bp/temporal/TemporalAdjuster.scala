@@ -61,6 +61,7 @@ import org.threeten.bp.DateTimeException
   * however immutability is strongly recommended.
   */
 trait TemporalAdjuster {
+
   /** Adjusts the specified temporal object.
     *
     * This adjusts the specified temporal object using the logic

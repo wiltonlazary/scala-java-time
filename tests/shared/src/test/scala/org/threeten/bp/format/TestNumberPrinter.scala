@@ -44,14 +44,16 @@ import org.threeten.bp.temporal.MockFieldValue
 class TestNumberPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
   test("print_emptyCalendrical") {
     assertThrows[DateTimeException] {
-      val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER)
+      val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+        new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER)
       pp.print(printEmptyContext, buf)
     }
   }
 
   test("print_append") {
     printContext.setDateTime(LocalDate.of(2012, 1, 3))
-    val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER)
+    val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+      new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER)
     buf.append("EXISTING")
     pp.print(printContext, buf)
     assertEquals(buf.toString, "EXISTING3")
@@ -136,7 +138,8 @@ class TestNumberPrinter extends FunSuite with GenTestPrinterParser with Assertio
       (1, 10, Integer.MAX_VALUE - 1, "2147483646"),
       (1, 10, Integer.MAX_VALUE, "2147483647"),
       (1, 10, Integer.MIN_VALUE + 1, "2147483647"),
-      (1, 10, Integer.MIN_VALUE, "2147483648"))
+      (1, 10, Integer.MIN_VALUE, "2147483648")
+    )
   }
 
   test("pad_NOT_NEGATIVE") {
@@ -144,14 +147,17 @@ class TestNumberPrinter extends FunSuite with GenTestPrinterParser with Assertio
       case (minPad, maxPad, value, result) =>
         super.beforeEach
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
-        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.NOT_NEGATIVE)
+        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+          new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
+                                                               minPad,
+                                                               maxPad,
+                                                               SignStyle.NOT_NEGATIVE)
         try {
           pp.print(printContext, buf)
           if (result == null || value < 0)
             fail("Expected exception")
           assertEquals(buf.toString, result)
-        }
-        catch {
+        } catch {
           case ex: DateTimeException =>
             if (result == null || value < 0)
               assertEquals(ex.getMessage.contains(DAY_OF_MONTH.toString), true)
@@ -168,14 +174,17 @@ class TestNumberPrinter extends FunSuite with GenTestPrinterParser with Assertio
       case (minPad, maxPad, value, result) =>
         super.beforeEach
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
-        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.NEVER)
+        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+          new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
+                                                               minPad,
+                                                               maxPad,
+                                                               SignStyle.NEVER)
         try {
           pp.print(printContext, buf)
           if (result == null)
             fail("Expected exception")
           assertEquals(buf.toString, result)
-        }
-        catch {
+        } catch {
           case ex: DateTimeException =>
             if (result != null)
               throw ex
@@ -191,14 +200,17 @@ class TestNumberPrinter extends FunSuite with GenTestPrinterParser with Assertio
       case (minPad, maxPad, value, result) =>
         super.beforeEach
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
-        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.NORMAL)
+        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+          new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
+                                                               minPad,
+                                                               maxPad,
+                                                               SignStyle.NORMAL)
         try {
           pp.print(printContext, buf)
           if (result == null)
             fail("Expected exception")
           assertEquals(buf.toString, if (value < 0) "-" + result else result)
-        }
-        catch {
+        } catch {
           case ex: DateTimeException =>
             if (result != null)
               throw ex
@@ -214,14 +226,17 @@ class TestNumberPrinter extends FunSuite with GenTestPrinterParser with Assertio
       case (minPad, maxPad, value, result) =>
         super.beforeEach
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
-        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.ALWAYS)
+        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+          new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
+                                                               minPad,
+                                                               maxPad,
+                                                               SignStyle.ALWAYS)
         try {
           pp.print(printContext, buf)
           if (result == null)
             fail("Expected exception")
           assertEquals(buf.toString, if (value < 0) "-" + result else "+" + result)
-        }
-        catch {
+        } catch {
           case ex: DateTimeException =>
             if (result != null)
               throw ex
@@ -238,7 +253,11 @@ class TestNumberPrinter extends FunSuite with GenTestPrinterParser with Assertio
         super.beforeEach
         var _result = result
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
-        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, minPad, maxPad, SignStyle.EXCEEDS_PAD)
+        val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+          new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
+                                                               minPad,
+                                                               maxPad,
+                                                               SignStyle.EXCEEDS_PAD)
         try {
           pp.print(printContext, buf)
           if (_result == null) {
@@ -248,8 +267,7 @@ class TestNumberPrinter extends FunSuite with GenTestPrinterParser with Assertio
             _result = if (value < 0) "-" + _result else "+" + _result
           }
           assertEquals(buf.toString, _result)
-        }
-        catch {
+        } catch {
           case ex: DateTimeException =>
             if (_result != null)
               throw ex
@@ -261,17 +279,26 @@ class TestNumberPrinter extends FunSuite with GenTestPrinterParser with Assertio
   }
 
   def test_toString1(): Unit = {
-    val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(HOUR_OF_DAY, 1, 19, SignStyle.NORMAL)
+    val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+      new TTBPDateTimeFormatterBuilder.NumberPrinterParser(HOUR_OF_DAY, 1, 19, SignStyle.NORMAL)
     assertEquals(pp.toString, "Value(HourOfDay)")
   }
 
   def test_toString2(): Unit = {
-    val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(HOUR_OF_DAY, 2, 2, SignStyle.NOT_NEGATIVE)
+    val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+      new TTBPDateTimeFormatterBuilder.NumberPrinterParser(HOUR_OF_DAY,
+                                                           2,
+                                                           2,
+                                                           SignStyle.NOT_NEGATIVE)
     assertEquals(pp.toString, "Value(HourOfDay,2)")
   }
 
   def test_toString3(): Unit = {
-    val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser = new TTBPDateTimeFormatterBuilder.NumberPrinterParser(HOUR_OF_DAY, 1, 2, SignStyle.NOT_NEGATIVE)
+    val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
+      new TTBPDateTimeFormatterBuilder.NumberPrinterParser(HOUR_OF_DAY,
+                                                           1,
+                                                           2,
+                                                           SignStyle.NOT_NEGATIVE)
     assertEquals(pp.toString, "Value(HourOfDay,1,2,NOT_NEGATIVE)")
   }
 }

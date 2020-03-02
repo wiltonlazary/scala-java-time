@@ -37,7 +37,8 @@ import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.TextStyle
 
 private[format] object TTBPDateTimeTextProvider {
-  val MUTABLE_PROVIDER: AtomicReference[TTBPDateTimeTextProvider] = new AtomicReference[TTBPDateTimeTextProvider]()
+  val MUTABLE_PROVIDER: AtomicReference[TTBPDateTimeTextProvider] =
+    new AtomicReference[TTBPDateTimeTextProvider]()
 
   /** Gets the provider.
     *
@@ -47,29 +48,31 @@ private[format] object TTBPDateTimeTextProvider {
     ProviderSingleton.PROVIDER
 
   /**
-   * Sets the provider to use.
-   * <p>
-   * This can only be invoked before {@link DateTimeTextProvider} class is used for formatting/parsing.
-   * Invoking this method at a later point will throw an exception.
-   *
-   * @param provider the provider to use, not null
-   * @throws IllegalStateException if provider is already set
-   */
+    * Sets the provider to use.
+    * <p>
+    * This can only be invoked before {@link DateTimeTextProvider} class is used for formatting/parsing.
+    * Invoking this method at a later point will throw an exception.
+    *
+    * @param provider the provider to use, not null
+    * @throws IllegalStateException if provider is already set
+    */
   def setInitializer(provider: TTBPDateTimeTextProvider): Unit =
     if (!MUTABLE_PROVIDER.compareAndSet(null, provider)) {
-      throw new IllegalStateException("Provider was already set, possibly with a default during initialization")
+      throw new IllegalStateException(
+        "Provider was already set, possibly with a default during initialization"
+      )
     }
 
   //-----------------------------------------------------------------------
   // use JVM class initializtion to lock the singleton without additional synchronization
   object ProviderSingleton {
-      val PROVIDER: TTBPDateTimeTextProvider = initialize()
-      // initialize the provider
-      def initialize(): TTBPDateTimeTextProvider = {
-        // Set the default initializer if none has been provided yet
-        MUTABLE_PROVIDER.compareAndSet(null, new TTBPSimpleDateTimeTextProvider())
-        return MUTABLE_PROVIDER.get();
-      }
+    val PROVIDER: TTBPDateTimeTextProvider = initialize()
+    // initialize the provider
+    def initialize(): TTBPDateTimeTextProvider = {
+      // Set the default initializer if none has been provided yet
+      MUTABLE_PROVIDER.compareAndSet(null, new TTBPSimpleDateTimeTextProvider())
+      return MUTABLE_PROVIDER.get();
+    }
   }
 }
 
@@ -80,10 +83,11 @@ private[format] object TTBPDateTimeTextProvider {
   * This interface is a service provider that can be called by multiple threads.
   * Implementations must be thread-safe.
   * Implementations should cache the textual information.
- * <p>
- * This class has been made pubilc primarily for the benefit of Android.
- */
+  * <p>
+  * This class has been made pubilc primarily for the benefit of Android.
+  */
 abstract class TTBPDateTimeTextProvider {
+
   /** Gets the text for the specified field, locale and style
     * for the purpose of printing.
     *
@@ -114,5 +118,9 @@ abstract class TTBPDateTimeTextProvider {
     * @return the iterator of text to field pairs, in order from longest text to shortest text,
     *         null if the field or style is not parsable
     */
-  def getTextIterator(field: TemporalField, style: TextStyle, locale: Locale): Iterator[(String, Long)]
+  def getTextIterator(
+    field:  TemporalField,
+    style:  TextStyle,
+    locale: Locale
+  ): Iterator[(String, Long)]
 }

@@ -35,11 +35,14 @@ import org.scalatest.FunSuite
 
 class TestZonedDateTimeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
   test("test_serialization") {
-    assertSerializable(ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 11, 30, 59, 500), TestZonedDateTime.ZONE_0100))
+    assertSerializable(
+      ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 11, 30, 59, 500), TestZonedDateTime.ZONE_0100)
+    )
   }
 
   test("test_serialization_format") {
-    val zdt: ZonedDateTime = LocalDateTime.of(2012, 9, 16, 22, 17, 59, 470 * 1000000).atZone(ZoneId.of("Europe/London"))
+    val zdt: ZonedDateTime =
+      LocalDateTime.of(2012, 9, 16, 22, 17, 59, 470 * 1000000).atZone(ZoneId.of("Europe/London"))
     assertEqualsSerialisedForm(zdt)
   }
 

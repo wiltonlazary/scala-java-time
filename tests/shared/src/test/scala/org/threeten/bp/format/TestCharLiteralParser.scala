@@ -42,16 +42,25 @@ class TestCharLiteralParser extends FunSuite with GenTestPrinterParser with Asse
     List(
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "a", 0, 1),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "aOTHER", 0, 1),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERaOTHER", 5, 6),
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+           true,
+           "OTHERaOTHER",
+           5,
+           6),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERa", 5, 6),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "", 0, ~0),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "a", 1, ~1),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "A", 0, ~0),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "b", 0, ~0),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERbOTHER", 5, ~5),
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+           true,
+           "OTHERbOTHER",
+           5,
+           ~5),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERb", 5, ~5),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), false, "a", 0, 1),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), false, "A", 0, 1))
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), false, "A", 0, 1)
+    )
   }
 
   test("parse_success") {
@@ -69,17 +78,25 @@ class TestCharLiteralParser extends FunSuite with GenTestPrinterParser with Asse
 
   val data_error: List[List[Any]] = {
     List[List[Any]](
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), "a", -1, classOf[IndexOutOfBoundsException]),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), "a", 2, classOf[IndexOutOfBoundsException]))
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+           "a",
+           -1,
+           classOf[IndexOutOfBoundsException]),
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+           "a",
+           2,
+           classOf[IndexOutOfBoundsException])
+    )
   }
 
   test("parse_error") {
     data_error.foreach {
-      case (pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser) :: (text: String) :: (pos: Int) :: (expected: Class[_]) :: Nil =>
+      case (pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser) :: (text: String) :: (pos: Int) :: (expected: Class[
+            _
+          ]) :: Nil =>
         try {
           pp.parse(parseContext, text, pos)
-        }
-        catch {
+        } catch {
           case ex: RuntimeException =>
             assertTrue(expected.isInstance(ex))
             assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)

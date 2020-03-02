@@ -38,12 +38,14 @@ import java.io.IOException
 import org.threeten.bp.DateTimeException
 
 object ThaiBuddhistEra {
+
   /** The singleton instance for the era before the current one, 'Before Buddhist Era',
     * which has the value 0.
     */
   val BEFORE_BE = new ThaiBuddhistEra("BEFORE_BE", 0)
+
   /** The singleton instance for the current era, 'Buddhist Era', which has the value 1. */
-  val BE        = new ThaiBuddhistEra("BE", 1)
+  val BE = new ThaiBuddhistEra("BE", 1)
 
   val values: Array[ThaiBuddhistEra] = Array(BEFORE_BE, BE)
 
@@ -61,7 +63,7 @@ object ThaiBuddhistEra {
       case 0 => BEFORE_BE
       case 1 => BE
       case _ => throw new DateTimeException("Era is not valid for ThaiBuddhistEra")
-  }
+    }
 
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): ThaiBuddhistEra = {
@@ -80,7 +82,10 @@ object ThaiBuddhistEra {
   * <h3>Specification for implementors</h3>
   * This is an immutable and thread-safe enum.
   */
-final class ThaiBuddhistEra(name: String, ordinal: Int) extends Enum[ThaiBuddhistEra](name, ordinal) with Era {
+final class ThaiBuddhistEra(name: String, ordinal: Int)
+    extends Enum[ThaiBuddhistEra](name, ordinal)
+    with Era {
+
   /** Gets the era numeric value.
     *
     * The current era (from ISO year -543 onwards) has the value 1

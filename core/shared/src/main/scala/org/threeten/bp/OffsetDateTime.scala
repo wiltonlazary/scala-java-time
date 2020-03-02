@@ -42,7 +42,7 @@ import java.io.IOException
 import java.io.InvalidObjectException
 import java.io.ObjectStreamException
 import java.io.Serializable
-import java.util.{Comparator, Objects}
+import java.util.{ Comparator, Objects }
 
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
@@ -62,6 +62,7 @@ import org.threeten.bp.zone.ZoneRules
 
 @SerialVersionUID(2287754244819255394L)
 object OffsetDateTime {
+
   /** The minimum supported {@code OffsetDateTime}, '-999999999-01-01T00:00:00+18:00'.
     * This is the local date-time of midnight at the start of the minimum date
     * in the maximum offset (larger offsets are earlier on the time-line).
@@ -69,6 +70,7 @@ object OffsetDateTime {
     * This could be used by an application as a "far past" date-time.
     */
   val MIN: OffsetDateTime = LocalDateTime.MIN.atOffset(ZoneOffset.MAX)
+
   /** The maximum supported {@code OffsetDateTime}, '+999999999-12-31T23:59:59.999999999-18:00'.
     * This is the local date-time just before midnight at the end of the maximum date
     * in the minimum offset (larger negative offsets are later on the time-line).
@@ -93,11 +95,11 @@ object OffsetDateTime {
   private val INSTANT_COMPARATOR: Comparator[OffsetDateTime] =
     new Comparator[OffsetDateTime] {
       override def compare(datetime1: OffsetDateTime, datetime2: OffsetDateTime): Int = {
-          var cmp: Int = java.lang.Long.compare(datetime1.toEpochSecond, datetime2.toEpochSecond)
-          if (cmp == 0)
-            cmp = java.lang.Long.compare(datetime1.getNano, datetime2.getNano)
-          cmp
-        }
+        var cmp: Int = java.lang.Long.compare(datetime1.toEpochSecond, datetime2.toEpochSecond)
+        if (cmp == 0)
+          cmp = java.lang.Long.compare(datetime1.getNano, datetime2.getNano)
+        cmp
+      }
     }
 
   /** Obtains the current date-time from the system clock in the default time-zone.
@@ -166,7 +168,8 @@ object OffsetDateTime {
     * @param offset  the zone offset, not null
     * @return the offset date-time, not null
     */
-  def of(dateTime: LocalDateTime, offset: ZoneOffset): OffsetDateTime = new OffsetDateTime(dateTime, offset)
+  def of(dateTime: LocalDateTime, offset: ZoneOffset): OffsetDateTime =
+    new OffsetDateTime(dateTime, offset)
 
   /** Obtains an instance of {@code OffsetDateTime} from a year, month, day,
     * hour, minute, second, nanosecond and offset.
@@ -191,8 +194,18 @@ object OffsetDateTime {
     * @throws DateTimeException if the value of any field is out of range, or
     *                           if the day-of-month is invalid for the month-year
     */
-  def of(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second: Int, nanoOfSecond: Int, offset: ZoneOffset): OffsetDateTime = {
-    val dt: LocalDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond)
+  def of(
+    year:         Int,
+    month:        Int,
+    dayOfMonth:   Int,
+    hour:         Int,
+    minute:       Int,
+    second:       Int,
+    nanoOfSecond: Int,
+    offset:       ZoneOffset
+  ): OffsetDateTime = {
+    val dt: LocalDateTime =
+      LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoOfSecond)
     new OffsetDateTime(dt, offset)
   }
 
@@ -210,9 +223,10 @@ object OffsetDateTime {
   def ofInstant(instant: Instant, zone: ZoneId): OffsetDateTime = {
     Objects.requireNonNull(instant, "instant")
     Objects.requireNonNull(zone, "zone")
-    val rules: ZoneRules = zone.getRules
+    val rules: ZoneRules   = zone.getRules
     val offset: ZoneOffset = rules.getOffset(instant)
-    val ldt: LocalDateTime = LocalDateTime.ofEpochSecond(instant.getEpochSecond, instant.getNano, offset)
+    val ldt: LocalDateTime =
+      LocalDateTime.ofEpochSecond(instant.getEpochSecond, instant.getNano, offset)
     new OffsetDateTime(ldt, offset)
   }
 
@@ -231,7 +245,7 @@ object OffsetDateTime {
     * @return the offset date-time, not null
     * @throws DateTimeException if unable to convert to an { @code OffsetDateTime}
     */
-  def from(temporal: TemporalAccessor): OffsetDateTime = {
+  def from(temporal: TemporalAccessor): OffsetDateTime =
     temporal match {
       case time: OffsetDateTime => time
       case _ =>
@@ -247,10 +261,11 @@ object OffsetDateTime {
           }
         } catch {
           case ex: DateTimeException =>
-            throw new DateTimeException(s"Unable to obtain OffsetDateTime from TemporalAccessor: $temporal, type ${temporal.getClass.getName}")
+            throw new DateTimeException(
+              s"Unable to obtain OffsetDateTime from TemporalAccessor: $temporal, type ${temporal.getClass.getName}"
+            )
         }
     }
-  }
 
   /** Obtains an instance of {@code OffsetDateTime} from a text string
     * such as {@code 2007-12-03T10:15:30+01:00}.
@@ -262,7 +277,8 @@ object OffsetDateTime {
     * @return the parsed offset date-time, not null
     * @throws DateTimeParseException if the text cannot be parsed
     */
-  def parse(text: CharSequence): OffsetDateTime = parse(text, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+  def parse(text: CharSequence): OffsetDateTime =
+    parse(text, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
 
   /** Obtains an instance of {@code OffsetDateTime} from a text string using a specific formatter.
     *
@@ -276,14 +292,15 @@ object OffsetDateTime {
   def parse(text: CharSequence, formatter: DateTimeFormatter): OffsetDateTime = {
     Objects.requireNonNull(formatter, "formatter")
     formatter.parse(text, new TemporalQuery[OffsetDateTime] {
-      override def queryFrom(temporal: TemporalAccessor): OffsetDateTime = OffsetDateTime.from(temporal)
+      override def queryFrom(temporal: TemporalAccessor): OffsetDateTime =
+        OffsetDateTime.from(temporal)
     })
   }
 
   @throws(classOf[IOException])
   private[bp] def readExternal(in: DataInput): OffsetDateTime = {
     val dateTime: LocalDateTime = LocalDateTime.readExternal(in)
-    val offset: ZoneOffset = ZoneOffset.readExternal(in)
+    val offset: ZoneOffset      = ZoneOffset.readExternal(in)
     OffsetDateTime.of(dateTime, offset)
   }
 }
@@ -315,9 +332,15 @@ object OffsetDateTime {
   * @param offset  the zone offset, not null
   */
 @SerialVersionUID(2287754244819255394L)
-final class OffsetDateTime private(private val dateTime: LocalDateTime, private val offset: ZoneOffset) extends Temporal with TemporalAdjuster with Ordered[OffsetDateTime] with Serializable {
-    Objects.requireNonNull(dateTime, "dateTime")
-    Objects.requireNonNull(offset, "offset")
+final class OffsetDateTime private (
+  private val dateTime: LocalDateTime,
+  private val offset:   ZoneOffset
+) extends Temporal
+    with TemporalAdjuster
+    with Ordered[OffsetDateTime]
+    with Serializable {
+  Objects.requireNonNull(dateTime, "dateTime")
+  Objects.requireNonNull(offset, "offset")
 
   /** Returns a new date-time based on this one, returning {@code this} where possible.
     *
@@ -437,18 +460,17 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws DateTimeException if a value for the field cannot be obtained
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def get(field: TemporalField): Int = {
+  override def get(field: TemporalField): Int =
     field match {
       case f: ChronoField =>
         f match {
           case INSTANT_SECONDS => throw new DateTimeException(s"Field too large for an int: $field")
-          case OFFSET_SECONDS => getOffset.getTotalSeconds
-          case _ => dateTime.get(field)
+          case OFFSET_SECONDS  => getOffset.getTotalSeconds
+          case _               => dateTime.get(field)
         }
       case _ =>
         super.get(field)
     }
-  }
 
   /** Gets the value of the specified field from this date-time as a {@code long}.
     *
@@ -471,18 +493,17 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws DateTimeException if a value for the field cannot be obtained
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def getLong(field: TemporalField): Long = {
+  def getLong(field: TemporalField): Long =
     field match {
       case f: ChronoField =>
         f match {
           case INSTANT_SECONDS => toEpochSecond
-          case OFFSET_SECONDS => getOffset.getTotalSeconds
-          case _ => dateTime.getLong(field)
+          case OFFSET_SECONDS  => getOffset.getTotalSeconds
+          case _               => dateTime.getLong(field)
         }
       case _ =>
         field.getFrom(this)
     }
-  }
 
   /** Gets the zone offset, such as '+01:00'.
     *
@@ -531,7 +552,7 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
   def withOffsetSameInstant(offset: ZoneOffset): OffsetDateTime = {
     if (offset == this.offset)
       return this
-    val difference: Int = offset.getTotalSeconds - this.offset.getTotalSeconds
+    val difference: Int         = offset.getTotalSeconds - this.offset.getTotalSeconds
     val adjusted: LocalDateTime = dateTime.plusSeconds(difference)
     new OffsetDateTime(adjusted, offset)
   }
@@ -668,9 +689,10 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     */
   override def `with`(adjuster: TemporalAdjuster): OffsetDateTime =
     adjuster match {
-      case _: LocalDate | _: LocalTime | _: LocalDateTime => `with`(dateTime.`with`(adjuster), offset)
-      case i: Instant => OffsetDateTime.ofInstant(i, offset)
-      case z: ZoneOffset => `with`(dateTime, z)
+      case _: LocalDate | _: LocalTime | _: LocalDateTime =>
+        `with`(dateTime.`with`(adjuster), offset)
+      case i: Instant        => OffsetDateTime.ofInstant(i, offset)
+      case z: ZoneOffset     => `with`(dateTime, z)
       case o: OffsetDateTime => o
       case _ =>
         adjuster.adjustInto(this).asInstanceOf[OffsetDateTime]
@@ -718,18 +740,19 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws DateTimeException if the field cannot be set
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def `with`(field: TemporalField, newValue: Long): OffsetDateTime = {
+  def `with`(field: TemporalField, newValue: Long): OffsetDateTime =
     field match {
       case f: ChronoField =>
         f match {
-          case INSTANT_SECONDS => OffsetDateTime.ofInstant(Instant.ofEpochSecond(newValue, getNano), offset)
-          case OFFSET_SECONDS => `with`(dateTime, ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue)))
+          case INSTANT_SECONDS =>
+            OffsetDateTime.ofInstant(Instant.ofEpochSecond(newValue, getNano), offset)
+          case OFFSET_SECONDS =>
+            `with`(dateTime, ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue)))
           case _ => `with`(dateTime.`with`(field, newValue), offset)
         }
       case _ =>
         field.adjustInto(this, newValue)
     }
-  }
 
   /** Returns a copy of this {@code OffsetDateTime} with the year altered.
     * The offset does not affect the calculation and will be the same in the result.
@@ -766,7 +789,8 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws DateTimeException if the day-of-month value is invalid
     * @throws DateTimeException if the day-of-month is invalid for the month-year
     */
-  def withDayOfMonth(dayOfMonth: Int): OffsetDateTime = `with`(dateTime.withDayOfMonth(dayOfMonth), offset)
+  def withDayOfMonth(dayOfMonth: Int): OffsetDateTime =
+    `with`(dateTime.withDayOfMonth(dayOfMonth), offset)
 
   /** Returns a copy of this {@code OffsetDateTime} with the day-of-year altered.
     * If the resulting {@code OffsetDateTime} is invalid, an exception is thrown.
@@ -778,7 +802,8 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws DateTimeException if the day-of-year value is invalid
     * @throws DateTimeException if the day-of-year is invalid for the year
     */
-  def withDayOfYear(dayOfYear: Int): OffsetDateTime = `with`(dateTime.withDayOfYear(dayOfYear), offset)
+  def withDayOfYear(dayOfYear: Int): OffsetDateTime =
+    `with`(dateTime.withDayOfYear(dayOfYear), offset)
 
   /** Returns a copy of this {@code OffsetDateTime} with the hour-of-day value altered.
     *
@@ -866,7 +891,8 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws DateTimeException if the addition cannot be made
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def plus(amount: TemporalAmount): OffsetDateTime = amount.addTo(this).asInstanceOf[OffsetDateTime]
+  override def plus(amount: TemporalAmount): OffsetDateTime =
+    amount.addTo(this).asInstanceOf[OffsetDateTime]
 
   /** Returns a copy of this date-time with the specified period added.
     *
@@ -1017,7 +1043,8 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws DateTimeException if the subtraction cannot be made
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def minus(amount: TemporalAmount): OffsetDateTime = amount.subtractFrom(this).asInstanceOf[OffsetDateTime]
+  override def minus(amount: TemporalAmount): OffsetDateTime =
+    amount.subtractFrom(this).asInstanceOf[OffsetDateTime]
 
   /** Returns a copy of this date-time with the specified period subtracted.
     *
@@ -1186,14 +1213,13 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     */
   override def query[R](query: TemporalQuery[R]): R =
     query match {
-      case TemporalQueries.chronology => IsoChronology.INSTANCE.asInstanceOf[R]
-      case TemporalQueries.precision  => NANOS.asInstanceOf[R]
-      case TemporalQueries.offset
-         | TemporalQueries.zone       => getOffset.asInstanceOf[R]
-      case TemporalQueries.localDate  => toLocalDate.asInstanceOf[R]
-      case TemporalQueries.localTime  => toLocalTime.asInstanceOf[R]
-      case TemporalQueries.zoneId     => null.asInstanceOf[R]
-      case _                          => super.query(query)
+      case TemporalQueries.chronology                    => IsoChronology.INSTANCE.asInstanceOf[R]
+      case TemporalQueries.precision                     => NANOS.asInstanceOf[R]
+      case TemporalQueries.offset | TemporalQueries.zone => getOffset.asInstanceOf[R]
+      case TemporalQueries.localDate                     => toLocalDate.asInstanceOf[R]
+      case TemporalQueries.localTime                     => toLocalTime.asInstanceOf[R]
+      case TemporalQueries.zoneId                        => null.asInstanceOf[R]
+      case _                                             => super.query(query)
     }
 
   /** Adjusts the specified temporal object to have the same offset, date
@@ -1222,7 +1248,10 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws ArithmeticException if numeric overflow occurs
     */
   def adjustInto(temporal: Temporal): Temporal =
-    temporal.`with`(EPOCH_DAY, toLocalDate.toEpochDay).`with`(NANO_OF_DAY, toLocalTime.toNanoOfDay).`with`(OFFSET_SECONDS, getOffset.getTotalSeconds)
+    temporal
+      .`with`(EPOCH_DAY, toLocalDate.toEpochDay)
+      .`with`(NANO_OF_DAY, toLocalTime.toNanoOfDay)
+      .`with`(OFFSET_SECONDS, getOffset.getTotalSeconds)
 
   /** Calculates the period between this date-time and another date-time in
     * terms of the specified unit.
@@ -1294,7 +1323,8 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @param zone  the time-zone to use, not null
     * @return the zoned date-time formed from this date-time, not null
     */
-  def atZoneSameInstant(zone: ZoneId): ZonedDateTime = ZonedDateTime.ofInstant(dateTime, offset, zone)
+  def atZoneSameInstant(zone: ZoneId): ZonedDateTime =
+    ZonedDateTime.ofInstant(dateTime, offset, zone)
 
   /** Combines this date-time with a time-zone to create a {@code ZonedDateTime}
     * trying to keep the same local date and time.
@@ -1319,7 +1349,8 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @param zone  the time-zone to use, not null
     * @return the zoned date-time formed from this date and the earliest valid time for the zone, not null
     */
-  def atZoneSimilarLocal(zone: ZoneId): ZonedDateTime = ZonedDateTime.ofLocal(dateTime, zone, offset)
+  def atZoneSimilarLocal(zone: ZoneId): ZonedDateTime =
+    ZonedDateTime.ofLocal(dateTime, zone, offset)
 
   /** Gets the {@code LocalDateTime} part of this offset date-time.
     *
@@ -1430,7 +1461,7 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @return true if this is after the instant of the specified date-time
     */
   def isAfter(other: OffsetDateTime): Boolean = {
-    val thisEpochSec: Long = toEpochSecond
+    val thisEpochSec: Long  = toEpochSecond
     val otherEpochSec: Long = other.toEpochSecond
     thisEpochSec > otherEpochSec || (thisEpochSec == otherEpochSec && toLocalTime.getNano > other.toLocalTime.getNano)
   }
@@ -1445,7 +1476,7 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @return true if this is before the instant of the specified date-time
     */
   def isBefore(other: OffsetDateTime): Boolean = {
-    val thisEpochSec: Long = toEpochSecond
+    val thisEpochSec: Long  = toEpochSecond
     val otherEpochSec: Long = other.toEpochSecond
     thisEpochSec < otherEpochSec || (thisEpochSec == otherEpochSec && toLocalTime.getNano < other.toLocalTime.getNano)
   }
@@ -1473,8 +1504,9 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     */
   override def equals(obj: Any): Boolean =
     obj match {
-      case other: OffsetDateTime => (this eq other) || ((dateTime == other.dateTime) && (offset == other.offset))
-      case _                     => false
+      case other: OffsetDateTime =>
+        (this eq other) || ((dateTime == other.dateTime) && (offset == other.offset))
+      case _ => false
     }
 
   /** A hash code for this date-time.
@@ -1522,7 +1554,8 @@ final class OffsetDateTime private(private val dateTime: LocalDateTime, private 
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[bp] def writeExternal(out: DataOutput): Unit = {

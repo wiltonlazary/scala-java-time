@@ -31,9 +31,9 @@
  */
 package org.threeten.bp
 
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.{ BeforeAndAfter, FunSuite }
 import org.threeten.bp.chrono.IsoChronology
-import org.threeten.bp.format.{DateTimeFormatter, DateTimeParseException}
+import org.threeten.bp.format.{ DateTimeFormatter, DateTimeParseException }
 import org.threeten.bp.temporal.ChronoField._
 import org.threeten.bp.temporal.ChronoUnit._
 import org.threeten.bp.temporal._
@@ -41,18 +41,22 @@ import org.threeten.bp.temporal._
 /** Test LocalDate. */
 object TestLocalDate {
   private val OFFSET_PONE: ZoneOffset = ZoneOffset.ofHours(1)
-  private val ZONE_PARIS: ZoneId = ZoneId.of("Europe/Paris")
-  private val ZONE_GAZA: ZoneId = ZoneId.of("Asia/Gaza")
+  private val ZONE_PARIS: ZoneId      = ZoneId.of("Europe/Paris")
+  private val ZONE_GAZA: ZoneId       = ZoneId.of("Asia/Gaza")
 }
 
-class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper with BeforeAndAfter {
+class TestLocalDate
+    extends FunSuite
+    with GenDateTimeTest
+    with AssertionsHelper
+    with BeforeAndAfter {
   private var TEST_2007_07_15: LocalDate = null
-  private var MAX_VALID_EPOCHDAYS: Long = 0L
-  private var MIN_VALID_EPOCHDAYS: Long = 0L
-  private var MAX_DATE: LocalDate = null
-  private var MIN_DATE: LocalDate = null
-  private var MAX_INSTANT: Instant = null
-  private var MIN_INSTANT: Instant = null
+  private var MAX_VALID_EPOCHDAYS: Long  = 0L
+  private var MIN_VALID_EPOCHDAYS: Long  = 0L
+  private var MAX_DATE: LocalDate        = null
+  private var MIN_DATE: LocalDate        = null
+  private var MAX_INSTANT: Instant       = null
+  private var MIN_INSTANT: Instant       = null
 
   before {
     TEST_2007_07_15 = LocalDate.of(2007, 7, 15)
@@ -60,17 +64,34 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
     val min: LocalDate = LocalDate.MIN
     MAX_VALID_EPOCHDAYS = max.toEpochDay
     MIN_VALID_EPOCHDAYS = min.toEpochDay
-    MAX_DATE = max
-    MIN_DATE = min
-    MAX_INSTANT = max.atStartOfDay(ZoneOffset.UTC).toInstant
-    MIN_INSTANT = min.atStartOfDay(ZoneOffset.UTC).toInstant
+    MAX_DATE            = max
+    MIN_DATE            = min
+    MAX_INSTANT         = max.atStartOfDay(ZoneOffset.UTC).toInstant
+    MIN_INSTANT         = min.atStartOfDay(ZoneOffset.UTC).toInstant
   }
 
   protected def samples: List[TemporalAccessor] =
     List(TEST_2007_07_15, LocalDate.MAX, LocalDate.MIN)
 
   protected def validFields: List[TemporalField] =
-    List(DAY_OF_WEEK, ALIGNED_DAY_OF_WEEK_IN_MONTH, ALIGNED_DAY_OF_WEEK_IN_YEAR, DAY_OF_MONTH, DAY_OF_YEAR, EPOCH_DAY, ALIGNED_WEEK_OF_MONTH, ALIGNED_WEEK_OF_YEAR, MONTH_OF_YEAR, PROLEPTIC_MONTH, YEAR_OF_ERA, YEAR, ERA, JulianFields.JULIAN_DAY, JulianFields.MODIFIED_JULIAN_DAY, JulianFields.RATA_DIE)
+    List(
+      DAY_OF_WEEK,
+      ALIGNED_DAY_OF_WEEK_IN_MONTH,
+      ALIGNED_DAY_OF_WEEK_IN_YEAR,
+      DAY_OF_MONTH,
+      DAY_OF_YEAR,
+      EPOCH_DAY,
+      ALIGNED_WEEK_OF_MONTH,
+      ALIGNED_WEEK_OF_YEAR,
+      MONTH_OF_YEAR,
+      PROLEPTIC_MONTH,
+      YEAR_OF_ERA,
+      YEAR,
+      ERA,
+      JulianFields.JULIAN_DAY,
+      JulianFields.MODIFIED_JULIAN_DAY,
+      JulianFields.RATA_DIE
+    )
 
   protected def invalidFields: List[TemporalField] =
     List(ChronoField.values: _*).filterNot(validFields.contains)
@@ -83,7 +104,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
 
   test("now") {
     var expected: LocalDate = LocalDate.now(Clock.systemDefaultZone)
-    var test: LocalDate = LocalDate.now
+    var test: LocalDate     = LocalDate.now
 
     {
       var i: Int = 0
@@ -91,7 +112,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
         {
           if (expected != test) {
             expected = LocalDate.now(Clock.systemDefaultZone)
-            test = LocalDate.now
+            test     = LocalDate.now
           }
         }
         {
@@ -110,9 +131,9 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("now_ZoneId") {
-    val zone: ZoneId = ZoneId.of("UTC+01:02:03")
+    val zone: ZoneId        = ZoneId.of("UTC+01:02:03")
     var expected: LocalDate = LocalDate.now(Clock.system(zone))
-    var test: LocalDate = LocalDate.now(zone)
+    var test: LocalDate     = LocalDate.now(zone)
 
     {
       var i: Int = 0
@@ -120,7 +141,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
         {
           if (expected != test) {
             expected = LocalDate.now(Clock.system(zone))
-            test = LocalDate.now(zone)
+            test     = LocalDate.now(zone)
           }
         }
         {
@@ -144,8 +165,8 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
       while (i < (2 * 24 * 60 * 60)) {
         {
           val instant: Instant = Instant.ofEpochSecond(i)
-          val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
-          val test: LocalDate = LocalDate.now(clock)
+          val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
+          val test: LocalDate  = LocalDate.now(clock)
           assertEquals(test.getYear, 1970)
           assertEquals(test.getMonth, Month.JANUARY)
           assertEquals(test.getDayOfMonth, if (i < 24 * 60 * 60) 1 else 2)
@@ -164,7 +185,9 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
       while (i < (2 * 24 * 60 * 60)) {
         {
           val instant: Instant = Instant.ofEpochSecond(i)
-          val clock: Clock = Clock.fixed(instant.minusSeconds(TestLocalDate.OFFSET_PONE.getTotalSeconds), TestLocalDate.OFFSET_PONE)
+          val clock: Clock =
+            Clock.fixed(instant.minusSeconds(TestLocalDate.OFFSET_PONE.getTotalSeconds),
+                        TestLocalDate.OFFSET_PONE)
           val test: LocalDate = LocalDate.now(clock)
           assertEquals(test.getYear, 1970)
           assertEquals(test.getMonth, Month.JANUARY)
@@ -184,8 +207,8 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
       while (i >= -(2 * 24 * 60 * 60)) {
         {
           val instant: Instant = Instant.ofEpochSecond(i)
-          val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
-          val test: LocalDate = LocalDate.now(clock)
+          val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
+          val test: LocalDate  = LocalDate.now(clock)
           assertEquals(test.getYear, 1969)
           assertEquals(test.getMonth, Month.DECEMBER)
           assertEquals(test.getDayOfMonth, if (i >= -24 * 60 * 60) 31 else 30)
@@ -199,7 +222,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("now_Clock_maxYear") {
-    val clock: Clock = Clock.fixed(MAX_INSTANT, ZoneOffset.UTC)
+    val clock: Clock    = Clock.fixed(MAX_INSTANT, ZoneOffset.UTC)
     val test: LocalDate = LocalDate.now(clock)
     assertEquals(test, MAX_DATE)
   }
@@ -212,7 +235,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("now_Clock_minYear") {
-    val clock: Clock = Clock.fixed(MIN_INSTANT, ZoneOffset.UTC)
+    val clock: Clock    = Clock.fixed(MIN_INSTANT, ZoneOffset.UTC)
     val test: LocalDate = LocalDate.now(clock)
     assertEquals(test, MIN_DATE)
   }
@@ -371,7 +394,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   private def next(date: LocalDate): LocalDate = {
-    var _date = date
+    var _date              = date
     val newDayOfMonth: Int = _date.getDayOfMonth + 1
     if (newDayOfMonth <= _date.getMonth.length(isIsoLeap(_date.getYear))) {
       return _date.withDayOfMonth(newDayOfMonth)
@@ -384,7 +407,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   private def previous(date: LocalDate): LocalDate = {
-    var _date = date
+    var _date              = date
     val newDayOfMonth: Int = _date.getDayOfMonth - 1
     if (newDayOfMonth > 0) {
       return _date.withDayOfMonth(newDayOfMonth)
@@ -478,18 +501,19 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   def provider_sampleBadParse: List[String] =
-      List(
-        "2008/07/05",
-        "10000-01-01",
-        "2008-1-1",
-        "2008--01",
-        "ABCD-02-01",
-        "2008-AB-01",
-        "2008-02-AB",
-        "-0000-02-01",
-        "2008-02-01Z",
-        "2008-02-01+01:00",
-        "2008-02-01+01:00[Europe/Paris]")
+    List(
+      "2008/07/05",
+      "10000-01-01",
+      "2008-1-1",
+      "2008--01",
+      "ABCD-02-01",
+      "2008-AB-01",
+      "2008-02-AB",
+      "-0000-02-01",
+      "2008-02-01Z",
+      "2008-02-01+01:00",
+      "2008-02-01+01:00[Europe/Paris]"
+    )
 
   test("factory_parse_invalidText") {
     provider_sampleBadParse.foreach { unparsable =>
@@ -519,7 +543,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
 
   test("factory_parse_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("u M d")
-    val test: LocalDate = LocalDate.parse("2010 12 3", f)
+    val test: LocalDate      = LocalDate.parse("2010 12 3", f)
     assertEquals(test, LocalDate.of(2010, 12, 3))
   }
 
@@ -617,15 +641,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
     }
   }
 
-  def provider_sampleDates: List[List[Int]] = {
-    List(
-      List(2008, 7, 5),
-      List(2007, 7, 5),
-      List(2006, 7, 5),
-      List(2005, 7, 5),
-      List(2004, 1, 1),
-      List(-1, 1, 2))
-  }
+  def provider_sampleDates: List[List[Int]] =
+    List(List(2008, 7, 5),
+         List(2007, 7, 5),
+         List(2006, 7, 5),
+         List(2005, 7, 5),
+         List(2004, 1, 1),
+         List(-1, 1, 2))
 
   test("get") {
     provider_sampleDates.foreach {
@@ -643,7 +665,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
     provider_sampleDates.foreach {
       case (y: Int) :: (m: Int) :: (d: Int) :: Nil =>
         val a: LocalDate = LocalDate.of(y, m, d)
-        var total: Int = 0
+        var total: Int   = 0
 
         {
           var i: Int = 1
@@ -739,9 +761,8 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   test("with_adjustment") {
     val sample: LocalDate = LocalDate.of(2012, 3, 4)
     val adjuster: TemporalAdjuster = new TemporalAdjuster() {
-      def adjustInto(dateTime: Temporal): Temporal = {
+      def adjustInto(dateTime: Temporal): Temporal =
         sample
-      }
     }
     assertEquals(TEST_2007_07_15.`with`(adjuster), sample)
   }
@@ -793,7 +814,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("withYear_int_adjustDay") {
-    val t: LocalDate = LocalDate.of(2008, 2, 29).withYear(2007)
+    val t: LocalDate        = LocalDate.of(2008, 2, 29).withYear(2007)
     val expected: LocalDate = LocalDate.of(2007, 2, 28)
     assertEquals(t, expected)
   }
@@ -810,7 +831,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("withMonth_int_adjustDay") {
-    val t: LocalDate = LocalDate.of(2007, 12, 31).withMonth(11)
+    val t: LocalDate        = LocalDate.of(2007, 12, 31).withMonth(11)
     val expected: LocalDate = LocalDate.of(2007, 11, 30)
     assertEquals(t, expected)
   }
@@ -851,13 +872,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
 
   test("plus_Period_positiveMonths") {
     val period: MockSimplePeriod = MockSimplePeriod.of(7, ChronoUnit.MONTHS)
-    val t: LocalDate = TEST_2007_07_15.plus(period)
+    val t: LocalDate             = TEST_2007_07_15.plus(period)
     assertEquals(t, LocalDate.of(2008, 2, 15))
   }
 
   test("plus_Period_negativeDays") {
     val period: MockSimplePeriod = MockSimplePeriod.of(-25, ChronoUnit.DAYS)
-    val t: LocalDate = TEST_2007_07_15.plus(period)
+    val t: LocalDate             = TEST_2007_07_15.plus(period)
     assertEquals(t, LocalDate.of(2007, 6, 20))
   }
 
@@ -933,13 +954,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("plusYears_long_adjustDay") {
-    val t: LocalDate = LocalDate.of(2008, 2, 29).plusYears(1)
+    val t: LocalDate        = LocalDate.of(2008, 2, 29).plusYears(1)
     val expected: LocalDate = LocalDate.of(2009, 2, 28)
     assertEquals(t, expected)
   }
 
   test("plusYears_long_big") {
-    val years: Long = 20L + Year.MAX_VALUE
+    val years: Long     = 20L + Year.MAX_VALUE
     val test: LocalDate = LocalDate.of(-40, 6, 1).plusYears(years)
     assertEquals(test, LocalDate.of((-40L + years).toInt, 6, 1))
   }
@@ -1003,19 +1024,19 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("plusMonths_long_adjustDayFromLeapYear") {
-    val t: LocalDate = LocalDate.of(2008, 2, 29).plusMonths(12)
+    val t: LocalDate        = LocalDate.of(2008, 2, 29).plusMonths(12)
     val expected: LocalDate = LocalDate.of(2009, 2, 28)
     assertEquals(t, expected)
   }
 
   test("plusMonths_long_adjustDayFromMonthLength") {
-    val t: LocalDate = LocalDate.of(2007, 3, 31).plusMonths(1)
+    val t: LocalDate        = LocalDate.of(2007, 3, 31).plusMonths(1)
     val expected: LocalDate = LocalDate.of(2007, 4, 30)
     assertEquals(t, expected)
   }
 
   test("plusMonths_long_big") {
-    val months: Long = 20L + Integer.MAX_VALUE
+    val months: Long    = 20L + Integer.MAX_VALUE
     val test: LocalDate = LocalDate.of(-40, 6, 1).plusMonths(months)
     assertEquals(test, LocalDate.of((-40L + months / 12).toInt, 6 + (months % 12).toInt, 1))
   }
@@ -1082,13 +1103,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("plusWeeks_maximum") {
-    val t: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 24).plusWeeks(1)
+    val t: LocalDate        = LocalDate.of(Year.MAX_VALUE, 12, 24).plusWeeks(1)
     val expected: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 31)
     assertEquals(t, expected)
   }
 
   test("plusWeeks_minimum") {
-    val t: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 8).plusWeeks(-1)
+    val t: LocalDate        = LocalDate.of(Year.MIN_VALUE, 1, 8).plusWeeks(-1)
     val expected: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 1)
     assertEquals(t, expected)
   }
@@ -1153,13 +1174,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("plusDays_maximum") {
-    val t: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 30).plusDays(1)
+    val t: LocalDate        = LocalDate.of(Year.MAX_VALUE, 12, 30).plusDays(1)
     val expected: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 31)
     assertEquals(t, expected)
   }
 
   test("plusDays_minimum") {
-    val t: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 2).plusDays(-1)
+    val t: LocalDate        = LocalDate.of(Year.MIN_VALUE, 1, 2).plusDays(-1)
     val expected: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 1)
     assertEquals(t, expected)
   }
@@ -1190,13 +1211,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
 
   test("minus_Period_positiveMonths") {
     val period: MockSimplePeriod = MockSimplePeriod.of(7, ChronoUnit.MONTHS)
-    val t: LocalDate = TEST_2007_07_15.minus(period)
+    val t: LocalDate             = TEST_2007_07_15.minus(period)
     assertEquals(t, LocalDate.of(2006, 12, 15))
   }
 
   test("minus_Period_negativeDays") {
     val period: MockSimplePeriod = MockSimplePeriod.of(-25, ChronoUnit.DAYS)
-    val t: LocalDate = TEST_2007_07_15.minus(period)
+    val t: LocalDate             = TEST_2007_07_15.minus(period)
     assertEquals(t, LocalDate.of(2007, 8, 9))
   }
 
@@ -1272,13 +1293,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("minusYears_long_adjustDay") {
-    val t: LocalDate = LocalDate.of(2008, 2, 29).minusYears(1)
+    val t: LocalDate        = LocalDate.of(2008, 2, 29).minusYears(1)
     val expected: LocalDate = LocalDate.of(2007, 2, 28)
     assertEquals(t, expected)
   }
 
   test("minusYears_long_big") {
-    val years: Long = 20L + Year.MAX_VALUE
+    val years: Long     = 20L + Year.MAX_VALUE
     val test: LocalDate = LocalDate.of(40, 6, 1).minusYears(years)
     assertEquals(test, LocalDate.of((40L - years).toInt, 6, 1))
   }
@@ -1336,19 +1357,19 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("minusMonths_long_adjustDayFromLeapYear") {
-    val t: LocalDate = LocalDate.of(2008, 2, 29).minusMonths(12)
+    val t: LocalDate        = LocalDate.of(2008, 2, 29).minusMonths(12)
     val expected: LocalDate = LocalDate.of(2007, 2, 28)
     assertEquals(t, expected)
   }
 
   test("minusMonths_long_adjustDayFromMonthLength") {
-    val t: LocalDate = LocalDate.of(2007, 3, 31).minusMonths(1)
+    val t: LocalDate        = LocalDate.of(2007, 3, 31).minusMonths(1)
     val expected: LocalDate = LocalDate.of(2007, 2, 28)
     assertEquals(t, expected)
   }
 
   test("minusMonths_long_big") {
-    val months: Long = 20L + Integer.MAX_VALUE
+    val months: Long    = 20L + Integer.MAX_VALUE
     val test: LocalDate = LocalDate.of(40, 6, 1).minusMonths(months)
     assertEquals(test, LocalDate.of((40L - months / 12).toInt, 6 - (months % 12).toInt, 1))
   }
@@ -1415,13 +1436,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("minusWeeks_maximum") {
-    val t: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 24).minusWeeks(-1)
+    val t: LocalDate        = LocalDate.of(Year.MAX_VALUE, 12, 24).minusWeeks(-1)
     val expected: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 31)
     assertEquals(t, expected)
   }
 
   test("minusWeeks_minimum") {
-    val t: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 8).minusWeeks(1)
+    val t: LocalDate        = LocalDate.of(Year.MIN_VALUE, 1, 8).minusWeeks(1)
     val expected: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 1)
     assertEquals(t, expected)
   }
@@ -1486,13 +1507,13 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("minusDays_maximum") {
-    val t: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 30).minusDays(-1)
+    val t: LocalDate        = LocalDate.of(Year.MAX_VALUE, 12, 30).minusDays(-1)
     val expected: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 31)
     assertEquals(t, expected)
   }
 
   test("minusDays_minimum") {
-    val t: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 2).minusDays(1)
+    val t: LocalDate        = LocalDate.of(Year.MIN_VALUE, 1, 2).minusDays(1)
     val expected: LocalDate = LocalDate.of(Year.MIN_VALUE, 1, 1)
     assertEquals(t, expected)
   }
@@ -1546,13 +1567,14 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
       List("2012-06-30", "2012-07-07", MILLENNIA, 0),
       List("2012-06-30", "2012-07-29", MONTHS, 0),
       List("2012-06-30", "2012-07-30", MONTHS, 1),
-      List("2012-06-30", "2012-07-31", MONTHS, 1))
+      List("2012-06-30", "2012-07-31", MONTHS, 1)
+    )
 
   test("until") {
     provider_until.foreach {
       case (startStr: String) :: (endStr: String) :: (unit: TemporalUnit) :: (expected: Int) :: Nil =>
         val start: LocalDate = LocalDate.parse(startStr)
-        val end: LocalDate = LocalDate.parse(endStr)
+        val end: LocalDate   = LocalDate.parse(endStr)
         assertEquals(start.until(end, unit), expected)
         assertEquals(end.until(start, unit), -expected)
       case _ =>
@@ -1715,12 +1737,14 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
 
   test("atStartOfDay") {
     val t: LocalDate = LocalDate.of(2008, 6, 30)
-    assertEquals(t.atStartOfDay(TestLocalDate.ZONE_PARIS), ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 0, 0), TestLocalDate.ZONE_PARIS))
+    assertEquals(t.atStartOfDay(TestLocalDate.ZONE_PARIS),
+                 ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 0, 0), TestLocalDate.ZONE_PARIS))
   }
 
   test("atStartOfDay_dstGap") {
     val t: LocalDate = LocalDate.of(2007, 4, 1)
-    assertEquals(t.atStartOfDay(TestLocalDate.ZONE_GAZA), ZonedDateTime.of(LocalDateTime.of(2007, 4, 1, 1, 0), TestLocalDate.ZONE_GAZA))
+    assertEquals(t.atStartOfDay(TestLocalDate.ZONE_GAZA),
+                 ZonedDateTime.of(LocalDateTime.of(2007, 4, 1, 1, 0), TestLocalDate.ZONE_GAZA))
   }
 
   test("atStartOfDay_nullTimeZone") {
@@ -1732,7 +1756,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
 
   test("toEpochDay") {
     val date_0000_01_01: Long = -678941 - 40587
-    var test: LocalDate = LocalDate.of(0, 1, 1)
+    var test: LocalDate       = LocalDate.of(0, 1, 1)
 
     {
       var i: Long = date_0000_01_01
@@ -1770,51 +1794,65 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
   }
 
   test("comparisons") {
-    doTest_comparisons_LocalDate(LocalDate.of(Year.MIN_VALUE, 1, 1), LocalDate.of(Year.MIN_VALUE, 12, 31), LocalDate.of(-1, 1, 1), LocalDate.of(-1, 12, 31), LocalDate.of(0, 1, 1), LocalDate.of(0, 12, 31), LocalDate.of(1, 1, 1), LocalDate.of(1, 12, 31), LocalDate.of(2006, 1, 1), LocalDate.of(2006, 12, 31), LocalDate.of(2007, 1, 1), LocalDate.of(2007, 12, 31), LocalDate.of(2008, 1, 1), LocalDate.of(2008, 2, 29), LocalDate.of(2008, 12, 31), LocalDate.of(Year.MAX_VALUE, 1, 1), LocalDate.of(Year.MAX_VALUE, 12, 31))
+    doTest_comparisons_LocalDate(
+      LocalDate.of(Year.MIN_VALUE, 1, 1),
+      LocalDate.of(Year.MIN_VALUE, 12, 31),
+      LocalDate.of(-1, 1, 1),
+      LocalDate.of(-1, 12, 31),
+      LocalDate.of(0, 1, 1),
+      LocalDate.of(0, 12, 31),
+      LocalDate.of(1, 1, 1),
+      LocalDate.of(1, 12, 31),
+      LocalDate.of(2006, 1, 1),
+      LocalDate.of(2006, 12, 31),
+      LocalDate.of(2007, 1, 1),
+      LocalDate.of(2007, 12, 31),
+      LocalDate.of(2008, 1, 1),
+      LocalDate.of(2008, 2, 29),
+      LocalDate.of(2008, 12, 31),
+      LocalDate.of(Year.MAX_VALUE, 1, 1),
+      LocalDate.of(Year.MAX_VALUE, 12, 31)
+    )
   }
 
   def doTest_comparisons_LocalDate(localDates: LocalDate*): Unit = {
-    {
-      var i: Int = 0
-      while (i < localDates.length) {
-        {
-          val a: LocalDate = localDates(i)
+    var i: Int = 0
+    while (i < localDates.length) {
+      {
+        val a: LocalDate = localDates(i)
 
-          {
-            var j: Int = 0
-            while (j < localDates.length) {
-              {
-                val b: LocalDate = localDates(j)
-                if (i < j) {
-                  assertTrue(a.compareTo(b) < 0)
-                  assertEquals(a.isBefore(b), true, a + " <=> " + b)
-                  assertEquals(a.isAfter(b), false, a + " <=> " + b)
-                  assertEquals(a == b, false, a + " <=> " + b)
-                }
-                else if (i > j) {
-                  assertTrue(a.compareTo(b) > 0)
-                  assertEquals(a.isBefore(b), false, a + " <=> " + b)
-                  assertEquals(a.isAfter(b), true, a + " <=> " + b)
-                  assertEquals(a == b, false, a + " <=> " + b)
-                }
-                else {
-                  assertEquals(a.compareTo(b), 0, a + " <=> " + b)
-                  assertEquals(a.isBefore(b), false, a + " <=> " + b)
-                  assertEquals(a.isAfter(b), false, a + " <=> " + b)
-                  assertEquals(a == b, true, a + " <=> " + b)
-                }
+        {
+          var j: Int = 0
+          while (j < localDates.length) {
+            {
+              val b: LocalDate = localDates(j)
+              if (i < j) {
+                assertTrue(a.compareTo(b) < 0)
+                assertEquals(a.isBefore(b), true, a + " <=> " + b)
+                assertEquals(a.isAfter(b), false, a + " <=> " + b)
+                assertEquals(a == b, false, a + " <=> " + b)
+              } else if (i > j) {
+                assertTrue(a.compareTo(b) > 0)
+                assertEquals(a.isBefore(b), false, a + " <=> " + b)
+                assertEquals(a.isAfter(b), true, a + " <=> " + b)
+                assertEquals(a == b, false, a + " <=> " + b)
+              } else {
+                assertEquals(a.compareTo(b), 0, a + " <=> " + b)
+                assertEquals(a.isBefore(b), false, a + " <=> " + b)
+                assertEquals(a.isAfter(b), false, a + " <=> " + b)
+                assertEquals(a == b, true, a + " <=> " + b)
               }
-              {
-                j += 1
-                j - 1
-              }
+            }
+            {
+              j += 1
+              j - 1
             }
           }
         }
-        {
-          i += 1
-          i - 1
-        }
+      }
+      {
+        i += 1
+        i - 1
       }
     }
   }
@@ -1917,7 +1955,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
     }
   }
 
-  def provider_sampleToString: List[List[Any]] = {
+  def provider_sampleToString: List[List[Any]] =
     List(
       List(2008, 7, 5, "2008-07-05"),
       List(2007, 12, 31, "2007-12-31"),
@@ -1928,14 +1966,14 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
       List(10000, 1, 1, "+10000-01-01"),
       List(-10000, 1, 1, "-10000-01-01"),
       List(12345678, 1, 1, "+12345678-01-01"),
-      List(-12345678, 1, 1, "-12345678-01-01"))
-  }
+      List(-12345678, 1, 1, "-12345678-01-01")
+    )
 
   test("toString") {
     provider_sampleToString.foreach {
       case (y: Int) :: (m: Int) :: (d: Int) :: (expected: String) :: Nil =>
         val t: LocalDate = LocalDate.of(y, m, d)
-        val str: String = t.toString
+        val str: String  = t.toString
         assertEquals(str, expected)
       case _ =>
         fail()
@@ -1944,7 +1982,7 @@ class TestLocalDate extends FunSuite with GenDateTimeTest with AssertionsHelper 
 
   test("format_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("y M d")
-    val t: String = LocalDate.of(2010, 12, 3).format(f)
+    val t: String            = LocalDate.of(2010, 12, 3).format(f)
     assertEquals(t, "2010 12 3")
   }
 

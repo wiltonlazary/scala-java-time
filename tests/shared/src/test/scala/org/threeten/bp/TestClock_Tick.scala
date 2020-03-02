@@ -35,10 +35,11 @@ import org.scalatest.FunSuite
 
 /** Test tick clock. */
 object TestClock_Tick {
-  val MOSCOW: ZoneId = ZoneId.of("Europe/Moscow")
-  val PARIS: ZoneId = ZoneId.of("Europe/Paris")
+  val MOSCOW: ZoneId   = ZoneId.of("Europe/Moscow")
+  val PARIS: ZoneId    = ZoneId.of("Europe/Paris")
   val AMOUNT: Duration = Duration.ofSeconds(2)
-  val ZDT: ZonedDateTime = LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2))
+  val ZDT: ZonedDateTime =
+    LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2))
   val INSTANT: Instant = ZDT.toInstant
 }
 
@@ -48,7 +49,10 @@ class TestClock_Tick extends FunSuite with AssertionsHelper {
       var i: Int = 0
       while (i < 1000) {
         {
-          val test: Clock = Clock.tick(Clock.fixed(TestClock_Tick.ZDT.withNano(i * 1000000).toInstant, TestClock_Tick.PARIS), Duration.ofMillis(250))
+          val test: Clock = Clock.tick(
+            Clock.fixed(TestClock_Tick.ZDT.withNano(i * 1000000).toInstant, TestClock_Tick.PARIS),
+            Duration.ofMillis(250)
+          )
           assertEquals(test.instant, TestClock_Tick.ZDT.withNano((i / 250) * 250000000).toInstant)
           assertEquals(test.getZone, TestClock_Tick.PARIS)
         }
@@ -65,7 +69,10 @@ class TestClock_Tick extends FunSuite with AssertionsHelper {
       var i: Int = 0
       while (i < 1000) {
         {
-          val test: Clock = Clock.tick(Clock.fixed(TestClock_Tick.ZDT.withNano(i * 1000).toInstant, TestClock_Tick.PARIS), Duration.ofNanos(250000))
+          val test: Clock = Clock.tick(
+            Clock.fixed(TestClock_Tick.ZDT.withNano(i * 1000).toInstant, TestClock_Tick.PARIS),
+            Duration.ofNanos(250000)
+          )
           assertEquals(test.instant, TestClock_Tick.ZDT.withNano((i / 250) * 250000).toInstant)
           assertEquals(test.getZone, TestClock_Tick.PARIS)
         }
@@ -82,7 +89,9 @@ class TestClock_Tick extends FunSuite with AssertionsHelper {
       var i: Int = 0
       while (i < 1000) {
         {
-          val test: Clock = Clock.tick(Clock.fixed(TestClock_Tick.ZDT.withNano(i).toInstant, TestClock_Tick.PARIS), Duration.ofNanos(20))
+          val test: Clock =
+            Clock.tick(Clock.fixed(TestClock_Tick.ZDT.withNano(i).toInstant, TestClock_Tick.PARIS),
+                       Duration.ofNanos(20))
           assertEquals(test.instant, TestClock_Tick.ZDT.withNano((i / 20) * 20).toInstant)
           assertEquals(test.getZone, TestClock_Tick.PARIS)
         }
@@ -96,13 +105,13 @@ class TestClock_Tick extends FunSuite with AssertionsHelper {
 
   test("tick_ClockDuration_zeroDuration") {
     val underlying: Clock = Clock.system(TestClock_Tick.PARIS)
-    val test: Clock = Clock.tick(underlying, Duration.ZERO)
+    val test: Clock       = Clock.tick(underlying, Duration.ZERO)
     assertSame(test, underlying)
   }
 
   test("tick_ClockDuration_1nsDuration") {
     val underlying: Clock = Clock.system(TestClock_Tick.PARIS)
-    val test: Clock = Clock.tick(underlying, Duration.ofNanos(1))
+    val test: Clock       = Clock.tick(underlying, Duration.ofNanos(1))
     assertSame(test, underlying)
   }
 
@@ -185,14 +194,14 @@ class TestClock_Tick extends FunSuite with AssertionsHelper {
   }
 
   test("withZone") {
-    val test: Clock = Clock.tick(Clock.system(TestClock_Tick.PARIS), Duration.ofMillis(500))
+    val test: Clock    = Clock.tick(Clock.system(TestClock_Tick.PARIS), Duration.ofMillis(500))
     val changed: Clock = test.withZone(TestClock_Tick.MOSCOW)
     assertEquals(test.getZone, TestClock_Tick.PARIS)
     assertEquals(changed.getZone, TestClock_Tick.MOSCOW)
   }
 
   test("withZone_same") {
-    val test: Clock = Clock.tick(Clock.system(TestClock_Tick.PARIS), Duration.ofMillis(500))
+    val test: Clock    = Clock.tick(Clock.system(TestClock_Tick.PARIS), Duration.ofMillis(500))
     val changed: Clock = test.withZone(TestClock_Tick.PARIS)
     assertSame(test, changed)
   }

@@ -68,12 +68,14 @@ import org.threeten.bp.zone.ZoneRules
 
 @SerialVersionUID(6207766400415563566L)
 object LocalDateTime {
+
   /** The minimum supported {@code LocalDateTime}, '-999999999-01-01T00:00:00'.
     * This is the local date-time of midnight at the start of the minimum date.
     * This combines {@link LocalDate#MIN} and {@link LocalTime#MIN}.
     * This could be used by an application as a "far past" date-time.
     */
   val MIN: LocalDateTime = LocalDateTime.of(LocalDate.MIN, LocalTime.MIN)
+
   /** The maximum supported {@code LocalDateTime}, '+999999999-12-31T23:59:59.999999999'.
     * This is the local date-time just before midnight at the end of the maximum date.
     * This combines {@link LocalDate#MAX} and {@link LocalTime#MAX}.
@@ -117,7 +119,7 @@ object LocalDateTime {
     */
   def now(clock: Clock): LocalDateTime = {
     Objects.requireNonNull(clock, "clock")
-    val now: Instant = clock.instant
+    val now: Instant       = clock.instant
     val offset: ZoneOffset = clock.getZone.getRules.getOffset(now)
     ofEpochSecond(now.getEpochSecond, now.getNano, offset)
   }
@@ -159,7 +161,14 @@ object LocalDateTime {
     * @throws DateTimeException if the value of any field is out of range
     * @throws DateTimeException if the day-of-month is invalid for the month-year
     */
-  def of(year: Int, month: Month, dayOfMonth: Int, hour: Int, minute: Int, second: Int): LocalDateTime = {
+  def of(
+    year:       Int,
+    month:      Month,
+    dayOfMonth: Int,
+    hour:       Int,
+    minute:     Int,
+    second:     Int
+  ): LocalDateTime = {
     val date: LocalDate = LocalDate.of(year, month, dayOfMonth)
     val time: LocalTime = LocalTime.of(hour, minute, second)
     new LocalDateTime(date, time)
@@ -181,7 +190,15 @@ object LocalDateTime {
     * @throws DateTimeException if the value of any field is out of range
     * @throws DateTimeException if the day-of-month is invalid for the month-year
     */
-  def of(year: Int, month: Month, dayOfMonth: Int, hour: Int, minute: Int, second: Int, nanoOfSecond: Int): LocalDateTime = {
+  def of(
+    year:         Int,
+    month:        Month,
+    dayOfMonth:   Int,
+    hour:         Int,
+    minute:       Int,
+    second:       Int,
+    nanoOfSecond: Int
+  ): LocalDateTime = {
     val date: LocalDate = LocalDate.of(year, month, dayOfMonth)
     val time: LocalTime = LocalTime.of(hour, minute, second, nanoOfSecond)
     new LocalDateTime(date, time)
@@ -224,7 +241,14 @@ object LocalDateTime {
     * @throws DateTimeException if the value of any field is out of range
     * @throws DateTimeException if the day-of-month is invalid for the month-year
     */
-  def of(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second: Int): LocalDateTime = {
+  def of(
+    year:       Int,
+    month:      Int,
+    dayOfMonth: Int,
+    hour:       Int,
+    minute:     Int,
+    second:     Int
+  ): LocalDateTime = {
     val date: LocalDate = LocalDate.of(year, month, dayOfMonth)
     val time: LocalTime = LocalTime.of(hour, minute, second)
     new LocalDateTime(date, time)
@@ -246,7 +270,15 @@ object LocalDateTime {
     * @throws DateTimeException if the value of any field is out of range
     * @throws DateTimeException if the day-of-month is invalid for the month-year
     */
-  def of(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second: Int, nanoOfSecond: Int): LocalDateTime = {
+  def of(
+    year:         Int,
+    month:        Int,
+    dayOfMonth:   Int,
+    hour:         Int,
+    minute:       Int,
+    second:       Int,
+    nanoOfSecond: Int
+  ): LocalDateTime = {
     val date: LocalDate = LocalDate.of(year, month, dayOfMonth)
     val time: LocalTime = LocalTime.of(hour, minute, second, nanoOfSecond)
     new LocalDateTime(date, time)
@@ -279,7 +311,7 @@ object LocalDateTime {
   def ofInstant(instant: Instant, zone: ZoneId): LocalDateTime = {
     Objects.requireNonNull(instant, "instant")
     Objects.requireNonNull(zone, "zone")
-    val rules: ZoneRules = zone.getRules
+    val rules: ZoneRules   = zone.getRules
     val offset: ZoneOffset = rules.getOffset(instant)
     ofEpochSecond(instant.getEpochSecond, instant.getNano, offset)
   }
@@ -299,11 +331,11 @@ object LocalDateTime {
     */
   def ofEpochSecond(epochSecond: Long, nanoOfSecond: Int, offset: ZoneOffset): LocalDateTime = {
     Objects.requireNonNull(offset, "offset")
-    val localSecond: Long = epochSecond + offset.getTotalSeconds
+    val localSecond: Long   = epochSecond + offset.getTotalSeconds
     val localEpochDay: Long = Math.floorDiv(localSecond, SECONDS_PER_DAY)
-    val secsOfDay: Int = Math.floorMod(localSecond, SECONDS_PER_DAY).toInt
-    val date: LocalDate = LocalDate.ofEpochDay(localEpochDay)
-    val time: LocalTime = LocalTime.ofSecondOfDay(secsOfDay, nanoOfSecond)
+    val secsOfDay: Int      = Math.floorMod(localSecond, SECONDS_PER_DAY).toInt
+    val date: LocalDate     = LocalDate.ofEpochDay(localEpochDay)
+    val time: LocalTime     = LocalTime.ofSecondOfDay(secsOfDay, nanoOfSecond)
     new LocalDateTime(date, time)
   }
 
@@ -330,12 +362,13 @@ object LocalDateTime {
           val date: LocalDate = LocalDate.from(temporal)
           val time: LocalTime = LocalTime.from(temporal)
           new LocalDateTime(date, time)
-        }
-        catch {
+        } catch {
           case ex: DateTimeException =>
-            throw new DateTimeException(s"Unable to obtain LocalDateTime from TemporalAccessor: $temporal, type ${temporal.getClass.getName}")
+            throw new DateTimeException(
+              s"Unable to obtain LocalDateTime from TemporalAccessor: $temporal, type ${temporal.getClass.getName}"
+            )
         }
-  }
+    }
 
   /** Obtains an instance of {@code LocalDateTime} from a text string such as {@code 2007-12-03T10:15:30}.
     *
@@ -360,7 +393,8 @@ object LocalDateTime {
   def parse(text: CharSequence, formatter: DateTimeFormatter): LocalDateTime = {
     Objects.requireNonNull(formatter, "formatter")
     formatter.parse(text, new TemporalQuery[LocalDateTime] {
-      override def queryFrom(temporal: TemporalAccessor): LocalDateTime = LocalDateTime.from(temporal)
+      override def queryFrom(temporal: TemporalAccessor): LocalDateTime =
+        LocalDateTime.from(temporal)
     })
   }
 
@@ -404,7 +438,11 @@ object LocalDateTime {
   * @param time  the time part of the date-time, validated not null
   */
 @SerialVersionUID(6207766400415563566L)
-final class LocalDateTime private(private val date: LocalDate, private val time: LocalTime) extends ChronoLocalDateTime[LocalDate] with Temporal with TemporalAdjuster with Serializable {
+final class LocalDateTime private (private val date: LocalDate, private val time: LocalTime)
+    extends ChronoLocalDateTime[LocalDate]
+    with Temporal
+    with TemporalAdjuster
+    with Serializable {
 
   /** Returns a copy of this date-time with the new date and time, checking
     * to see if a new object is in fact required.
@@ -475,7 +513,7 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
   def isSupported(unit: TemporalUnit): Boolean =
     unit match {
       case _: ChronoUnit => unit.isDateBased || unit.isTimeBased
-      case _ => unit != null && unit.isSupportedBy(this)
+      case _             => unit != null && unit.isSupportedBy(this)
     }
 
   /** Gets the range of valid values for the specified field.
@@ -702,8 +740,8 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     */
   override def `with`(adjuster: TemporalAdjuster): LocalDateTime =
     adjuster match {
-      case l: LocalDate => `with`(l, time)
-      case l: LocalTime => `with`(date, l)
+      case l: LocalDate     => `with`(l, time)
+      case l: LocalTime     => `with`(date, l)
       case l: LocalDateTime => l
       case _ =>
         adjuster.adjustInto(this).asInstanceOf[LocalDateTime]
@@ -809,7 +847,6 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
   def withHour(hour: Int): LocalDateTime =
     `with`(date, time.withHour(hour))
 
-
   /** Returns a copy of this {@code LocalDateTime} with the minute-of-hour value altered.
     *
     * This instance is immutable and unaffected by this method call.
@@ -884,7 +921,8 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @throws DateTimeException if the addition cannot be made
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def plus(amount: TemporalAmount): LocalDateTime = amount.addTo(this).asInstanceOf[LocalDateTime]
+  override def plus(amount: TemporalAmount): LocalDateTime =
+    amount.addTo(this).asInstanceOf[LocalDateTime]
 
   /** Returns a copy of this date-time with the specified period added.
     *
@@ -906,13 +944,16 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
         import ChronoUnit._
         f match {
           case NANOS => plusNanos(amountToAdd)
-          case MICROS => plusDays(amountToAdd / MICROS_PER_DAY).plusNanos((amountToAdd % MICROS_PER_DAY) * 1000)
-          case MILLIS => plusDays(amountToAdd / MILLIS_PER_DAY).plusNanos((amountToAdd % MILLIS_PER_DAY) * 1000000)
-          case SECONDS => plusSeconds(amountToAdd)
-          case MINUTES => plusMinutes(amountToAdd)
-          case HOURS => plusHours(amountToAdd)
+          case MICROS =>
+            plusDays(amountToAdd / MICROS_PER_DAY).plusNanos((amountToAdd % MICROS_PER_DAY) * 1000)
+          case MILLIS =>
+            plusDays(amountToAdd / MILLIS_PER_DAY)
+              .plusNanos((amountToAdd % MILLIS_PER_DAY) * 1000000)
+          case SECONDS   => plusSeconds(amountToAdd)
+          case MINUTES   => plusMinutes(amountToAdd)
+          case HOURS     => plusHours(amountToAdd)
           case HALF_DAYS => plusDays(amountToAdd / 256).plusHours((amountToAdd % 256) * 12)
-          case _ => `with`(date.plus(amountToAdd, unit), time)
+          case _         => `with`(date.plus(amountToAdd, unit), time)
         }
       case _ =>
         unit.addTo(this, amountToAdd)
@@ -1059,7 +1100,8 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @throws DateTimeException if the subtraction cannot be made
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def minus(amount: TemporalAmount): LocalDateTime = amount.subtractFrom(this).asInstanceOf[LocalDateTime]
+  override def minus(amount: TemporalAmount): LocalDateTime =
+    amount.subtractFrom(this).asInstanceOf[LocalDateTime]
 
   /** Returns a copy of this date-time with the specified period subtracted.
     *
@@ -1213,16 +1255,25 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @param sign  the sign to determine add or subtract
     * @return the combined result, not null
     */
-  private def plusWithOverflow(newDate: LocalDate, hours: Long, minutes: Long, seconds: Long, nanos: Long, sign: Int): LocalDateTime = {
+  private def plusWithOverflow(
+    newDate: LocalDate,
+    hours:   Long,
+    minutes: Long,
+    seconds: Long,
+    nanos:   Long,
+    sign:    Int
+  ): LocalDateTime = {
     if ((hours | minutes | seconds | nanos) == 0)
       return `with`(newDate, time)
-    var totDays: Long = nanos / NANOS_PER_DAY + seconds / SECONDS_PER_DAY + minutes / MINUTES_PER_DAY + hours / HOURS_PER_DAY
+    var totDays: Long =
+      nanos / NANOS_PER_DAY + seconds / SECONDS_PER_DAY + minutes / MINUTES_PER_DAY + hours / HOURS_PER_DAY
     totDays *= sign
-    var totNanos: Long = nanos % NANOS_PER_DAY + (seconds % SECONDS_PER_DAY) * NANOS_PER_SECOND + (minutes % MINUTES_PER_DAY) * NANOS_PER_MINUTE + (hours % HOURS_PER_DAY) * NANOS_PER_HOUR
+    var totNanos: Long =
+      nanos % NANOS_PER_DAY + (seconds % SECONDS_PER_DAY) * NANOS_PER_SECOND + (minutes % MINUTES_PER_DAY) * NANOS_PER_MINUTE + (hours % HOURS_PER_DAY) * NANOS_PER_HOUR
     val curNoD: Long = time.toNanoOfDay
     totNanos = totNanos * sign + curNoD
     totDays += Math.floorDiv(totNanos, NANOS_PER_DAY)
-    val newNoD: Long = Math.floorMod(totNanos, NANOS_PER_DAY)
+    val newNoD: Long       = Math.floorMod(totNanos, NANOS_PER_DAY)
     val newTime: LocalTime = if (newNoD == curNoD) time else LocalTime.ofNanoOfDay(newNoD)
     `with`(newDate.plusDays(totDays), newTime)
   }
@@ -1340,15 +1391,20 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
             case MICROS =>
               return Math.addExact(Math.multiplyExact(daysUntil, MICROS_PER_DAY), timeUntil / 1000)
             case MILLIS =>
-              return Math.addExact(Math.multiplyExact(daysUntil, MILLIS_PER_DAY), timeUntil / 1000000)
+              return Math.addExact(Math.multiplyExact(daysUntil, MILLIS_PER_DAY),
+                                   timeUntil / 1000000)
             case SECONDS =>
-              return Math.addExact(Math.multiplyExact(daysUntil, SECONDS_PER_DAY), timeUntil / NANOS_PER_SECOND)
+              return Math.addExact(Math.multiplyExact(daysUntil, SECONDS_PER_DAY),
+                                   timeUntil / NANOS_PER_SECOND)
             case MINUTES =>
-              return Math.addExact(Math.multiplyExact(daysUntil, MINUTES_PER_DAY), timeUntil / NANOS_PER_MINUTE)
+              return Math.addExact(Math.multiplyExact(daysUntil, MINUTES_PER_DAY),
+                                   timeUntil / NANOS_PER_MINUTE)
             case HOURS =>
-              return Math.addExact(Math.multiplyExact(daysUntil, HOURS_PER_DAY), timeUntil / NANOS_PER_HOUR)
+              return Math.addExact(Math.multiplyExact(daysUntil, HOURS_PER_DAY),
+                                   timeUntil / NANOS_PER_HOUR)
             case HALF_DAYS =>
-              return Math.addExact(Math.multiplyExact(daysUntil, 2), timeUntil / (NANOS_PER_HOUR * 12))
+              return Math.addExact(Math.multiplyExact(daysUntil, 2),
+                                   timeUntil / (NANOS_PER_HOUR * 12))
             case _ => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
 
           }
@@ -1441,7 +1497,7 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
   override def compareTo(other: ChronoLocalDateTime[_]): Int =
     other match {
       case l: LocalDateTime => compareTo0(l)
-      case _ => super.compareTo(other)
+      case _                => super.compareTo(other)
     }
 
   private def compareTo0(other: LocalDateTime): Int = {
@@ -1474,7 +1530,7 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
   override def isAfter(other: ChronoLocalDateTime[_ <: ChronoLocalDate]): Boolean =
     other match {
       case l: LocalDateTime => compareTo0(l) > 0
-      case _ => super.isAfter(other)
+      case _                => super.isAfter(other)
     }
 
   /** Checks if this date-time is before the specified date-time.
@@ -1500,7 +1556,7 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
   override def isBefore(other: ChronoLocalDateTime[_ <: ChronoLocalDate]): Boolean =
     other match {
       case l: LocalDateTime => compareTo0(l) < 0
-      case _ => super.isBefore(other)
+      case _                => super.isBefore(other)
     }
 
   /** Checks if this date-time is equal to the specified date-time.
@@ -1526,7 +1582,7 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
   override def isEqual(other: ChronoLocalDateTime[_ <: ChronoLocalDate]): Boolean =
     other match {
       case l: LocalDateTime => compareTo0(l) == 0
-      case _ => super.isEqual(other)
+      case _                => super.isEqual(other)
     }
 
   /** Checks if this date-time is equal to another date-time.
@@ -1584,7 +1640,8 @@ final class LocalDateTime private(private val date: LocalDate, private val time:
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[bp] def writeExternal(out: DataOutput): Unit = {

@@ -31,10 +31,10 @@
  */
 package org.threeten.bp
 
-import java.util.{Arrays, Locale}
+import java.util.{ Arrays, Locale }
 
-import org.scalatest.{BeforeAndAfter, FunSuite}
-import org.threeten.bp.DayOfWeek.{MONDAY, SUNDAY, WEDNESDAY}
+import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.threeten.bp.DayOfWeek.{ MONDAY, SUNDAY, WEDNESDAY }
 import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.ChronoField.DAY_OF_WEEK
 import org.threeten.bp.temporal._
@@ -42,17 +42,16 @@ import org.threeten.bp.temporal._
 /** Test DayOfWeek. */
 class TestDayOfWeek extends FunSuite with GenDateTimeTest with AssertionsHelper {
 
-  protected def samples: List[TemporalAccessor] = {
+  protected def samples: List[TemporalAccessor] =
     List(MONDAY, WEDNESDAY, SUNDAY)
-  }
 
-  protected def validFields: List[TemporalField] = {
+  protected def validFields: List[TemporalField] =
     List(DAY_OF_WEEK)
-  }
 
   protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
-    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE).filterNot(validFields.contains)
+    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
+      .filterNot(validFields.contains)
   }
 
   test("factory_int_singleton") {
@@ -133,7 +132,7 @@ class TestDayOfWeek extends FunSuite with GenDateTimeTest with AssertionsHelper 
     }
   }
 
-  def data_plus: List[List[Long]] = {
+  def data_plus: List[List[Long]] =
     List(
       List(1, -8, 7),
       List(1, -7, 1),
@@ -165,8 +164,8 @@ class TestDayOfWeek extends FunSuite with GenDateTimeTest with AssertionsHelper 
       List(4, -1, 3),
       List(5, -1, 4),
       List(6, -1, 5),
-      List(7, -1, 6))
-  }
+      List(7, -1, 6)
+    )
 
   test("plus_long") {
     data_plus.foreach {
@@ -177,7 +176,7 @@ class TestDayOfWeek extends FunSuite with GenDateTimeTest with AssertionsHelper 
     }
   }
 
-  def data_minus: List[List[Long]] = {
+  def data_minus: List[List[Long]] =
     List(
       List(1, -8, 2),
       List(1, -7, 1),
@@ -195,8 +194,8 @@ class TestDayOfWeek extends FunSuite with GenDateTimeTest with AssertionsHelper 
       List(1, 5, 3),
       List(1, 6, 2),
       List(1, 7, 1),
-      List(1, 8, 7))
-  }
+      List(1, 8, 7)
+    )
 
   test("minus_long") {
     data_minus.foreach {

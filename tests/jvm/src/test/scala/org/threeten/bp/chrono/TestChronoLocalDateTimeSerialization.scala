@@ -42,26 +42,28 @@ import org.threeten.bp.AbstractTest
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
-class TestChronoLocalDateTimeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestChronoLocalDateTimeSerialization
+    extends FunSuite
+    with AssertionsHelper
+    with AbstractTest {
   val data_of_calendars: List[Chronology] = {
-    List(
-      HijrahChronology.INSTANCE,
-      IsoChronology.INSTANCE,
-      JapaneseChronology.INSTANCE,
-      MinguoChronology.INSTANCE,
-      ThaiBuddhistChronology.INSTANCE)
+    List(HijrahChronology.INSTANCE,
+         IsoChronology.INSTANCE,
+         JapaneseChronology.INSTANCE,
+         MinguoChronology.INSTANCE,
+         ThaiBuddhistChronology.INSTANCE)
   }
 
   test("test_ChronoLocalDateTimeSerialization") {
     data_of_calendars.foreach { chrono =>
-      val ref: LocalDateTime = LocalDate.of(2000, 1, 5).atTime(12, 1, 2, 3)
+      val ref: LocalDateTime              = LocalDate.of(2000, 1, 5).atTime(12, 1, 2, 3)
       val orginal: ChronoLocalDateTime[_] = chrono.date(ref).atTime(ref.toLocalTime)
-      val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-      val out: ObjectOutputStream = new ObjectOutputStream(baos)
+      val baos: ByteArrayOutputStream     = new ByteArrayOutputStream
+      val out: ObjectOutputStream         = new ObjectOutputStream(baos)
       out.writeObject(orginal)
       out.close()
-      val bais: ByteArrayInputStream = new ByteArrayInputStream(baos.toByteArray)
-      val in: ObjectInputStream = new ObjectInputStream(bais)
+      val bais: ByteArrayInputStream  = new ByteArrayInputStream(baos.toByteArray)
+      val in: ObjectInputStream       = new ObjectInputStream(bais)
       val ser: ChronoLocalDateTime[_] = in.readObject.asInstanceOf[ChronoLocalDateTime[_]]
       assertTrue(ser == orginal)
     }

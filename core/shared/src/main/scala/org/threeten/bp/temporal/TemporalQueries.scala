@@ -65,6 +65,7 @@ import org.threeten.bp.chrono.Chronology
   * All returned adjusters are immutable and thread-safe.
   */
 object TemporalQueries {
+
   /** A strict query for the {@code ZoneId}.
     *
     * This queries a {@code TemporalAccessor} for the zone.
@@ -188,7 +189,8 @@ object TemporalQueries {
     */
   val offset: TemporalQuery[ZoneOffset] = new TemporalQuery[ZoneOffset] {
     def queryFrom(temporal: TemporalAccessor): ZoneOffset =
-      if (temporal.isSupported(OFFSET_SECONDS)) ZoneOffset.ofTotalSeconds(temporal.get(OFFSET_SECONDS))
+      if (temporal.isSupported(OFFSET_SECONDS))
+        ZoneOffset.ofTotalSeconds(temporal.get(OFFSET_SECONDS))
       else null
   }
 

@@ -55,14 +55,13 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   protected def samples: List[TemporalAccessor] =
     List(TEST_2008_06)
 
-
   protected def validFields: List[TemporalField] =
     List(MONTH_OF_YEAR, PROLEPTIC_MONTH, YEAR_OF_ERA, YEAR, ERA)
 
-
   protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
-    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE).filterNot(validFields.contains)
+    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
+      .filterNot(validFields.contains)
   }
 
   ignore("test_immutable") {
@@ -80,7 +79,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   def test_serialization_format(): Unit = {
     AbstractTest.assertEqualsSerialisedForm(YearMonth.of(2012, 9))
   }
-  */
+   */
 
   private def check(test: YearMonth, y: Int, m: Int): Unit = {
     assertEquals(test.getYear, y)
@@ -89,11 +88,11 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
 
   test("now") {
     var expected: YearMonth = YearMonth.now(Clock.systemDefaultZone)
-    var test: YearMonth = YearMonth.now
-    var i: Int = 0
+    var test: YearMonth     = YearMonth.now
+    var i: Int              = 0
     while (i < 100 && (expected != test)) {
       expected = YearMonth.now(Clock.systemDefaultZone)
-      test = YearMonth.now
+      test     = YearMonth.now
       i += 1
     }
     assertEquals(test, expected)
@@ -106,14 +105,14 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("now_ZoneId") {
-    val zone: ZoneId = ZoneId.of("UTC+01:02:03")
+    val zone: ZoneId        = ZoneId.of("UTC+01:02:03")
     var expected: YearMonth = YearMonth.now(Clock.system(zone))
-    var test: YearMonth = YearMonth.now(zone)
+    var test: YearMonth     = YearMonth.now(zone)
 
     var i: Int = 0
     while (i < 100 && (expected != test)) {
       expected = YearMonth.now(Clock.system(zone))
-      test = YearMonth.now(zone)
+      test     = YearMonth.now(zone)
       i += 1
     }
     assertEquals(test, expected)
@@ -121,8 +120,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
 
   test("now_Clock") {
     val instant: Instant = LocalDateTime.of(2010, 12, 31, 0, 0).toInstant(ZoneOffset.UTC)
-    val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
-    val test: YearMonth = YearMonth.now(clock)
+    val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
+    val test: YearMonth  = YearMonth.now(clock)
     assertEquals(test.getYear, 2010)
     assertEquals(test.getMonth, Month.DECEMBER)
   }
@@ -224,13 +223,14 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
       ("-1234-03", YearMonth.of(-1234, 3)),
       ("-12345678-03", YearMonth.of(-12345678, 3)),
       ("+" + Year.MAX_VALUE + "-03", YearMonth.of(Year.MAX_VALUE, 3)),
-      (Year.MIN_VALUE + "-03", YearMonth.of(Year.MIN_VALUE, 3)))
+      (Year.MIN_VALUE + "-03", YearMonth.of(Year.MIN_VALUE, 3))
+    )
 
   test("factory_parse_success") {
     provider_goodParseData.foreach {
       case (text, expected) =>
-      val yearMonth: YearMonth = YearMonth.parse(text)
-      assertEquals(yearMonth, expected)
+        val yearMonth: YearMonth = YearMonth.parse(text)
+        assertEquals(yearMonth, expected)
     }
   }
 
@@ -249,7 +249,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
       ("+123-10", 1),
       ("+1234-10", 0),
       ("12345-10", 0),
-      ("+12345678901-10", 11))
+      ("+12345678901-10", 11)
+    )
   }
 
   test("factory_parse_fail") {
@@ -258,8 +259,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
         try {
           YearMonth.parse(text)
           fail(f"Parse should have failed for $text%s at position $pos%d")
-        }
-        catch {
+        } catch {
           case ex: DateTimeParseException =>
             assertEquals(ex.getParsedString, text)
             assertEquals(ex.getErrorIndex, pos)
@@ -281,7 +281,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
 
   test("factory_parse_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("u M")
-    val test: YearMonth = YearMonth.parse("2010 12", f)
+    val test: YearMonth      = YearMonth.parse("2010 12", f)
     assertEquals(test, YearMonth.of(2010, 12))
   }
 
@@ -356,11 +356,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   }
 
   val provider_sampleDates: List[(Int, Int)] =
-    List(
-      (2008, 1),
-      (2008, 2),
-      (-1, 3),
-      (0, 12))
+    List((2008, 1), (2008, 2), (-1, 3), (0, 12))
 
   test("test_hashCode") {
     provider_sampleDates.foreach {
@@ -374,7 +370,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
 
   test("test_hashCode_unique") {
     val uniques: java.util.Set[Integer] = new java.util.HashSet[Integer](201 * 12)
-    var i: Int = 1900
+    var i: Int                          = 1900
     while (i <= 2100) {
       var j: Int = 1
       while (j <= 12) {
@@ -484,7 +480,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
 
   test("test_plusYears_long_big") {
     val test: YearMonth = YearMonth.of(-40, 6)
-    assertEquals(test.plusYears(20L + Year.MAX_VALUE), YearMonth.of((-40L + 20L + Year.MAX_VALUE).asInstanceOf[Int], 6))
+    assertEquals(test.plusYears(20L + Year.MAX_VALUE),
+                 YearMonth.of((-40L + 20L + Year.MAX_VALUE).asInstanceOf[Int], 6))
   }
 
   test("test_plusYears_long_invalidTooLarge") {
@@ -542,8 +539,9 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
 
   test("test_plusMonths_long_big") {
     val test: YearMonth = YearMonth.of(-40, 6)
-    val months: Long = 20L + Integer.MAX_VALUE
-    assertEquals(test.plusMonths(months), YearMonth.of((-40L + months / 12).toInt, 6 + (months % 12).toInt))
+    val months: Long    = 20L + Integer.MAX_VALUE
+    assertEquals(test.plusMonths(months),
+                 YearMonth.of((-40L + months / 12).toInt, 6 + (months % 12).toInt))
   }
 
   test("test_plusMonths_long_invalidTooLarge") {
@@ -591,7 +589,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
 
   test("test_minusYears_long_big") {
     val test: YearMonth = YearMonth.of(40, 6)
-    assertEquals(test.minusYears(20L + Year.MAX_VALUE), YearMonth.of((40L - 20L - Year.MAX_VALUE).asInstanceOf[Int], 6))
+    assertEquals(test.minusYears(20L + Year.MAX_VALUE),
+                 YearMonth.of((40L - 20L - Year.MAX_VALUE).asInstanceOf[Int], 6))
   }
 
   test("test_minusYears_long_invalidTooLarge") {
@@ -649,8 +648,9 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
 
   test("test_minusMonths_long_big") {
     val test: YearMonth = YearMonth.of(40, 6)
-    val months: Long = 20L + Integer.MAX_VALUE
-    assertEquals(test.minusMonths(months), YearMonth.of((40L - months / 12).toInt, 6 - (months % 12).toInt))
+    val months: Long    = 20L + Integer.MAX_VALUE
+    assertEquals(test.minusMonths(months),
+                 YearMonth.of((40L - months / 12).toInt, 6 - (months % 12).toInt))
   }
 
   test("test_minusMonths_long_invalidTooLarge") {
@@ -795,14 +795,24 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("test_comparisons") {
-    doTest_comparisons_YearMonth(YearMonth.of(-1, 1), YearMonth.of(0, 1), YearMonth.of(0, 12), YearMonth.of(1, 1), YearMonth.of(1, 2), YearMonth.of(1, 12), YearMonth.of(2008, 1), YearMonth.of(2008, 6), YearMonth.of(2008, 12))
+    doTest_comparisons_YearMonth(
+      YearMonth.of(-1, 1),
+      YearMonth.of(0, 1),
+      YearMonth.of(0, 12),
+      YearMonth.of(1, 1),
+      YearMonth.of(1, 2),
+      YearMonth.of(1, 12),
+      YearMonth.of(2008, 1),
+      YearMonth.of(2008, 6),
+      YearMonth.of(2008, 12)
+    )
   }
 
   private def doTest_comparisons_YearMonth(localDates: YearMonth*): Unit = {
     var i: Int = 0
     while (i < localDates.length) {
       val a: YearMonth = localDates(i)
-      var j: Int = 0
+      var j: Int       = 0
       while (j < localDates.length) {
         val b: YearMonth = localDates(j)
         if (i < j) {
@@ -810,14 +820,12 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
           assertEquals(a.isBefore(b), true, a + " <=> " + b)
           assertEquals(a.isAfter(b), false, a + " <=> " + b)
           assertEquals(a == b, false, a + " <=> " + b)
-        }
-        else if (i > j) {
+        } else if (i > j) {
           assertTrue(a.compareTo(b) > 0)
           assertEquals(a.isBefore(b), false, a + " <=> " + b)
           assertEquals(a.isAfter(b), true, a + " <=> " + b)
           assertEquals(a == b, false, a + " <=> " + b)
-        }
-        else {
+        } else {
           assertEquals(a.compareTo(b), 0)
           assertEquals(a.isBefore(b), false, a + " <=> " + b)
           assertEquals(a.isAfter(b), false, a + " <=> " + b)
@@ -883,25 +891,24 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   }
 
   val provider_sampleToString: List[(Int, Int, String)] =
-    List(
-      (2008, 1, "2008-01"),
-      (2008, 12, "2008-12"),
-      (7, 5, "0007-05"),
-      (0, 5, "0000-05"),
-      (-1, 1, "-0001-01"))
+    List((2008, 1, "2008-01"),
+         (2008, 12, "2008-12"),
+         (7, 5, "0007-05"),
+         (0, 5, "0000-05"),
+         (-1, 1, "-0001-01"))
 
   test("test_toString") {
     provider_sampleToString.foreach {
       case (y, m, expected) =>
         val test: YearMonth = YearMonth.of(y, m)
-        val str: String = test.toString
+        val str: String     = test.toString
         assertEquals(str, expected)
     }
   }
 
   test("test_format_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("y M")
-    val t: String = YearMonth.of(2010, 12).format(f)
+    val t: String            = YearMonth.of(2010, 12).format(f)
     assertEquals(t, "2010 12")
   }
 

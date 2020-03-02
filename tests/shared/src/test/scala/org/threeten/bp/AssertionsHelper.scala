@@ -1,6 +1,6 @@
 package org.threeten.bp
 
-import org.scalactic.{Prettifier, source}
+import org.scalactic.{ Prettifier, source }
 import org.scalatest.Assertion
 import org.scalatest.FunSuite
 
@@ -16,16 +16,28 @@ trait AssertionsHelper { this: FunSuite =>
     else
       true
 
-  def assertEquals[A, B](o1: A, o2: B, msg: String)(implicit prettifier: Prettifier, pos: source.Position): Assertion =
+  def assertEquals[A, B](o1: A, o2: B, msg: String)(
+    implicit prettifier:     Prettifier,
+    pos:                     source.Position
+  ): Assertion =
     assertEquals(o1, o2)
 
-  def assertEquals[A, B](o1: A, o2: B)(implicit prettifier: Prettifier, pos: source.Position): Assertion =
+  def assertEquals[A, B](
+    o1:                  A,
+    o2:                  B
+  )(implicit prettifier: Prettifier, pos: source.Position): Assertion =
     assert(o1 == o2)
 
-  def assertSame[A <: AnyRef, B <: AnyRef](o1: A, o2: B)(implicit prettifier: Prettifier, pos: source.Position): Assertion =
+  def assertSame[A <: AnyRef, B <: AnyRef](
+    o1:                  A,
+    o2:                  B
+  )(implicit prettifier: Prettifier, pos: source.Position): Assertion =
     assert(o1 eq o2)
 
-  def assertNotEquals[A, B](o1: A, o2: B)(implicit prettifier: Prettifier, pos: source.Position): Assertion =
+  def assertNotEquals[A, B](
+    o1:                  A,
+    o2:                  B
+  )(implicit prettifier: Prettifier, pos: source.Position): Assertion =
     assert(o1 != o2)
 
   def assertFalse(b: Boolean)(implicit prettifier: Prettifier, pos: source.Position): Assertion =

@@ -34,7 +34,7 @@ package org.threeten.bp.chrono
 import org.threeten.bp.temporal.ChronoField.INSTANT_SECONDS
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
 import org.threeten.bp.temporal.ChronoUnit.NANOS
-import java.util.{Objects, Comparator}
+import java.util.{ Comparator, Objects }
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
@@ -55,6 +55,7 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 
 object ChronoZonedDateTime {
+
   /** Gets a comparator that compares {@code ChronoZonedDateTime} in
     * time-line order ignoring the chronology.
     *
@@ -73,10 +74,14 @@ object ChronoZonedDateTime {
 
   private val INSTANT_COMPARATOR: Comparator[ChronoZonedDateTime[_]] =
     new Comparator[ChronoZonedDateTime[_]] {
-      override def compare(datetime1: ChronoZonedDateTime[_], datetime2: ChronoZonedDateTime[_]): Int = {
+      override def compare(
+        datetime1: ChronoZonedDateTime[_],
+        datetime2: ChronoZonedDateTime[_]
+      ): Int = {
         var cmp: Int = java.lang.Long.compare(datetime1.toEpochSecond, datetime2.toEpochSecond)
         if (cmp == 0)
-          cmp = java.lang.Long.compare(datetime1.toLocalTime.toNanoOfDay, datetime2.toLocalTime.toNanoOfDay)
+          cmp = java.lang.Long
+            .compare(datetime1.toLocalTime.toNanoOfDay, datetime2.toLocalTime.toNanoOfDay)
         cmp
       }
     }
@@ -108,7 +113,9 @@ object ChronoZonedDateTime {
     else {
       val chrono: Chronology = temporal.query(TemporalQueries.chronology)
       if (chrono == null)
-        throw new DateTimeException(s"No Chronology found to create ChronoZonedDateTime: ${temporal.getClass}")
+        throw new DateTimeException(
+          s"No Chronology found to create ChronoZonedDateTime: ${temporal.getClass}"
+        )
       else chrono.zonedDateTime(temporal)
     }
   }
@@ -142,7 +149,9 @@ object ChronoZonedDateTime {
   *
   * @tparam D the date type
   */
-trait ChronoZonedDateTime[D <: ChronoLocalDate] extends Temporal with Ordered[ChronoZonedDateTime[_]] {
+trait ChronoZonedDateTime[D <: ChronoLocalDate]
+    extends Temporal
+    with Ordered[ChronoZonedDateTime[_]] {
   override def range(field: TemporalField): ValueRange =
     field match {
       case INSTANT_SECONDS | OFFSET_SECONDS => field.range
@@ -152,7 +161,8 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate] extends Temporal with Ordered[Ch
 
   override def get(field: TemporalField): Int =
     field match {
-      case INSTANT_SECONDS     => throw new UnsupportedTemporalTypeException(s"Field too large for an int: $field")
+      case INSTANT_SECONDS =>
+        throw new UnsupportedTemporalTypeException(s"Field too large for an int: $field")
       case OFFSET_SECONDS      => getOffset.getTotalSeconds
       case chrono: ChronoField => toLocalDateTime.get(field)
       case _                   => super.get(field)
@@ -308,14 +318,13 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate] extends Temporal with Ordered[Ch
 
   override def query[R](query: TemporalQuery[R]): R =
     query match {
-      case TemporalQueries.zoneId
-         | TemporalQueries.zone       => getZone.asInstanceOf[R]
-      case TemporalQueries.chronology => toLocalDate.getChronology.asInstanceOf[R]
-      case TemporalQueries.precision  => NANOS.asInstanceOf[R]
-      case TemporalQueries.offset     => getOffset.asInstanceOf[R]
-      case TemporalQueries.localDate  => LocalDate.ofEpochDay (toLocalDate.toEpochDay).asInstanceOf[R]
-      case TemporalQueries.localTime  => toLocalTime.asInstanceOf[R]
-      case _                          => super.query(query)
+      case TemporalQueries.zoneId | TemporalQueries.zone => getZone.asInstanceOf[R]
+      case TemporalQueries.chronology                    => toLocalDate.getChronology.asInstanceOf[R]
+      case TemporalQueries.precision                     => NANOS.asInstanceOf[R]
+      case TemporalQueries.offset                        => getOffset.asInstanceOf[R]
+      case TemporalQueries.localDate                     => LocalDate.ofEpochDay(toLocalDate.toEpochDay).asInstanceOf[R]
+      case TemporalQueries.localTime                     => toLocalTime.asInstanceOf[R]
+      case _                                             => super.query(query)
     }
 
   /** Outputs this date-time as a {@code String} using the formatter.
@@ -352,7 +361,7 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate] extends Temporal with Ordered[Ch
     */
   def toEpochSecond: Long = {
     val epochDay: Long = toLocalDate.toEpochDay
-    var secs: Long = epochDay * 86400 + toLocalTime.toSecondOfDay
+    var secs: Long     = epochDay * 86400 + toLocalTime.toSecondOfDay
     secs -= getOffset.getTotalSeconds
     secs
   }
@@ -378,7 +387,9 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate] extends Temporal with Ordered[Ch
         if (cmp == 0) {
           cmp = getZone.getId.compareTo(other.getZone.getId)
           if (cmp == 0)
-            cmp = toLocalDate.getChronology.compareTo(other.toLocalDate.asInstanceOf[ChronoLocalDate].getChronology)
+            cmp = toLocalDate.getChronology.compareTo(
+              other.toLocalDate.asInstanceOf[ChronoLocalDate].getChronology
+            )
         }
       }
     }
@@ -395,7 +406,7 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate] extends Temporal with Ordered[Ch
     * @return true if this is after the specified date-time
     */
   def isAfter(other: ChronoZonedDateTime[_]): Boolean = {
-    val thisEpochSec: Long = toEpochSecond
+    val thisEpochSec: Long  = toEpochSecond
     val otherEpochSec: Long = other.toEpochSecond
     thisEpochSec > otherEpochSec || (thisEpochSec == otherEpochSec && toLocalTime.getNano > other.toLocalTime.getNano)
   }
@@ -410,7 +421,7 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate] extends Temporal with Ordered[Ch
     * @return true if this point is before the specified date-time
     */
   def isBefore(other: ChronoZonedDateTime[_]): Boolean = {
-    val thisEpochSec: Long = toEpochSecond
+    val thisEpochSec: Long  = toEpochSecond
     val otherEpochSec: Long = other.toEpochSecond
     thisEpochSec < otherEpochSec || (thisEpochSec == otherEpochSec && toLocalTime.getNano < other.toLocalTime.getNano)
   }
@@ -446,7 +457,8 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate] extends Temporal with Ordered[Ch
     *
     * @return a suitable hash code
     */
-  override def hashCode: Int = toLocalDateTime.hashCode ^ getOffset.hashCode ^ Integer.rotateLeft(getZone.hashCode, 3)
+  override def hashCode: Int =
+    toLocalDateTime.hashCode ^ getOffset.hashCode ^ Integer.rotateLeft(getZone.hashCode, 3)
 
   /** Outputs this date-time as a {@code String}.
     *

@@ -65,13 +65,63 @@ object TestDateTimeBuilderCombinations {
 class TestDateTimeBuilderCombinations extends FunSuite with AssertionsHelper {
   import TestDateTimeBuilderCombinations.localDateFrom
 
-  val data_combine: List[(TemporalField, Number, TemporalField, Number, TemporalField, Number, TemporalField, Number, TemporalQuery[LocalDate], AnyRef)] = {
+  val data_combine: List[
+    (
+      TemporalField,
+      Number,
+      TemporalField,
+      Number,
+      TemporalField,
+      Number,
+      TemporalField,
+      Number,
+      TemporalQuery[LocalDate],
+      AnyRef
+    )
+  ] = {
     List(
-      (YEAR, 2012, MONTH_OF_YEAR, 6, DAY_OF_MONTH, 3, null, null, localDateFrom, LocalDate.of(2012, 6, 3)),
-      (PROLEPTIC_MONTH, 2012 * 12 + 6 - 1, DAY_OF_MONTH, 3, null, null, null, null, localDateFrom, LocalDate.of(2012, 6, 3)),
-      (YEAR, 2012, ALIGNED_WEEK_OF_YEAR, 6, DAY_OF_WEEK, 3, null, null, localDateFrom, LocalDate.of(2012, 2, 8)),
-      (YEAR, 2012, DAY_OF_YEAR, 155, null, null, null, null, localDateFrom, LocalDate.of(2012, 6, 3)),
-      (EPOCH_DAY, 12, null, null, null, null, null, null, localDateFrom, LocalDate.of(1970, 1, 13)))
+      (YEAR,
+       2012,
+       MONTH_OF_YEAR,
+       6,
+       DAY_OF_MONTH,
+       3,
+       null,
+       null,
+       localDateFrom,
+       LocalDate.of(2012, 6, 3)),
+      (PROLEPTIC_MONTH,
+       2012 * 12 + 6 - 1,
+       DAY_OF_MONTH,
+       3,
+       null,
+       null,
+       null,
+       null,
+       localDateFrom,
+       LocalDate.of(2012, 6, 3)),
+      (YEAR,
+       2012,
+       ALIGNED_WEEK_OF_YEAR,
+       6,
+       DAY_OF_WEEK,
+       3,
+       null,
+       null,
+       localDateFrom,
+       LocalDate.of(2012, 2, 8)),
+      (YEAR,
+       2012,
+       DAY_OF_YEAR,
+       155,
+       null,
+       null,
+       null,
+       null,
+       localDateFrom,
+       LocalDate.of(2012, 6, 3)),
+      (EPOCH_DAY, 12, null, null, null, null, null, null, localDateFrom, LocalDate.of(1970, 1, 13))
+    )
   }
 
   test("test_derive") {
@@ -92,10 +142,12 @@ class TestDateTimeBuilderCombinations extends FunSuite with AssertionsHelper {
         assertEquals(builder.build(query), expectedVal)
       case _ =>
         fail()
-      }
+    }
   }
 
-  val data_normalized: List[(TemporalField, Number, TemporalField, Number, TemporalField, Number, TemporalField, Number)] =
+  val data_normalized: List[
+    (TemporalField, Number, TemporalField, Number, TemporalField, Number, TemporalField, Number)
+  ] =
     List(
       (YEAR, 2127, null, null, null, null, YEAR, 2127),
       (MONTH_OF_YEAR, 12, null, null, null, null, MONTH_OF_YEAR, 12),
@@ -108,7 +160,8 @@ class TestDateTimeBuilderCombinations extends FunSuite with AssertionsHelper {
       (ALIGNED_DAY_OF_WEEK_IN_MONTH, 3, null, null, null, null, ALIGNED_DAY_OF_WEEK_IN_MONTH, 3),
       (PROLEPTIC_MONTH, 15, null, null, null, null, PROLEPTIC_MONTH, null),
       (PROLEPTIC_MONTH, 1971 * 12 + 4 - 1, null, null, null, null, YEAR, 1971),
-      (PROLEPTIC_MONTH, 1971 * 12 + 4 - 1, null, null, null, null, MONTH_OF_YEAR, 4))
+      (PROLEPTIC_MONTH, 1971 * 12 + 4 - 1, null, null, null, null, MONTH_OF_YEAR, 4)
+    )
 
   test("test_normalized") {
     data_normalized.foreach {
@@ -124,8 +177,7 @@ class TestDateTimeBuilderCombinations extends FunSuite with AssertionsHelper {
         builder.resolve(ResolverStyle.SMART, null)
         if (expectedVal != null) {
           assertEquals(builder.getLong(query), expectedVal.longValue)
-        }
-        else {
+        } else {
           assertEquals(builder.isSupported(query), false)
         }
       case _ =>
@@ -134,14 +186,22 @@ class TestDateTimeBuilderCombinations extends FunSuite with AssertionsHelper {
   }
 
   test("test_parse_ZDT_withZone") {
-    val fmt: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(TestDateTimeBuilderCombinations.PARIS)
+    val fmt: DateTimeFormatter = DateTimeFormatter
+      .ofPattern("yyyy-MM-dd HH:mm:ss")
+      .withZone(TestDateTimeBuilderCombinations.PARIS)
     val acc: TemporalAccessor = fmt.parse("2014-06-30 01:02:03")
-    assertEquals(ZonedDateTime.from(acc), ZonedDateTime.of(2014, 6, 30, 1, 2, 3, 0, TestDateTimeBuilderCombinations.PARIS))
+    assertEquals(ZonedDateTime.from(acc),
+                 ZonedDateTime.of(2014, 6, 30, 1, 2, 3, 0, TestDateTimeBuilderCombinations.PARIS))
   }
 
   test("test_parse_Instant_withZone") {
-    val fmt: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(TestDateTimeBuilderCombinations.PARIS)
+    val fmt: DateTimeFormatter = DateTimeFormatter
+      .ofPattern("yyyy-MM-dd HH:mm:ss")
+      .withZone(TestDateTimeBuilderCombinations.PARIS)
     val acc: TemporalAccessor = fmt.parse("2014-06-30 01:02:03")
-    assertEquals(Instant.from(acc), ZonedDateTime.of(2014, 6, 30, 1, 2, 3, 0, TestDateTimeBuilderCombinations.PARIS).toInstant)
+    assertEquals(
+      Instant.from(acc),
+      ZonedDateTime.of(2014, 6, 30, 1, 2, 3, 0, TestDateTimeBuilderCombinations.PARIS).toInstant
+    )
   }
 }

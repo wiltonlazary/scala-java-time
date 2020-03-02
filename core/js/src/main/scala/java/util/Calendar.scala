@@ -3,7 +3,10 @@ package java.util
 import java.time.Instant
 
 @SerialVersionUID(-1807547505821590642L)
-abstract class Calendar private[util](timezone: TimeZone = null, locale: Locale = null) extends Cloneable with Serializable with Ordered[Calendar] {
+abstract class Calendar private[util] (timezone: TimeZone = null, locale: Locale = null)
+    extends Cloneable
+    with Serializable
+    with Ordered[Calendar] {
 
   if (timezone == null && locale == null) {
     init(TimeZone.getDefault, Locale.getDefault)
@@ -20,23 +23,22 @@ abstract class Calendar private[util](timezone: TimeZone = null, locale: Locale 
     // TODO: need to set firstDayOfWeekfirstDayOfWeek and minimalDaysInFirstWeek
   }
 
-
-  protected var areFieldsSet: Boolean = false
-  protected val fields: Array[Int] = new Array(Calendar.FIELD_COUNT)
-  protected val isSet: Array[Boolean] = new Array(Calendar.FIELD_COUNT)
-  protected var isTimeSet: Boolean = false
-  protected var time: Long = -1
-  private var lenient: Boolean = false
-  private var firstDayOfWeek: Int = 0
+  protected var areFieldsSet: Boolean     = false
+  protected val fields: Array[Int]        = new Array(Calendar.FIELD_COUNT)
+  protected val isSet: Array[Boolean]     = new Array(Calendar.FIELD_COUNT)
+  protected var isTimeSet: Boolean        = false
+  protected var time: Long                = -1
+  private var lenient: Boolean            = false
+  private var firstDayOfWeek: Int         = 0
   private var minimalDaysInFirstWeek: Int = 0
-  private var zone: TimeZone = null
+  private var zone: TimeZone              = null
 
   protected def computeTime(): Unit
   protected def computeFields(): Unit
 
-  def getMaximum(field: Int): Int
-  def getMinimum(field: Int): Int
-  def getLeastMaximum(field: Int): Int
+  def getMaximum(field:         Int): Int
+  def getMinimum(field:         Int): Int
+  def getLeastMaximum(field:    Int): Int
   def getGreatestMinimum(field: Int): Int
 
   def compare(anotherCalendar: Calendar): Int = ???
@@ -47,7 +49,8 @@ abstract class Calendar private[util](timezone: TimeZone = null, locale: Locale 
   def getTimeInMillis(): Long = ???
 
   // Access  from DateTimeUtils
-  /*protected[util]*/ def getTimeZone: TimeZone
+  /*protected[util]*/
+  def getTimeZone: TimeZone
 
   def getFirstDayOfWeek(): Int = firstDayOfWeek
 
@@ -59,7 +62,8 @@ abstract class Calendar private[util](timezone: TimeZone = null, locale: Locale 
 
   final def set(year: Int, month: Int, day: Int, hourOfDay: Int, minute: Int): Unit = ???
 
-  final def set(year: Int, month: Int, day: Int, hourOfDay: Int, minute: Int, second: Int): Unit = ???
+  final def set(year: Int, month: Int, day: Int, hourOfDay: Int, minute: Int, second: Int): Unit =
+    ???
 
   def setLenient(value: Boolean): Unit = lenient = value
 
@@ -80,60 +84,62 @@ abstract class Calendar private[util](timezone: TimeZone = null, locale: Locale 
 }
 
 object Calendar {
-  val JANUARY = 0
-  val FEBRUARY = 1
-  val MARCH = 2
-  val APRIL = 3
-  val MAY = 4
-  val JUNE = 5
-  val JULY = 6
-  val AUGUST = 7
-  val SEPTEMBER = 8
-  val OCTOBER = 9
-  val NOVEMBER = 10
-  val DECEMBER = 11
+  val JANUARY    = 0
+  val FEBRUARY   = 1
+  val MARCH      = 2
+  val APRIL      = 3
+  val MAY        = 4
+  val JUNE       = 5
+  val JULY       = 6
+  val AUGUST     = 7
+  val SEPTEMBER  = 8
+  val OCTOBER    = 9
+  val NOVEMBER   = 10
+  val DECEMBER   = 11
   val UNDECIMBER = 12
 
-  val SUNDAY = 1
-  val MONDAY = 2
-  val TUESDAY = 3
+  val SUNDAY    = 1
+  val MONDAY    = 2
+  val TUESDAY   = 3
   val WEDNESDAY = 4
-  val THURSDAY = 5
-  val FRIDAY = 6
-  val SATURDAY = 7
+  val THURSDAY  = 5
+  val FRIDAY    = 6
+  val SATURDAY  = 7
 
-  val ERA = 0
-  val YEAR = 1
-  val MONTH = 2
-  val WEEK_OF_YEAR = 3
-  val WEEK_OF_MONTH = 4
-  val DATE = 5
-  val DAY_OF_MONTH = 5
-  val DAY_OF_YEAR = 6
-  val DAY_OF_WEEK = 7
+  val ERA                  = 0
+  val YEAR                 = 1
+  val MONTH                = 2
+  val WEEK_OF_YEAR         = 3
+  val WEEK_OF_MONTH        = 4
+  val DATE                 = 5
+  val DAY_OF_MONTH         = 5
+  val DAY_OF_YEAR          = 6
+  val DAY_OF_WEEK          = 7
   val DAY_OF_WEEK_IN_MONTH = 8
-  val AM_PM = 9
-  val HOUR = 10
-  val HOUR_OF_DAY = 11
-  val MINUTE = 12
-  val SECOND = 13
-  val MILLISECOND = 14
-  val ZONE_OFFSET = 15
-  val DST_OFFSET = 16
-  val FIELD_COUNT = 17
+  val AM_PM                = 9
+  val HOUR                 = 10
+  val HOUR_OF_DAY          = 11
+  val MINUTE               = 12
+  val SECOND               = 13
+  val MILLISECOND          = 14
+  val ZONE_OFFSET          = 15
+  val DST_OFFSET           = 16
+  val FIELD_COUNT          = 17
 
   val AM = 0
   val PM = 1
 
   val ALL_STYLES = 0
-  val SHORT = 1
-  val LONG = 2
+  val SHORT      = 1
+  val LONG       = 2
 
-  def getInstance(): Calendar = synchronized { new GregorianCalendar() }
+  def getInstance(): Calendar = synchronized(new GregorianCalendar())
 
-  def getInstance(locale: Locale): Calendar = synchronized { new GregorianCalendar(locale) }
+  def getInstance(locale: Locale): Calendar = synchronized(new GregorianCalendar(locale))
 
-  def getInstance(timezone: TimeZone): Calendar = synchronized { new GregorianCalendar(timezone) }
+  def getInstance(timezone: TimeZone): Calendar = synchronized(new GregorianCalendar(timezone))
 
-  def getInstance(timezone: TimeZone, locale: Locale): Calendar = synchronized { new GregorianCalendar(timezone, locale) }
+  def getInstance(timezone: TimeZone, locale: Locale): Calendar = synchronized {
+    new GregorianCalendar(timezone, locale)
+  }
 }

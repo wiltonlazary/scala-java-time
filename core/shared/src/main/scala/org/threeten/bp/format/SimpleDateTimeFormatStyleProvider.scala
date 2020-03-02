@@ -39,8 +39,10 @@ import java.util.concurrent.ConcurrentMap
 import org.threeten.bp.chrono.Chronology
 
 private object SimpleDateTimeFormatStyleProvider {
+
   /** Cache of formatters. */
-  private val FORMATTER_CACHE: ConcurrentMap[String, AnyRef] = new ConcurrentHashMap[String, AnyRef](16, 0.75f, 2)
+  private val FORMATTER_CACHE: ConcurrentMap[String, AnyRef] =
+    new ConcurrentHashMap[String, AnyRef](16, 0.75f, 2)
 }
 
 /** The Service Provider Implementation to obtain date-time formatters for a style.
@@ -53,10 +55,15 @@ private object SimpleDateTimeFormatStyleProvider {
 final class SimpleDateTimeFormatStyleProvider extends DateTimeFormatStyleProvider {
   override def getAvailableLocales: Array[Locale] = DateFormat.getAvailableLocales
 
-  def getFormatter(dateStyle: FormatStyle, timeStyle: FormatStyle, chrono: Chronology, locale: Locale): DateTimeFormatter = {
+  def getFormatter(
+    dateStyle: FormatStyle,
+    timeStyle: FormatStyle,
+    chrono:    Chronology,
+    locale:    Locale
+  ): DateTimeFormatter = {
     if (dateStyle == null && timeStyle == null)
       throw new IllegalArgumentException("Date and Time style must not both be null")
-    val key: String = chrono.getId + '|' + locale.toString + '|' + dateStyle + timeStyle
+    val key: String    = chrono.getId + '|' + locale.toString + '|' + dateStyle + timeStyle
     val cached: AnyRef = SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.get(key)
     if (cached != null) {
       if (cached == "")
@@ -64,17 +71,18 @@ final class SimpleDateTimeFormatStyleProvider extends DateTimeFormatStyleProvide
       cached.asInstanceOf[DateTimeFormatter]
     } else {
       (if (dateStyle != null) {
-        if (timeStyle != null) {
-          DateFormat.getDateTimeInstance(convertStyle(dateStyle), convertStyle(timeStyle), locale)
-        } else {
-          DateFormat.getDateInstance(convertStyle(dateStyle), locale)
-        }
-      } else {
-        DateFormat.getTimeInstance(convertStyle(timeStyle), locale)
-      }) match {
+         if (timeStyle != null) {
+           DateFormat.getDateTimeInstance(convertStyle(dateStyle), convertStyle(timeStyle), locale)
+         } else {
+           DateFormat.getDateInstance(convertStyle(dateStyle), locale)
+         }
+       } else {
+         DateFormat.getTimeInstance(convertStyle(timeStyle), locale)
+       }) match {
         case format: SimpleDateFormat =>
           val pattern: String = format.toPattern
-          val formatter: DateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(pattern).toFormatter(locale)
+          val formatter: DateTimeFormatter =
+            new DateTimeFormatterBuilder().appendPattern(pattern).toFormatter(locale)
           SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.putIfAbsent(key, formatter)
           formatter
         case _ =>

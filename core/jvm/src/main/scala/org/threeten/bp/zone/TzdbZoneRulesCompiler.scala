@@ -31,21 +31,39 @@
  */
 package org.threeten.bp.zone
 
-import java.io.{BufferedReader, ByteArrayOutputStream, DataOutputStream, File, FileOutputStream, FileReader, IOException, OutputStream}
+import java.io.{
+  BufferedReader,
+  ByteArrayOutputStream,
+  DataOutputStream,
+  File,
+  FileOutputStream,
+  FileReader,
+  IOException,
+  OutputStream
+}
 import java.text.ParsePosition
-import java.util.{Arrays, StringTokenizer}
+import java.util.{ Arrays, StringTokenizer }
 import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
 
-import org.threeten.bp.{DayOfWeek, LocalDate, LocalDateTime, LocalTime, Month, Year, ZoneOffset}
-import org.threeten.bp.format.{DateTimeFormatter, DateTimeFormatterBuilder}
-import org.threeten.bp.temporal.ChronoField.{HOUR_OF_DAY, MINUTE_OF_HOUR, SECOND_OF_MINUTE}
-import org.threeten.bp.temporal.{TemporalAccessor, TemporalAdjusters}
+import org.threeten.bp.{ DayOfWeek, LocalDate, LocalDateTime, LocalTime, Month, Year, ZoneOffset }
+import org.threeten.bp.format.{ DateTimeFormatter, DateTimeFormatterBuilder }
+import org.threeten.bp.temporal.ChronoField.{ HOUR_OF_DAY, MINUTE_OF_HOUR, SECOND_OF_MINUTE }
+import org.threeten.bp.temporal.{ TemporalAccessor, TemporalAdjusters }
 import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
 object TzdbZoneRulesCompiler {
+
   /** Time parser. */
-  private val TIME_PARSER: DateTimeFormatter =  new DateTimeFormatterBuilder().appendValue(HOUR_OF_DAY).optionalStart().appendLiteral(':').appendValue(MINUTE_OF_HOUR, 2).optionalStart().appendLiteral(':').appendValue(SECOND_OF_MINUTE, 2).toFormatter
+  private val TIME_PARSER: DateTimeFormatter = new DateTimeFormatterBuilder()
+    .appendValue(HOUR_OF_DAY)
+    .optionalStart()
+    .appendLiteral(':')
+    .appendValue(MINUTE_OF_HOUR, 2)
+    .optionalStart()
+    .appendLiteral(':')
+    .appendValue(SECOND_OF_MINUTE, 2)
+    .toFormatter
 
   /** Reads a set of TZDB files and builds a single combined data file.
     *
@@ -56,13 +74,13 @@ object TzdbZoneRulesCompiler {
       outputHelp()
       return
     }
-    var version: String = null
-    var baseSrcDir: File = null
-    var dstDir: File = null
+    var version: String   = null
+    var baseSrcDir: File  = null
+    var dstDir: File      = null
     var unpacked: Boolean = false
-    var verbose: Boolean = false
-    var i: Int = 0
-    val outer = new scala.util.control.Breaks()
+    var verbose: Boolean  = false
+    var i: Int            = 0
+    val outer             = new scala.util.control.Breaks()
     outer.breakable {
       while (i < args.length) {
         val inner = new scala.util.control.Breaks()
@@ -72,38 +90,33 @@ object TzdbZoneRulesCompiler {
             outer.break()
           }
           if ("-srcdir" == arg) {
-            if (baseSrcDir == null && {i += 1; i} < args.length) {
+            if (baseSrcDir == null && { i += 1; i } < args.length) {
               baseSrcDir = new File(args(i))
               inner.break()
             }
-          }
-          else if ("-dstdir" == arg) {
-            if (dstDir == null && {i += 1; i} < args.length) {
+          } else if ("-dstdir" == arg) {
+            if (dstDir == null && { i += 1; i } < args.length) {
               dstDir = new File(args(i))
               inner.break()
             }
-          }
-          else if ("-version" == arg) {
-            if (version == null && {i += 1; i} < args.length) {
+          } else if ("-version" == arg) {
+            if (version == null && { i += 1; i } < args.length) {
               version = args(i)
               inner.break()
             }
-          }
-          else if ("-unpacked" == arg) {
+          } else if ("-unpacked" == arg) {
             if (!unpacked) {
               unpacked = true
               i += 1
               inner.break()
             }
-          }
-          else if ("-verbose" == arg) {
+          } else if ("-verbose" == arg) {
             if (!verbose) {
               verbose = true
               i += 1
               inner.break()
             }
-          }
-          else if ("-help" != arg) {
+          } else if ("-help" != arg) {
             i += 1
             System.out.println(s"Unrecognised option: $arg")
           }
@@ -121,11 +134,22 @@ object TzdbZoneRulesCompiler {
       return
     }
     dstDir = if (dstDir != null) dstDir else baseSrcDir
-    var srcFileNames: java.util.List[String] = Arrays.asList(Arrays.copyOfRange(args, i, args.length): _*)
+    var srcFileNames: java.util.List[String] =
+      Arrays.asList(Arrays.copyOfRange(args, i, args.length): _*)
     if (srcFileNames.isEmpty) {
       System.out.println("Source filenames not specified, using default set")
-      System.out.println("(africa antarctica asia australasia backward etcetera europe northamerica southamerica)")
-      srcFileNames = Arrays.asList("africa", "antarctica", "asia", "australasia", "backward", "etcetera", "europe", "northamerica", "southamerica")
+      System.out.println(
+        "(africa antarctica asia australasia backward etcetera europe northamerica southamerica)"
+      )
+      srcFileNames = Arrays.asList("africa",
+                                   "antarctica",
+                                   "asia",
+                                   "australasia",
+                                   "backward",
+                                   "etcetera",
+                                   "europe",
+                                   "northamerica",
+                                   "southamerica")
     }
     val srcDirs: java.util.List[File] = new java.util.ArrayList[File]
     if (version != null) {
@@ -135,8 +159,7 @@ object TzdbZoneRulesCompiler {
         return
       }
       srcDirs.add(srcDir)
-    }
-    else {
+    } else {
       val dirs: Array[File] = baseSrcDir.listFiles
       for (dir <- dirs) {
         if (dir.isDirectory && dir.getName.matches("[12][0-9][0-9][0-9][A-Za-z0-9._-]+"))
@@ -170,28 +193,39 @@ object TzdbZoneRulesCompiler {
     System.out.println("   -verbose              Output verbose information during compilation")
     System.out.println(" There must be one directory for each version in srcdir")
     System.out.println(" Each directory must have the name of the version, such as 2009a")
-    System.out.println(" Each directory must contain the unpacked tzdb files, such as asia or europe")
+    System.out.println(
+      " Each directory must contain the unpacked tzdb files, such as asia or europe"
+    )
     System.out.println(" Directories must match the regex [12][0-9][0-9][0-9][A-Za-z0-9._-]+")
-    System.out.println(" There will be one jar file for each version and one combined jar in dstdir")
+    System.out.println(
+      " There will be one jar file for each version and one combined jar in dstdir"
+    )
     System.out.println(" If the version is specified, only that version is processed")
   }
 
   /** Process to create the jar files. */
-  private def process(srcDirs: java.util.List[File], srcFileNames: java.util.List[String], dstDir: File, unpacked: Boolean, verbose: Boolean): Unit = {
+  private def process(
+    srcDirs:      java.util.List[File],
+    srcFileNames: java.util.List[String],
+    dstDir:       File,
+    unpacked:     Boolean,
+    verbose:      Boolean
+  ): Unit = {
     val deduplicateMap: java.util.Map[AnyRef, AnyRef] = new java.util.HashMap[AnyRef, AnyRef]
-    val allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]] = new java.util.TreeMap[String, java.util.SortedMap[String, ZoneRules]]
-    val allRegionIds: java.util.Set[String] = new java.util.TreeSet[String]
-    val allRules: java.util.Set[ZoneRules] = new java.util.HashSet[ZoneRules]
+    val allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]] =
+      new java.util.TreeMap[String, java.util.SortedMap[String, ZoneRules]]
+    val allRegionIds: java.util.Set[String]                   = new java.util.TreeSet[String]
+    val allRules: java.util.Set[ZoneRules]                    = new java.util.HashSet[ZoneRules]
     var bestLeapSeconds: java.util.SortedMap[LocalDate, Byte] = null
-    val srcDirsIterator = srcDirs.iterator
+    val srcDirsIterator                                       = srcDirs.iterator
     while (srcDirsIterator.hasNext) {
       val srcDir = srcDirsIterator.next()
       scala.util.control.Breaks.breakable {
         val srcFiles: java.util.List[File] = new java.util.ArrayList[File]
-        val srcFileNamesIterator = srcFileNames.iterator
+        val srcFileNamesIterator           = srcFileNames.iterator
         while (srcFileNamesIterator.hasNext) {
           val srcFileName = srcFileNamesIterator.next()
-          val file: File = new File(srcDir, srcFileName)
+          val file: File  = new File(srcDir, srcFileName)
           if (file.exists)
             srcFiles.add(file)
         }
@@ -199,15 +233,18 @@ object TzdbZoneRulesCompiler {
           scala.util.control.Breaks.break()
         var leapSecondsFile: File = new File(srcDir, "leapseconds")
         if (!leapSecondsFile.exists) {
-          System.out.println(s"Version ${srcDir.getName} does not include leap seconds information.")
+          System.out.println(
+            s"Version ${srcDir.getName} does not include leap seconds information."
+          )
           leapSecondsFile = null
         }
         val loopVersion: String = srcDir.getName
-        val compiler: TzdbZoneRulesCompiler = new TzdbZoneRulesCompiler(loopVersion, srcFiles, leapSecondsFile, verbose)
+        val compiler: TzdbZoneRulesCompiler =
+          new TzdbZoneRulesCompiler(loopVersion, srcFiles, leapSecondsFile, verbose)
         compiler.setDeduplicateMap(deduplicateMap)
         try {
           compiler.compile()
-          val builtZones: java.util.SortedMap[String, ZoneRules] = compiler.getZones
+          val builtZones: java.util.SortedMap[String, ZoneRules]      = compiler.getZones
           val parsedLeapSeconds: java.util.SortedMap[LocalDate, Byte] = compiler.getLeapSeconds
           if (!unpacked) {
             val dstFile: File = new File(dstDir, s"threeten-TZDB-$loopVersion.jar")
@@ -219,11 +256,12 @@ object TzdbZoneRulesCompiler {
           allRegionIds.addAll(builtZones.keySet)
           allRules.addAll(builtZones.values)
           if (compiler.getMostRecentLeapSecond != null) {
-            if (bestLeapSeconds == null || compiler.getMostRecentLeapSecond.compareTo(bestLeapSeconds.lastKey) > 0)
+            if (bestLeapSeconds == null || compiler.getMostRecentLeapSecond.compareTo(
+                  bestLeapSeconds.lastKey
+                ) > 0)
               bestLeapSeconds = parsedLeapSeconds
           }
-        }
-        catch {
+        } catch {
           case ex: Exception =>
             System.out.println(s"Failed: ${ex.toString}")
             ex.printStackTrace()
@@ -235,8 +273,7 @@ object TzdbZoneRulesCompiler {
       if (verbose)
         System.out.println(s"Outputting combined files: $dstDir")
       outputFilesDat(dstDir, allBuiltZones, allRegionIds, allRules, bestLeapSeconds)
-    }
-    else {
+    } else {
       val dstFile: File = new File(dstDir, "threeten-TZDB-all.jar")
       if (verbose)
         System.out.println(s"Outputting combined file: $dstFile")
@@ -245,7 +282,13 @@ object TzdbZoneRulesCompiler {
   }
 
   /** Outputs the DAT files. */
-  private def outputFilesDat(dstDir: File, allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]], allRegionIds: java.util.Set[String], allRules: java.util.Set[ZoneRules], leapSeconds: java.util.SortedMap[LocalDate, Byte]): Unit = {
+  private def outputFilesDat(
+    dstDir:        File,
+    allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]],
+    allRegionIds:  java.util.Set[String],
+    allRules:      java.util.Set[ZoneRules],
+    leapSeconds:   java.util.SortedMap[LocalDate, Byte]
+  ): Unit = {
     val tzdbFile: File = new File(dstDir, "TZDB.dat")
     tzdbFile.delete
     try {
@@ -257,8 +300,7 @@ object TzdbZoneRulesCompiler {
         if (fos != null)
           fos.close()
       }
-    }
-    catch {
+    } catch {
       case ex: Exception =>
         System.out.println(s"Failed: ${ex.toString}")
         ex.printStackTrace()
@@ -267,22 +309,33 @@ object TzdbZoneRulesCompiler {
   }
 
   /** Outputs the file. */
-  private def outputFile(dstFile: File, version: String, builtZones: java.util.SortedMap[String, ZoneRules], leapSeconds: java.util.SortedMap[LocalDate, Byte]): Unit = {
-    val loopAllBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]] = new java.util.TreeMap[String, java.util.SortedMap[String, ZoneRules]]
+  private def outputFile(
+    dstFile:     File,
+    version:     String,
+    builtZones:  java.util.SortedMap[String, ZoneRules],
+    leapSeconds: java.util.SortedMap[LocalDate, Byte]
+  ): Unit = {
+    val loopAllBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]] =
+      new java.util.TreeMap[String, java.util.SortedMap[String, ZoneRules]]
     loopAllBuiltZones.put(version, builtZones)
     val loopAllRegionIds: java.util.Set[String] = new java.util.TreeSet[String](builtZones.keySet)
-    val loopAllRules: java.util.Set[ZoneRules] = new java.util.HashSet[ZoneRules](builtZones.values)
+    val loopAllRules: java.util.Set[ZoneRules]  = new java.util.HashSet[ZoneRules](builtZones.values)
     outputFile(dstFile, loopAllBuiltZones, loopAllRegionIds, loopAllRules, leapSeconds)
   }
 
   /** Outputs the file. */
-  private def outputFile(dstFile: File, allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]], allRegionIds: java.util.Set[String], allRules: java.util.Set[ZoneRules], leapSeconds: java.util.SortedMap[LocalDate, Byte]): Unit = {
+  private def outputFile(
+    dstFile:       File,
+    allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]],
+    allRegionIds:  java.util.Set[String],
+    allRules:      java.util.Set[ZoneRules],
+    leapSeconds:   java.util.SortedMap[LocalDate, Byte]
+  ): Unit = {
     var jos: JarOutputStream = null
     try {
       jos = new JarOutputStream(new FileOutputStream(dstFile))
       outputTzdbEntry(jos, allBuiltZones, allRegionIds, allRules)
-    }
-    catch {
+    } catch {
       case ex: Exception =>
         System.out.println(s"Failed: ${ex.toString}")
         ex.printStackTrace()
@@ -298,27 +351,36 @@ object TzdbZoneRulesCompiler {
   }
 
   /** Outputs the timezone entry in the JAR file. */
-  private def outputTzdbEntry(jos: JarOutputStream, allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]], allRegionIds: java.util.Set[String], allRules: java.util.Set[ZoneRules]): Unit = {
+  private def outputTzdbEntry(
+    jos:           JarOutputStream,
+    allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]],
+    allRegionIds:  java.util.Set[String],
+    allRules:      java.util.Set[ZoneRules]
+  ): Unit =
     try {
       jos.putNextEntry(new ZipEntry("org/threeten/bp/TZDB.dat"))
       outputTzdbDat(jos, allBuiltZones, allRegionIds, allRules)
       jos.closeEntry()
-    }
-    catch {
+    } catch {
       case ex: Exception =>
         System.out.println(s"Failed: ${ex.toString}")
         ex.printStackTrace()
         System.exit(1)
     }
-  }
 
   /** Outputs the timezone DAT file. */
   @throws(classOf[IOException])
-  private def outputTzdbDat(jos: OutputStream, allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]], allRegionIds: java.util.Set[String], allRules: java.util.Set[ZoneRules]): Unit = {
+  private def outputTzdbDat(
+    jos:           OutputStream,
+    allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]],
+    allRegionIds:  java.util.Set[String],
+    allRules:      java.util.Set[ZoneRules]
+  ): Unit = {
     val out: DataOutputStream = new DataOutputStream(jos)
     out.writeByte(1)
     out.writeUTF("TZDB")
-    val versionArray: Array[String] = allBuiltZones.keySet.toArray(new Array[String](allBuiltZones.size))
+    val versionArray: Array[String] =
+      allBuiltZones.keySet.toArray(new Array[String](allBuiltZones.size))
     out.writeShort(versionArray.length)
     for (version <- versionArray) {
       out.writeUTF(version)
@@ -331,7 +393,7 @@ object TzdbZoneRulesCompiler {
     val rulesList: java.util.List[ZoneRules] = new java.util.ArrayList[ZoneRules](allRules)
     out.writeShort(rulesList.size)
     val baos: ByteArrayOutputStream = new ByteArrayOutputStream(1024)
-    val rulesIterator = rulesList.iterator
+    val rulesIterator               = rulesList.iterator
     while (rulesIterator.hasNext) {
       val rules = rulesIterator.next()
       baos.reset()
@@ -349,7 +411,8 @@ object TzdbZoneRulesCompiler {
       val entries = allBuiltZones.get(version).entrySet.iterator()
       while (entries.hasNext) {
         val entry = entries.next()
-        val regionIndex: Int = Arrays.binarySearch(regionArray.asInstanceOf[Array[AnyRef]], entry.getKey)
+        val regionIndex: Int =
+          Arrays.binarySearch(regionArray.asInstanceOf[Array[AnyRef]], entry.getKey)
         val rulesIndex: Int = rulesList.indexOf(entry.getValue)
         out.writeShort(regionIndex)
         out.writeShort(rulesIndex)
@@ -364,7 +427,10 @@ object TzdbZoneRulesCompiler {
     * @param leapDate Date which has gets leap second adjustment (at the end)
     * @param secondAdjustment +1 or -1 for inserting or dropping a second
     */
-  private[zone] final class LeapSecondRule(private[zone] val leapDate: LocalDate, private[zone] var secondAdjustment: Byte)
+  private[zone] final class LeapSecondRule(
+    private[zone] val leapDate:         LocalDate,
+    private[zone] var secondAdjustment: Byte
+  )
 }
 
 /** A builder that can read the TZDB time-zone files and build {@code ZoneRules} instances.
@@ -378,19 +444,34 @@ object TzdbZoneRulesCompiler {
   * @param sourceFiles  the list of source files, not empty, not null
   * @param verbose  whether to output verbose messages
   */
-final class TzdbZoneRulesCompiler(private val version: String, private val sourceFiles: java.util.List[File], private val leapSecondsFile: File, private val verbose: Boolean) {
+final class TzdbZoneRulesCompiler(
+  private val version:         String,
+  private val sourceFiles:     java.util.List[File],
+  private val leapSecondsFile: File,
+  private val verbose:         Boolean
+) {
+
   /** The TZDB rules. */
-  private val rules: java.util.Map[String, java.util.List[TzdbZoneRulesCompiler#TZDBRule]] = new java.util.HashMap[String, java.util.List[TzdbZoneRulesCompiler#TZDBRule]]
+  private val rules: java.util.Map[String, java.util.List[TzdbZoneRulesCompiler#TZDBRule]] =
+    new java.util.HashMap[String, java.util.List[TzdbZoneRulesCompiler#TZDBRule]]
+
   /** The TZDB zones. */
-  private val zones: java.util.Map[String, java.util.List[TzdbZoneRulesCompiler#TZDBZone]] = new java.util.HashMap[String, java.util.List[TzdbZoneRulesCompiler#TZDBZone]]
+  private val zones: java.util.Map[String, java.util.List[TzdbZoneRulesCompiler#TZDBZone]] =
+    new java.util.HashMap[String, java.util.List[TzdbZoneRulesCompiler#TZDBZone]]
+
   /** The TZDB links. */
   private val links: java.util.Map[String, String] = new java.util.HashMap[String, String]
+
   /** The built zones. */
-  private val builtZones: java.util.SortedMap[String, ZoneRules] = new java.util.TreeMap[String, ZoneRules]
+  private val builtZones: java.util.SortedMap[String, ZoneRules] =
+    new java.util.TreeMap[String, ZoneRules]
+
   /** A map to deduplicate object instances. */
   private var deduplicateMap: java.util.Map[AnyRef, AnyRef] = new java.util.HashMap[AnyRef, AnyRef]
+
   /** Sorted collection of LeapSecondRules. */
-  private val leapSeconds: java.util.SortedMap[LocalDate, Byte] = new java.util.TreeMap[LocalDate, Byte]
+  private val leapSeconds: java.util.SortedMap[LocalDate, Byte] =
+    new java.util.TreeMap[LocalDate, Byte]
 
   /** Compile the rules file.
     *
@@ -423,7 +504,8 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
     *
     * @return the most recent leap second, null if none
     */
-  private def getMostRecentLeapSecond: LocalDate = if (leapSeconds.isEmpty) null else leapSeconds.lastKey
+  private def getMostRecentLeapSecond: LocalDate =
+    if (leapSeconds.isEmpty) null else leapSeconds.lastKey
 
   /** Sets the deduplication map.
     *
@@ -453,12 +535,12 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
   @throws[Exception]
   private def parseLeapSecondsFile(): Unit = {
     printVerbose(s"Parsing leap second file: $leapSecondsFile")
-    var lineNumber: Int = 1
-    var line: String = null
+    var lineNumber: Int    = 1
+    var line: String       = null
     var in: BufferedReader = null
     try {
       in = new BufferedReader(new FileReader(leapSecondsFile))
-      while ({line = in.readLine; line} != null) {
+      while ({ line = in.readLine; line } != null) {
         scala.util.control.Breaks.breakable {
           val index: Int = line.indexOf('#')
           if (index >= 0)
@@ -472,13 +554,15 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
       }
     } catch {
       case ex: Exception =>
-        throw new Exception(s"Failed while processing file '$leapSecondsFile' on line $lineNumber '$line'", ex)
+        throw new Exception(
+          s"Failed while processing file '$leapSecondsFile' on line $lineNumber '$line'",
+          ex
+        )
     } finally {
       try {
         if (in != null)
           in.close()
-      }
-      catch {
+      } catch {
         case ex: Exception =>
       }
     }
@@ -486,37 +570,42 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
 
   private def parseLeapSecondRule(line: String): TzdbZoneRulesCompiler.LeapSecondRule = {
     val st: StringTokenizer = new StringTokenizer(line, " \t")
-    val first: String = st.nextToken
+    val first: String       = st.nextToken
     if (first == "Leap") {
       if (st.countTokens < 6) {
         printVerbose(s"Invalid leap second line in file: $leapSecondsFile, line: $line")
         throw new IllegalArgumentException("Invalid leap second line")
       }
-    }
-    else
+    } else
       throw new IllegalArgumentException("Unknown line")
-    val year: Int = st.nextToken.toInt
-    val month: Month = parseMonth(st.nextToken)
-    val dayOfMonth: Int = st.nextToken.toInt
-    val leapDate: LocalDate = LocalDate.of(year, month, dayOfMonth)
+    val year: Int                = st.nextToken.toInt
+    val month: Month             = parseMonth(st.nextToken)
+    val dayOfMonth: Int          = st.nextToken.toInt
+    val leapDate: LocalDate      = LocalDate.of(year, month, dayOfMonth)
     val timeOfLeapSecond: String = st.nextToken
-    var adjustmentByte: Byte = 0
-    val adjustment: String = st.nextToken
+    var adjustmentByte: Byte     = 0
+    val adjustment: String       = st.nextToken
     if (adjustment == "+") {
       if ("23:59:60" != timeOfLeapSecond)
-        throw new IllegalArgumentException(s"Leap seconds can only be inserted at 23:59:60 - Date:$leapDate")
+        throw new IllegalArgumentException(
+          s"Leap seconds can only be inserted at 23:59:60 - Date:$leapDate"
+        )
       adjustmentByte = +1
-    }
-    else if (adjustment == "-") {
+    } else if (adjustment == "-") {
       if ("23:59:59" != timeOfLeapSecond)
-        throw new IllegalArgumentException(s"Leap seconds can only be removed at 23:59:59 - Date:$leapDate")
+        throw new IllegalArgumentException(
+          s"Leap seconds can only be removed at 23:59:59 - Date:$leapDate"
+        )
       adjustmentByte = -1
-    }
-    else
-      throw new IllegalArgumentException(s"Invalid adjustment '$adjustment' in leap second rule for $leapDate")
+    } else
+      throw new IllegalArgumentException(
+        s"Invalid adjustment '$adjustment' in leap second rule for $leapDate"
+      )
     val rollingOrStationary: String = st.nextToken
     if (!"S".equalsIgnoreCase(rollingOrStationary))
-      throw new IllegalArgumentException(s"Only stationary ('S') leap seconds are supported, not '$rollingOrStationary'")
+      throw new IllegalArgumentException(
+        s"Only stationary ('S') leap seconds are supported, not '$rollingOrStationary'"
+      )
     new TzdbZoneRulesCompiler.LeapSecondRule(leapDate, adjustmentByte)
   }
 
@@ -527,13 +616,13 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
     */
   @throws[Exception]
   private def parseFile(file: File): Unit = {
-    var lineNumber: Int = 1
-    var line: String = null
+    var lineNumber: Int    = 1
+    var line: String       = null
     var in: BufferedReader = null
     try {
       in = new BufferedReader(new FileReader(file))
       var openZone: java.util.List[TzdbZoneRulesCompiler#TZDBZone] = null
-      while ({line = in.readLine; line} != null) {
+      while ({ line = in.readLine; line } != null) {
         scala.util.control.Breaks.breakable {
           {
             val index: Int = line.indexOf('#')
@@ -545,8 +634,7 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
             if (openZone != null && Character.isWhitespace(line.charAt(0)) && st.hasMoreTokens) {
               if (parseZoneLine(st, openZone))
                 openZone = null
-            }
-            else {
+            } else {
               if (st.hasMoreTokens) {
                 val first: String = st.nextToken
                 if (first == "Zone") {
@@ -558,8 +646,7 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
                   zones.put(st.nextToken, openZone)
                   if (parseZoneLine(st, openZone))
                     openZone = null
-                }
-                else {
+                } else {
                   openZone = null
                   if (first == "Rule") {
                     if (st.countTokens < 9) {
@@ -567,17 +654,15 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
                       throw new IllegalArgumentException("Invalid Rule line")
                     }
                     parseRuleLine(st)
-                  }
-                  else if (first == "Link") {
+                  } else if (first == "Link") {
                     if (st.countTokens < 2) {
                       printVerbose(s"Invalid Link line in file: $file, line: $line")
                       throw new IllegalArgumentException("Invalid Link line")
                     }
-                    val realId: String = st.nextToken
+                    val realId: String  = st.nextToken
                     val aliasId: String = st.nextToken
                     links.put(aliasId, realId)
-                  }
-                  else
+                  } else
                     throw new IllegalArgumentException("Unknown line")
                 }
               }
@@ -586,8 +671,7 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
           lineNumber += 1
         }
       }
-    }
-    catch {
+    } catch {
       case ex: Exception =>
         throw new Exception(s"Failed while processing file '$file' on line $lineNumber '$line'", ex)
     } finally {
@@ -602,18 +686,18 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
     */
   private def parseRuleLine(st: StringTokenizer): Unit = {
     val rule: TzdbZoneRulesCompiler#TZDBRule = new TZDBRule
-    val name: String = st.nextToken
+    val name: String                         = st.nextToken
     if (!rules.containsKey(name))
       rules.put(name, new java.util.ArrayList[TzdbZoneRulesCompiler#TZDBRule])
     rules.get(name).add(rule)
     rule.startYear = parseYear(st.nextToken, 0)
-    rule.endYear = parseYear(st.nextToken, rule.startYear)
+    rule.endYear   = parseYear(st.nextToken, rule.startYear)
     if (rule.startYear > rule.endYear)
       throw new IllegalArgumentException(s"Year order invalid: ${rule.startYear} > ${rule.endYear}")
     parseOptional(st.nextToken)
     parseMonthDayTime(st, rule)
     rule.savingsAmount = parsePeriod(st.nextToken)
-    rule.text = parseOptional(st.nextToken)
+    rule.text          = parseOptional(st.nextToken)
   }
 
   /** Parses a Zone line.
@@ -621,24 +705,25 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
     * @param st  the tokenizer, not null
     * @return true if the zone is complete
     */
-  private def parseZoneLine(st: StringTokenizer, zoneList: java.util.List[TzdbZoneRulesCompiler#TZDBZone]): Boolean = {
+  private def parseZoneLine(
+    st:       StringTokenizer,
+    zoneList: java.util.List[TzdbZoneRulesCompiler#TZDBZone]
+  ): Boolean = {
     val zone: TzdbZoneRulesCompiler#TZDBZone = new TZDBZone
     zoneList.add(zone)
     zone.standardOffset = parseOffset(st.nextToken)
     val savingsRule: String = parseOptional(st.nextToken)
     if (savingsRule == null) {
       zone.fixedSavingsSecs = 0
-      zone.savingsRule = null
-    }
-    else {
+      zone.savingsRule      = null
+    } else {
       try {
         zone.fixedSavingsSecs = parsePeriod(savingsRule)
-        zone.savingsRule = null
-      }
-      catch {
+        zone.savingsRule      = null
+      } catch {
         case ex: Exception =>
           zone.fixedSavingsSecs = null
-          zone.savingsRule = savingsRule
+          zone.savingsRule      = savingsRule
       }
     }
     zone.text = st.nextToken
@@ -648,8 +733,7 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
         parseMonthDayTime(st, zone)
       }
       false
-    }
-    else {
+    } else {
       true
     }
   }
@@ -659,40 +743,41 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
     * @param st  the tokenizer, not null
     * @param mdt  the object to parse into, not null
     */
-  private def parseMonthDayTime(st: StringTokenizer, mdt: TzdbZoneRulesCompiler#TZDBMonthDayTime): Unit = {
+  private def parseMonthDayTime(
+    st:  StringTokenizer,
+    mdt: TzdbZoneRulesCompiler#TZDBMonthDayTime
+  ): Unit = {
     mdt.month = parseMonth(st.nextToken)
     if (st.hasMoreTokens) {
       var dayRule: String = st.nextToken
       if (dayRule.startsWith("last")) {
-        mdt.dayOfMonth = -1
-        mdt.dayOfWeek = parseDayOfWeek(dayRule.substring(4))
+        mdt.dayOfMonth     = -1
+        mdt.dayOfWeek      = parseDayOfWeek(dayRule.substring(4))
         mdt.adjustForwards = false
-      }
-      else {
+      } else {
         var index: Int = dayRule.indexOf(">=")
         if (index > 0) {
           mdt.dayOfWeek = parseDayOfWeek(dayRule.substring(0, index))
-          dayRule = dayRule.substring(index + 2)
-        }
-        else {
+          dayRule       = dayRule.substring(index + 2)
+        } else {
           index = dayRule.indexOf("<=")
           if (index > 0) {
-            mdt.dayOfWeek = parseDayOfWeek(dayRule.substring(0, index))
+            mdt.dayOfWeek      = parseDayOfWeek(dayRule.substring(0, index))
             mdt.adjustForwards = false
-            dayRule = dayRule.substring(index + 2)
+            dayRule            = dayRule.substring(index + 2)
           }
         }
         mdt.dayOfMonth = dayRule.toInt
       }
       if (st.hasMoreTokens) {
         val timeStr: String = st.nextToken
-        var secsOfDay: Int = parseSecs(timeStr)
+        var secsOfDay: Int  = parseSecs(timeStr)
         if (secsOfDay == 86400) {
           mdt.endOfDay = true
-          secsOfDay = 0
+          secsOfDay    = 0
         }
         val time: LocalTime = deduplicate(LocalTime.ofSecondOfDay(secsOfDay))
-        mdt.time = time
+        mdt.time           = time
         mdt.timeDefinition = parseTimeDefinition(timeStr.charAt(timeStr.length - 1))
       }
     }
@@ -741,15 +826,19 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
     if (str.startsWith("-")) {
       pos = 1
     }
-    val pp: ParsePosition = new ParsePosition(pos)
+    val pp: ParsePosition        = new ParsePosition(pos)
     val parsed: TemporalAccessor = TzdbZoneRulesCompiler.TIME_PARSER.parseUnresolved(str, pp)
     if (parsed == null || pp.getErrorIndex >= 0) {
       throw new IllegalArgumentException(str)
     }
     val hour: Long = parsed.getLong(HOUR_OF_DAY)
-    val min: java.lang.Long = if (parsed.isSupported(MINUTE_OF_HOUR)) parsed.getLong(MINUTE_OF_HOUR) else null
-    val sec: java.lang.Long = if (parsed.isSupported(SECOND_OF_MINUTE)) parsed.getLong(SECOND_OF_MINUTE) else null
-    var secs: Int = (hour * 60 * 60 + (if (min != null) min.toInt else 0) * 60 + (if (sec != null) sec.toInt else 0)).toInt
+    val min: java.lang.Long =
+      if (parsed.isSupported(MINUTE_OF_HOUR)) parsed.getLong(MINUTE_OF_HOUR) else null
+    val sec: java.lang.Long =
+      if (parsed.isSupported(SECOND_OF_MINUTE)) parsed.getLong(SECOND_OF_MINUTE) else null
+    var secs: Int =
+      (hour * 60 * 60 + (if (min != null) min.toInt else 0) * 60 + (if (sec != null) sec.toInt
+                                                                    else 0)).toInt
     if (pos == 1) {
       secs = -secs
     }
@@ -782,7 +871,7 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
       printVerbose(s"Building zone ${zoneId}")
       zoneId = deduplicate(zoneId)
       val tzdbZones: java.util.Iterator[TzdbZoneRulesCompiler#TZDBZone] = zones.get(zoneId).iterator
-      var bld: ZoneRulesBuilder = new ZoneRulesBuilder
+      var bld: ZoneRulesBuilder                                         = new ZoneRulesBuilder
 
       while (tzdbZones.hasNext) {
         val tzdbZone = tzdbZones.next()
@@ -803,7 +892,9 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
         printVerbose(s"Relinking alias ${aliasId} to $realId")
         realRules = builtZones.get(realId)
         if (realRules == null) {
-          throw new IllegalArgumentException(s"Alias '${aliasId}' links to invalid zone '$realId' for '$version'")
+          throw new IllegalArgumentException(
+            s"Alias '${aliasId}' links to invalid zone '$realId' for '$version'"
+          )
         }
       }
       builtZones.put(aliasId, realRules)
@@ -837,62 +928,88 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
 
   /** Class representing a month-day-time in the TZDB file. */
   private[zone] abstract class TZDBMonthDayTime {
+
     /** The month of the cutover. */
     private[zone] var month: Month = Month.JANUARY
+
     /** The day-of-month of the cutover. */
     private[zone] var dayOfMonth: Int = 1
+
     /** Whether to adjust forwards. */
     private[zone] var adjustForwards: Boolean = true
+
     /** The day-of-week of the cutover. */
     private[zone] var dayOfWeek: DayOfWeek = null
+
     /** The time of the cutover. */
     private[zone] var time: LocalTime = LocalTime.MIDNIGHT
+
     /** Whether this is midnight end of day. */
     private[zone] var endOfDay: Boolean = false
+
     /** The time of the cutover. */
     private[zone] var timeDefinition: ZoneOffsetTransitionRule.TimeDefinition = TimeDefinition.WALL
 
-    private[zone] def adjustToFowards(year: Int): Unit = {
+    private[zone] def adjustToFowards(year: Int): Unit =
       if (!adjustForwards && dayOfMonth > 0) {
         val adjustedDate: LocalDate = LocalDate.of(year, month, dayOfMonth).minusDays(6)
-        dayOfMonth = adjustedDate.getDayOfMonth
-        month = adjustedDate.getMonth
+        dayOfMonth     = adjustedDate.getDayOfMonth
+        month          = adjustedDate.getMonth
         adjustForwards = true
       }
-    }
   }
 
   /** Class representing a rule line in the TZDB file. */
   private[zone] final class TZDBRule extends TZDBMonthDayTime {
+
     /** The start year. */
     private[zone] var startYear: Int = 0
+
     /** The end year. */
     private[zone] var endYear: Int = 0
+
     /** The amount of savings. */
     private[zone] var savingsAmount: Int = 0
+
     /** The text name of the zone. */
     private[zone] var text: String = null
 
     private[zone] def addToBuilder(bld: ZoneRulesBuilder): Unit = {
       adjustToFowards(2004)
-      bld.addRuleToWindow(startYear, endYear, month, dayOfMonth, dayOfWeek, time, endOfDay, timeDefinition, savingsAmount)
+      bld.addRuleToWindow(startYear,
+                          endYear,
+                          month,
+                          dayOfMonth,
+                          dayOfWeek,
+                          time,
+                          endOfDay,
+                          timeDefinition,
+                          savingsAmount)
     }
   }
 
   /** Class representing a linked set of zone lines in the TZDB file. */
   private[zone] final class TZDBZone extends TZDBMonthDayTime {
+
     /** The standard offset. */
     private[zone] var standardOffset: ZoneOffset = null
+
     /** The fixed savings amount. */
     private[zone] var fixedSavingsSecs: Integer = null
+
     /** The savings rule. */
     private[zone] var savingsRule: String = null
+
     /** The text name of the zone. */
     private[zone] var text: String = null
+
     /** The year of the cutover. */
     private[zone] var year: Year = null
 
-    private[zone] def addToBuilder(bld: ZoneRulesBuilder, rules: java.util.Map[String, java.util.List[TzdbZoneRulesCompiler#TZDBRule]]): ZoneRulesBuilder = {
+    private[zone] def addToBuilder(
+      bld:   ZoneRulesBuilder,
+      rules: java.util.Map[String, java.util.List[TzdbZoneRulesCompiler#TZDBRule]]
+    ): ZoneRulesBuilder = {
       if (year != null)
         bld.addWindow(standardOffset, toDateTime(year.getValue), timeDefinition)
       else {
@@ -918,11 +1035,10 @@ final class TzdbZoneRulesCompiler(private val version: String, private val sourc
       var date: LocalDate = null
       if (dayOfMonth == -1) {
         dayOfMonth = month.length(Year.isLeap(year))
-        date = LocalDate.of(year, month, dayOfMonth)
+        date       = LocalDate.of(year, month, dayOfMonth)
         if (dayOfWeek != null)
           date = date.`with`(TemporalAdjusters.previousOrSame(dayOfWeek))
-      }
-      else {
+      } else {
         date = LocalDate.of(year, month, dayOfMonth)
         if (dayOfWeek != null)
           date = date.`with`(TemporalAdjusters.nextOrSame(dayOfWeek))

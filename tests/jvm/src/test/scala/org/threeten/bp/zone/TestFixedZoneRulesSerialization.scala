@@ -31,33 +31,41 @@
  */
 package org.threeten.bp.zone
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
+import java.io.{
+  ByteArrayInputStream,
+  ByteArrayOutputStream,
+  ObjectInputStream,
+  ObjectOutputStream
+}
 
 import org.scalatest.FunSuite
 import org.threeten.bp._
 
 /** Test ZoneRules Serialization for fixed offset time-zones. */
 class TestFixedZoneRulesSerialization extends FunSuite with AssertionsHelper with AbstractTest {
-  private def make(offset: ZoneOffset): ZoneRules = {
+  private def make(offset: ZoneOffset): ZoneRules =
     offset.getRules
-  }
 
-  private[zone] def data_rules: List[(ZoneRules, ZoneOffset)] = {
-    List((make(TestFixedZoneRules.OFFSET_PONE), TestFixedZoneRules.OFFSET_PONE), (make(TestFixedZoneRules.OFFSET_PTWO), TestFixedZoneRules.OFFSET_PTWO), (make(TestFixedZoneRules.OFFSET_M18), TestFixedZoneRules.OFFSET_M18))
-  }
+  private[zone] def data_rules: List[(ZoneRules, ZoneOffset)] =
+    List(
+      (make(TestFixedZoneRules.OFFSET_PONE), TestFixedZoneRules.OFFSET_PONE),
+      (make(TestFixedZoneRules.OFFSET_PTWO), TestFixedZoneRules.OFFSET_PTWO),
+      (make(TestFixedZoneRules.OFFSET_M18), TestFixedZoneRules.OFFSET_M18)
+    )
 
   test("serialization(test: ZoneRules, expectedOffset: ZoneOffset)") {
-    data_rules.foreach { case (test: ZoneRules, _: ZoneOffset) =>
-      val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-      val out: ObjectOutputStream = new ObjectOutputStream(baos)
-      out.writeObject(test)
-      baos.close()
-      val bytes: Array[Byte] = baos.toByteArray
-      val bais: ByteArrayInputStream = new ByteArrayInputStream(bytes)
-      val in: ObjectInputStream = new ObjectInputStream(bais)
-      val result: ZoneRules = in.readObject.asInstanceOf[ZoneRules]
-      assertEquals(result, test)
-      assertEquals(result.getClass, test.getClass)
+    data_rules.foreach {
+      case (test: ZoneRules, _: ZoneOffset) =>
+        val baos: ByteArrayOutputStream = new ByteArrayOutputStream
+        val out: ObjectOutputStream     = new ObjectOutputStream(baos)
+        out.writeObject(test)
+        baos.close()
+        val bytes: Array[Byte]         = baos.toByteArray
+        val bais: ByteArrayInputStream = new ByteArrayInputStream(bytes)
+        val in: ObjectInputStream      = new ObjectInputStream(bais)
+        val result: ZoneRules          = in.readObject.asInstanceOf[ZoneRules]
+        assertEquals(result, test)
+        assertEquals(result.getClass, test.getClass)
     }
   }
 

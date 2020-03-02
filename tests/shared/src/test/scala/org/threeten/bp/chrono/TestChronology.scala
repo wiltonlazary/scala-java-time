@@ -35,7 +35,7 @@ import java.util.Locale
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.AssertionsHelper
 
-import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import org.scalatest.{ BeforeAndAfterEach, FunSuite }
 
 /** Test Chrono class. */
 class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHelper {
@@ -55,7 +55,8 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
       ("ISO", "iso8601", "ISO calendar"),
       ("Japanese", "japanese", "Japanese calendar"),
       ("Minguo", "roc", "Minguo Calendar"),
-      ("ThaiBuddhist", "buddhist", "ThaiBuddhist calendar"))
+      ("ThaiBuddhist", "buddhist", "ThaiBuddhist calendar")
+    )
   }
 
   test("test_getters") {
@@ -99,11 +100,13 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
   test("test_epoch") {
     data_of_calendars.foreach {
       case (name, alias, description) =>
-        val chrono: Chronology = Chronology.of(name)
+        val chrono: Chronology     = Chronology.of(name)
         val date1: ChronoLocalDate = chrono.dateNow
-        val epoch1: Long = date1.getLong(ChronoField.EPOCH_DAY)
+        val epoch1: Long           = date1.getLong(ChronoField.EPOCH_DAY)
         val date2: ChronoLocalDate = date1.`with`(ChronoField.EPOCH_DAY, epoch1)
-        assertEquals(date1, date2, "Date from epoch day is not same date: " + date1 + " != " + date2)
+        assertEquals(date1,
+                     date2,
+                     "Date from epoch day is not same date: " + date1 + " != " + date2)
         val epoch2: Long = date1.getLong(ChronoField.EPOCH_DAY)
         assertEquals(epoch1, epoch2, "Epoch day not the same: " + epoch1 + " != " + epoch2)
     }
@@ -115,7 +118,8 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
       (IsoChronology.INSTANCE, "iso8601"),
       (JapaneseChronology.INSTANCE, "japanese"),
       (MinguoChronology.INSTANCE, "roc"),
-      (ThaiBuddhistChronology.INSTANCE, "buddhist"))
+      (ThaiBuddhistChronology.INSTANCE, "buddhist")
+    )
   }
 
   test("test_getCalendarType") {

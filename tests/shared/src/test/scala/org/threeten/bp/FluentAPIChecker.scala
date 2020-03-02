@@ -50,7 +50,7 @@ import org.threeten.bp.zone.ZoneOffsetTransition
 /** Test the fluency of the whole API. */
 object FluentAPIChecker {
   @SuppressWarnings(Array("unused")) def main(args: Array[String]): Unit = {
-    val clock: Clock = Clock.systemDefaultZone
+    val clock: Clock   = Clock.systemDefaultZone
     val tod: LocalTime = LocalTime.now(clock)
     tod.plusHours(6).plusMinutes(2)
     tod.plus(6, HOURS).plus(2, MINUTES)
@@ -82,22 +82,22 @@ object FluentAPIChecker {
     var dow: DayOfWeek = MONDAY
     dow = dow.plus(1)
     val offset: ZoneOffset = ZoneOffset.ofHours(1)
-    val paris: ZoneId = ZoneId.of("Europe/Paris")
+    val paris: ZoneId      = ZoneId.of("Europe/Paris")
     import scala.collection.JavaConverters._
     for (trans <- paris.getRules.getTransitions.asScala) {
       System.out.println("Paris transition: " + trans)
     }
     System.out.println("Summer time Paris starts: " + paris.getRules.getTransitionRules.get(0))
     System.out.println("Summer time Paris ends: " + paris.getRules.getTransitionRules.get(1))
-    val ldt: LocalDateTime = date.atTime(tod)
+    val ldt: LocalDateTime  = date.atTime(tod)
     val zdt1: ZonedDateTime = date.atStartOfDay(paris)
     val zdt2: ZonedDateTime = date.atTime(12, 0).atZone(paris)
 
     {
-      val year: Year = Year.of(2002)
+      val year: Year                 = Year.of(2002)
       val sixNationsMonth: YearMonth = year.atMonth(FEBRUARY)
-      val englandWales: LocalDate = sixNationsMonth.atDay(12)
-      val engWal: LocalDate = Year.of(2009).atMonth(FEBRUARY).atDay(12)
+      val englandWales: LocalDate    = sixNationsMonth.atDay(12)
+      val engWal: LocalDate          = Year.of(2009).atMonth(FEBRUARY).atDay(12)
     }
     val tickingClock: Clock = Clock.tickSeconds(paris)
 

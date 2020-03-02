@@ -54,7 +54,9 @@ object TestChronoLocalDate {
   /** FixedAdjusted returns a fixed DateTime in all adjustments.
     * Construct an adjuster with the DateTime that should be returned.
     */
-  private[chrono] class FixedAdjuster private[chrono](private var datetime: Temporal) extends TemporalAdjuster with TemporalAmount {
+  private[chrono] class FixedAdjuster private[chrono] (private var datetime: Temporal)
+      extends TemporalAdjuster
+      with TemporalAmount {
 
     def adjustInto(ignore: Temporal): Temporal = datetime
 
@@ -72,7 +74,8 @@ object TestChronoLocalDate {
   /** FixedPeriodUnit returns a fixed DateTime in all adjustments.
     * Construct an FixedPeriodUnit with the DateTime that should be returned.
     */
-  private[chrono] class FixedPeriodUnit private[chrono](private var dateTime: Temporal) extends TemporalUnit {
+  private[chrono] class FixedPeriodUnit private[chrono] (private var dateTime: Temporal)
+      extends TemporalUnit {
 
     override def toString: String = "FixedPeriodUnit"
 
@@ -91,7 +94,10 @@ object TestChronoLocalDate {
     override def isSupportedBy(dateTime: Temporal): Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
 
-    @SuppressWarnings(Array("unchecked")) def addTo[R <: Temporal](dateTime: R, periodToAdd: Long): R =
+    @SuppressWarnings(Array("unchecked")) def addTo[R <: Temporal](
+      dateTime:    R,
+      periodToAdd: Long
+    ): R =
       this.dateTime.asInstanceOf[R]
 
     def between(temporal1: Temporal, temporal2: Temporal): Long =
@@ -101,7 +107,8 @@ object TestChronoLocalDate {
   /** FixedDateTimeField returns a fixed DateTime in all adjustments.
     * Construct an FixedDateTimeField with the DateTime that should be returned from doSet.
     */
-  private[chrono] class FixedDateTimeField private[chrono](private var dateTime: Temporal) extends TemporalField {
+  private[chrono] class FixedDateTimeField private[chrono] (private var dateTime: Temporal)
+      extends TemporalField {
 
     override def toString: String = "FixedDateTimeField"
 
@@ -129,14 +136,20 @@ object TestChronoLocalDate {
     def getFrom(dateTime: TemporalAccessor): Long =
       throw new UnsupportedOperationException("Not supported yet.")
 
-    @SuppressWarnings(Array("unchecked")) def adjustInto[R <: Temporal](dateTime: R, newValue: Long): R =
+    @SuppressWarnings(Array("unchecked")) def adjustInto[R <: Temporal](
+      dateTime: R,
+      newValue: Long
+    ): R =
       this.dateTime.asInstanceOf[R]
-
 
     override def getDisplayName(locale: Locale): String =
       throw new UnsupportedOperationException("Not supported yet.")
 
-    override def resolve(fieldValues: java.util.Map[TemporalField, java.lang.Long], partialTemporal: TemporalAccessor, resolverStyle: ResolverStyle): TemporalAccessor =
+    override def resolve(
+      fieldValues:     java.util.Map[TemporalField, java.lang.Long],
+      partialTemporal: TemporalAccessor,
+      resolverStyle:   ResolverStyle
+    ): TemporalAccessor =
       null
   }
 
@@ -144,20 +157,19 @@ object TestChronoLocalDate {
 
 class TestChronoLocalDate extends FunSuite with AssertionsHelper {
   val data_of_calendars: List[Chronology] = {
-    List[Chronology](
-      (HijrahChronology.INSTANCE),
-      (IsoChronology.INSTANCE),
-      (JapaneseChronology.INSTANCE),
-      (MinguoChronology.INSTANCE),
-      (ThaiBuddhistChronology.INSTANCE))
+    List[Chronology]((HijrahChronology.INSTANCE),
+                     (IsoChronology.INSTANCE),
+                     (JapaneseChronology.INSTANCE),
+                     (MinguoChronology.INSTANCE),
+                     (ThaiBuddhistChronology.INSTANCE))
   }
 
   test("test_badWithAdjusterChrono") {
     data_of_calendars.foreach { chrono =>
-      val refDate: LocalDate = LocalDate.of(1900, 1, 1)
+      val refDate: LocalDate    = LocalDate.of(1900, 1, 1)
       val date: ChronoLocalDate = chrono.date(refDate)
       for (chrono2 <- data_of_calendars) {
-        val date2: ChronoLocalDate = chrono2.date(refDate)
+        val date2: ChronoLocalDate     = chrono2.date(refDate)
         val adjuster: TemporalAdjuster = new TestChronoLocalDate.FixedAdjuster(date2)
         if (chrono ne chrono2) {
           try {
@@ -176,10 +188,10 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
 
   test("test_badPlusAdjusterChrono") {
     data_of_calendars.foreach { chrono =>
-      val refDate: LocalDate = LocalDate.of(1900, 1, 1)
+      val refDate: LocalDate    = LocalDate.of(1900, 1, 1)
       val date: ChronoLocalDate = chrono.date(refDate)
       for (chrono2 <- data_of_calendars) {
-        val date2: ChronoLocalDate = chrono2.date(refDate)
+        val date2: ChronoLocalDate   = chrono2.date(refDate)
         val adjuster: TemporalAmount = new TestChronoLocalDate.FixedAdjuster(date2)
         if (chrono ne chrono2) {
           try {
@@ -198,10 +210,10 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
 
   test("test_badMinusAdjusterChrono") {
     data_of_calendars.foreach { chrono =>
-      val refDate: LocalDate = LocalDate.of(1900, 1, 1)
+      val refDate: LocalDate    = LocalDate.of(1900, 1, 1)
       val date: ChronoLocalDate = chrono.date(refDate)
       for (chrono2 <- data_of_calendars) {
-        val date2: ChronoLocalDate = chrono2.date(refDate)
+        val date2: ChronoLocalDate   = chrono2.date(refDate)
         val adjuster: TemporalAmount = new TestChronoLocalDate.FixedAdjuster(date2)
         if (chrono ne chrono2) {
           try {
@@ -220,7 +232,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
 
   test("test_badPlusPeriodUnitChrono") {
     data_of_calendars.foreach { chrono =>
-      val refDate: LocalDate = LocalDate.of(1900, 1, 1)
+      val refDate: LocalDate    = LocalDate.of(1900, 1, 1)
       val date: ChronoLocalDate = chrono.date(refDate)
       for (chrono2 <- data_of_calendars) {
         val date2: ChronoLocalDate = chrono2.date(refDate)
@@ -228,7 +240,9 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
         if (chrono ne chrono2) {
           try {
             date.plus(1, adjuster)
-            fail("PeriodUnit.doAdd plus should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass)
+            fail(
+              "PeriodUnit.doAdd plus should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass
+            )
           } catch {
             case cce: Throwable =>
           }
@@ -242,7 +256,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
 
   test("test_badMinusPeriodUnitChrono") {
     data_of_calendars.foreach { chrono =>
-      val refDate: LocalDate = LocalDate.of(1900, 1, 1)
+      val refDate: LocalDate    = LocalDate.of(1900, 1, 1)
       val date: ChronoLocalDate = chrono.date(refDate)
       for (chrono2 <- data_of_calendars) {
         val date2: ChronoLocalDate = chrono2.date(refDate)
@@ -250,7 +264,9 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
         if (chrono ne chrono2) {
           try {
             date.minus(1, adjuster)
-            fail("PeriodUnit.doAdd minus should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass)
+            fail(
+              "PeriodUnit.doAdd minus should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass
+            )
           } catch {
             case cce: Throwable =>
           }
@@ -264,15 +280,17 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
 
   test("test_badDateTimeFieldChrono") {
     data_of_calendars.foreach { chrono =>
-      val refDate: LocalDate = LocalDate.of(1900, 1, 1)
+      val refDate: LocalDate    = LocalDate.of(1900, 1, 1)
       val date: ChronoLocalDate = chrono.date(refDate)
       for (chrono2 <- data_of_calendars) {
-        val date2: ChronoLocalDate = chrono2.date(refDate)
+        val date2: ChronoLocalDate  = chrono2.date(refDate)
         val adjuster: TemporalField = new TestChronoLocalDate.FixedDateTimeField(date2)
         if (chrono ne chrono2) {
           try {
             date.`with`(adjuster, 1)
-            fail("DateTimeField doSet should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass)
+            fail(
+              "DateTimeField doSet should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass
+            )
           } catch {
             case cce: Platform.CCE =>
           }
@@ -287,7 +305,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
   test("test_date_comparisons") {
     data_of_calendars.foreach { chrono =>
       val dates: java.util.List[ChronoLocalDate] = new java.util.ArrayList[ChronoLocalDate]
-      val date: ChronoLocalDate = chrono.date(LocalDate.of(1900, 1, 1))
+      val date: ChronoLocalDate                  = chrono.date(LocalDate.of(1900, 1, 1))
       if (chrono ne JapaneseChronology.INSTANCE) {
         dates.add(date.minus(1000, ChronoUnit.YEARS))
         dates.add(date.minus(100, ChronoUnit.YEARS))
@@ -317,23 +335,21 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
           var i: Int = 0
           while (i < dates.size) {
             val a: ChronoLocalDate = dates.get(i)
-            var j: Int = 0
+            var j: Int             = 0
             while (j < otherDates.size) {
               val b: ChronoLocalDate = otherDates.get(j)
-              val cmp: Int = ChronoLocalDate.timeLineOrder.compare(a, b)
+              val cmp: Int           = ChronoLocalDate.timeLineOrder.compare(a, b)
               if (i < j) {
                 assertTrue(cmp < 0)
                 assertEquals(a.isBefore(b), true, a + " isBefore " + b)
                 assertEquals(a.isAfter(b), false, a + " isAfter " + b)
                 assertEquals(a.isEqual(b), false, a + " isEqual " + b)
-              }
-              else if (i > j) {
+              } else if (i > j) {
                 assertTrue(cmp > 0)
                 assertEquals(a.isBefore(b), false, a + " isBefore " + b)
                 assertEquals(a.isAfter(b), true, a + " isAfter " + b)
                 assertEquals(a.isEqual(b), false, a + " isEqual " + b)
-              }
-              else {
+              } else {
                 assertTrue(cmp == 0)
                 assertEquals(a.isBefore(b), false, a + " isBefore " + b)
                 assertEquals(a.isAfter(b), false, a + " isAfter " + b)

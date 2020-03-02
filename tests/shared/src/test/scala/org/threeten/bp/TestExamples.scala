@@ -47,7 +47,8 @@ class TestExamples extends FunSuite with AssertionsHelper {
     assertEquals(localeUS.getLanguage, "en")
 
     assertEquals(date.format(format.DateTimeFormatter.BASIC_ISO_DATE), "20090213")
-    val format1 = format.DateTimeFormatter.ofPattern("MMMM MM d HH mm ss EE EEEE yyyy G[ VV z Z]", java.util.Locale.GERMAN)
+    val format1 = format.DateTimeFormatter.ofPattern("MMMM MM d HH mm ss EE EEEE yyyy G[ VV z Z]",
+                                                     java.util.Locale.GERMAN)
     assertEquals(date.format(format1), "Februar 02 13 23 31 30 Fr. Freitag 2009 n. Chr.")
 
     // failes due to non-existent method String#toLowerCase(String, Locale): String

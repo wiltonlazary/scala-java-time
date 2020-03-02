@@ -56,6 +56,7 @@ import org.threeten.bp.temporal.ValueRange
 
 @SerialVersionUID(-8722293800195731463L)
 object ThaiBuddhistDate {
+
   /** Obtains the current {@code ThaiBuddhistDate} from the system clock in the default time-zone.
     *
     * This will query the {@link Clock#systemDefaultZone() system clock} in the default
@@ -130,8 +131,8 @@ object ThaiBuddhistDate {
 
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
-    val year: Int = in.readInt
-    val month: Int = in.readByte
+    val year: Int       = in.readInt
+    val month: Int      = in.readByte
     val dayOfMonth: Int = in.readByte
     ThaiBuddhistChronology.INSTANCE.date(year, month, dayOfMonth)
   }
@@ -151,7 +152,9 @@ object ThaiBuddhistDate {
   * @param isoDate  the standard local date, validated not null
   */
 @SerialVersionUID(-8722293800195731463L)
-final class ThaiBuddhistDate private[chrono](private val isoDate: LocalDate) extends ChronoDateImpl[ThaiBuddhistDate] with Serializable {
+final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
+    extends ChronoDateImpl[ThaiBuddhistDate]
+    with Serializable {
   Objects.requireNonNull(isoDate, "date")
 
   def getChronology: ThaiBuddhistChronology = ThaiBuddhistChronology.INSTANCE
@@ -160,15 +163,14 @@ final class ThaiBuddhistDate private[chrono](private val isoDate: LocalDate) ext
 
   def lengthOfMonth: Int = isoDate.lengthOfMonth
 
-  override def range(field: TemporalField): ValueRange = {
+  override def range(field: TemporalField): ValueRange =
     field match {
       case f: ChronoField =>
         if (isSupported(field)) {
           f match {
-            case DAY_OF_MONTH
-                 | DAY_OF_YEAR
-                 | ALIGNED_WEEK_OF_MONTH => isoDate.range(field)
-            case YEAR_OF_ERA => val range: ValueRange = YEAR.range
+            case DAY_OF_MONTH | DAY_OF_YEAR | ALIGNED_WEEK_OF_MONTH => isoDate.range(field)
+            case YEAR_OF_ERA =>
+              val range: ValueRange = YEAR.range
               val max: Long =
                 if (getProlepticYear <= 0) -(range.getMinimum + YEARS_DIFFERENCE) + 1
                 else range.getMaximum + YEARS_DIFFERENCE
@@ -181,24 +183,25 @@ final class ThaiBuddhistDate private[chrono](private val isoDate: LocalDate) ext
       case _ =>
         field.rangeRefinedBy(this)
     }
-  }
 
   def getLong(field: TemporalField): Long =
     field match {
-      case PROLEPTIC_MONTH     => getProlepticMonth
-      case YEAR_OF_ERA         => val prolepticYear: Int = getProlepticYear
-                                  if (prolepticYear >= 1) prolepticYear else 1 - prolepticYear
+      case PROLEPTIC_MONTH => getProlepticMonth
+      case YEAR_OF_ERA =>
+        val prolepticYear: Int = getProlepticYear
+        if (prolepticYear >= 1) prolepticYear else 1 - prolepticYear
       case YEAR                => getProlepticYear
       case ERA                 => if (getProlepticYear >= 1) 1 else 0
       case chrono: ChronoField => isoDate.getLong(field)
       case _                   => field.getFrom(this)
-  }
+    }
 
   private def getProlepticMonth: Long = getProlepticYear * 12L + isoDate.getMonthValue - 1
 
   private def getProlepticYear: Int = isoDate.getYear + YEARS_DIFFERENCE
 
-  override def `with`(adjuster: TemporalAdjuster): ThaiBuddhistDate = super.`with`(adjuster).asInstanceOf[ThaiBuddhistDate]
+  override def `with`(adjuster: TemporalAdjuster): ThaiBuddhistDate =
+    super.`with`(adjuster).asInstanceOf[ThaiBuddhistDate]
 
   def `with`(field: TemporalField, newValue: Long): ThaiBuddhistDate = {
     field match {
@@ -213,7 +216,11 @@ final class ThaiBuddhistDate private[chrono](private val isoDate: LocalDate) ext
             val nvalue: Int = getChronology.range(f).checkValidIntValue(newValue, f)
             f match {
               case YEAR_OF_ERA =>
-                return `with`(isoDate.withYear((if (getProlepticYear >= 1) nvalue else 1 - nvalue) - YEARS_DIFFERENCE))
+                return `with`(
+                  isoDate.withYear(
+                    (if (getProlepticYear >= 1) nvalue else 1 - nvalue) - YEARS_DIFFERENCE
+                  )
+                )
               case YEAR =>
                 return `with`(isoDate.withYear(nvalue - YEARS_DIFFERENCE))
               case ERA =>
@@ -227,19 +234,22 @@ final class ThaiBuddhistDate private[chrono](private val isoDate: LocalDate) ext
     field.adjustInto(this, newValue)
   }
 
-  override def plus(amount: TemporalAmount): ThaiBuddhistDate = super.plus(amount).asInstanceOf[ThaiBuddhistDate]
+  override def plus(amount: TemporalAmount): ThaiBuddhistDate =
+    super.plus(amount).asInstanceOf[ThaiBuddhistDate]
 
   override def plus(amountToAdd: Long, unit: TemporalUnit): ThaiBuddhistDate =
     super.plus(amountToAdd, unit).asInstanceOf[ThaiBuddhistDate]
 
-  override def minus(amount: TemporalAmount): ThaiBuddhistDate = super.minus(amount).asInstanceOf[ThaiBuddhistDate]
+  override def minus(amount: TemporalAmount): ThaiBuddhistDate =
+    super.minus(amount).asInstanceOf[ThaiBuddhistDate]
 
   override def minus(amountToAdd: Long, unit: TemporalUnit): ThaiBuddhistDate =
     super.minus(amountToAdd, unit).asInstanceOf[ThaiBuddhistDate]
 
   private[chrono] def plusYears(years: Long): ThaiBuddhistDate = `with`(isoDate.plusYears(years))
 
-  private[chrono] def plusMonths(months: Long): ThaiBuddhistDate = `with`(isoDate.plusMonths(months))
+  private[chrono] def plusMonths(months: Long): ThaiBuddhistDate =
+    `with`(isoDate.plusMonths(months))
 
   private[chrono] def plusDays(days: Long): ThaiBuddhistDate = `with`(isoDate.plusDays(days))
 
@@ -260,7 +270,7 @@ final class ThaiBuddhistDate private[chrono](private val isoDate: LocalDate) ext
   override def equals(obj: Any): Boolean =
     obj match {
       case otherDate: ThaiBuddhistDate => (this eq otherDate) || this.isoDate == otherDate.isoDate
-      case _ => false
+      case _                           => false
     }
 
   override def hashCode: Int = getChronology.getId.hashCode ^ isoDate.hashCode

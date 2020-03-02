@@ -56,6 +56,7 @@ import org.threeten.bp.format.ResolverStyle
   * An enum is as effective implementation choice.
   */
 trait TemporalField {
+
   /** Gets the unit that the field is measured in.
     *
     * The unit of the field is the period that varies within the range.
@@ -258,5 +259,9 @@ trait TemporalField {
     * @throws DateTimeException if resolving results in an error. This must not be thrown
     *                           by querying a field on the temporal without first checking if it is supported
     */
-  def resolve(fieldValues: java.util.Map[TemporalField, java.lang.Long], partialTemporal: TemporalAccessor, resolverStyle: ResolverStyle): TemporalAccessor
+  def resolve(
+    fieldValues:     java.util.Map[TemporalField, java.lang.Long],
+    partialTemporal: TemporalAccessor,
+    resolverStyle:   ResolverStyle
+  ): TemporalAccessor
 }

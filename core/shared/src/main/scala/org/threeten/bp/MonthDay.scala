@@ -60,7 +60,12 @@ import org.threeten.bp.temporal.ValueRange
 object MonthDay {
 
   /** Parser. */
-  private val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder().appendLiteral("--").appendValue(MONTH_OF_YEAR, 2).appendLiteral('-').appendValue(DAY_OF_MONTH, 2).toFormatter
+  private val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder()
+    .appendLiteral("--")
+    .appendValue(MONTH_OF_YEAR, 2)
+    .appendLiteral('-')
+    .appendValue(DAY_OF_MONTH, 2)
+    .toFormatter
 
   /** Obtains the current month-day from the system clock in the default time-zone.
     *
@@ -120,7 +125,9 @@ object MonthDay {
     Objects.requireNonNull(month, "month")
     DAY_OF_MONTH.checkValidValue(dayOfMonth)
     if (dayOfMonth > month.maxLength) {
-      throw new DateTimeException(s"Illegal value for DayOfMonth field, value $dayOfMonth is not valid for month ${month.name}")
+      throw new DateTimeException(
+        s"Illegal value for DayOfMonth field, value $dayOfMonth is not valid for month ${month.name}"
+      )
     }
     new MonthDay(month.getValue, dayOfMonth)
   }
@@ -169,10 +176,11 @@ object MonthDay {
             _temporal = LocalDate.from(_temporal)
           }
           of(_temporal.get(MONTH_OF_YEAR), _temporal.get(DAY_OF_MONTH))
-        }
-        catch {
+        } catch {
           case ex: DateTimeException =>
-            throw new DateTimeException(s"Unable to obtain MonthDay from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}")
+            throw new DateTimeException(
+              s"Unable to obtain MonthDay from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}"
+            )
         }
     }
   }
@@ -207,7 +215,7 @@ object MonthDay {
   @throws[IOException]
   private[bp] def readExternal(in: DataInput): MonthDay = {
     val month: Byte = in.readByte
-    val day: Byte = in.readByte
+    val day: Byte   = in.readByte
     MonthDay.of(month, day)
   }
 }
@@ -246,7 +254,11 @@ object MonthDay {
   * @param day  the day-of-month to represent, validated from 1 to 29-31
   */
 @SerialVersionUID(-939150713474957432L)
-final class MonthDay private (private val month: Int, private val day: Int) extends TemporalAccessor with TemporalAdjuster with Ordered[MonthDay] with Serializable {
+final class MonthDay private (private val month: Int, private val day: Int)
+    extends TemporalAccessor
+    with TemporalAdjuster
+    with Ordered[MonthDay]
+    with Serializable {
 
   /** Checks if the specified field is supported.
     *
@@ -332,7 +344,8 @@ final class MonthDay private (private val month: Int, private val day: Int) exte
     * @throws DateTimeException if a value for the field cannot be obtained
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def get(field: TemporalField): Int = range(field).checkValidIntValue(getLong(field), field)
+  override def get(field: TemporalField): Int =
+    range(field).checkValidIntValue(getLong(field), field)
 
   /** Gets the value of the specified field from this month-day as a {@code long}.
     *
@@ -478,7 +491,7 @@ final class MonthDay private (private val month: Int, private val day: Int) exte
   override def query[R](query: TemporalQuery[R]): R =
     if (query eq TemporalQueries.chronology)
       IsoChronology.INSTANCE.asInstanceOf[R]
-    else if ((query eq TemporalQueries.zoneId)|| (query eq TemporalQueries.precision))
+    else if ((query eq TemporalQueries.zoneId) || (query eq TemporalQueries.precision))
       null.asInstanceOf[R]
     else
       query.queryFrom(this)
@@ -590,7 +603,13 @@ final class MonthDay private (private val month: Int, private val day: Int) exte
     * @return a string representation of this month-day, not null
     */
   override def toString: String =
-    new StringBuilder(10).append("--").append(if (month < 10) "0" else "").append(month).append(if (day < 10) "-0" else "-").append(day).toString
+    new StringBuilder(10)
+      .append("--")
+      .append(if (month < 10) "0" else "")
+      .append(month)
+      .append(if (day < 10) "-0" else "-")
+      .append(day)
+      .toString
 
   /** Outputs this month-day as a {@code String} using the formatter.
     *
@@ -613,7 +632,8 @@ final class MonthDay private (private val month: Int, private val day: Int) exte
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[bp] def writeExternal(out: DataOutput): Unit = {

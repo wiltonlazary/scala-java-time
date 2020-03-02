@@ -13,7 +13,7 @@ class TestZoneMap extends FunSuite with AssertionsHelper {
   test("creation") {
     assertNotNull(zoneMap(m))
     assertEquals(4, zoneMap(m).size)
-    val n = TreeMap(0 -> "0", 1 -> "1", 3 -> "3", 2 -> "2")
+    val n       = TreeMap(0 -> "0", 1 -> "1", 3 -> "3", 2 -> "2")
     val cleared = zoneMap(n)
     cleared.clear()
     assertEquals(0, cleared.size)

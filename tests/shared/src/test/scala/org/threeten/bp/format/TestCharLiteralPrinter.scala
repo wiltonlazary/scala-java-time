@@ -39,31 +39,36 @@ import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 class TestCharLiteralPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
   test("print_emptyCalendrical") {
     buf.append("EXISTING")
-    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a')
+    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a')
     pp.print(printEmptyContext, buf)
     assertEquals(buf.toString, "EXISTINGa")
   }
 
   test("print_dateTime") {
     buf.append("EXISTING")
-    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a')
+    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a')
     pp.print(printContext, buf)
     assertEquals(buf.toString, "EXISTINGa")
   }
 
   test("print_emptyAppendable") {
-    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a')
+    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a')
     pp.print(printContext, buf)
     assertEquals(buf.toString, "a")
   }
 
   test("toString") {
-    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a')
+    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a')
     assertEquals(pp.toString, "'a'")
   }
 
   test("toString_apos") {
-    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('\'')
+    val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('\'')
     assertEquals(pp.toString, "''")
   }
 }

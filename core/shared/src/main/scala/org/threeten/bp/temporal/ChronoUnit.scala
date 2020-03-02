@@ -50,35 +50,43 @@ import org.threeten.bp.chrono.ChronoZonedDateTime
   * This is a final, immutable and thread-safe enum.
   */
 object ChronoUnit {
+
   /** Unit that represents the concept of a nanosecond, the smallest supported unit of time.
     * For the ISO calendar system, it is equal to the 1,000,000,000th part of the second unit.
     */
-  val NANOS     = new ChronoUnit("Nanos",      0, Duration.ofNanos(1))
+  val NANOS = new ChronoUnit("Nanos", 0, Duration.ofNanos(1))
+
   /** Unit that represents the concept of a microsecond.
     * For the ISO calendar system, it is equal to the 1,000,000th part of the second unit.
     */
-  val MICROS    = new ChronoUnit("Micros",     1, Duration.ofNanos(1000))
+  val MICROS = new ChronoUnit("Micros", 1, Duration.ofNanos(1000))
+
   /** Unit that represents the concept of a millisecond.
     * For the ISO calendar system, it is equal to the 1000th part of the second unit.
     */
-  val MILLIS    = new ChronoUnit("Millis",     2, Duration.ofNanos(1000000))
+  val MILLIS = new ChronoUnit("Millis", 2, Duration.ofNanos(1000000))
+
   /** Unit that represents the concept of a second.
     * For the ISO calendar system, it is equal to the second in the SI system
     * of units, except around a leap-second.
     */
-  val SECONDS   = new ChronoUnit("Seconds",    3, Duration.ofSeconds(1))
+  val SECONDS = new ChronoUnit("Seconds", 3, Duration.ofSeconds(1))
+
   /** Unit that represents the concept of a minute.
     * For the ISO calendar system, it is equal to 60 seconds.
     */
-  val MINUTES   = new ChronoUnit("Minutes",    4, Duration.ofSeconds(60))
+  val MINUTES = new ChronoUnit("Minutes", 4, Duration.ofSeconds(60))
+
   /** Unit that represents the concept of an hour.
     * For the ISO calendar system, it is equal to 60 minutes.
     */
-  val HOURS     = new ChronoUnit("Hours",      5, Duration.ofSeconds(3600))
+  val HOURS = new ChronoUnit("Hours", 5, Duration.ofSeconds(3600))
+
   /** Unit that represents the concept of half a day, as used in AM/PM.
     * For the ISO calendar system, it is equal to 12 hours.
     */
-  val HALF_DAYS = new ChronoUnit("HalfDays",   6, Duration.ofSeconds(43200))
+  val HALF_DAYS = new ChronoUnit("HalfDays", 6, Duration.ofSeconds(43200))
+
   /** Unit that represents the concept of a day.
     * For the ISO calendar system, it is the standard day from midnight to midnight.
     * The estimated duration of a day is {@code 24 Hours}.
@@ -88,20 +96,23 @@ object ChronoUnit {
     * at midnight - when converting between calendar systems, the date should be
     * equivalent at midday.
     */
-  val DAYS      = new ChronoUnit("Days",       7, Duration.ofSeconds(86400))
+  val DAYS = new ChronoUnit("Days", 7, Duration.ofSeconds(86400))
+
   /** Unit that represents the concept of a week.
     * For the ISO calendar system, it is equal to 7 days.
     *
     * When used with other calendar systems it must correspond to an integral number of days.
     */
-  val WEEKS     = new ChronoUnit("Weeks",      8, Duration.ofSeconds(7 * 86400L))
+  val WEEKS = new ChronoUnit("Weeks", 8, Duration.ofSeconds(7 * 86400L))
+
   /** Unit that represents the concept of a month.
     * For the ISO calendar system, the length of the month varies by month-of-year.
     * The estimated duration of a month is one twelfth of {@code 365.2425 Days}.
     *
     * When used with other calendar systems it must correspond to an integral number of days.
     */
-  val MONTHS    = new ChronoUnit("Months",     9, Duration.ofSeconds(31556952L / 12))
+  val MONTHS = new ChronoUnit("Months", 9, Duration.ofSeconds(31556952L / 12))
+
   /** Unit that represents the concept of a year.
     * For the ISO calendar system, it is equal to 12 months.
     * The estimated duration of a year is {@code 365.2425 Days}.
@@ -109,14 +120,16 @@ object ChronoUnit {
     * When used with other calendar systems it must correspond to an integral number of days
     * or months roughly equal to a year defined by the passage of the Earth around the Sun.
     */
-  val YEARS     = new ChronoUnit("Years",     10, Duration.ofSeconds(31556952L))
+  val YEARS = new ChronoUnit("Years", 10, Duration.ofSeconds(31556952L))
+
   /** Unit that represents the concept of a decade.
     * For the ISO calendar system, it is equal to 10 years.
     *
     * When used with other calendar systems it must correspond to an integral number of days
     * and is normally an integral number of years.
     */
-  val DECADES   = new ChronoUnit("Decades",   11, Duration.ofSeconds(31556952L * 10L))
+  val DECADES = new ChronoUnit("Decades", 11, Duration.ofSeconds(31556952L * 10L))
+
   /** Unit that represents the concept of a century.
     * For the ISO calendar system, it is equal to 100 years.
     *
@@ -124,13 +137,15 @@ object ChronoUnit {
     * and is normally an integral number of years.
     */
   val CENTURIES = new ChronoUnit("Centuries", 12, Duration.ofSeconds(31556952L * 100L))
+
   /** Unit that represents the concept of a millennium.
     * For the ISO calendar system, it is equal to 1000 years.
     *
     * When used with other calendar systems it must correspond to an integral number of days
     * and is normally an integral number of years.
     */
-  val MILLENNIA = new ChronoUnit("Millenia",  13, Duration.ofSeconds(31556952L * 1000L))
+  val MILLENNIA = new ChronoUnit("Millenia", 13, Duration.ofSeconds(31556952L * 1000L))
+
   /** Unit that represents the concept of an era.
     * The ISO calendar system doesn't have eras thus it is impossible to add
     * an era to a date or date-time.
@@ -138,21 +153,39 @@ object ChronoUnit {
     *
     * When used with other calendar systems there are no restrictions on the unit.
     */
-  val ERAS      = new ChronoUnit("Eras",      14, Duration.ofSeconds(31556952L * 1000000000L))
+  val ERAS = new ChronoUnit("Eras", 14, Duration.ofSeconds(31556952L * 1000000000L))
+
   /** Artificial unit that represents the concept of forever.
     * This is primarily used with {@link TemporalField} to represent unbounded fields
     * such as the year or era.
     * The estimated duration of the era is artificially defined as the largest duration
     * supported by {@code Duration}.
     */
-  val FOREVER   = new ChronoUnit("Forever",   15, Duration.ofSeconds(Long.MaxValue, 999999999))
+  val FOREVER = new ChronoUnit("Forever", 15, Duration.ofSeconds(Long.MaxValue, 999999999))
 
-  val values: Array[ChronoUnit] = Array(NANOS, MICROS, MILLIS, SECONDS, MINUTES, HOURS, HALF_DAYS, DAYS, WEEKS, MONTHS, YEARS, DECADES, CENTURIES, MILLENNIA, ERAS, FOREVER)
+  val values: Array[ChronoUnit] = Array(NANOS,
+                                        MICROS,
+                                        MILLIS,
+                                        SECONDS,
+                                        MINUTES,
+                                        HOURS,
+                                        HALF_DAYS,
+                                        DAYS,
+                                        WEEKS,
+                                        MONTHS,
+                                        YEARS,
+                                        DECADES,
+                                        CENTURIES,
+                                        MILLENNIA,
+                                        ERAS,
+                                        FOREVER)
 }
 
 /// !!! FIXME: Passing of name to the Enum constructor is not quite right.
 //             We should have a look at the compiled code to figure out what's happening exactly in the Java version.
-final class ChronoUnit private(name: String, ordinal: Int, private val duration: Duration) extends Enum[ChronoUnit](name, ordinal) with TemporalUnit {
+final class ChronoUnit private (name: String, ordinal: Int, private val duration: Duration)
+    extends Enum[ChronoUnit](name, ordinal)
+    with TemporalUnit {
 
   /** Gets the estimated duration of this unit in the ISO calendar system.
     *
@@ -192,25 +225,25 @@ final class ChronoUnit private(name: String, ordinal: Int, private val duration:
       return false
     if (temporal.isInstanceOf[ChronoLocalDate])
       return isDateBased
-    if (temporal.isInstanceOf[ChronoLocalDateTime[_]] || temporal.isInstanceOf[ChronoZonedDateTime[_]])
+    if (temporal.isInstanceOf[ChronoLocalDateTime[_]] || temporal
+          .isInstanceOf[ChronoZonedDateTime[_]])
       return true
     try {
       temporal.plus(1, this)
       true
-    }
-    catch {
+    } catch {
       case ex: RuntimeException =>
         try {
           temporal.plus(-1, this)
           true
-        }
-        catch {
+        } catch {
           case ex2: RuntimeException => false
         }
     }
   }
 
-  def addTo[R <: Temporal](dateTime: R, periodToAdd: Long): R = dateTime.plus(periodToAdd, this).asInstanceOf[R]
+  def addTo[R <: Temporal](dateTime: R, periodToAdd: Long): R =
+    dateTime.plus(periodToAdd, this).asInstanceOf[R]
 
   def between(temporal1: Temporal, temporal2: Temporal): Long = temporal1.until(temporal2, this)
 

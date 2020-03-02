@@ -34,38 +34,43 @@ package org.threeten.bp.format
 import java.util.Locale
 import java.lang.StringBuilder
 
-import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import org.scalatest.{ BeforeAndAfterEach, FunSuite }
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.chrono.IsoChronology
-import org.threeten.bp.temporal.{TemporalAccessor, TemporalField, TemporalQuery, ValueRange}
+import org.threeten.bp.temporal.{ TemporalAccessor, TemporalField, TemporalQuery, ValueRange }
 import org.threeten.bp.format.internal.TTBPDateTimeParseContext
 import org.threeten.bp.format.internal.TTBPDateTimePrintContext
 
 /** Abstract PrinterParser test. */
 object GenTestPrinterParser {
   private val EMPTY: TemporalAccessor = new TemporalAccessor() {
-    def isSupported(field: TemporalField): Boolean = true
-    def getLong(field: TemporalField): Long = throw new DateTimeException("Mock")
-    override def get(field: TemporalField): Int = range(field).checkValidIntValue(getLong(field), field)
-    override def query[R](query: TemporalQuery[R]): R = query.queryFrom(this)
-    override def range(field: TemporalField): ValueRange = field.range
+    def isSupported(field:  TemporalField): Boolean = true
+    def getLong(field:      TemporalField): Long = throw new DateTimeException("Mock")
+    override def get(field: TemporalField): Int =
+      range(field).checkValidIntValue(getLong(field), field)
+    override def query[R](query: TemporalQuery[R]): R       = query.queryFrom(this)
+    override def range(field:    TemporalField): ValueRange = field.range
   }
 }
 
 trait GenTestPrinterParser extends BeforeAndAfterEach { this: FunSuite =>
   protected var printEmptyContext: TTBPDateTimePrintContext = null
-  protected var printContext: TTBPDateTimePrintContext = null
-  protected var parseContext: TTBPDateTimeParseContext = null
-  protected var buf: StringBuilder = null
+  protected var printContext: TTBPDateTimePrintContext      = null
+  protected var parseContext: TTBPDateTimeParseContext      = null
+  protected var buf: StringBuilder                          = null
 
   override def beforeEach() {
-    printEmptyContext = new TTBPDateTimePrintContext(GenTestPrinterParser.EMPTY, Locale.ENGLISH, DecimalStyle.STANDARD)
-    val zdt: ZonedDateTime = LocalDateTime.of(2011, 6, 30, 12, 30, 40, 0).atZone(ZoneId.of("Europe/Paris"))
+    printEmptyContext = new TTBPDateTimePrintContext(GenTestPrinterParser.EMPTY,
+                                                     Locale.ENGLISH,
+                                                     DecimalStyle.STANDARD)
+    val zdt: ZonedDateTime =
+      LocalDateTime.of(2011, 6, 30, 12, 30, 40, 0).atZone(ZoneId.of("Europe/Paris"))
     printContext = new TTBPDateTimePrintContext(zdt, Locale.ENGLISH, DecimalStyle.STANDARD)
-    parseContext = new TTBPDateTimeParseContext(Locale.ENGLISH, DecimalStyle.STANDARD, IsoChronology.INSTANCE)
+    parseContext =
+      new TTBPDateTimeParseContext(Locale.ENGLISH, DecimalStyle.STANDARD, IsoChronology.INSTANCE)
     buf = new StringBuilder
   }
 }

@@ -10,11 +10,12 @@ object Platform {
   type CCE = ClassCastException
 
   /** Returns `true` if and only if the code is executing on a JVM.
-   *  Note: Returns `false` when executing on any JS VM.
-   */
+    *  Note: Returns `false` when executing on any JS VM.
+    */
   final val executingInJVM = false
 
   def setupLocales(): Unit = ()
 
-  def zoneMap(m: scala.collection.immutable.TreeMap[Int, String]): NavigableMap[Int, String] = new TreeMap(m.asJava)
+  def zoneMap(m: scala.collection.immutable.TreeMap[Int, String]): NavigableMap[Int, String] =
+    new TreeMap(m.asJava)
 }

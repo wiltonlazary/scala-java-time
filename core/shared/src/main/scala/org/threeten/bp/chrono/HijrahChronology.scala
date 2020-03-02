@@ -49,7 +49,7 @@ import org.threeten.bp.temporal.ChronoUnit.MONTHS
 import org.threeten.bp.temporal.ChronoUnit.WEEKS
 import org.threeten.bp.temporal.TemporalAdjusters.nextOrSame
 import java.io.Serializable
-import java.util.{Objects, Arrays}
+import java.util.{ Arrays, Objects }
 import org.threeten.bp.Clock
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.DayOfWeek
@@ -64,6 +64,7 @@ import org.threeten.bp.temporal.ValueRange
 
 @SerialVersionUID(3127340209035924785L)
 object HijrahChronology {
+
   /** Singleton instance of the Hijrah chronology. */
   val INSTANCE: HijrahChronology = new HijrahChronology
 
@@ -76,12 +77,14 @@ object HijrahChronology {
     names.put(FALLBACK_LANGUAGE, Array[String]("BH", "HE"))
     names
   }
+
   /** Short names for eras. */
   private val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
     names.put(FALLBACK_LANGUAGE, Array[String]("B.H.", "H.E."))
     names
   }
+
   /** Full names for eras. */
   private val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
     val names = new java.util.HashMap[String, Array[String]]
@@ -190,7 +193,7 @@ object HijrahChronology {
   * @constructor Restrictive constructor.
   */
 @SerialVersionUID(3127340209035924785L)
-final class HijrahChronology private() extends Chronology with Serializable {
+final class HijrahChronology private () extends Chronology with Serializable {
 
   /** Resolve singleton.
     *
@@ -264,8 +267,8 @@ final class HijrahChronology private() extends Chronology with Serializable {
   def prolepticYear(era: Era, yearOfEra: Int): Int =
     if (!era.isInstanceOf[HijrahEra])
       throw new ClassCastException("Era must be HijrahEra")
-    else
-      if (era eq HijrahEra.AH) yearOfEra else 1 - yearOfEra
+    else if (era eq HijrahEra.AH) yearOfEra
+    else 1 - yearOfEra
 
   def eraOf(eraValue: Int): HijrahEra =
     eraValue match {
@@ -281,7 +284,10 @@ final class HijrahChronology private() extends Chronology with Serializable {
 
   def range(field: ChronoField): ValueRange = field.range
 
-  override def resolveDate(fieldValues: java.util.Map[TemporalField, java.lang.Long], resolverStyle: ResolverStyle): HijrahDate = {
+  override def resolveDate(
+    fieldValues:   java.util.Map[TemporalField, java.lang.Long],
+    resolverStyle: ResolverStyle
+  ): HijrahDate = {
     if (fieldValues.containsKey(EPOCH_DAY))
       return dateEpochDay(fieldValues.remove(EPOCH_DAY))
     val prolepticMonth: java.lang.Long = fieldValues.remove(PROLEPTIC_MONTH)
@@ -301,20 +307,24 @@ final class HijrahChronology private() extends Chronology with Serializable {
         val year: java.lang.Long = fieldValues.get(YEAR)
         if (resolverStyle eq ResolverStyle.STRICT)
           if (year != null)
-            updateResolveMap(fieldValues, YEAR, if (year > 0) yoeLong else Math.subtractExact(1, yoeLong))
+            updateResolveMap(fieldValues,
+                             YEAR,
+                             if (year > 0) yoeLong else Math.subtractExact(1, yoeLong))
           else
             fieldValues.put(YEAR_OF_ERA, yoeLong)
         else
-          updateResolveMap(fieldValues, YEAR, if (year == null || year > 0) yoeLong else Math.subtractExact(1, yoeLong))
-      }
-      else if (era.longValue == 1L)
+          updateResolveMap(
+            fieldValues,
+            YEAR,
+            if (year == null || year > 0) yoeLong else Math.subtractExact(1, yoeLong)
+          )
+      } else if (era.longValue == 1L)
         updateResolveMap(fieldValues, YEAR, yoeLong)
       else if (era.longValue == 0L)
         updateResolveMap(fieldValues, YEAR, Math.subtractExact(1, yoeLong))
       else
         throw new DateTimeException(s"Invalid value for era: $era")
-    }
-    else if (fieldValues.containsKey(ERA))
+    } else if (fieldValues.containsKey(ERA))
       ERA.checkValidValue(fieldValues.get(ERA))
     if (fieldValues.containsKey(YEAR)) {
       if (fieldValues.containsKey(MONTH_OF_YEAR)) {
@@ -322,12 +332,13 @@ final class HijrahChronology private() extends Chronology with Serializable {
           val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-            val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1)
+            val days: Long   = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1)
             return date(y, 1, 1).plusMonths(months).plusDays(days)
-          }
-          else {
-            val moy: Int = range(MONTH_OF_YEAR).checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR)
-            var dom: Int = range(DAY_OF_MONTH).checkValidIntValue(fieldValues.remove(DAY_OF_MONTH), DAY_OF_MONTH)
+          } else {
+            val moy: Int = range(MONTH_OF_YEAR)
+              .checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR)
+            var dom: Int =
+              range(DAY_OF_MONTH).checkValidIntValue(fieldValues.remove(DAY_OF_MONTH), DAY_OF_MONTH)
             if ((resolverStyle eq ResolverStyle.SMART) && dom > 28) {
               dom = Math.min(dom, date(y, moy, 1).lengthOfMonth)
             }
@@ -339,13 +350,17 @@ final class HijrahChronology private() extends Chronology with Serializable {
             val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
             if (resolverStyle eq ResolverStyle.LENIENT) {
               val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-              val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
-              val days: Long = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1)
+              val weeks: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
+              val days: Long =
+                Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1)
               return date(y, 1, 1).plus(months, MONTHS).plus(weeks, WEEKS).plus(days, DAYS)
             }
             val moy: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
-            val aw: Int = ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
-            val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH))
+            val aw: Int =
+              ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
+            val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(
+              fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH)
+            )
             val hijrahDate: HijrahDate = date(y, moy, 1).plus((aw - 1) * 7 + (ad - 1), DAYS)
             if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(MONTH_OF_YEAR) != moy) {
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
@@ -356,14 +371,16 @@ final class HijrahChronology private() extends Chronology with Serializable {
             val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
             if (resolverStyle eq ResolverStyle.LENIENT) {
               val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-              val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
-              val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
+              val weeks: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
+              val days: Long   = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
               return date(y, 1, 1).plus(months, MONTHS).plus(weeks, WEEKS).plus(days, DAYS)
             }
             val moy: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
-            val aw: Int = ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
+            val aw: Int =
+              ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
             val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
-            val hijrahDate: HijrahDate = date(y, moy, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
+            val hijrahDate: HijrahDate =
+              date(y, moy, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
             if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(MONTH_OF_YEAR) != moy) {
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             }
@@ -385,11 +402,14 @@ final class HijrahChronology private() extends Chronology with Serializable {
           val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1)
-            val days: Long = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1)
+            val days: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1)
             return date(y, 1, 1).plus(weeks, WEEKS).plus(days, DAYS)
           }
-          val aw: Int = ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
-          val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR))
+          val aw: Int =
+            ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
+          val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(
+            fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR)
+          )
           val hijrahDate: HijrahDate = date(y, 1, 1).plusDays((aw - 1) * 7 + (ad - 1))
           if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(YEAR) != y) {
             throw new DateTimeException("Strict mode rejected date parsed to a different year")
@@ -400,12 +420,14 @@ final class HijrahChronology private() extends Chronology with Serializable {
           val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1)
-            val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
+            val days: Long  = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
             return date(y, 1, 1).plus(weeks, WEEKS).plus(days, DAYS)
           }
-          val aw: Int = ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
+          val aw: Int =
+            ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
           val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
-          val hijrahDate: HijrahDate = date(y, 1, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
+          val hijrahDate: HijrahDate =
+            date(y, 1, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
           if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(YEAR) != y) {
             throw new DateTimeException("Strict mode rejected date parsed to a different month")
           }

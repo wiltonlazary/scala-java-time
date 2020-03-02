@@ -32,10 +32,11 @@
 package org.threeten.bp
 
 import org.scalatest.FunSuite
-import org.threeten.bp.temporal.{TemporalAccessor, TemporalField, TemporalQuery}
+import org.threeten.bp.temporal.{ TemporalAccessor, TemporalField, TemporalQuery }
 
 /** Base test class for {@code DateTime}. */
 trait GenDateTimeTest extends FunSuite with AssertionsHelper {
+
   /** Sample {@code DateTime} objects.
     *
     * @return the objects, not null
@@ -57,14 +58,14 @@ trait GenDateTimeTest extends FunSuite with AssertionsHelper {
   test("basicTest_isSupported_DateTimeField_supported") {
     for {
       sample <- samples
-      field <- validFields
+      field  <- validFields
     } assertEquals(sample.isSupported(field), true, "Failed on " + sample + " " + field)
   }
 
   test("basicTest_isSupported_DateTimeField_unsupported") {
     for {
       sample <- samples
-      field <- invalidFields
+      field  <- invalidFields
     } assertEquals(sample.isSupported(field), false, "Failed on " + sample + " " + field)
   }
 
@@ -77,11 +78,11 @@ trait GenDateTimeTest extends FunSuite with AssertionsHelper {
   test("basicTest_range_DateTimeField_unsupported") {
     for {
       sample <- samples
-      field <- invalidFields
+      field  <- invalidFields
     } assertThrows[DateTimeException] {
-        sample.range(field)
-        fail("Failed on " + sample + " " + field)
-      }
+      sample.range(field)
+      fail("Failed on " + sample + " " + field)
+    }
   }
 
   test("basicTest_range_DateTimeField_null") {
@@ -96,11 +97,11 @@ trait GenDateTimeTest extends FunSuite with AssertionsHelper {
   test("basicTest_get_DateTimeField_unsupported") {
     for {
       sample <- samples
-      field <- invalidFields
+      field  <- invalidFields
     } assertThrows[DateTimeException] {
-        sample.get(field)
-        fail("Failed on " + sample + " " + field)
-      }
+      sample.get(field)
+      fail("Failed on " + sample + " " + field)
+    }
   }
 
   test("basicTest_get_DateTimeField_null") {
@@ -115,11 +116,11 @@ trait GenDateTimeTest extends FunSuite with AssertionsHelper {
   test("basicTest_getLong_DateTimeField_unsupported") {
     for {
       sample <- samples
-      field <- invalidFields
+      field  <- invalidFields
     } assertThrows[DateTimeException] {
-        sample.getLong(field)
-        fail("Failed on " + sample + " " + field)
-      }
+      sample.getLong(field)
+      fail("Failed on " + sample + " " + field)
+    }
   }
 
   test("basicTest_getLong_DateTimeField_null") {

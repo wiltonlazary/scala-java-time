@@ -47,7 +47,7 @@ import org.threeten.bp.temporal.TemporalAdjusters
 /** Test. */
 class TestIsoChronology extends FunSuite with AssertionsHelper {
   test("test_chrono_byName") {
-    val c: Chronology = IsoChronology.INSTANCE
+    val c: Chronology    = IsoChronology.INSTANCE
     val test: Chronology = Chronology.of("ISO")
     assertNotNull(test, "The ISO calendar could not be found byName")
     assertEquals(test.getId, "ISO", "ID mismatch")
@@ -78,7 +78,8 @@ class TestIsoChronology extends FunSuite with AssertionsHelper {
       (IsoChronology.INSTANCE.date(5, 1, 1), LocalDate.of(5, 1, 1)),
       (IsoChronology.INSTANCE.date(1727, 3, 3), LocalDate.of(1727, 3, 3)),
       (IsoChronology.INSTANCE.date(1728, 10, 28), LocalDate.of(1728, 10, 28)),
-      (IsoChronology.INSTANCE.date(2012, 10, 29), LocalDate.of(2012, 10, 29)))
+      (IsoChronology.INSTANCE.date(2012, 10, 29), LocalDate.of(2012, 10, 29))
+    )
 
   test("test_toLocalDate") {
     data_samples.foreach {
@@ -95,18 +96,17 @@ class TestIsoChronology extends FunSuite with AssertionsHelper {
   }
 
   val data_badDates: List[(Int, Int, Int)] =
-    List(
-      (2012, 0, 0),
-      (2012, -1, 1),
-      (2012, 0, 1),
-      (2012, 14, 1),
-      (2012, 15, 1),
-      (2012, 1, -1),
-      (2012, 1, 0),
-      (2012, 1, 32),
-      (2012, 12, -1),
-      (2012, 12, 0),
-      (2012, 12, 32))
+    List((2012, 0, 0),
+         (2012, -1, 1),
+         (2012, 0, 1),
+         (2012, 14, 1),
+         (2012, 15, 1),
+         (2012, 1, -1),
+         (2012, 1, 0),
+         (2012, 1, 32),
+         (2012, 12, -1),
+         (2012, 12, 0),
+         (2012, 12, 32))
 
   test("test_badDates") {
     data_badDates.foreach {
@@ -118,9 +118,9 @@ class TestIsoChronology extends FunSuite with AssertionsHelper {
   }
 
   test("test_date_withEra") {
-    val year: Int = 5
-    val month: Int = 5
-    val dayOfMonth: Int = 5
+    val year: Int             = 5
+    val month: Int            = 5
+    val dayOfMonth: Int       = 5
     val test: ChronoLocalDate = IsoChronology.INSTANCE.date(IsoEra.BCE, year, month, dayOfMonth)
     assertEquals(test.getEra, IsoEra.BCE)
     assertEquals(test.get(ChronoField.YEAR_OF_ERA), year)
@@ -151,7 +151,7 @@ class TestIsoChronology extends FunSuite with AssertionsHelper {
 
   test("test_adjust_toLocalDate") {
     val isoDate: ChronoLocalDate = IsoChronology.INSTANCE.date(1726, 1, 4)
-    val test: ChronoLocalDate = isoDate.`with`(LocalDate.of(2012, 7, 6))
+    val test: ChronoLocalDate    = isoDate.`with`(LocalDate.of(2012, 7, 6))
     assertEquals(test, IsoChronology.INSTANCE.date(2012, 7, 6))
   }
 
@@ -162,13 +162,13 @@ class TestIsoChronology extends FunSuite with AssertionsHelper {
 
   test("test_LocalDate_adjustToISODate") {
     val isoDate: ChronoLocalDate = IsoChronology.INSTANCE.date(1728, 10, 29)
-    val test: LocalDate = LocalDate.MIN.`with`(isoDate)
+    val test: LocalDate          = LocalDate.MIN.`with`(isoDate)
     assertEquals(test, LocalDate.of(1728, 10, 29))
   }
 
   test("test_LocalDateTime_adjustToISODate") {
     val isoDate: ChronoLocalDate = IsoChronology.INSTANCE.date(1728, 10, 29)
-    val test: LocalDateTime = LocalDateTime.MIN.`with`(isoDate)
+    val test: LocalDateTime      = LocalDateTime.MIN.`with`(isoDate)
     assertEquals(test, LocalDateTime.of(1728, 10, 29, 0, 0))
   }
 
@@ -196,7 +196,8 @@ class TestIsoChronology extends FunSuite with AssertionsHelper {
       (100, false),
       (300, false),
       (400, true),
-      (500, false))
+      (500, false)
+    )
 
   test("test_isLeapYear") {
     leapYearInformation.foreach {
@@ -215,7 +216,8 @@ class TestIsoChronology extends FunSuite with AssertionsHelper {
       (IsoChronology.INSTANCE.date(1728, 10, 28), "1728-10-28"),
       (IsoChronology.INSTANCE.date(1728, 10, 29), "1728-10-29"),
       (IsoChronology.INSTANCE.date(1727, 12, 5), "1727-12-05"),
-      (IsoChronology.INSTANCE.date(1727, 12, 6), "1727-12-06"))
+      (IsoChronology.INSTANCE.date(1727, 12, 6), "1727-12-06")
+    )
 
   test("test_toString") {
     data_toString.foreach {

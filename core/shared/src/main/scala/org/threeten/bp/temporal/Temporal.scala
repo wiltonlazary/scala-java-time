@@ -93,6 +93,7 @@ import org.threeten.bp.DateTimeException
   * All implementations must be {@link Comparable}.
   */
 trait Temporal extends TemporalAccessor {
+
   /** Checks if the specified unit is supported.
     *
     * This checks if the date-time can be queried for the specified unit.

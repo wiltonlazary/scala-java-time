@@ -57,16 +57,21 @@ import scala.collection.JavaConverters._
 
 /** Test Performance. */
 object Performance {
+
   /** Size. */
   private val NF: NumberFormat = {
     val nf = NumberFormat.getIntegerInstance
     nf.setGroupingUsed(true)
     nf
   }
+
   /** Size. */
   private val SIZE: Int = 100000
+
   /** Results. */
-  private val RESULTS: java.util.Map[String, Array[Long]] = new java.util.TreeMap[String, Array[Long]]
+  private val RESULTS: java.util.Map[String, Array[Long]] =
+    new java.util.TreeMap[String, Array[Long]]
+
   /** Count. */
   private var loop: Int = 0
 
@@ -94,9 +99,9 @@ object Performance {
     }
     System.out.println()
     for (name <- RESULTS.keySet.asScala) {
-      val r: Array[Long] = RESULTS.get(name)
+      val r: Array[Long]      = RESULTS.get(name)
       val percent: BigDecimal = BigDecimal.valueOf(r(6), 1)
-      var max: String = "           " + NF.format(r(0))
+      var max: String         = "           " + NF.format(r(0))
       max = max.substring(max.length - 12)
       var min: String = "           " + NF.format(r(5))
       min = min.substring(min.length - 12)
@@ -140,12 +145,17 @@ object Performance {
   }
 
   private def setupDateTime: java.util.List[LocalDateTime] = {
-    val random: Random = new Random(47658758756875687L)
+    val random: Random                      = new Random(47658758756875687L)
     val list: java.util.List[LocalDateTime] = new java.util.ArrayList[LocalDateTime](SIZE)
-    val start: Long = System.nanoTime
-    var i: Int = 0
+    val start: Long                         = System.nanoTime
+    var i: Int                              = 0
     while (i < SIZE) {
-      val t: LocalDateTime = LocalDateTime.of(random.nextInt(10000), random.nextInt(12) + 1, random.nextInt(28) + 1, random.nextInt(24), random.nextInt(60), random.nextInt(60))
+      val t: LocalDateTime = LocalDateTime.of(random.nextInt(10000),
+                                              random.nextInt(12) + 1,
+                                              random.nextInt(28) + 1,
+                                              random.nextInt(24),
+                                              random.nextInt(60),
+                                              random.nextInt(60))
       list.add(t)
       i += 1
     }
@@ -180,9 +190,9 @@ object Performance {
   }
 
   private def formatListDateTime(list: java.util.List[LocalDateTime]): Unit = {
-    val buf: StringBuilder = new StringBuilder
+    val buf: StringBuilder        = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_DATE.withLocale(Locale.ENGLISH)
-    val start: Long = System.nanoTime
+    val start: Long               = System.nanoTime
     for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(dt))
@@ -208,12 +218,13 @@ object Performance {
   }
 
   private def setupLocalDate: java.util.List[LocalDate] = {
-    val random: Random = new Random(47658758756875687L)
+    val random: Random                  = new Random(47658758756875687L)
     val list: java.util.List[LocalDate] = new java.util.ArrayList[LocalDate](SIZE)
-    val start: Long = System.nanoTime
-    var i: Int = 0
+    val start: Long                     = System.nanoTime
+    var i: Int                          = 0
     while (i < SIZE) {
-      val t: LocalDate = LocalDate.of(random.nextInt(10000), random.nextInt(12) + 1, random.nextInt(28) + 1)
+      val t: LocalDate =
+        LocalDate.of(random.nextInt(10000), random.nextInt(12) + 1, random.nextInt(28) + 1)
       list.add(t)
       i += 1
     }
@@ -245,9 +256,9 @@ object Performance {
   }
 
   private def formatListLocalDate(list: java.util.List[LocalDate]): Unit = {
-    val buf: StringBuilder = new StringBuilder
+    val buf: StringBuilder        = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_DATE.withLocale(Locale.ENGLISH)
-    val start: Long = System.nanoTime
+    val start: Long               = System.nanoTime
     for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(dt))
@@ -258,12 +269,15 @@ object Performance {
   }
 
   private def setupTime: java.util.List[LocalTime] = {
-    val random: Random = new Random(47658758756875687L)
+    val random: Random                  = new Random(47658758756875687L)
     val list: java.util.List[LocalTime] = new java.util.ArrayList[LocalTime](SIZE)
-    val start: Long = System.nanoTime
-    var i: Int = 0
+    val start: Long                     = System.nanoTime
+    var i: Int                          = 0
     while (i < SIZE) {
-      val t: LocalTime = LocalTime.of(random.nextInt(24), random.nextInt(60), random.nextInt(60), random.nextInt(1000000000))
+      val t: LocalTime = LocalTime.of(random.nextInt(24),
+                                      random.nextInt(60),
+                                      random.nextInt(60),
+                                      random.nextInt(1000000000))
       list.add(t)
       i += 1
     }
@@ -296,9 +310,9 @@ object Performance {
   }
 
   private def formatListTime(list: java.util.List[LocalTime]): Unit = {
-    val buf: StringBuilder = new StringBuilder
+    val buf: StringBuilder        = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_TIME.withLocale(Locale.ENGLISH)
-    val start: Long = System.nanoTime
+    val start: Long               = System.nanoTime
     for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(dt))
@@ -323,13 +337,21 @@ object Performance {
   }
 
   private def setupZonedDateTime: java.util.List[ZonedDateTime] = {
-    val tz: ZoneId = ZoneId.of("Europe/London")
-    val random: Random = new Random(47658758756875687L)
+    val tz: ZoneId                          = ZoneId.of("Europe/London")
+    val random: Random                      = new Random(47658758756875687L)
     val list: java.util.List[ZonedDateTime] = new java.util.ArrayList[ZonedDateTime](SIZE)
-    val start: Long = System.nanoTime
-    var i: Int = 0
+    val start: Long                         = System.nanoTime
+    var i: Int                              = 0
     while (i < SIZE) {
-      val t: ZonedDateTime = LocalDateTime.of(2008, random.nextInt(12) + 1, random.nextInt(28) + 1, random.nextInt(24), random.nextInt(60), random.nextInt(60), 0).atZone(tz)
+      val t: ZonedDateTime = LocalDateTime
+        .of(2008,
+            random.nextInt(12) + 1,
+            random.nextInt(28) + 1,
+            random.nextInt(24),
+            random.nextInt(60),
+            random.nextInt(60),
+            0)
+        .atZone(tz)
       list.add(t)
       i += 1
     }
@@ -364,9 +386,9 @@ object Performance {
   }
 
   private def formatListZonedDateTime(list: java.util.List[ZonedDateTime]): Unit = {
-    val buf: StringBuilder = new StringBuilder
+    val buf: StringBuilder        = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_DATE.withLocale(Locale.ENGLISH)
-    val start: Long = System.nanoTime
+    val start: Long               = System.nanoTime
     for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(dt))
@@ -377,10 +399,10 @@ object Performance {
   }
 
   private def setupInstant: java.util.List[Instant] = {
-    val random: Random = new Random(47658758756875687L)
+    val random: Random                = new Random(47658758756875687L)
     val list: java.util.List[Instant] = new java.util.ArrayList[Instant](SIZE)
-    val start: Long = System.nanoTime
-    var i: Int = 0
+    val start: Long                   = System.nanoTime
+    var i: Int                        = 0
     while (i < SIZE) {
       val t: Instant = Instant.ofEpochMilli(random.nextLong)
       list.add(t)
@@ -414,7 +436,7 @@ object Performance {
 
   private def formatListInstant(list: java.util.List[Instant]): Unit = {
     val buf: StringBuilder = new StringBuilder
-    val start: Long = System.nanoTime
+    val start: Long        = System.nanoTime
     for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(dt.toString)
@@ -425,10 +447,10 @@ object Performance {
   }
 
   private def setupDate: java.util.List[Date] = {
-    val random: Random = new Random(47658758756875687L)
+    val random: Random             = new Random(47658758756875687L)
     val list: java.util.List[Date] = new java.util.ArrayList[Date](SIZE)
-    val start: Long = System.nanoTime
-    var i: Int = 0
+    val start: Long                = System.nanoTime
+    var i: Int                     = 0
     while (i < SIZE) {
       val t: Date = new Date(random.nextLong)
       list.add(t)
@@ -461,7 +483,7 @@ object Performance {
 
   private def formatListDate(list: java.util.List[Date]): Unit = {
     val buf: StringBuilder = new StringBuilder
-    val start: Long = System.nanoTime
+    val start: Long        = System.nanoTime
     for (dt <- list.asScala) {
       buf.setLength(0)
       buf.append(dt.toString)
@@ -472,15 +494,20 @@ object Performance {
   }
 
   private def setupGCal: java.util.List[GregorianCalendar] = {
-    val tz: java.util.TimeZone = java.util.TimeZone.getTimeZone("Europe/London")
-    val random: Random = new Random(47658758756875687L)
+    val tz: java.util.TimeZone                  = java.util.TimeZone.getTimeZone("Europe/London")
+    val random: Random                          = new Random(47658758756875687L)
     val list: java.util.List[GregorianCalendar] = new java.util.ArrayList[GregorianCalendar](SIZE)
-    val start: Long = System.nanoTime
-    var i: Int = 0
+    val start: Long                             = System.nanoTime
+    var i: Int                                  = 0
     while (i < SIZE) {
       val t: GregorianCalendar = new GregorianCalendar(tz)
       t.setGregorianChange(new Date(Long.MinValue))
-      t.set(random.nextInt(10000), random.nextInt(12), random.nextInt(28) + 1, random.nextInt(24), random.nextInt(60), random.nextInt(60))
+      t.set(random.nextInt(10000),
+            random.nextInt(12),
+            random.nextInt(28) + 1,
+            random.nextInt(24),
+            random.nextInt(60),
+            random.nextInt(60))
       list.add(t)
       i += 1
     }
@@ -516,9 +543,9 @@ object Performance {
   }
 
   private def formatListGCal(list: java.util.List[GregorianCalendar]): Unit = {
-    val buf: StringBuilder = new StringBuilder
+    val buf: StringBuilder       = new StringBuilder
     val format: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-    val start: Long = System.nanoTime
+    val start: Long              = System.nanoTime
     for (gcal <- list.asScala) {
       buf.setLength(0)
       buf.append(format.format(gcal.getTime))
@@ -536,7 +563,8 @@ object Performance {
     }
     values(loop) = result
     if (loop == 4) {
-      values(5) = Math.min(values(0), Math.min(values(1), Math.min(values(2), Math.min(values(3), values(4)))))
+      values(5) = Math.min(values(0),
+                           Math.min(values(1), Math.min(values(2), Math.min(values(3), values(4)))))
       values(6) = ((values(0) - values(5)) * 1000) / values(0)
     }
   }

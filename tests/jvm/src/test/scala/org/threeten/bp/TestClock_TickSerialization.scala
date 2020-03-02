@@ -37,6 +37,8 @@ class TestClock_TickSerialization extends FunSuite with AssertionsHelper with Ab
   test("isSerializable") {
     assertSerializable(Clock.tickSeconds(TestClock_Tick.PARIS))
     assertSerializable(Clock.tickMinutes(TestClock_Tick.MOSCOW))
-    assertSerializable(Clock.tick(Clock.fixed(TestClock_Tick.INSTANT, TestClock_Tick.PARIS), TestClock_Tick.AMOUNT))
+    assertSerializable(
+      Clock.tick(Clock.fixed(TestClock_Tick.INSTANT, TestClock_Tick.PARIS), TestClock_Tick.AMOUNT)
+    )
   }
 }

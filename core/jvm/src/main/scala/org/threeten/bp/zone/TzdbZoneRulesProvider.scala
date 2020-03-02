@@ -37,7 +37,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.StreamCorruptedException
 import java.net.URL
-import java.util.{Objects, Arrays}
+import java.util.{ Arrays, Objects }
 import java.lang.Iterable
 import java.util.concurrent.ConcurrentNavigableMap
 import java.util.concurrent.ConcurrentSkipListMap
@@ -47,10 +47,12 @@ import java.util.concurrent.atomic.AtomicReferenceArray
 private[zone] object TzdbZoneRulesProvider {
 
   /** A version of the TZDB rules. */
-  private[zone] class Version private[zone](private[zone] val versionId: String,
-                                            private val regionArray: Array[String],
-                                            private val ruleIndices: Array[Short],
-                                            private val ruleData: AtomicReferenceArray[AnyRef]) {
+  private[zone] class Version private[zone] (
+    private[zone] val versionId: String,
+    private val regionArray:     Array[String],
+    private val ruleIndices:     Array[Short],
+    private val ruleData:        AtomicReferenceArray[AnyRef]
+  ) {
 
     private[zone] def getRules(regionId: String): ZoneRules = {
       val regionIndex: Int = Arrays.binarySearch(regionArray.asInstanceOf[Array[AnyRef]], regionId)
@@ -59,7 +61,10 @@ private[zone] object TzdbZoneRulesProvider {
       try createRule(ruleIndices(regionIndex))
       catch {
         case ex: Exception =>
-          throw new ZoneRulesException(s"Invalid binary time-zone data: TZDB:$regionId, version: $versionId", ex)
+          throw new ZoneRulesException(
+            s"Invalid binary time-zone data: TZDB:$regionId, version: $versionId",
+            ex
+          )
       }
     }
 
@@ -91,10 +96,15 @@ private[zone] object TzdbZoneRulesProvider {
   * @throws ZoneRulesException if unable to load
   */
 final class TzdbZoneRulesProvider extends ZoneRulesProvider {
+
   /** All the regions that are available. */
-  private val regionIds: java.util.List[String] = new java.util.concurrent.CopyOnWriteArrayList[String]
+  private val regionIds: java.util.List[String] =
+    new java.util.concurrent.CopyOnWriteArrayList[String]
+
   /** All the versions that are available. */
-  private val versions: ConcurrentNavigableMap[String, TzdbZoneRulesProvider.Version] = new ConcurrentSkipListMap[String, TzdbZoneRulesProvider.Version]
+  private val versions: ConcurrentNavigableMap[String, TzdbZoneRulesProvider.Version] =
+    new ConcurrentSkipListMap[String, TzdbZoneRulesProvider.Version]
+
   /** All the URLs that have been loaded.
     * Uses String to avoid equals() on URL.
     */
@@ -116,9 +126,9 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
 
   protected def provideVersions(zoneId: String): java.util.NavigableMap[String, ZoneRules] = {
     val map: java.util.TreeMap[String, ZoneRules] = new java.util.TreeMap[String, ZoneRules]
-    val versionsIterator = versions.values.iterator
+    val versionsIterator                          = versions.values.iterator
     while (versionsIterator.hasNext) {
-      val version = versionsIterator.next()
+      val version          = versionsIterator.next()
       val rules: ZoneRules = version.getRules(zoneId)
       if (rules != null) {
         map.put(version.versionId, rules)
@@ -135,16 +145,16 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
     */
   private def load(classLoader: ClassLoader): Boolean = {
     var updated: Boolean = false
-    var url: URL = null
+    var url: URL         = null
     try {
       val en: java.util.Enumeration[URL] = classLoader.getResources("org/threeten/bp/TZDB.dat")
       while (en.hasMoreElements) {
         url = en.nextElement
         updated |= load(url)
       }
-    }
-    catch {
-      case ex: Exception => throw new ZoneRulesException(s"Unable to load TZDB time-zone rules: $url", ex)
+    } catch {
+      case ex: Exception =>
+        throw new ZoneRulesException(s"Unable to load TZDB time-zone rules: $url", ex)
     }
     updated
   }
@@ -183,13 +193,16 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
   @throws[IOException]
   @throws[StreamCorruptedException]
   private def load(in: InputStream): Boolean = {
-    var updated: Boolean = false
+    var updated: Boolean                                                  = false
     val loadedVersions: java.util.Iterator[TzdbZoneRulesProvider.Version] = loadData(in).iterator
     while (loadedVersions.hasNext) {
       val loadedVersion = loadedVersions.next()
-      val existing: TzdbZoneRulesProvider.Version = versions.putIfAbsent(loadedVersion.versionId, loadedVersion)
+      val existing: TzdbZoneRulesProvider.Version =
+        versions.putIfAbsent(loadedVersion.versionId, loadedVersion)
       if (existing != null && !(existing.versionId == loadedVersion.versionId))
-        throw new ZoneRulesException(s"Data already loaded for TZDB time-zone rules version: ${loadedVersion.versionId}")
+        throw new ZoneRulesException(
+          s"Data already loaded for TZDB time-zone rules version: ${loadedVersion.versionId}"
+        )
       updated = true
     }
     updated
@@ -209,7 +222,7 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
     val groupId: String = dis.readUTF
     if (!("TZDB" == groupId))
       throw new StreamCorruptedException("File format not recognised")
-    val versionCount: Int = dis.readShort
+    val versionCount: Int           = dis.readShort
     val versionArray: Array[String] = new Array[String](versionCount)
 
     {
@@ -219,7 +232,7 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
         i += 1
       }
     }
-    val regionCount: Int = dis.readShort
+    val regionCount: Int           = dis.readShort
     val regionArray: Array[String] = new Array[String](regionCount)
 
     {
@@ -230,7 +243,7 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
       }
     }
     regionIds.addAll(Arrays.asList(regionArray: _*))
-    val ruleCount: Int = dis.readShort
+    val ruleCount: Int           = dis.readShort
     val ruleArray: Array[AnyRef] = new Array[AnyRef](ruleCount)
 
     {
@@ -243,22 +256,28 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
       }
     }
     val ruleData: AtomicReferenceArray[AnyRef] = new AtomicReferenceArray[AnyRef](ruleArray)
-    val versionSet: java.util.Set[TzdbZoneRulesProvider.Version] = new java.util.HashSet[TzdbZoneRulesProvider.Version](versionCount)
+    val versionSet: java.util.Set[TzdbZoneRulesProvider.Version] =
+      new java.util.HashSet[TzdbZoneRulesProvider.Version](versionCount)
 
     {
       var i: Int = 0
       while (i < versionCount) {
-        val versionRegionCount: Int = dis.readShort
+        val versionRegionCount: Int           = dis.readShort
         val versionRegionArray: Array[String] = new Array[String](versionRegionCount)
-        val versionRulesArray: Array[Short] = new Array[Short](versionRegionCount)
+        val versionRulesArray: Array[Short]   = new Array[Short](versionRegionCount)
 
         var j: Int = 0
         while (j < versionRegionCount) {
           versionRegionArray(j) = regionArray(dis.readShort)
-          versionRulesArray(j) = dis.readShort
+          versionRulesArray(j)  = dis.readShort
           j += 1
         }
-        versionSet.add(new TzdbZoneRulesProvider.Version(versionArray(i), versionRegionArray, versionRulesArray, ruleData))
+        versionSet.add(
+          new TzdbZoneRulesProvider.Version(versionArray(i),
+                                            versionRegionArray,
+                                            versionRulesArray,
+                                            ruleData)
+        )
         i += 1
       }
     }

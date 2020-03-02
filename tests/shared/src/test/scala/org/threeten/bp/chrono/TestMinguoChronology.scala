@@ -46,7 +46,7 @@ import org.threeten.bp.temporal.TemporalAdjusters
 /** Test. */
 class TestMinguoChronology extends FunSuite with AssertionsHelper {
   test("test_chrono_byName") {
-    val c: Chronology = MinguoChronology.INSTANCE
+    val c: Chronology    = MinguoChronology.INSTANCE
     val test: Chronology = Chronology.of("Minguo")
     assertNotNull(test, "The Minguo calendar could not be found byName")
     assertEquals(test.getId, "Minguo", "ID mismatch")
@@ -68,7 +68,8 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
       (MinguoChronology.INSTANCE.date(5, 1, 1), LocalDate.of(1916, 1, 1)),
       (MinguoChronology.INSTANCE.date(100, 3, 3), LocalDate.of(2011, 3, 3)),
       (MinguoChronology.INSTANCE.date(101, 10, 28), LocalDate.of(2012, 10, 28)),
-      (MinguoChronology.INSTANCE.date(101, 10, 29), LocalDate.of(2012, 10, 29)))
+      (MinguoChronology.INSTANCE.date(101, 10, 29), LocalDate.of(2012, 10, 29))
+    )
   }
 
   test("test_toLocalDate") {
@@ -90,9 +91,9 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
   ignore("test_MinguoDate") {
     data_samples.foreach {
       case (minguoDate, iso) =>
-        val hd: ChronoLocalDate = minguoDate
-        var hdt: ChronoLocalDateTime[_] = hd.atTime(LocalTime.NOON)
-        val zo: ZoneOffset = ZoneOffset.ofHours(1)
+        val hd: ChronoLocalDate          = minguoDate
+        var hdt: ChronoLocalDateTime[_]  = hd.atTime(LocalTime.NOON)
+        val zo: ZoneOffset               = ZoneOffset.ofHours(1)
         val hzdt: ChronoZonedDateTime[_] = hdt.atZone(zo)
         hdt = hdt.plus(1, ChronoUnit.YEARS)
         hdt = hdt.plus(1, ChronoUnit.MONTHS)
@@ -101,16 +102,16 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
         hdt = hdt.plus(1, ChronoUnit.MINUTES)
         hdt = hdt.plus(1, ChronoUnit.SECONDS)
         hdt = hdt.plus(1, ChronoUnit.NANOS)
-        //val a2: ChronoLocalDateTime[_] = hzdt.toLocalDateTime
-        //val a3: ChronoLocalDate = a2.toLocalDate
-        //val a5: ChronoLocalDate = hzdt.toLocalDate
+      //val a2: ChronoLocalDateTime[_] = hzdt.toLocalDateTime
+      //val a3: ChronoLocalDate = a2.toLocalDate
+      //val a5: ChronoLocalDate = hzdt.toLocalDate
     }
   }
 
   test("test_MinguoChrono") {
-    val h1: ChronoLocalDate = MinguoChronology.INSTANCE.date(MinguoEra.ROC, 1, 2, 3)
-    val h2: ChronoLocalDate = h1
-    val h3: ChronoLocalDateTime[_] = h2.atTime(LocalTime.NOON)
+    val h1: ChronoLocalDate                                           = MinguoChronology.INSTANCE.date(MinguoEra.ROC, 1, 2, 3)
+    val h2: ChronoLocalDate                                           = h1
+    val h3: ChronoLocalDateTime[_]                                    = h2.atTime(LocalTime.NOON)
     @SuppressWarnings(Array("unused")) val h4: ChronoZonedDateTime[_] = h3.atZone(ZoneOffset.UTC)
   }
 
@@ -128,7 +129,8 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
       (1912, 2, 30),
       (1912, 12, -1),
       (1912, 12, 0),
-      (1912, 12, 32))
+      (1912, 12, 32)
+    )
   }
 
   test("test_badDates") {
@@ -154,7 +156,7 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
 
   test("test_adjust_toLocalDate") {
     val minguo: ChronoLocalDate = MinguoChronology.INSTANCE.date(99, 1, 4)
-    val test: ChronoLocalDate = minguo.`with`(LocalDate.of(2012, 7, 6))
+    val test: ChronoLocalDate   = minguo.`with`(LocalDate.of(2012, 7, 6))
     assertEquals(test, MinguoChronology.INSTANCE.date(101, 7, 6))
   }
 
@@ -167,13 +169,13 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
 
   test("test_LocalDate_adjustToMinguoDate") {
     val minguo: ChronoLocalDate = MinguoChronology.INSTANCE.date(101, 10, 29)
-    val test: LocalDate = LocalDate.MIN.`with`(minguo)
+    val test: LocalDate         = LocalDate.MIN.`with`(minguo)
     assertEquals(test, LocalDate.of(2012, 10, 29))
   }
 
   test("test_LocalDateTime_adjustToMinguoDate") {
     val minguo: ChronoLocalDate = MinguoChronology.INSTANCE.date(101, 10, 29)
-    val test: LocalDateTime = LocalDateTime.MIN.`with`(minguo)
+    val test: LocalDateTime     = LocalDateTime.MIN.`with`(minguo)
     assertEquals(test, LocalDateTime.of(2012, 10, 29, 0, 0))
   }
 
@@ -183,7 +185,8 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
       (MinguoChronology.INSTANCE.date(1728, 10, 28), "Minguo ROC 1728-10-28"),
       (MinguoChronology.INSTANCE.date(1728, 10, 29), "Minguo ROC 1728-10-29"),
       (MinguoChronology.INSTANCE.date(1727, 12, 5), "Minguo ROC 1727-12-05"),
-      (MinguoChronology.INSTANCE.date(1727, 12, 6), "Minguo ROC 1727-12-06"))
+      (MinguoChronology.INSTANCE.date(1727, 12, 6), "Minguo ROC 1727-12-06")
+    )
   }
 
   test("test_toString") {

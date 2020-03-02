@@ -37,7 +37,7 @@ import java.io.DataOutput
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.Serializable
-import java.util.{Objects, Calendar}
+import java.util.{ Calendar, Objects }
 import org.threeten.bp.Clock
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.LocalDate
@@ -55,6 +55,7 @@ import org.threeten.bp.temporal.ValueRange
 
 @SerialVersionUID(-305327627230580483L)
 object JapaneseDate {
+
   /** Minimum date. */
   private[chrono] val MIN_DATE: LocalDate = LocalDate.of(1873, 1, 1)
 
@@ -124,9 +125,9 @@ object JapaneseDate {
     if (yearOfEra < 1)
       throw new DateTimeException(s"Invalid YearOfEra: $yearOfEra")
     val eraStartDate: LocalDate = era.startDate
-    val eraEndDate: LocalDate = era.endDate
-    val yearOffset: Int = eraStartDate.getYear - 1
-    val date: LocalDate = LocalDate.of(yearOfEra + yearOffset, month, dayOfMonth)
+    val eraEndDate: LocalDate   = era.endDate
+    val yearOffset: Int         = eraStartDate.getYear - 1
+    val date: LocalDate         = LocalDate.of(yearOfEra + yearOffset, month, dayOfMonth)
     if (date.isBefore(eraStartDate) || date.isAfter(eraEndDate))
       throw new DateTimeException(s"Requested date is outside bounds of era $era")
     new JapaneseDate(era, yearOfEra, date)
@@ -152,13 +153,15 @@ object JapaneseDate {
     if (yearOfEra < 1)
       throw new DateTimeException(s"Invalid YearOfEra: $yearOfEra")
     val eraStartDate: LocalDate = era.startDate
-    val eraEndDate: LocalDate = era.endDate
+    val eraEndDate: LocalDate   = era.endDate
     if (yearOfEra == 1) {
       _dayOfYear += eraStartDate.getDayOfYear - 1
       if (_dayOfYear > eraStartDate.lengthOfYear)
-        throw new DateTimeException(s"DayOfYear exceeds maximum allowed in the first year of era $era")
+        throw new DateTimeException(
+          s"DayOfYear exceeds maximum allowed in the first year of era $era"
+        )
     }
-    val yearOffset: Int = eraStartDate.getYear - 1
+    val yearOffset: Int    = eraStartDate.getYear - 1
     val isoDate: LocalDate = LocalDate.ofYearDay(yearOfEra + yearOffset, _dayOfYear)
     if (isoDate.isBefore(eraStartDate) || isoDate.isAfter(eraEndDate))
       throw new DateTimeException(s"Requested date is outside bounds of era $era")
@@ -204,8 +207,8 @@ object JapaneseDate {
 
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
-    val year: Int = in.readInt
-    val month: Int = in.readByte
+    val year: Int       = in.readInt
+    val month: Int      = in.readByte
     val dayOfMonth: Int = in.readByte
     JapaneseChronology.INSTANCE.date(year, month, dayOfMonth)
   }
@@ -241,7 +244,12 @@ object JapaneseDate {
   * @param isoDate  the standard local date, validated not null
   */
 @SerialVersionUID(-305327627230580483L)
-final class JapaneseDate private[chrono](@transient private var era: JapaneseEra, @transient private var yearOfEra: Int, private val isoDate: LocalDate) extends ChronoDateImpl[JapaneseDate] with Serializable {
+final class JapaneseDate private[chrono] (
+  @transient private var era:       JapaneseEra,
+  @transient private var yearOfEra: Int,
+  private val isoDate:              LocalDate
+) extends ChronoDateImpl[JapaneseDate]
+    with Serializable {
   if (isoDate.isBefore(JapaneseDate.MIN_DATE))
     throw new DateTimeException("Minimum supported date is January 1st Meiji 6")
 
@@ -251,7 +259,9 @@ final class JapaneseDate private[chrono](@transient private var era: JapaneseEra
     */
   private[chrono] def this(isoDate: LocalDate) {
     // !!!! FIXME: JapaneseEra.from(isoDate) is called twice, because this call must be first ...
-    this(JapaneseEra.from(isoDate), isoDate.getYear - (JapaneseEra.from(isoDate).startDate.getYear - 1), isoDate)
+    this(JapaneseEra.from(isoDate),
+         isoDate.getYear - (JapaneseEra.from(isoDate).startDate.getYear - 1),
+         isoDate)
   }
 
   /** Reconstitutes this object from a stream.
@@ -311,11 +321,10 @@ final class JapaneseDate private[chrono](@transient private var era: JapaneseEra
     */
   override def isSupported(field: TemporalField): Boolean =
     field match {
-      case ALIGNED_DAY_OF_WEEK_IN_MONTH
-         | ALIGNED_DAY_OF_WEEK_IN_YEAR
-         | ALIGNED_WEEK_OF_MONTH
-         | ALIGNED_WEEK_OF_YEAR         => false
-      case _                            => super.isSupported (field)
+      case ALIGNED_DAY_OF_WEEK_IN_MONTH | ALIGNED_DAY_OF_WEEK_IN_YEAR | ALIGNED_WEEK_OF_MONTH |
+          ALIGNED_WEEK_OF_YEAR =>
+        false
+      case _ => super.isSupported(field)
     }
 
   override def range(field: TemporalField): ValueRange =
@@ -325,7 +334,7 @@ final class JapaneseDate private[chrono](@transient private var era: JapaneseEra
           f match {
             case DAY_OF_YEAR => actualRange(Calendar.DAY_OF_YEAR)
             case YEAR_OF_ERA => actualRange(Calendar.YEAR)
-            case _ => getChronology.range(f)
+            case _           => getChronology.range(f)
           }
         } else {
           throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
@@ -341,23 +350,21 @@ final class JapaneseDate private[chrono](@transient private var era: JapaneseEra
     ValueRange.of(jcal.getActualMinimum(calendarField), jcal.getActualMaximum(calendarField))
   }
 
-  def getLong(field: TemporalField): Long = {
+  def getLong(field: TemporalField): Long =
     field match {
       case f: ChronoField =>
         f match {
-          case ALIGNED_DAY_OF_WEEK_IN_MONTH
-               | ALIGNED_DAY_OF_WEEK_IN_YEAR
-               | ALIGNED_WEEK_OF_MONTH
-               | ALIGNED_WEEK_OF_YEAR => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-          case YEAR_OF_ERA            => yearOfEra
-          case ERA                    => era.getValue
-          case DAY_OF_YEAR            => getDayOfYear
-          case _                      => isoDate.getLong(field)
+          case ALIGNED_DAY_OF_WEEK_IN_MONTH | ALIGNED_DAY_OF_WEEK_IN_YEAR | ALIGNED_WEEK_OF_MONTH |
+              ALIGNED_WEEK_OF_YEAR =>
+            throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+          case YEAR_OF_ERA => yearOfEra
+          case ERA         => era.getValue
+          case DAY_OF_YEAR => getDayOfYear
+          case _           => isoDate.getLong(field)
         }
       case _ =>
         field.getFrom(this)
     }
-  }
 
   private def getDayOfYear: Long =
     if (yearOfEra == 1)
@@ -365,17 +372,16 @@ final class JapaneseDate private[chrono](@transient private var era: JapaneseEra
     else
       isoDate.getDayOfYear
 
-  override def `with`(adjuster: TemporalAdjuster): JapaneseDate = super.`with`(adjuster).asInstanceOf[JapaneseDate]
+  override def `with`(adjuster: TemporalAdjuster): JapaneseDate =
+    super.`with`(adjuster).asInstanceOf[JapaneseDate]
 
-  def `with`(field: TemporalField, newValue: Long): JapaneseDate = {
+  def `with`(field: TemporalField, newValue: Long): JapaneseDate =
     field match {
       case f: ChronoField =>
         if (getLong(f) == newValue)
           return this
         f match {
-          case DAY_OF_YEAR
-               | YEAR_OF_ERA
-               | ERA =>
+          case DAY_OF_YEAR | YEAR_OF_ERA | ERA =>
             val nvalue: Int = getChronology.range(f).checkValidIntValue(newValue, f)
             f match {
               case DAY_OF_YEAR => `with`(isoDate.plusDays(nvalue - getDayOfYear))
@@ -387,14 +393,15 @@ final class JapaneseDate private[chrono](@transient private var era: JapaneseEra
       case _ =>
         field.adjustInto(this, newValue)
     }
-  }
 
-  override def plus(amount: TemporalAmount): JapaneseDate = super.plus(amount).asInstanceOf[JapaneseDate]
+  override def plus(amount: TemporalAmount): JapaneseDate =
+    super.plus(amount).asInstanceOf[JapaneseDate]
 
   override def plus(amountToAdd: Long, unit: TemporalUnit): JapaneseDate =
     super.plus(amountToAdd, unit).asInstanceOf[JapaneseDate]
 
-  override def minus(amount: TemporalAmount): JapaneseDate = super.minus(amount).asInstanceOf[JapaneseDate]
+  override def minus(amount: TemporalAmount): JapaneseDate =
+    super.minus(amount).asInstanceOf[JapaneseDate]
 
   override def minus(amountToAdd: Long, unit: TemporalUnit): JapaneseDate =
     super.minus(amountToAdd, unit).asInstanceOf[JapaneseDate]
@@ -437,7 +444,8 @@ final class JapaneseDate private[chrono](@transient private var era: JapaneseEra
 
   private[chrono] def plusDays(days: Long): JapaneseDate = `with`(isoDate.plusDays(days))
 
-  private def `with`(newDate: LocalDate): JapaneseDate = if (newDate == isoDate) this else new JapaneseDate(newDate)
+  private def `with`(newDate: LocalDate): JapaneseDate =
+    if (newDate == isoDate) this else new JapaneseDate(newDate)
 
   override def atTime(localTime: LocalTime): ChronoLocalDateTime[JapaneseDate] =
     super.atTime(localTime).asInstanceOf[ChronoLocalDateTime[JapaneseDate]]
@@ -452,7 +460,7 @@ final class JapaneseDate private[chrono](@transient private var era: JapaneseEra
   override def equals(obj: Any): Boolean =
     obj match {
       case otherDate: JapaneseDate => (this eq otherDate) || (this.isoDate == otherDate.isoDate)
-      case _ => false
+      case _                       => false
     }
 
   override def hashCode: Int = getChronology.getId.hashCode ^ isoDate.hashCode

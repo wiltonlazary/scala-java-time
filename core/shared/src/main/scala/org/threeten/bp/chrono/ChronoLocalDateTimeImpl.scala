@@ -50,30 +50,42 @@ import org.threeten.bp.temporal.ValueRange
 
 @SerialVersionUID(4556003607393004514L)
 private[chrono] object ChronoLocalDateTimeImpl {
+
   /** Hours per minute. */
-  private val HOURS_PER_DAY: Int      = 24
+  private val HOURS_PER_DAY: Int = 24
+
   /** Minutes per hour. */
-  private val MINUTES_PER_HOUR: Int   = 60
+  private val MINUTES_PER_HOUR: Int = 60
+
   /** Minutes per day. */
-  private val MINUTES_PER_DAY: Int    = MINUTES_PER_HOUR * HOURS_PER_DAY
+  private val MINUTES_PER_DAY: Int = MINUTES_PER_HOUR * HOURS_PER_DAY
+
   /** Seconds per minute. */
   private val SECONDS_PER_MINUTE: Int = 60
+
   /** Seconds per hour. */
-  private val SECONDS_PER_HOUR: Int   = SECONDS_PER_MINUTE * MINUTES_PER_HOUR
+  private val SECONDS_PER_HOUR: Int = SECONDS_PER_MINUTE * MINUTES_PER_HOUR
+
   /** Seconds per day. */
-  private val SECONDS_PER_DAY: Int    = SECONDS_PER_HOUR * HOURS_PER_DAY
+  private val SECONDS_PER_DAY: Int = SECONDS_PER_HOUR * HOURS_PER_DAY
+
   /** Milliseconds per day. */
-  private val MILLIS_PER_DAY: Long    = SECONDS_PER_DAY * 1000L
+  private val MILLIS_PER_DAY: Long = SECONDS_PER_DAY * 1000L
+
   /** Microseconds per day. */
-  private val MICROS_PER_DAY: Long    = SECONDS_PER_DAY * 1000000L
+  private val MICROS_PER_DAY: Long = SECONDS_PER_DAY * 1000000L
+
   /** Nanos per second. */
-  private val NANOS_PER_SECOND: Long  = 1000000000L
+  private val NANOS_PER_SECOND: Long = 1000000000L
+
   /** Nanos per minute. */
-  private val NANOS_PER_MINUTE: Long  = NANOS_PER_SECOND * SECONDS_PER_MINUTE
+  private val NANOS_PER_MINUTE: Long = NANOS_PER_SECOND * SECONDS_PER_MINUTE
+
   /** Nanos per hour. */
-  private val NANOS_PER_HOUR: Long    = NANOS_PER_MINUTE * MINUTES_PER_HOUR
+  private val NANOS_PER_HOUR: Long = NANOS_PER_MINUTE * MINUTES_PER_HOUR
+
   /** Nanos per day. */
-  private val NANOS_PER_DAY: Long     = NANOS_PER_HOUR * HOURS_PER_DAY
+  private val NANOS_PER_DAY: Long = NANOS_PER_HOUR * HOURS_PER_DAY
 
   /** Obtains an instance of {@code ChronoLocalDateTime} from a date and time.
     *
@@ -81,14 +93,17 @@ private[chrono] object ChronoLocalDateTimeImpl {
     * @param time  the local time, not null
     * @return the local date-time, not null
     */
-  private[chrono] def of[R <: ChronoLocalDate](date: R, time: LocalTime): ChronoLocalDateTimeImpl[R] =
+  private[chrono] def of[R <: ChronoLocalDate](
+    date: R,
+    time: LocalTime
+  ): ChronoLocalDateTimeImpl[R] =
     new ChronoLocalDateTimeImpl[R](date, time)
 
   @throws(classOf[IOException])
   @throws(classOf[ClassNotFoundException])
   private[chrono] def readExternal(in: ObjectInput): ChronoLocalDateTime[_] = {
     val date: ChronoLocalDate = in.readObject.asInstanceOf[ChronoLocalDate]
-    val time: LocalTime = in.readObject.asInstanceOf[LocalTime]
+    val time: LocalTime       = in.readObject.asInstanceOf[LocalTime]
     date.atTime(time)
   }
 }
@@ -113,7 +128,13 @@ private[chrono] object ChronoLocalDateTimeImpl {
   * @param time  the time part of the date-time, not null
   */
 @SerialVersionUID(4556003607393004514L)
-final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private(private val date: D, private val time: LocalTime) extends ChronoLocalDateTime[D] with Temporal with TemporalAdjuster with Serializable {
+final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
+  private val date: D,
+  private val time: LocalTime
+) extends ChronoLocalDateTime[D]
+    with Temporal
+    with TemporalAdjuster
+    with Serializable {
   Objects.requireNonNull(date, "date")
   Objects.requireNonNull(time, "time")
 
@@ -171,9 +192,13 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private(private val da
     else if (adjuster.isInstanceOf[LocalTime])
       `with`(date, adjuster.asInstanceOf[LocalTime])
     else if (adjuster.isInstanceOf[ChronoLocalDateTimeImpl[_ <: ChronoLocalDate]])
-      date.getChronology.ensureChronoLocalDateTime(adjuster.asInstanceOf[ChronoLocalDateTimeImpl[_]])
+      date.getChronology.ensureChronoLocalDateTime(
+        adjuster.asInstanceOf[ChronoLocalDateTimeImpl[_]]
+      )
     else
-      date.getChronology.ensureChronoLocalDateTime(adjuster.adjustInto(this).asInstanceOf[ChronoLocalDateTimeImpl[_]])
+      date.getChronology.ensureChronoLocalDateTime(
+        adjuster.adjustInto(this).asInstanceOf[ChronoLocalDateTimeImpl[_]]
+      )
 
   def `with`(field: TemporalField, newValue: Long): ChronoLocalDateTimeImpl[D] =
     if (field.isInstanceOf[ChronoField])
@@ -182,14 +207,18 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private(private val da
     else
       date.getChronology.ensureChronoLocalDateTime(field.adjustInto(this, newValue))
 
-  def plus(amountToAdd: Long, unit: TemporalUnit): ChronoLocalDateTimeImpl[D] = {
+  def plus(amountToAdd: Long, unit: TemporalUnit): ChronoLocalDateTimeImpl[D] =
     if (unit.isInstanceOf[ChronoUnit]) {
       val f: ChronoUnit = unit.asInstanceOf[ChronoUnit]
       import ChronoUnit._
       f match {
-        case NANOS     => plusNanos(amountToAdd)
-        case MICROS    => plusDays(amountToAdd / ChronoLocalDateTimeImpl.MICROS_PER_DAY).plusNanos((amountToAdd % ChronoLocalDateTimeImpl.MICROS_PER_DAY) * 1000)
-        case MILLIS    => plusDays(amountToAdd / ChronoLocalDateTimeImpl.MILLIS_PER_DAY).plusNanos((amountToAdd % ChronoLocalDateTimeImpl.MILLIS_PER_DAY) * 1000000)
+        case NANOS => plusNanos(amountToAdd)
+        case MICROS =>
+          plusDays(amountToAdd / ChronoLocalDateTimeImpl.MICROS_PER_DAY)
+            .plusNanos((amountToAdd % ChronoLocalDateTimeImpl.MICROS_PER_DAY) * 1000)
+        case MILLIS =>
+          plusDays(amountToAdd / ChronoLocalDateTimeImpl.MILLIS_PER_DAY)
+            .plusNanos((amountToAdd % ChronoLocalDateTimeImpl.MILLIS_PER_DAY) * 1000000)
         case SECONDS   => plusSeconds(amountToAdd)
         case MINUTES   => plusMinutes(amountToAdd)
         case HOURS     => plusHours(amountToAdd)
@@ -199,46 +228,62 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private(private val da
     } else {
       date.getChronology.ensureChronoLocalDateTime(unit.addTo(this, amountToAdd))
     }
-  }
 
-  private def plusDays(days: Long): ChronoLocalDateTimeImpl[D] = `with`(date.plus(days, ChronoUnit.DAYS), time)
+  private def plusDays(days: Long): ChronoLocalDateTimeImpl[D] =
+    `with`(date.plus(days, ChronoUnit.DAYS), time)
 
-  private def plusHours(hours: Long): ChronoLocalDateTimeImpl[D] = plusWithOverflow(date, hours, 0, 0, 0)
+  private def plusHours(hours: Long): ChronoLocalDateTimeImpl[D] =
+    plusWithOverflow(date, hours, 0, 0, 0)
 
-  private def plusMinutes(minutes: Long): ChronoLocalDateTimeImpl[D] = plusWithOverflow(date, 0, minutes, 0, 0)
+  private def plusMinutes(minutes: Long): ChronoLocalDateTimeImpl[D] =
+    plusWithOverflow(date, 0, minutes, 0, 0)
 
-  private[chrono] def plusSeconds(seconds: Long): ChronoLocalDateTimeImpl[D] = plusWithOverflow(date, 0, 0, seconds, 0)
+  private[chrono] def plusSeconds(seconds: Long): ChronoLocalDateTimeImpl[D] =
+    plusWithOverflow(date, 0, 0, seconds, 0)
 
-  private def plusNanos(nanos: Long): ChronoLocalDateTimeImpl[D] = plusWithOverflow(date, 0, 0, 0, nanos)
+  private def plusNanos(nanos: Long): ChronoLocalDateTimeImpl[D] =
+    plusWithOverflow(date, 0, 0, 0, nanos)
 
-  private def plusWithOverflow(newDate: D, hours: Long, minutes: Long, seconds: Long, nanos: Long): ChronoLocalDateTimeImpl[D] = {
+  private def plusWithOverflow(
+    newDate: D,
+    hours:   Long,
+    minutes: Long,
+    seconds: Long,
+    nanos:   Long
+  ): ChronoLocalDateTimeImpl[D] = {
     if ((hours | minutes | seconds | nanos) == 0)
       return `with`(newDate, time)
-    var totDays: Long = nanos / ChronoLocalDateTimeImpl.NANOS_PER_DAY + seconds / ChronoLocalDateTimeImpl.SECONDS_PER_DAY + minutes / ChronoLocalDateTimeImpl.MINUTES_PER_DAY + hours / ChronoLocalDateTimeImpl.HOURS_PER_DAY
-    var totNanos: Long = nanos % ChronoLocalDateTimeImpl.NANOS_PER_DAY + (seconds % ChronoLocalDateTimeImpl.SECONDS_PER_DAY) * ChronoLocalDateTimeImpl.NANOS_PER_SECOND + (minutes % ChronoLocalDateTimeImpl.MINUTES_PER_DAY) * ChronoLocalDateTimeImpl.NANOS_PER_MINUTE + (hours % ChronoLocalDateTimeImpl.HOURS_PER_DAY) * ChronoLocalDateTimeImpl.NANOS_PER_HOUR
+    var totDays: Long =
+      nanos / ChronoLocalDateTimeImpl.NANOS_PER_DAY + seconds / ChronoLocalDateTimeImpl.SECONDS_PER_DAY + minutes / ChronoLocalDateTimeImpl.MINUTES_PER_DAY + hours / ChronoLocalDateTimeImpl.HOURS_PER_DAY
+    var totNanos: Long =
+      nanos % ChronoLocalDateTimeImpl.NANOS_PER_DAY + (seconds % ChronoLocalDateTimeImpl.SECONDS_PER_DAY) * ChronoLocalDateTimeImpl.NANOS_PER_SECOND + (minutes % ChronoLocalDateTimeImpl.MINUTES_PER_DAY) * ChronoLocalDateTimeImpl.NANOS_PER_MINUTE + (hours % ChronoLocalDateTimeImpl.HOURS_PER_DAY) * ChronoLocalDateTimeImpl.NANOS_PER_HOUR
     val curNoD: Long = time.toNanoOfDay
     totNanos = totNanos + curNoD
     totDays += Math.floorDiv(totNanos, ChronoLocalDateTimeImpl.NANOS_PER_DAY)
-    val newNoD: Long = Math.floorMod(totNanos, ChronoLocalDateTimeImpl.NANOS_PER_DAY)
+    val newNoD: Long       = Math.floorMod(totNanos, ChronoLocalDateTimeImpl.NANOS_PER_DAY)
     val newTime: LocalTime = if (newNoD == curNoD) time else LocalTime.ofNanoOfDay(newNoD)
     `with`(newDate.plus(totDays, ChronoUnit.DAYS), newTime)
   }
 
-  def atZone(zoneId: ZoneId): ChronoZonedDateTime[D] = ChronoZonedDateTimeImpl.ofBest(this, zoneId, null)
+  def atZone(zoneId: ZoneId): ChronoZonedDateTime[D] =
+    ChronoZonedDateTimeImpl.ofBest(this, zoneId, null)
 
   def until(endExclusive: Temporal, unit: TemporalUnit): Long = {
-    val end: ChronoLocalDateTime[D] = toLocalDate.getChronology.localDateTime(endExclusive).asInstanceOf[ChronoLocalDateTime[D]]
+    val end: ChronoLocalDateTime[D] =
+      toLocalDate.getChronology.localDateTime(endExclusive).asInstanceOf[ChronoLocalDateTime[D]]
     if (unit.isInstanceOf[ChronoUnit]) {
       val f: ChronoUnit = unit.asInstanceOf[ChronoUnit]
       if (f.isTimeBased) {
         var amount: Long = end.getLong(EPOCH_DAY) - date.getLong(EPOCH_DAY)
         import ChronoUnit._
         f match {
-          case NANOS     => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.NANOS_PER_DAY)
-          case MICROS    => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MICROS_PER_DAY)
-          case MILLIS    => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MILLIS_PER_DAY)
-          case SECONDS   => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.SECONDS_PER_DAY)
-          case MINUTES   => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MINUTES_PER_DAY)
+          case NANOS  => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.NANOS_PER_DAY)
+          case MICROS => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MICROS_PER_DAY)
+          case MILLIS => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MILLIS_PER_DAY)
+          case SECONDS =>
+            amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.SECONDS_PER_DAY)
+          case MINUTES =>
+            amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MINUTES_PER_DAY)
           case HOURS     => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.HOURS_PER_DAY)
           case HALF_DAYS => amount = Math.multiplyExact(amount, 2)
         }

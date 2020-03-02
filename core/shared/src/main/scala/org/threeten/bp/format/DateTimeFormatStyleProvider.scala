@@ -35,6 +35,7 @@ import java.util.Locale
 import org.threeten.bp.chrono.Chronology
 
 private[format] object DateTimeFormatStyleProvider {
+
   /** Gets the provider.
     *
     * @return the provider, not null
@@ -52,6 +53,7 @@ private[format] object DateTimeFormatStyleProvider {
   * Implementations should cache the returned formatters.
   */
 abstract class DateTimeFormatStyleProvider {
+
   /** Gets the available locales.
     *
     * @return the locales
@@ -71,5 +73,10 @@ abstract class DateTimeFormatStyleProvider {
     * @throws IllegalArgumentException if both format styles are null
     * @throws IllegalArgumentException if the locale is not a recognized locale
     */
-  def getFormatter(dateStyle: FormatStyle, timeStyle: FormatStyle, chrono: Chronology, locale: Locale): DateTimeFormatter
+  def getFormatter(
+    dateStyle: FormatStyle,
+    timeStyle: FormatStyle,
+    chrono:    Chronology,
+    locale:    Locale
+  ): DateTimeFormatter
 }

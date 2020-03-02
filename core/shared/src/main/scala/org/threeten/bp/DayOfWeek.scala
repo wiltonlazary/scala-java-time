@@ -72,36 +72,44 @@ import org.threeten.bp.temporal.ValueRange
   * This is an immutable and thread-safe enum.
   */
 object DayOfWeek {
+
   /** The singleton instance for the day-of-week of Monday.
     * This has the numeric value of {@code 1}.
     */
-  val MONDAY    = new DayOfWeek("MONDAY", 0)
+  val MONDAY = new DayOfWeek("MONDAY", 0)
+
   /** The singleton instance for the day-of-week of Tuesday.
     * This has the numeric value of {@code 2}.
     */
-  val TUESDAY   = new DayOfWeek("TUESDAY", 1)
+  val TUESDAY = new DayOfWeek("TUESDAY", 1)
+
   /** The singleton instance for the day-of-week of Wednesday.
     * This has the numeric value of {@code 3}.
     */
   val WEDNESDAY = new DayOfWeek("WEDNESDAY", 2)
+
   /** The singleton instance for the day-of-week of Thursday.
     * This has the numeric value of {@code 4}.
     */
-  val THURSDAY  = new DayOfWeek("THURSDAY", 3)
+  val THURSDAY = new DayOfWeek("THURSDAY", 3)
+
   /** The singleton instance for the day-of-week of Friday.
     * This has the numeric value of {@code 5}.
     */
-  val FRIDAY    = new DayOfWeek("FRIDAY", 4)
+  val FRIDAY = new DayOfWeek("FRIDAY", 4)
+
   /** The singleton instance for the day-of-week of Saturday.
     * This has the numeric value of {@code 6}.
     */
-  val SATURDAY  = new DayOfWeek("SATURDAY", 5)
+  val SATURDAY = new DayOfWeek("SATURDAY", 5)
+
   /** The singleton instance for the day-of-week of Sunday.
     * This has the numeric value of {@code 7}.
     */
-  val SUNDAY    = new DayOfWeek("SUNDAY", 6)
+  val SUNDAY = new DayOfWeek("SUNDAY", 6)
 
-  val values: Array[DayOfWeek] = Array(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
+  val values: Array[DayOfWeek] =
+    Array(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
   def valueOf(enum: String): DayOfWeek = values.find(_.name() == enum) match {
     case Some(dayOfWeek) => dayOfWeek
     case _ =>
@@ -145,17 +153,24 @@ object DayOfWeek {
   def from(temporal: TemporalAccessor): DayOfWeek = {
     temporal match {
       case week: DayOfWeek => return week
-      case _ =>
+      case _               =>
     }
     try of(temporal.get(DAY_OF_WEEK))
     catch {
       case ex: DateTimeException =>
-        throw new DateTimeException(s"Unable to obtain DayOfWeek from TemporalAccessor: $temporal, type ${temporal.getClass.getName}", ex)
+        throw new DateTimeException(
+          s"Unable to obtain DayOfWeek from TemporalAccessor: $temporal, type ${temporal.getClass.getName}",
+          ex
+        )
     }
   }
 }
 
-final class DayOfWeek(name: String, ordinal: Int) extends Enum[DayOfWeek](name, ordinal) with TemporalAccessor with TemporalAdjuster {
+final class DayOfWeek(name: String, ordinal: Int)
+    extends Enum[DayOfWeek](name, ordinal)
+    with TemporalAccessor
+    with TemporalAdjuster {
+
   /** Gets the day-of-week {@code int} value.
     *
     * The values are numbered following the ISO-8601 standard, from 1 (Monday) to 7 (Sunday).

@@ -43,56 +43,89 @@ import org.threeten.bp.temporal.TemporalField
 class TestPadParserDecorator extends FunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_parse_negativePosition") {
     assertThrows[Platform.DFE] {
-      val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'), 3, '-')
+      val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+        new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+          new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'),
+          3,
+          '-'
+        )
       pp.parse(parseContext, "--Z", -1)
     }
   }
 
   test("test_parse_offEndPosition") {
     assertThrows[IndexOutOfBoundsException] {
-      val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'), 3, '-')
+      val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+        new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+          new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'),
+          3,
+          '-'
+        )
       pp.parse(parseContext, "--Z", 4)
     }
   }
 
   test("test_parse") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER),
+        3,
+        '-'
+      )
     val result: Int = pp.parse(parseContext, "--2", 0)
     assertEquals(result, 3)
     assertParsed(MONTH_OF_YEAR, 2L)
   }
 
   test("test_parse_noReadBeyond") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER),
+        3,
+        '-'
+      )
     val result: Int = pp.parse(parseContext, "--22", 0)
     assertEquals(result, 3)
     assertParsed(MONTH_OF_YEAR, 2L)
   }
 
   test("test_parse_textLessThanPadWidth") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER),
+        3,
+        '-'
+      )
     val result: Int = pp.parse(parseContext, "-1", 0)
     assertEquals(result, ~0)
   }
 
   test("test_parse_decoratedErrorPassedBack") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER),
+        3,
+        '-'
+      )
     val result: Int = pp.parse(parseContext, "--A", 0)
     assertEquals(result, ~2)
   }
 
   test("test_parse_decoratedDidNotParseToPadWidth") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER), 3, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.NumberPrinterParser(MONTH_OF_YEAR, 1, 3, SignStyle.NEVER),
+        3,
+        '-'
+      )
     val result: Int = pp.parse(parseContext, "-1X", 0)
     assertEquals(result, ~1)
   }
 
-  private def assertParsed(field: TemporalField, value: java.lang.Long): Unit = {
+  private def assertParsed(field: TemporalField, value: java.lang.Long): Unit =
     if (value == null) {
       assertEquals(parseContext.getParsed(field), null)
-    }
-    else {
+    } else {
       assertEquals(parseContext.getParsed(field), value)
     }
-  }
 }

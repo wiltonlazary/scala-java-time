@@ -73,7 +73,7 @@ import java.io.ObjectOutputStream
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.{ BeforeAndAfter, FunSuite }
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
@@ -93,37 +93,82 @@ object TestLocalDateTime {
   private val OFFSET_PONE: ZoneOffset = ZoneOffset.ofHours(1)
   private val OFFSET_PTWO: ZoneOffset = ZoneOffset.ofHours(2)
   private val OFFSET_MTWO: ZoneOffset = ZoneOffset.ofHours(-2)
-  private val ZONE_PARIS: ZoneId = ZoneId.of("Europe/Paris")
-  private val ZONE_GAZA: ZoneId = ZoneId.of("Asia/Gaza")
+  private val ZONE_PARIS: ZoneId      = ZoneId.of("Europe/Paris")
+  private val ZONE_GAZA: ZoneId       = ZoneId.of("Asia/Gaza")
 }
 
-class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHelper with BeforeAndAfter {
-  private val TEST_2007_07_15_12_30_40_987654321: LocalDateTime = LocalDateTime.of(2007, 7, 15, 12, 30, 40, 987654321)
+class TestLocalDateTime
+    extends FunSuite
+    with GenDateTimeTest
+    with AssertionsHelper
+    with BeforeAndAfter {
+  private val TEST_2007_07_15_12_30_40_987654321: LocalDateTime =
+    LocalDateTime.of(2007, 7, 15, 12, 30, 40, 987654321)
   private var MAX_DATE_TIME: LocalDateTime = null
   private var MIN_DATE_TIME: LocalDateTime = null
-  private var MAX_INSTANT: Instant = null
-  private var MIN_INSTANT: Instant = null
+  private var MAX_INSTANT: Instant         = null
+  private var MIN_INSTANT: Instant         = null
 
   before {
     MAX_DATE_TIME = LocalDateTime.MAX
     MIN_DATE_TIME = LocalDateTime.MIN
-    MAX_INSTANT = MAX_DATE_TIME.atZone(ZoneOffset.UTC).toInstant
-    MIN_INSTANT = MIN_DATE_TIME.atZone(ZoneOffset.UTC).toInstant
+    MAX_INSTANT   = MAX_DATE_TIME.atZone(ZoneOffset.UTC).toInstant
+    MIN_INSTANT   = MIN_DATE_TIME.atZone(ZoneOffset.UTC).toInstant
   }
 
   override protected def samples: List[TemporalAccessor] =
     List(TEST_2007_07_15_12_30_40_987654321, LocalDateTime.MAX, LocalDateTime.MIN)
 
-  override protected def validFields: List[TemporalField] = {
-    List(NANO_OF_SECOND, NANO_OF_DAY, MICRO_OF_SECOND, MICRO_OF_DAY, MILLI_OF_SECOND, MILLI_OF_DAY, SECOND_OF_MINUTE, SECOND_OF_DAY, MINUTE_OF_HOUR, MINUTE_OF_DAY, CLOCK_HOUR_OF_AMPM, HOUR_OF_AMPM, CLOCK_HOUR_OF_DAY, HOUR_OF_DAY, AMPM_OF_DAY, DAY_OF_WEEK, ALIGNED_DAY_OF_WEEK_IN_MONTH, ALIGNED_DAY_OF_WEEK_IN_YEAR, DAY_OF_MONTH, DAY_OF_YEAR, EPOCH_DAY, ALIGNED_WEEK_OF_MONTH, ALIGNED_WEEK_OF_YEAR, MONTH_OF_YEAR, PROLEPTIC_MONTH, YEAR_OF_ERA, YEAR, ERA, JulianFields.JULIAN_DAY, JulianFields.MODIFIED_JULIAN_DAY, JulianFields.RATA_DIE)
-  }
+  override protected def validFields: List[TemporalField] =
+    List(
+      NANO_OF_SECOND,
+      NANO_OF_DAY,
+      MICRO_OF_SECOND,
+      MICRO_OF_DAY,
+      MILLI_OF_SECOND,
+      MILLI_OF_DAY,
+      SECOND_OF_MINUTE,
+      SECOND_OF_DAY,
+      MINUTE_OF_HOUR,
+      MINUTE_OF_DAY,
+      CLOCK_HOUR_OF_AMPM,
+      HOUR_OF_AMPM,
+      CLOCK_HOUR_OF_DAY,
+      HOUR_OF_DAY,
+      AMPM_OF_DAY,
+      DAY_OF_WEEK,
+      ALIGNED_DAY_OF_WEEK_IN_MONTH,
+      ALIGNED_DAY_OF_WEEK_IN_YEAR,
+      DAY_OF_MONTH,
+      DAY_OF_YEAR,
+      EPOCH_DAY,
+      ALIGNED_WEEK_OF_MONTH,
+      ALIGNED_WEEK_OF_YEAR,
+      MONTH_OF_YEAR,
+      PROLEPTIC_MONTH,
+      YEAR_OF_ERA,
+      YEAR,
+      ERA,
+      JulianFields.JULIAN_DAY,
+      JulianFields.MODIFIED_JULIAN_DAY,
+      JulianFields.RATA_DIE
+    )
 
   override protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
     list.filterNot(validFields.contains)
   }
 
-  private def check(dateTime: LocalDateTime, y: Int, m: Int, d: Int, h: Int, mi: Int, s: Int, n: Int): Unit = {
+  private def check(
+    dateTime: LocalDateTime,
+    y:        Int,
+    m:        Int,
+    d:        Int,
+    h:        Int,
+    mi:       Int,
+    s:        Int,
+    n:        Int
+  ): Unit = {
     assertEquals(dateTime.getYear, y)
     assertEquals(dateTime.getMonth.getValue, m)
     assertEquals(dateTime.getDayOfMonth, d)
@@ -133,18 +178,17 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     assertEquals(dateTime.getNano, n)
   }
 
-  private def createDateMidnight(year: Int, month: Int, day: Int): LocalDateTime = {
+  private def createDateMidnight(year: Int, month: Int, day: Int): LocalDateTime =
     LocalDateTime.of(year, month, day, 0, 0)
-  }
 
   test("now") {
     var expected: LocalDateTime = LocalDateTime.now(Clock.systemDefaultZone)
-    var test: LocalDateTime = LocalDateTime.now
-    var diff: Long = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
+    var test: LocalDateTime     = LocalDateTime.now
+    var diff: Long              = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
     if (diff >= 100000000) {
       expected = LocalDateTime.now(Clock.systemDefaultZone)
-      test = LocalDateTime.now
-      diff = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
+      test     = LocalDateTime.now
+      diff     = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
     }
     assertTrue(diff < 100000000)
   }
@@ -156,13 +200,13 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("now_ZoneId") {
-    val zone: ZoneId = ZoneId.of("UTC+01:02:03")
+    val zone: ZoneId            = ZoneId.of("UTC+01:02:03")
     var expected: LocalDateTime = LocalDateTime.now(Clock.system(zone))
-    var test: LocalDateTime = LocalDateTime.now(zone)
-    var i: Int = 0
+    var test: LocalDateTime     = LocalDateTime.now(zone)
+    var i: Int                  = 0
     while (i < 100 && expected != test) {
       expected = LocalDateTime.now(Clock.system(zone))
-      test = LocalDateTime.now(zone)
+      test     = LocalDateTime.now(zone)
       i += 1
     }
     assertEquals(test, expected)
@@ -177,8 +221,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   test("now_Clock_allSecsInDay_utc") {
     var i: Int = 0
     while (i < (2 * 24 * 60 * 60)) {
-      val instant: Instant = Instant.ofEpochSecond(i).plusNanos(123456789L)
-      val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
+      val instant: Instant    = Instant.ofEpochSecond(i).plusNanos(123456789L)
+      val clock: Clock        = Clock.fixed(instant, ZoneOffset.UTC)
       val test: LocalDateTime = LocalDateTime.now(clock)
       assertEquals(test.getYear, 1970)
       assertEquals(test.getMonth, Month.JANUARY)
@@ -195,7 +239,9 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     var i: Int = 0
     while (i < (2 * 24 * 60 * 60)) {
       val instant: Instant = Instant.ofEpochSecond(i).plusNanos(123456789L)
-      val clock: Clock = Clock.fixed(instant.minusSeconds(TestLocalDateTime.OFFSET_PONE.getTotalSeconds), TestLocalDateTime.OFFSET_PONE)
+      val clock: Clock =
+        Clock.fixed(instant.minusSeconds(TestLocalDateTime.OFFSET_PONE.getTotalSeconds),
+                    TestLocalDateTime.OFFSET_PONE)
       val test: LocalDateTime = LocalDateTime.now(clock)
       assertEquals(test.getYear, 1970)
       assertEquals(test.getMonth, Month.JANUARY)
@@ -210,10 +256,10 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("now_Clock_allSecsInDay_beforeEpoch") {
     var expected: LocalTime = LocalTime.MIDNIGHT.plusNanos(123456789L)
-    var i: Int = -1
+    var i: Int              = -1
     while (i >= -(24 * 60 * 60)) {
-      val instant: Instant = Instant.ofEpochSecond(i).plusNanos(123456789L)
-      val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
+      val instant: Instant    = Instant.ofEpochSecond(i).plusNanos(123456789L)
+      val clock: Clock        = Clock.fixed(instant, ZoneOffset.UTC)
       val test: LocalDateTime = LocalDateTime.now(clock)
       assertEquals(test.getYear, 1969)
       assertEquals(test.getMonth, Month.DECEMBER)
@@ -225,7 +271,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("now_Clock_maxYear") {
-    val clock: Clock = Clock.fixed(MAX_INSTANT, ZoneOffset.UTC)
+    val clock: Clock        = Clock.fixed(MAX_INSTANT, ZoneOffset.UTC)
     val test: LocalDateTime = LocalDateTime.now(clock)
     assertEquals(test, MAX_DATE_TIME)
   }
@@ -238,7 +284,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("now_Clock_minYear") {
-    val clock: Clock = Clock.fixed(MIN_INSTANT, ZoneOffset.UTC)
+    val clock: Clock        = Clock.fixed(MIN_INSTANT, ZoneOffset.UTC)
     val test: LocalDateTime = LocalDateTime.now(clock)
     assertEquals(test, MIN_DATE_TIME)
   }
@@ -659,7 +705,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("factory_of_LocalDate_LocalTime") {
-    val dateTime: LocalDateTime = LocalDateTime.of(LocalDate.of(2007, 7, 15), LocalTime.of(12, 30, 40, 987654321))
+    val dateTime: LocalDateTime =
+      LocalDateTime.of(LocalDate.of(2007, 7, 15), LocalTime.of(12, 30, 40, 987654321))
     check(dateTime, 2007, 7, 15, 12, 30, 40, 987654321)
   }
 
@@ -676,17 +723,22 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("factory_ofInstant_zone") {
-    val test: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(86400 + 3600 + 120 + 4, 500), TestLocalDateTime.ZONE_PARIS)
+    val test: LocalDateTime =
+      LocalDateTime.ofInstant(Instant.ofEpochSecond(86400 + 3600 + 120 + 4, 500),
+                              TestLocalDateTime.ZONE_PARIS)
     assertEquals(test, LocalDateTime.of(1970, 1, 2, 2, 2, 4, 500))
   }
 
   test("factory_ofInstant_offset") {
-    val test: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(86400 + 3600 + 120 + 4, 500), TestLocalDateTime.OFFSET_MTWO)
+    val test: LocalDateTime =
+      LocalDateTime.ofInstant(Instant.ofEpochSecond(86400 + 3600 + 120 + 4, 500),
+                              TestLocalDateTime.OFFSET_MTWO)
     assertEquals(test, LocalDateTime.of(1970, 1, 1, 23, 2, 4, 500))
   }
 
   test("factory_ofInstant_offsetBeforeEpoch") {
-    val test: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(-86400 + 4, 500), TestLocalDateTime.OFFSET_PTWO)
+    val test: LocalDateTime =
+      LocalDateTime.ofInstant(Instant.ofEpochSecond(-86400 + 4, 500), TestLocalDateTime.OFFSET_PTWO)
     assertEquals(test, LocalDateTime.of(1969, 12, 31, 2, 0, 4, 500))
   }
 
@@ -721,7 +773,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       var i: Int = 0
       while (i < 100000) {
         {
-          val test: LocalDateTime = LocalDateTime.ofEpochSecond(i, 500, TestLocalDateTime.OFFSET_PTWO)
+          val test: LocalDateTime =
+            LocalDateTime.ofEpochSecond(i, 500, TestLocalDateTime.OFFSET_PTWO)
           assertEquals(test, base.plusSeconds(i))
         }
         {
@@ -739,7 +792,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       var i: Int = 0
       while (i < 100000) {
         {
-          val test: LocalDateTime = LocalDateTime.ofEpochSecond(-i, 500, TestLocalDateTime.OFFSET_PTWO)
+          val test: LocalDateTime =
+            LocalDateTime.ofEpochSecond(-i, 500, TestLocalDateTime.OFFSET_PTWO)
           assertEquals(test, base.minusSeconds(i))
         }
         {
@@ -834,7 +888,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("factory_parse_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("u M d H m s")
-    val test: LocalDateTime = LocalDateTime.parse("2010 12 3 11 30 45", f)
+    val test: LocalDateTime  = LocalDateTime.parse("2010 12 3 11 30 45", f)
     assertEquals(test, LocalDateTime.of(2010, 12, 3, 11, 30, 45))
   }
 
@@ -880,11 +934,15 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("query") {
-    assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.chronology), IsoChronology.INSTANCE)
-    assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.localDate), TEST_2007_07_15_12_30_40_987654321.toLocalDate)
-    assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.localTime), TEST_2007_07_15_12_30_40_987654321.toLocalTime)
+    assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.chronology),
+                 IsoChronology.INSTANCE)
+    assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.localDate),
+                 TEST_2007_07_15_12_30_40_987654321.toLocalDate)
+    assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.localTime),
+                 TEST_2007_07_15_12_30_40_987654321.toLocalTime)
     assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.offset), null)
-    assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.precision), ChronoUnit.NANOS)
+    assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.precision),
+                 ChronoUnit.NANOS)
     assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.zone), null)
     assertEquals(TEST_2007_07_15_12_30_40_987654321.query(TemporalQueries.zoneId), null)
   }
@@ -896,13 +954,12 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   val provider_sampleDates: List[List[Int]] = {
-    List(
-      List(2008, 7, 5),
-      List(2007, 7, 5),
-      List(2006, 7, 5),
-      List(2005, 7, 5),
-      List(2004, 1, 1),
-      List(-1, 1, 2))
+    List(List(2008, 7, 5),
+         List(2007, 7, 5),
+         List(2006, 7, 5),
+         List(2005, 7, 5),
+         List(2004, 1, 1),
+         List(-1, 1, 2))
   }
 
   val provider_sampleTimes: List[List[Int]] = {
@@ -922,7 +979,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       List(1, 1, 0, 0),
       List(1, 1, 0, 1),
       List(1, 1, 1, 0),
-      List(1, 1, 1, 1))
+      List(1, 1, 1, 1)
+    )
   }
 
   test("get_dates") {
@@ -941,7 +999,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     provider_sampleDates.foreach {
       case y :: m :: d :: Nil =>
         val a: LocalDateTime = LocalDateTime.of(y, m, d, 12, 30)
-        var total: Int = 0
+        var total: Int       = 0
 
         {
           var i: Int = 1
@@ -965,8 +1023,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   test("get_times") {
     provider_sampleTimes.foreach {
       case h :: m :: s :: ns :: Nil =>
-        val a: LocalDateTime
-        = LocalDateTime.of(TEST_2007_07_15_12_30_40_987654321.toLocalDate, LocalTime.of(h, m, s, ns))
+        val a: LocalDateTime = LocalDateTime.of(TEST_2007_07_15_12_30_40_987654321.toLocalDate,
+                                                LocalTime.of(h, m, s, ns))
         assertEquals(a.getHour, h)
         assertEquals(a.getMinute, m)
         assertEquals(a.getSecond, s)
@@ -985,7 +1043,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
         var i: Int = 1
         while (i <= length) {
           {
-            val d: LocalDateTime = LocalDateTime.of(LocalDate.of(2007, month, i), TEST_2007_07_15_12_30_40_987654321.toLocalTime)
+            val d: LocalDateTime = LocalDateTime.of(LocalDate.of(2007, month, i),
+                                                    TEST_2007_07_15_12_30_40_987654321.toLocalTime)
             assertSame(d.getDayOfWeek, dow)
             dow = dow.plus(1)
           }
@@ -1024,7 +1083,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("withYear_int_adjustDay") {
-    val t: LocalDateTime = LocalDateTime.of(2008, 2, 29, 12, 30).withYear(2007)
+    val t: LocalDateTime        = LocalDateTime.of(2008, 2, 29, 12, 30).withYear(2007)
     val expected: LocalDateTime = LocalDateTime.of(2007, 2, 28, 12, 30)
     assertEquals(t, expected)
   }
@@ -1041,7 +1100,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("withMonth_int_adjustDay") {
-    val t: LocalDateTime = LocalDateTime.of(2007, 12, 31, 12, 30).withMonth(11)
+    val t: LocalDateTime        = LocalDateTime.of(2007, 12, 31, 12, 30).withMonth(11)
     val expected: LocalDateTime = LocalDateTime.of(2007, 11, 30, 12, 30)
     assertEquals(t, expected)
   }
@@ -1195,7 +1254,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("plus_adjuster") {
-    val p: Duration = Duration.ofSeconds(62, 3)
+    val p: Duration      = Duration.ofSeconds(62, 3)
     val t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.plus(p)
     assertEquals(t, LocalDateTime.of(2007, 7, 15, 12, 31, 42, 987654324))
   }
@@ -1208,13 +1267,13 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("plus_Period_positiveMonths") {
     val period: MockSimplePeriod = MockSimplePeriod.of(7, ChronoUnit.MONTHS)
-    val t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.plus(period)
+    val t: LocalDateTime         = TEST_2007_07_15_12_30_40_987654321.plus(period)
     assertEquals(t, LocalDateTime.of(2008, 2, 15, 12, 30, 40, 987654321))
   }
 
   test("plus_Period_negativeDays") {
     val period: MockSimplePeriod = MockSimplePeriod.of(-25, ChronoUnit.DAYS)
-    val t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.plus(period)
+    val t: LocalDateTime         = TEST_2007_07_15_12_30_40_987654321.plus(period)
     assertEquals(t, LocalDateTime.of(2007, 6, 20, 12, 30, 40, 987654321))
   }
 
@@ -1340,7 +1399,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     }
   }
 
-  val provider_samplePlusWeeksSymmetry:List[LocalDateTime] = {
+  val provider_samplePlusWeeksSymmetry: List[LocalDateTime] = {
     List(
       createDateMidnight(-1, 1, 1),
       createDateMidnight(-1, 2, 28),
@@ -1367,7 +1426,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       createDateMidnight(2100, 1, 1),
       createDateMidnight(2100, 2, 28),
       createDateMidnight(2100, 3, 1),
-      createDateMidnight(2100, 12, 31))
+      createDateMidnight(2100, 12, 31)
+    )
   }
 
   test("plusWeeks_symmetry") {
@@ -1472,7 +1532,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       createDateMidnight(2100, 1, 1),
       createDateMidnight(2100, 2, 28),
       createDateMidnight(2100, 3, 1),
-      createDateMidnight(2100, 12, 31))
+      createDateMidnight(2100, 12, 31)
+    )
 
   test("plusDays_symmetry") {
     provider_samplePlusDaysSymmetry.foreach { reference =>
@@ -1563,7 +1624,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("plusHours_one") {
     var t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    var d: LocalDate = t.toLocalDate
+    var d: LocalDate     = t.toLocalDate
 
     {
       var i: Int = 0
@@ -1586,8 +1647,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("plusHours_fromZero") {
     val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    var d: LocalDate = base.toLocalDate.minusDays(3)
-    var t: LocalTime = LocalTime.of(21, 0)
+    var d: LocalDate        = base.toLocalDate.minusDays(3)
+    var t: LocalTime        = LocalTime.of(21, 0)
 
     {
       var i: Int = -50
@@ -1611,8 +1672,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("plusHours_fromOne") {
     val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.of(1, 0))
-    var d: LocalDate = base.toLocalDate.minusDays(3)
-    var t: LocalTime = LocalTime.of(22, 0)
+    var d: LocalDate        = base.toLocalDate.minusDays(3)
+    var t: LocalTime        = LocalTime.of(22, 0)
 
     {
       var i: Int = -50
@@ -1636,9 +1697,9 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("plusMinutes_one") {
     var t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    val d: LocalDate = t.toLocalDate
-    var hour: Int = 0
-    var min: Int = 0
+    val d: LocalDate     = t.toLocalDate
+    var hour: Int        = 0
+    var min: Int         = 0
 
     {
       var i: Int = 0
@@ -1664,8 +1725,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("plusMinutes_fromZero") {
     val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    var d: LocalDate = base.toLocalDate.minusDays(1)
-    var t: LocalTime = LocalTime.of(22, 49)
+    var d: LocalDate        = base.toLocalDate.minusDays(1)
+    var t: LocalTime        = LocalTime.of(22, 49)
 
     {
       var i: Int = -70
@@ -1694,10 +1755,10 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("plusSeconds_one") {
     var t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    val d: LocalDate = t.toLocalDate
-    var hour: Int = 0
-    var min: Int = 0
-    var sec: Int = 0
+    val d: LocalDate     = t.toLocalDate
+    var hour: Int        = 0
+    var min: Int         = 0
+    var sec: Int         = 0
 
     {
       var i: Int = 0
@@ -1728,12 +1789,12 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   val plusSeconds_fromZero: java.util.Iterator[List[Any]] = {
     new java.util.Iterator[List[Any]]() {
-      private[bp] var delta: Int = 30
-      private[bp] var i: Int = -3660
+      private[bp] var delta: Int      = 30
+      private[bp] var i: Int          = -3660
       private[bp] var date: LocalDate = TEST_2007_07_15_12_30_40_987654321.toLocalDate.minusDays(1)
-      private[bp] var hour: Int = 22
-      private[bp] var min: Int = 59
-      private[bp] var sec: Int = 0
+      private[bp] var hour: Int       = 22
+      private[bp] var min: Int        = 59
+      private[bp] var sec: Int        = 0
 
       def hasNext: Boolean = i <= 3660
 
@@ -1752,7 +1813,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
           }
         }
         if (i == 0)
-        date = date.plusDays(1)
+          date = date.plusDays(1)
         List[Any](i, date, hour, min, sec)
       }
 
@@ -1765,7 +1826,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     plusSeconds_fromZero.asScala.toList.foreach {
       case (seconds: Int) :: (date: LocalDate) :: (hour: Int) :: (min: Int) :: (sec: Int) :: Nil =>
         val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-        val t: LocalDateTime = base.plusSeconds(seconds)
+        val t: LocalDateTime    = base.plusSeconds(seconds)
         assertEquals(date, t.toLocalDate)
         assertEquals(hour, t.getHour)
         assertEquals(min, t.getMinute)
@@ -1782,11 +1843,11 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("plusNanos_halfABillion") {
     var t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    val d: LocalDate = t.toLocalDate
-    var hour: Int = 0
-    var min: Int = 0
-    var sec: Int = 0
-    var nanos: Int = 0
+    val d: LocalDate     = t.toLocalDate
+    var hour: Int        = 0
+    var min: Int         = 0
+    var sec: Int         = 0
+    var nanos: Int       = 0
 
     {
       var i: Long = 0
@@ -1819,13 +1880,13 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   val plusNanos_fromZero: java.util.Iterator[List[Any]] = {
     new java.util.Iterator[List[Any]]() {
-      private[bp] var delta: Long = 7500000000L
-      private[bp] var i: Long = -3660 * 1000000000L
+      private[bp] var delta: Long     = 7500000000L
+      private[bp] var i: Long         = -3660 * 1000000000L
       private[bp] var date: LocalDate = TEST_2007_07_15_12_30_40_987654321.toLocalDate.minusDays(1)
-      private[bp] var hour: Int = 22
-      private[bp] var min: Int = 59
-      private[bp] var sec: Int = 0
-      private[bp] var nanos: Long = 0
+      private[bp] var hour: Int       = 22
+      private[bp] var min: Int        = 59
+      private[bp] var sec: Int        = 0
+      private[bp] var nanos: Long     = 0
 
       def hasNext: Boolean = i <= 3660 * 1000000000L
 
@@ -1860,7 +1921,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     plusNanos_fromZero.asScala.toList.foreach {
       case (nanoseconds: Long) :: (date: LocalDate) :: (hour: Int) :: (min: Int) :: (sec: Int) :: (nanos: Int) :: Nil =>
         val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-        val t: LocalDateTime = base.plusNanos(nanoseconds)
+        val t: LocalDateTime    = base.plusNanos(nanoseconds)
         assertEquals(date, t.toLocalDate)
         assertEquals(hour, t.getHour)
         assertEquals(min, t.getMinute)
@@ -1877,7 +1938,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("minus_adjuster") {
-    val p: Duration = Duration.ofSeconds(62, 3)
+    val p: Duration      = Duration.ofSeconds(62, 3)
     val t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.minus(p)
     assertEquals(t, LocalDateTime.of(2007, 7, 15, 12, 29, 38, 987654318))
   }
@@ -1890,13 +1951,13 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("minus_Period_positiveMonths") {
     val period: MockSimplePeriod = MockSimplePeriod.of(7, ChronoUnit.MONTHS)
-    val t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.minus(period)
+    val t: LocalDateTime         = TEST_2007_07_15_12_30_40_987654321.minus(period)
     assertEquals(t, LocalDateTime.of(2006, 12, 15, 12, 30, 40, 987654321))
   }
 
   test("minus_Period_negativeDays") {
     val period: MockSimplePeriod = MockSimplePeriod.of(-25, ChronoUnit.DAYS)
-    val t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.minus(period)
+    val t: LocalDateTime         = TEST_2007_07_15_12_30_40_987654321.minus(period)
     assertEquals(t, LocalDateTime.of(2007, 8, 9, 12, 30, 40, 987654321))
   }
 
@@ -2049,7 +2110,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       createDateMidnight(2100, 1, 1),
       createDateMidnight(2100, 2, 28),
       createDateMidnight(2100, 3, 1),
-      createDateMidnight(2100, 12, 31))
+      createDateMidnight(2100, 12, 31)
+    )
   }
 
   test("minusWeeks_symmetry") {
@@ -2154,7 +2216,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       createDateMidnight(2100, 1, 1),
       createDateMidnight(2100, 2, 28),
       createDateMidnight(2100, 3, 1),
-      createDateMidnight(2100, 12, 31))
+      createDateMidnight(2100, 12, 31)
+    )
   }
 
   test("minusDays_symmetry") {
@@ -2246,7 +2309,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("minusHours_one") {
     var t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    var d: LocalDate = t.toLocalDate
+    var d: LocalDate     = t.toLocalDate
 
     {
       var i: Int = 0
@@ -2269,8 +2332,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("minusHours_fromZero") {
     val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    var d: LocalDate = base.toLocalDate.plusDays(2)
-    var t: LocalTime = LocalTime.of(3, 0)
+    var d: LocalDate        = base.toLocalDate.plusDays(2)
+    var t: LocalTime        = LocalTime.of(3, 0)
 
     {
       var i: Int = -50
@@ -2294,8 +2357,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("minusHours_fromOne") {
     val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.of(1, 0))
-    var d: LocalDate = base.toLocalDate.plusDays(2)
-    var t: LocalTime = LocalTime.of(4, 0)
+    var d: LocalDate        = base.toLocalDate.plusDays(2)
+    var t: LocalTime        = LocalTime.of(4, 0)
 
     {
       var i: Int = -50
@@ -2319,9 +2382,9 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("minusMinutes_one") {
     var t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    val d: LocalDate = t.toLocalDate.minusDays(1)
-    var hour: Int = 0
-    var min: Int = 0
+    val d: LocalDate     = t.toLocalDate.minusDays(1)
+    var hour: Int        = 0
+    var min: Int         = 0
 
     {
       var i: Int = 0
@@ -2350,8 +2413,8 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("minusMinutes_fromZero") {
     val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    var d: LocalDate = base.toLocalDate.minusDays(1)
-    var t: LocalTime = LocalTime.of(22, 49)
+    var d: LocalDate        = base.toLocalDate.minusDays(1)
+    var t: LocalTime        = LocalTime.of(22, 49)
 
     {
       var i: Int = 70
@@ -2380,10 +2443,10 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("minusSeconds_one") {
     var t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    val d: LocalDate = t.toLocalDate.minusDays(1)
-    var hour: Int = 0
-    var min: Int = 0
-    var sec: Int = 0
+    val d: LocalDate     = t.toLocalDate.minusDays(1)
+    var hour: Int        = 0
+    var min: Int         = 0
+    var sec: Int         = 0
 
     {
       var i: Int = 0
@@ -2417,12 +2480,12 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   val minusSeconds_fromZero: java.util.Iterator[List[Any]] = {
     new java.util.Iterator[List[Any]]() {
-      private[bp] var delta: Int = 30
-      private[bp] var i: Int = 3660
+      private[bp] var delta: Int      = 30
+      private[bp] var i: Int          = 3660
       private[bp] var date: LocalDate = TEST_2007_07_15_12_30_40_987654321.toLocalDate.minusDays(1)
-      private[bp] var hour: Int = 22
-      private[bp] var min: Int = 59
-      private[bp] var sec: Int = 0
+      private[bp] var hour: Int       = 22
+      private[bp] var min: Int        = 59
+      private[bp] var sec: Int        = 0
 
       def hasNext: Boolean = i >= -3660
 
@@ -2454,7 +2517,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     minusSeconds_fromZero.asScala.foreach {
       case (seconds: Int) :: (date: LocalDate) :: (hour: Int) :: (min: Int) :: (sec: Int) :: Nil =>
         val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-        val t: LocalDateTime = base.minusSeconds(seconds)
+        val t: LocalDateTime    = base.minusSeconds(seconds)
         assertEquals(date, t.toLocalDate)
         assertEquals(hour, t.getHour)
         assertEquals(min, t.getMinute)
@@ -2466,12 +2529,12 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("minusNanos_halfABillion") {
     var t: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-    val d: LocalDate = t.toLocalDate.minusDays(1)
-    var hour: Int = 0
-    var min: Int = 0
-    var sec: Int = 0
-    var nanos: Int = 0
-    var i: Long = 0
+    val d: LocalDate     = t.toLocalDate.minusDays(1)
+    var hour: Int        = 0
+    var min: Int         = 0
+    var sec: Int         = 0
+    var nanos: Int       = 0
+    var i: Long          = 0
     while (i < 3700 * 1000000000L) {
       t = t.minusNanos(500000000)
       nanos -= 500000000
@@ -2501,13 +2564,13 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   val minusNanos_fromZero: java.util.Iterator[List[Any]] = {
     new java.util.Iterator[List[Any]]() {
-      private[bp] var delta: Long = 7500000000L
-      private[bp] var i: Long = 3660 * 1000000000L
+      private[bp] var delta: Long     = 7500000000L
+      private[bp] var i: Long         = 3660 * 1000000000L
       private[bp] var date: LocalDate = TEST_2007_07_15_12_30_40_987654321.toLocalDate.minusDays(1)
-      private[bp] var hour: Int = 22
-      private[bp] var min: Int = 59
-      private[bp] var sec: Int = 0
-      private[bp] var nanos: Long = 0
+      private[bp] var hour: Int       = 22
+      private[bp] var min: Int        = 59
+      private[bp] var sec: Int        = 0
+      private[bp] var nanos: Long     = 0
 
       def hasNext: Boolean = i >= -3660 * 1000000000L
 
@@ -2542,7 +2605,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     minusNanos_fromZero.asScala.toList.foreach {
       case (nanoseconds: Long) :: (date: LocalDate) :: (hour: Int) :: (min: Int) :: (sec: Int) :: (nanos: Int) :: Nil =>
         val base: LocalDateTime = TEST_2007_07_15_12_30_40_987654321.`with`(LocalTime.MIDNIGHT)
-        val t: LocalDateTime = base.minusNanos(nanoseconds)
+        val t: LocalDateTime    = base.minusNanos(nanoseconds)
         assertEquals(date, t.toLocalDate)
         assertEquals(hour, t.getHour)
         assertEquals(min, t.getMinute)
@@ -2553,7 +2616,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     }
   }
 
-  val provider_until:List[List[Any]] = {
+  val provider_until: List[List[Any]] = {
     List(
       List("2012-06-15T00:00", "2012-06-15T00:00", NANOS, 0L),
       List("2012-06-15T00:00", "2012-06-15T00:00", MICROS, 0L),
@@ -2593,14 +2656,15 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       List("2012-06-15T12:30:40.500", "2012-06-16T12:30:40.501", SECONDS, 86400 + 0L),
       List("2012-06-15T12:30:40.500", "2012-06-16T12:30:41.499", SECONDS, 86400 + 0L),
       List("2012-06-15T12:30:40.500", "2012-06-16T12:30:41.500", SECONDS, 86400 + 1L),
-      List("2012-06-15T12:30:40.500", "2012-06-16T12:30:41.501", SECONDS, 86400 + 1L))
+      List("2012-06-15T12:30:40.500", "2012-06-16T12:30:41.501", SECONDS, 86400 + 1L)
+    )
   }
 
   test("until") {
     provider_until.foreach {
       case (startStr: String) :: (endStr: String) :: (unit: TemporalUnit) :: (expected: Long) :: Nil =>
         val start: LocalDateTime = LocalDateTime.parse(startStr)
-        val end: LocalDateTime = LocalDateTime.parse(endStr)
+        val end: LocalDateTime   = LocalDateTime.parse(endStr)
         assertEquals(start.until(end, unit), expected)
       case _ =>
         fail()
@@ -2611,7 +2675,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     provider_until.foreach {
       case (startStr: String) :: (endStr: String) :: (unit: TemporalUnit) :: (expected: Long) :: Nil =>
         val start: LocalDateTime = LocalDateTime.parse(startStr)
-        val end: LocalDateTime = LocalDateTime.parse(endStr)
+        val end: LocalDateTime   = LocalDateTime.parse(endStr)
         assertEquals(end.until(start, unit), -expected)
       case _ =>
         fail()
@@ -2620,22 +2684,34 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("atZone") {
     val t: LocalDateTime = LocalDateTime.of(2008, 6, 30, 11, 30)
-    assertEquals(t.atZone(TestLocalDateTime.ZONE_PARIS), ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 11, 30), TestLocalDateTime.ZONE_PARIS))
+    assertEquals(
+      t.atZone(TestLocalDateTime.ZONE_PARIS),
+      ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 11, 30), TestLocalDateTime.ZONE_PARIS)
+    )
   }
 
   test("atZone_Offset") {
     val t: LocalDateTime = LocalDateTime.of(2008, 6, 30, 11, 30)
-    assertEquals(t.atZone(TestLocalDateTime.OFFSET_PTWO), ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 11, 30), TestLocalDateTime.OFFSET_PTWO))
+    assertEquals(
+      t.atZone(TestLocalDateTime.OFFSET_PTWO),
+      ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 11, 30), TestLocalDateTime.OFFSET_PTWO)
+    )
   }
 
   test("atZone_dstGap") {
     val t: LocalDateTime = LocalDateTime.of(2007, 4, 1, 0, 0)
-    assertEquals(t.atZone(TestLocalDateTime.ZONE_GAZA), ZonedDateTime.of(LocalDateTime.of(2007, 4, 1, 1, 0), TestLocalDateTime.ZONE_GAZA))
+    assertEquals(t.atZone(TestLocalDateTime.ZONE_GAZA),
+                 ZonedDateTime.of(LocalDateTime.of(2007, 4, 1, 1, 0), TestLocalDateTime.ZONE_GAZA))
   }
 
   test("atZone_dstOverlap") {
     val t: LocalDateTime = LocalDateTime.of(2007, 10, 28, 2, 30)
-    assertEquals(t.atZone(TestLocalDateTime.ZONE_PARIS), ZonedDateTime.ofStrict(LocalDateTime.of(2007, 10, 28, 2, 30), TestLocalDateTime.OFFSET_PTWO, TestLocalDateTime.ZONE_PARIS))
+    assertEquals(
+      t.atZone(TestLocalDateTime.ZONE_PARIS),
+      ZonedDateTime.ofStrict(LocalDateTime.of(2007, 10, 28, 2, 30),
+                             TestLocalDateTime.OFFSET_PTWO,
+                             TestLocalDateTime.ZONE_PARIS)
+    )
   }
 
   test("atZone_nullTimeZone") {
@@ -2649,7 +2725,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     var i: Int = -5
     while (i < 5) {
       val offset: ZoneOffset = ZoneOffset.ofHours(i)
-      var j: Int = 0
+      var j: Int             = 0
       while (j < 100000) {
         val a: LocalDateTime = LocalDateTime.of(1970, 1, 1, 0, 0).plusSeconds(j)
         assertEquals(a.toEpochSecond(offset), j - i * 3600)
@@ -2669,22 +2745,59 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
   }
 
   test("comparisons") {
-    test_comparisons_LocalDateTime(LocalDate.of(Year.MIN_VALUE, 1, 1), LocalDate.of(Year.MIN_VALUE, 12, 31), LocalDate.of(-1, 1, 1), LocalDate.of(-1, 12, 31), LocalDate.of(0, 1, 1), LocalDate.of(0, 12, 31), LocalDate.of(1, 1, 1), LocalDate.of(1, 12, 31), LocalDate.of(2008, 1, 1), LocalDate.of(2008, 2, 29), LocalDate.of(2008, 12, 31), LocalDate.of(Year.MAX_VALUE, 1, 1), LocalDate.of(Year.MAX_VALUE, 12, 31))
+    test_comparisons_LocalDateTime(
+      LocalDate.of(Year.MIN_VALUE, 1, 1),
+      LocalDate.of(Year.MIN_VALUE, 12, 31),
+      LocalDate.of(-1, 1, 1),
+      LocalDate.of(-1, 12, 31),
+      LocalDate.of(0, 1, 1),
+      LocalDate.of(0, 12, 31),
+      LocalDate.of(1, 1, 1),
+      LocalDate.of(1, 12, 31),
+      LocalDate.of(2008, 1, 1),
+      LocalDate.of(2008, 2, 29),
+      LocalDate.of(2008, 12, 31),
+      LocalDate.of(Year.MAX_VALUE, 1, 1),
+      LocalDate.of(Year.MAX_VALUE, 12, 31)
+    )
   }
 
-  private def test_comparisons_LocalDateTime(localDates: LocalDate*): Unit = {
-    test_comparisons_LocalDateTime(localDates.toArray, LocalTime.MIDNIGHT, LocalTime.of(0, 0, 0, 999999999), LocalTime.of(0, 0, 59, 0), LocalTime.of(0, 0, 59, 999999999), LocalTime.of(0, 59, 0, 0), LocalTime.of(0, 59, 59, 999999999), LocalTime.NOON, LocalTime.of(12, 0, 0, 999999999), LocalTime.of(12, 0, 59, 0), LocalTime.of(12, 0, 59, 999999999), LocalTime.of(12, 59, 0, 0), LocalTime.of(12, 59, 59, 999999999), LocalTime.of(23, 0, 0, 0), LocalTime.of(23, 0, 0, 999999999), LocalTime.of(23, 0, 59, 0), LocalTime.of(23, 0, 59, 999999999), LocalTime.of(23, 59, 0, 0), LocalTime.of(23, 59, 59, 999999999))
-  }
+  private def test_comparisons_LocalDateTime(localDates: LocalDate*): Unit =
+    test_comparisons_LocalDateTime(
+      localDates.toArray,
+      LocalTime.MIDNIGHT,
+      LocalTime.of(0, 0, 0, 999999999),
+      LocalTime.of(0, 0, 59, 0),
+      LocalTime.of(0, 0, 59, 999999999),
+      LocalTime.of(0, 59, 0, 0),
+      LocalTime.of(0, 59, 59, 999999999),
+      LocalTime.NOON,
+      LocalTime.of(12, 0, 0, 999999999),
+      LocalTime.of(12, 0, 59, 0),
+      LocalTime.of(12, 0, 59, 999999999),
+      LocalTime.of(12, 59, 0, 0),
+      LocalTime.of(12, 59, 59, 999999999),
+      LocalTime.of(23, 0, 0, 0),
+      LocalTime.of(23, 0, 0, 999999999),
+      LocalTime.of(23, 0, 59, 0),
+      LocalTime.of(23, 0, 59, 999999999),
+      LocalTime.of(23, 59, 0, 0),
+      LocalTime.of(23, 59, 59, 999999999)
+    )
 
-  private def test_comparisons_LocalDateTime(localDates: Array[LocalDate], localTimes: LocalTime*): Unit = {
-    val localDateTimes: Array[LocalDateTime] = new Array[LocalDateTime](localDates.length * localTimes.length)
+  private def test_comparisons_LocalDateTime(
+    localDates: Array[LocalDate],
+    localTimes: LocalTime*
+  ): Unit = {
+    val localDateTimes: Array[LocalDateTime] =
+      new Array[LocalDateTime](localDates.length * localTimes.length)
     var i: Int = 0
     for (localDate <- localDates) {
       for (localTime <- localTimes) {
-        localDateTimes({
+        localDateTimes {
           i += 1
           i - 1
-        }) = LocalDateTime.of(localDate, localTime)
+        } = LocalDateTime.of(localDate, localTime)
       }
     }
     doTest_comparisons_LocalDateTime(localDateTimes)
@@ -2694,7 +2807,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
     var i: Int = 0
     while (i < localDateTimes.length) {
       val a: LocalDateTime = localDateTimes(i)
-      var j: Int = 0
+      var j: Int           = 0
       while (j < localDateTimes.length) {
         val b: LocalDateTime = localDateTimes(j)
         if (i < j) {
@@ -2702,14 +2815,12 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
           assertEquals(a.isBefore(b), true, a + " <=> " + b)
           assertEquals(a.isAfter(b), false, a + " <=> " + b)
           assertEquals(a == b, false, a + " <=> " + b)
-        }
-        else if (i > j) {
+        } else if (i > j) {
           assertTrue(a.compareTo(b) > 0)
           assertEquals(a.isBefore(b), false, a + " <=> " + b)
           assertEquals(a.isAfter(b), true, a + " <=> " + b)
           assertEquals(a == b, false, a + " <=> " + b)
-        }
-        else {
+        } else {
           assertEquals(a.compareTo(b), 0, a + " <=> " + b)
           assertEquals(a.isBefore(b), false, a + " <=> " + b)
           assertEquals(a.isAfter(b), false, a + " <=> " + b)
@@ -2866,14 +2977,15 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
       List(2007, 12, 31, 23, 59, 1, 0, "2007-12-31T23:59:01"),
       List(999, 12, 31, 23, 59, 59, 990000000, "0999-12-31T23:59:59.990"),
       List(-1, 1, 2, 23, 59, 59, 999990000, "-0001-01-02T23:59:59.999990"),
-      List(-2008, 1, 2, 23, 59, 59, 999999990, "-2008-01-02T23:59:59.999999990"))
+      List(-2008, 1, 2, 23, 59, 59, 999999990, "-2008-01-02T23:59:59.999999990")
+    )
   }
 
   test("toString") {
     provider_sampleToString.foreach {
       case (y: Int) :: (m: Int) :: (d: Int) :: (h: Int) :: (mi: Int) :: (s: Int) :: (n: Int) :: (expected: String) :: Nil =>
         val t: LocalDateTime = LocalDateTime.of(y, m, d, h, mi, s, n)
-        val str: String = t.toString
+        val str: String      = t.toString
         assertEquals(str, expected)
       case _ =>
         fail()
@@ -2882,7 +2994,7 @@ class TestLocalDateTime extends FunSuite with GenDateTimeTest with AssertionsHel
 
   test("format_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("y M d H m s")
-    val t: String = LocalDateTime.of(2010, 12, 3, 11, 30, 45).format(f)
+    val t: String            = LocalDateTime.of(2010, 12, 3, 11, 30, 45).format(f)
     assertEquals(t, "2010 12 3 11 30 45")
   }
 

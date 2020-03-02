@@ -35,7 +35,7 @@ import java.io.DataInput
 import java.io.DataOutput
 import java.io.IOException
 import java.io.Serializable
-import java.util.{Objects, Arrays, Collections}
+import java.util.{ Arrays, Collections, Objects }
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
@@ -60,6 +60,7 @@ import org.threeten.bp.ZoneOffset
   */
 @SerialVersionUID(-6946044323557704546L)
 object ZoneOffsetTransition {
+
   /** Obtains an instance defining a transition between two offsets.
     *
     * Applications should normally obtain an instance from {@link ZoneRules}.
@@ -73,7 +74,11 @@ object ZoneOffsetTransition {
     * @throws IllegalArgumentException if { @code offsetBefore} and { @code offsetAfter}
     *                                                                       are equal, or { @code transition.getNano()} returns non-zero value
     */
-  def of(transition: LocalDateTime, offsetBefore: ZoneOffset, offsetAfter: ZoneOffset): ZoneOffsetTransition = {
+  def of(
+    transition:   LocalDateTime,
+    offsetBefore: ZoneOffset,
+    offsetAfter:  ZoneOffset
+  ): ZoneOffsetTransition = {
     Objects.requireNonNull(transition, "transition")
     Objects.requireNonNull(offsetBefore, "offsetBefore")
     Objects.requireNonNull(offsetAfter, "offsetAfter")
@@ -92,9 +97,9 @@ object ZoneOffsetTransition {
     */
   @throws[IOException]
   private[zone] def readExternal(in: DataInput): ZoneOffsetTransition = {
-    val epochSecond: Long = Ser.readEpochSec(in)
+    val epochSecond: Long  = Ser.readEpochSec(in)
     val before: ZoneOffset = Ser.readOffset(in)
-    val after: ZoneOffset = Ser.readOffset(in)
+    val after: ZoneOffset  = Ser.readOffset(in)
     if (before == after) {
       throw new IllegalArgumentException("Offsets must not be equal")
     }
@@ -109,9 +114,12 @@ object ZoneOffsetTransition {
   * @param offsetAfter  the offset at and after the transition, not null
   */
 @SerialVersionUID(-6946044323557704546L)
-final class ZoneOffsetTransition private[zone](private val transition: LocalDateTime,
-                                               private val offsetBefore: ZoneOffset,
-                                               private val offsetAfter: ZoneOffset) extends Ordered[ZoneOffsetTransition] with Serializable {
+final class ZoneOffsetTransition private[zone] (
+  private val transition:   LocalDateTime,
+  private val offsetBefore: ZoneOffset,
+  private val offsetAfter:  ZoneOffset
+) extends Ordered[ZoneOffsetTransition]
+    with Serializable {
 
   /** Creates an instance from epoch-second and offsets.
     *
@@ -213,7 +221,8 @@ final class ZoneOffsetTransition private[zone](private val transition: LocalDate
     *
     * @return the duration in seconds
     */
-  private def getDurationSeconds: Int = getOffsetAfter.getTotalSeconds - getOffsetBefore.getTotalSeconds
+  private def getDurationSeconds: Int =
+    getOffsetAfter.getTotalSeconds - getOffsetBefore.getTotalSeconds
 
   /** Does this transition represent a gap in the local time-line.
     *
@@ -267,7 +276,8 @@ final class ZoneOffsetTransition private[zone](private val transition: LocalDate
     * @param transition  the transition to compare to, not null
     * @return the comparator value, negative if less, positive if greater
     */
-  def compare(transition: ZoneOffsetTransition): Int = this.getInstant.compareTo(transition.getInstant)
+  def compare(transition: ZoneOffsetTransition): Int =
+    this.getInstant.compareTo(transition.getInstant)
 
   override def compareTo(other: ZoneOffsetTransition): Int = compare(other)
 
@@ -280,7 +290,8 @@ final class ZoneOffsetTransition private[zone](private val transition: LocalDate
     */
   override def equals(other: Any): Boolean =
     other match {
-      case zot: ZoneOffsetTransition => (this eq zot) || ((transition == zot.transition) && (offsetBefore == zot.offsetBefore) && (offsetAfter == zot.offsetAfter))
+      case zot: ZoneOffsetTransition =>
+        (this eq zot) || ((transition == zot.transition) && (offsetBefore == zot.offsetBefore) && (offsetAfter == zot.offsetAfter))
       case _ => false
     }
 
@@ -288,7 +299,8 @@ final class ZoneOffsetTransition private[zone](private val transition: LocalDate
     *
     * @return the hash code
     */
-  override def hashCode: Int = transition.hashCode ^ offsetBefore.hashCode ^ Integer.rotateLeft(offsetAfter.hashCode, 16)
+  override def hashCode: Int =
+    transition.hashCode ^ offsetBefore.hashCode ^ Integer.rotateLeft(offsetAfter.hashCode, 16)
 
   /** Returns a string describing this object.
     *
@@ -296,7 +308,15 @@ final class ZoneOffsetTransition private[zone](private val transition: LocalDate
     */
   override def toString: String = {
     val buf: StringBuilder = new StringBuilder
-    buf.append("Transition[").append(if (isGap) "Gap" else "Overlap").append(" at ").append(transition).append(offsetBefore).append(" to ").append(offsetAfter).append(']')
+    buf
+      .append("Transition[")
+      .append(if (isGap) "Gap" else "Overlap")
+      .append(" at ")
+      .append(transition)
+      .append(offsetBefore)
+      .append(" to ")
+      .append(offsetAfter)
+      .append(']')
     buf.toString
   }
 }

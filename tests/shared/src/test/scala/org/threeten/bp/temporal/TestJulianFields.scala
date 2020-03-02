@@ -32,7 +32,7 @@
 package org.threeten.bp.temporal
 
 import org.scalatest.FunSuite
-import org.threeten.bp.{AssertionsHelper, LocalDate}
+import org.threeten.bp.{ AssertionsHelper, LocalDate }
 
 /** Test. */
 object TestJulianFields {
@@ -43,7 +43,7 @@ object TestJulianFields {
 }
 
 class TestJulianFields extends FunSuite with AssertionsHelper {
-  def data_samples: List[List[Any]] = {
+  def data_samples: List[List[Any]] =
     List(
       List(ChronoField.EPOCH_DAY, TestJulianFields.JAN01_1970, 0L),
       List(JulianFields.JULIAN_DAY, TestJulianFields.JAN01_1970, 2400001L + 40587L),
@@ -57,11 +57,13 @@ class TestJulianFields extends FunSuite with AssertionsHelper {
       List(JulianFields.JULIAN_DAY, TestJulianFields.NOV12_1945, 2431772L),
       List(JulianFields.MODIFIED_JULIAN_DAY, TestJulianFields.NOV12_1945, 31771L),
       List(JulianFields.RATA_DIE, TestJulianFields.NOV12_1945, 710347L),
-      List(ChronoField.EPOCH_DAY, TestJulianFields.JAN01_0001, (-24 * 365 - 6) - 31 - 30 + 11 - 710346L),
+      List(ChronoField.EPOCH_DAY,
+           TestJulianFields.JAN01_0001,
+           (-24 * 365 - 6) - 31 - 30 + 11 - 710346L),
       List(JulianFields.JULIAN_DAY, TestJulianFields.JAN01_0001, 2431772L - 710346L),
       List(JulianFields.MODIFIED_JULIAN_DAY, TestJulianFields.JAN01_0001, 31771L - 710346L),
-      List(JulianFields.RATA_DIE, TestJulianFields.JAN01_0001, 1L))
-  }
+      List(JulianFields.RATA_DIE, TestJulianFields.JAN01_0001, 1L)
+    )
 
   test("samples_get") {
     data_samples.foreach {

@@ -41,8 +41,8 @@ import scala.collection.JavaConverters._
 class ServiceLoaderZoneRulesInitializer extends ZoneRulesInitializer {
 
   override def initializeProviders(): Unit = {
-    val loader: ServiceLoader[ZoneRulesProvider] = ServiceLoader.load(classOf[ZoneRulesProvider],
-                                    ZoneRulesProvider.getClass.getClassLoader())
+    val loader: ServiceLoader[ZoneRulesProvider] =
+      ServiceLoader.load(classOf[ZoneRulesProvider], ZoneRulesProvider.getClass.getClassLoader())
     loader.iterator.asScala.foreach { provider =>
       try {
         ZoneRulesProvider.registerProvider(provider)

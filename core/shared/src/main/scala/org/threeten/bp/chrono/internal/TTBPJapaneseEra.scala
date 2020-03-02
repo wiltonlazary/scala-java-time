@@ -6,6 +6,7 @@ import org.threeten.bp.DateTimeException
 import java.util.Arrays
 
 object TTBPJapaneseEra {
+
   /**
     * Registers an additional instance of {@code JapaneseEra}.
     * <p>
@@ -23,14 +24,19 @@ object TTBPJapaneseEra {
     */
   def registerEra(since: LocalDate, name: String): JapaneseEra = {
     val known = JapaneseEra.KNOWN_ERAS.get
-    if (known.length > 4) throw new DateTimeException("Only one additional Japanese era can be added")
+    if (known.length > 4)
+      throw new DateTimeException("Only one additional Japanese era can be added")
     require(since != null)
     require(name != null)
-    if (!since.isAfter(JapaneseEra.HEISEI.since)) throw new DateTimeException("Invalid since date for additional Japanese era, must be after Heisei")
-    val era = new JapaneseEra(JapaneseEra.ADDITIONAL_VALUE, since, name)
+    if (!since.isAfter(JapaneseEra.HEISEI.since))
+      throw new DateTimeException(
+        "Invalid since date for additional Japanese era, must be after Heisei"
+      )
+    val era      = new JapaneseEra(JapaneseEra.ADDITIONAL_VALUE, since, name)
     val newArray = Arrays.copyOf(known, 5)
     newArray(4) = era
-    if (!JapaneseEra.KNOWN_ERAS.compareAndSet(known, newArray)) throw new DateTimeException("Only one additional Japanese era can be added")
+    if (!JapaneseEra.KNOWN_ERAS.compareAndSet(known, newArray))
+      throw new DateTimeException("Only one additional Japanese era can be added")
     era
   }
 

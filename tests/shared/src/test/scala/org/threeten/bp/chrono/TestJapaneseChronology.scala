@@ -44,7 +44,7 @@ import org.threeten.bp.chrono.internal.TTBPJapaneseEra
 /** Test. */
 class TestJapaneseChronology extends FunSuite with AssertionsHelper {
   test("test_chrono_byName") {
-    val c: Chronology = JapaneseChronology.INSTANCE
+    val c: Chronology    = JapaneseChronology.INSTANCE
     val test: Chronology = Chronology.of("Japanese")
     assertNotNull(test, "The Japanese calendar could not be found byName")
     assertEquals(test.getId, "Japanese", "ID mismatch")
@@ -56,36 +56,36 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
     List(
       (JapaneseChronology.INSTANCE.date(1890, 3, 3), LocalDate.of(1890, 3, 3)),
       (JapaneseChronology.INSTANCE.date(1890, 10, 28), LocalDate.of(1890, 10, 28)),
-      (JapaneseChronology.INSTANCE.date(1890, 10, 29), LocalDate.of(1890, 10, 29)))
+      (JapaneseChronology.INSTANCE.date(1890, 10, 29), LocalDate.of(1890, 10, 29))
+    )
 
   test("test_toLocalDate") {
     data_samples.foreach {
       case (jdate, iso) =>
         assertEquals(LocalDate.from(jdate), iso)
-      }
+    }
   }
 
   test("test_fromCalendrical") {
     data_samples.foreach {
       case (jdate, iso) =>
         assertEquals(JapaneseChronology.INSTANCE.date(iso), jdate)
-      }
+    }
   }
 
   val data_badDates: List[(Int, Int, Int)] =
-    List(
-      (1728, 0, 0),
-      (1890, 0, 0),
-      (1890, -1, 1),
-      (1890, 0, 1),
-      (1890, 14, 1),
-      (1890, 15, 1),
-      (1890, 1, -1),
-      (1890, 1, 0),
-      (1890, 1, 32),
-      (1890, 12, -1),
-      (1890, 12, 0),
-      (1890, 12, 32))
+    List((1728, 0, 0),
+         (1890, 0, 0),
+         (1890, -1, 1),
+         (1890, 0, 1),
+         (1890, 14, 1),
+         (1890, 15, 1),
+         (1890, 1, -1),
+         (1890, 1, 0),
+         (1890, 1, 32),
+         (1890, 12, -1),
+         (1890, 12, 0),
+         (1890, 12, 32))
 
   test("test_badDates") {
     data_badDates.foreach {
@@ -110,7 +110,7 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
 
   test("test_adjust_toLocalDate") {
     val jdate: ChronoLocalDate = JapaneseChronology.INSTANCE.date(1890, 1, 4)
-    val test: ChronoLocalDate = jdate.`with`(LocalDate.of(2012, 7, 6))
+    val test: ChronoLocalDate  = jdate.`with`(LocalDate.of(2012, 7, 6))
     assertEquals(test, JapaneseChronology.INSTANCE.date(2012, 7, 6))
   }
 
@@ -123,22 +123,21 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
 
   test("test_LocalDate_adjustToJapaneseDate") {
     val jdate: ChronoLocalDate = JapaneseChronology.INSTANCE.date(1890, 10, 29)
-    val test: LocalDate = LocalDate.MIN.`with`(jdate)
+    val test: LocalDate        = LocalDate.MIN.`with`(jdate)
     assertEquals(test, LocalDate.of(1890, 10, 29))
   }
 
   test("test_LocalDateTime_adjustToJapaneseDate") {
     val jdate: ChronoLocalDate = JapaneseChronology.INSTANCE.date(1890, 10, 29)
-    val test: LocalDateTime = LocalDateTime.MIN.`with`(jdate)
+    val test: LocalDateTime    = LocalDateTime.MIN.`with`(jdate)
     assertEquals(test, LocalDateTime.of(1890, 10, 29, 0, 0))
   }
 
   val data_japansesEras: List[(Era, Int, String)] = {
-    List(
-      (JapaneseEra.MEIJI, -1, "Meiji"),
-      (JapaneseEra.TAISHO, 0, "Taisho"),
-      (JapaneseEra.SHOWA, 1, "Showa"),
-      (JapaneseEra.HEISEI, 2, "Heisei"))
+    List((JapaneseEra.MEIJI, -1, "Meiji"),
+         (JapaneseEra.TAISHO, 0, "Taisho"),
+         (JapaneseEra.SHOWA, 1, "Showa"),
+         (JapaneseEra.HEISEI, 2, "Heisei"))
   }
 
   test("test_Japanese_Eras") {
@@ -167,7 +166,7 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
       fail("JapaneseEra.valueOf returned " + era + " + for invalid era name Rubbish")
     } catch {
       case _: IllegalArgumentException =>
-        // ignore expected exception
+      // ignore expected exception
     }
   }
 
@@ -178,7 +177,7 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
       fail("JapaneseEra.registerEra should have failed")
     } catch {
       case _: DateTimeException =>
-        // ignore expected exception
+      // ignore expected exception
     }
     val additional = TTBPJapaneseEra.registerEra(LocalDate.of(2100, 1, 1), "TestAdditional")
     assertEquals(JapaneseEra.of(3), additional)
@@ -190,7 +189,7 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
 
     } catch {
       case ex: DateTimeException =>
-        // ignore expected exception
+      // ignore expected exception
     }
   }
 
@@ -203,7 +202,8 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
       (JapaneseChronology.INSTANCE.date(1926, 12, 25), "Japanese Showa 1-12-25"),
       (JapaneseChronology.INSTANCE.date(1989, 1, 7), "Japanese Showa 64-01-07"),
       (JapaneseChronology.INSTANCE.date(1989, 1, 8), "Japanese Heisei 1-01-08"),
-      (JapaneseChronology.INSTANCE.date(2012, 12, 6), "Japanese Heisei 24-12-06"))
+      (JapaneseChronology.INSTANCE.date(2012, 12, 6), "Japanese Heisei 24-12-06")
+    )
 
   test("test_toString") {
     data_toString.foreach {

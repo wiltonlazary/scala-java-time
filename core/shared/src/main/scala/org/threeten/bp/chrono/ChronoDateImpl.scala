@@ -106,24 +106,31 @@ import org.threeten.bp.temporal.TemporalUnit
   * @tparam D the date type
   */
 @SerialVersionUID(6282433883239719096L)
-abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono]() extends ChronoLocalDate with Temporal with TemporalAdjuster with Serializable {
+abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
+    extends ChronoLocalDate
+    with Temporal
+    with TemporalAdjuster
+    with Serializable {
 
   def plus(amountToAdd: Long, unit: TemporalUnit): ChronoDateImpl[D] = {
     import ChronoUnit._
     unit match {
       case f: ChronoUnit =>
         f match {
-          case DAYS => plusDays(amountToAdd)
-          case WEEKS => plusDays(Math.multiplyExact(amountToAdd, 7))
-          case MONTHS => plusMonths(amountToAdd)
-          case YEARS => plusYears(amountToAdd)
-          case DECADES => plusYears(Math.multiplyExact(amountToAdd, 10))
+          case DAYS      => plusDays(amountToAdd)
+          case WEEKS     => plusDays(Math.multiplyExact(amountToAdd, 7))
+          case MONTHS    => plusMonths(amountToAdd)
+          case YEARS     => plusYears(amountToAdd)
+          case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10))
           case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100))
           case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000))
-          case _ => throw new DateTimeException(s"$unit not valid for chronology ${getChronology.getId}")
+          case _ =>
+            throw new DateTimeException(s"$unit not valid for chronology ${getChronology.getId}")
         }
       case _ =>
-        getChronology.ensureChronoLocalDate(unit.addTo(this, amountToAdd)).asInstanceOf[ChronoDateImpl[D]]
+        getChronology
+          .ensureChronoLocalDate(unit.addTo(this, amountToAdd))
+          .asInstanceOf[ChronoDateImpl[D]]
     }
   }
 
@@ -171,7 +178,8 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono]() extends Ch
     * @return a date based on this one with the weeks added, not null
     * @throws DateTimeException if the result exceeds the supported date range
     */
-  private[chrono] def plusWeeks(weeksToAdd: Long): ChronoDateImpl[D] = plusDays(Math.multiplyExact(weeksToAdd, 7))
+  private[chrono] def plusWeeks(weeksToAdd: Long): ChronoDateImpl[D] =
+    plusDays(Math.multiplyExact(weeksToAdd, 7))
 
   /** Returns a copy of this date with the specified number of days added.
     *
@@ -257,7 +265,8 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono]() extends Ch
     if (daysToSubtract == Long.MinValue) plusDays(Long.MaxValue).plusDays(1)
     else plusDays(-daysToSubtract)
 
-  override def atTime(localTime: LocalTime): ChronoLocalDateTime[_ <: ChronoLocalDate] = ChronoLocalDateTimeImpl.of(this, localTime)
+  override def atTime(localTime: LocalTime): ChronoLocalDateTime[_ <: ChronoLocalDate] =
+    ChronoLocalDateTimeImpl.of(this, localTime)
 
   def until(endExclusive: Temporal, unit: TemporalUnit): Long = {
     val end: ChronoLocalDate = getChronology.date(endExclusive)

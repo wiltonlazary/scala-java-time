@@ -70,24 +70,32 @@ import org.threeten.bp.temporal.TemporalQuery
   * Creates an empty instance of the builder.
   */
 final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
+
   /** The map of other fields.
     */
-  private[format] val fieldValues: java.util.Map[TemporalField, java.lang.Long] = new java.util.HashMap[TemporalField, java.lang.Long]
+  private[format] val fieldValues: java.util.Map[TemporalField, java.lang.Long] =
+    new java.util.HashMap[TemporalField, java.lang.Long]
+
   /** The chronology.
     */
   private[format] var chrono: Chronology = null
+
   /** The zone.
     */
   private[format] var zone: ZoneId = null
+
   /** The date.
     */
   private[format] var date: ChronoLocalDate = null
+
   /** The time.
     */
   private[format] var time: LocalTime = null
+
   /** The leap second flag.
     */
   private[format] var leapSecond: Boolean = false
+
   /** The excess days.
     */
   private[format] var excessDays: Period = null
@@ -104,9 +112,8 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     addFieldValue(field, value)
   }
 
-  private def getFieldValue0(field: TemporalField): java.lang.Long = {
+  private def getFieldValue0(field: TemporalField): java.lang.Long =
     fieldValues.get(field)
-  }
 
   /** Adds a field-value pair to the builder.
     *
@@ -148,7 +155,10 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     * @param resolverStyle how to resolve
     * @return { @code this}, for method chaining
     */
-  def resolve(resolverStyle: ResolverStyle, resolverFields: java.util.Set[TemporalField]): DateTimeBuilder = {
+  def resolve(
+    resolverStyle:  ResolverStyle,
+    resolverFields: java.util.Set[TemporalField]
+  ): DateTimeBuilder = {
     if (resolverFields != null)
       fieldValues.keySet.retainAll(resolverFields)
     mergeInstantFields()
@@ -162,7 +172,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     resolveTimeInferZeroes(resolverStyle)
     crossCheck()
     if (excessDays != null && !excessDays.isZero && date != null && time != null) {
-      date = date.plus(excessDays)
+      date       = date.plus(excessDays)
       excessDays = Period.ZERO
     }
     resolveFractional()
@@ -172,18 +182,20 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
 
   private def resolveFields(resolverStyle: ResolverStyle): Boolean = {
     var changes: Int = 0
-    val entries = fieldValues.entrySet.iterator
-    var break = false
+    val entries      = fieldValues.entrySet.iterator
+    var break        = false
     while (!break && entries.hasNext) {
-      val entry = entries.next()
-      val targetField: TemporalField = entry.getKey
+      val entry                            = entries.next()
+      val targetField: TemporalField       = entry.getKey
       var resolvedObject: TemporalAccessor = targetField.resolve(fieldValues, this, resolverStyle)
       resolvedObject match {
         case czdt: ChronoZonedDateTime[_] =>
           if (zone == null)
             zone = czdt.getZone
           else if (!(zone == czdt.getZone))
-            throw new DateTimeException(s"ChronoZonedDateTime must use the effective parsed zone: $zone")
+            throw new DateTimeException(
+              s"ChronoZonedDateTime must use the effective parsed zone: $zone"
+            )
           resolvedObject = czdt.toLocalDateTime
         case cld: ChronoLocalDate =>
           resolveMakeChanges(targetField, cld)
@@ -214,32 +226,37 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
 
   private def resolveMakeChanges(targetField: TemporalField, date: ChronoLocalDate): Unit = {
     if (chrono != date.getChronology)
-      throw new DateTimeException(s"ChronoLocalDate must use the effective parsed chronology: $chrono")
-    val epochDay: Long = date.toEpochDay
+      throw new DateTimeException(
+        s"ChronoLocalDate must use the effective parsed chronology: $chrono"
+      )
+    val epochDay: Long      = date.toEpochDay
     val old: java.lang.Long = fieldValues.put(ChronoField.EPOCH_DAY, epochDay)
     if (old != null && old.longValue != epochDay)
-      throw new DateTimeException(s"Conflict found: ${LocalDate.ofEpochDay(old)} differs from ${LocalDate.ofEpochDay(epochDay)} while resolving  $targetField")
+      throw new DateTimeException(
+        s"Conflict found: ${LocalDate.ofEpochDay(old)} differs from ${LocalDate.ofEpochDay(epochDay)} while resolving  $targetField"
+      )
   }
 
   private def resolveMakeChanges(targetField: TemporalField, time: LocalTime): Unit = {
-    val nanOfDay: Long = time.toNanoOfDay
+    val nanOfDay: Long      = time.toNanoOfDay
     val old: java.lang.Long = fieldValues.put(ChronoField.NANO_OF_DAY, nanOfDay)
     if (old != null && old.longValue != nanOfDay)
-      throw new DateTimeException(s"Conflict found: ${LocalTime.ofNanoOfDay(old)} differs from $time while resolving  $targetField")
+      throw new DateTimeException(
+        s"Conflict found: ${LocalTime.ofNanoOfDay(old)} differs from $time while resolving  $targetField"
+      )
   }
 
   private def mergeDate(resolverStyle: ResolverStyle): Unit =
     if (chrono.isInstanceOf[IsoChronology])
       checkDate(IsoChronology.INSTANCE.resolveDate(fieldValues, resolverStyle))
-    else
-      if (fieldValues.containsKey(EPOCH_DAY))
-        checkDate(LocalDate.ofEpochDay(fieldValues.remove(EPOCH_DAY)))
+    else if (fieldValues.containsKey(EPOCH_DAY))
+      checkDate(LocalDate.ofEpochDay(fieldValues.remove(EPOCH_DAY)))
 
   private def checkDate(date: LocalDate): Unit =
     if (date != null) {
       addObject(date)
       val fields = fieldValues.keySet.iterator
-      var break = false
+      var break  = false
       while (!break && fields.hasNext) {
         val field = fields.next()
         if (field.isInstanceOf[ChronoField]) {
@@ -248,12 +265,14 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
             try val1 = date.getLong(field)
             catch {
               case ex: DateTimeException =>
-              break = true
+                break = true
             }
             if (!break) {
               val val2: Long = fieldValues.get(field)
               if (val1 != val2)
-                throw new DateTimeException(s"Conflict found: Field $field $val1 differs from $field $val2 derived from $date")
+                throw new DateTimeException(
+                  s"Conflict found: Field $field $val1 differs from $field $val2 derived from $date"
+                )
             }
           }
         }
@@ -264,16 +283,16 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     if (fieldValues.containsKey(CLOCK_HOUR_OF_DAY)) {
       val ch: Long = fieldValues.remove(CLOCK_HOUR_OF_DAY)
       if (resolverStyle ne ResolverStyle.LENIENT) {
-        if ((resolverStyle eq ResolverStyle.SMART) && ch == 0) {}
-        else CLOCK_HOUR_OF_DAY.checkValidValue(ch)
+        if ((resolverStyle eq ResolverStyle.SMART) && ch == 0) {} else
+          CLOCK_HOUR_OF_DAY.checkValidValue(ch)
       }
       addFieldValue(HOUR_OF_DAY, if (ch == 24) 0 else ch)
     }
     if (fieldValues.containsKey(CLOCK_HOUR_OF_AMPM)) {
       val ch: Long = fieldValues.remove(CLOCK_HOUR_OF_AMPM)
       if (resolverStyle ne ResolverStyle.LENIENT) {
-        if ((resolverStyle eq ResolverStyle.SMART) && ch == 0) {}
-        else CLOCK_HOUR_OF_AMPM.checkValidValue(ch)
+        if ((resolverStyle eq ResolverStyle.SMART) && ch == 0) {} else
+          CLOCK_HOUR_OF_AMPM.checkValidValue(ch)
       }
       addFieldValue(HOUR_OF_AMPM, if (ch == 12) 0 else ch)
     }
@@ -284,7 +303,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
         HOUR_OF_AMPM.checkValidValue(fieldValues.get(HOUR_OF_AMPM))
     }
     if (fieldValues.containsKey(AMPM_OF_DAY) && fieldValues.containsKey(HOUR_OF_AMPM)) {
-      val ap: Long = fieldValues.remove(AMPM_OF_DAY)
+      val ap: Long  = fieldValues.remove(AMPM_OF_DAY)
       val hap: Long = fieldValues.remove(HOUR_OF_AMPM)
       addFieldValue(HOUR_OF_DAY, ap * 12 + hap)
     }
@@ -349,8 +368,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     if (fieldValues.containsKey(MICRO_OF_SECOND)) {
       val cos: Long = fieldValues.remove(MICRO_OF_SECOND)
       addFieldValue(NANO_OF_SECOND, cos * 1000)
-    }
-    else if (fieldValues.containsKey(MILLI_OF_SECOND)) {
+    } else if (fieldValues.containsKey(MILLI_OF_SECOND)) {
       val los: Long = fieldValues.remove(MILLI_OF_SECOND)
       addFieldValue(NANO_OF_SECOND, los * 1000000)
     }
@@ -370,7 +388,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     if (resolverStyle ne ResolverStyle.LENIENT) {
       if (hod != null) {
         if ((resolverStyle eq ResolverStyle.SMART) && (hod.longValue == 24) && (moh == null || moh.longValue == 0) && (som == null || som.longValue == 0) && (nos == null || nos.longValue == 0)) {
-          hod = 0L
+          hod        = 0L
           excessDays = Period.ofDays(1)
         }
         val hodVal: Int = HOUR_OF_DAY.checkValidIntValue(hod)
@@ -381,22 +399,18 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
             if (nos != null) {
               val nosVal: Int = NANO_OF_SECOND.checkValidIntValue(nos)
               addObject(LocalTime.of(hodVal, mohVal, somVal, nosVal))
-            }
-            else
+            } else
               addObject(LocalTime.of(hodVal, mohVal, somVal))
-          }
-          else {
+          } else {
             if (nos == null)
               addObject(LocalTime.of(hodVal, mohVal))
           }
-        }
-        else {
+        } else {
           if (som == null && nos == null)
             addObject(LocalTime.of(hodVal, 0))
         }
       }
-    }
-    else {
+    } else {
       if (hod != null) {
         var hodVal: Long = hod
         if (moh != null) {
@@ -409,20 +423,18 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
             totalNanos = Math.addExact(totalNanos, Math.multiplyExact(som, 1000000000L))
             totalNanos = Math.addExact(totalNanos, nos)
             val excessDays: Int = Math.floorDiv(totalNanos, 86400000000000L).toInt
-            val nod: Long = Math.floorMod(totalNanos, 86400000000000L)
+            val nod: Long       = Math.floorMod(totalNanos, 86400000000000L)
             addObject(LocalTime.ofNanoOfDay(nod))
             this.excessDays = Period.ofDays(excessDays)
-          }
-          else {
+          } else {
             var totalSecs: Long = Math.multiplyExact(hodVal, 3600L)
             totalSecs = Math.addExact(totalSecs, Math.multiplyExact(moh, 60L))
             val excessDays: Int = Math.floorDiv(totalSecs, 86400L).toInt
-            val sod: Long = Math.floorMod(totalSecs, 86400L)
+            val sod: Long       = Math.floorMod(totalSecs, 86400L)
             addObject(LocalTime.ofSecondOfDay(sod))
             this.excessDays = Period.ofDays(excessDays)
           }
-        }
-        else {
+        } else {
           val excessDays: Int = Math.toIntExact(Math.floorDiv(hodVal, 24L))
           hodVal = Math.floorMod(hodVal, 24)
           addObject(LocalTime.of(hodVal.toInt, 0))
@@ -436,7 +448,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     fieldValues.remove(NANO_OF_SECOND)
   }
 
-  private def mergeInstantFields(): Unit = {
+  private def mergeInstantFields(): Unit =
     if (fieldValues.containsKey(INSTANT_SECONDS)) {
       if (zone != null)
         mergeInstantFields0(zone)
@@ -448,10 +460,9 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
         }
       }
     }
-  }
 
   private def mergeInstantFields0(selectedZone: ZoneId): Unit = {
-    val instant: Instant = Instant.ofEpochSecond(fieldValues.remove(INSTANT_SECONDS))
+    val instant: Instant                               = Instant.ofEpochSecond(fieldValues.remove(INSTANT_SECONDS))
     val zdt: ChronoZonedDateTime[_ <: ChronoLocalDate] = chrono.zonedDateTime(instant, selectedZone)
     if (date == null)
       addObject(zdt.toLocalDate)
@@ -471,48 +482,51 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     }
 
   private def crossCheck(temporal: TemporalAccessor): Unit = {
-    val it: java.util.Iterator[java.util.Map.Entry[TemporalField, java.lang.Long]] = fieldValues.entrySet.iterator
+    val it: java.util.Iterator[java.util.Map.Entry[TemporalField, java.lang.Long]] =
+      fieldValues.entrySet.iterator
     var break = false
     while (!break && it.hasNext) {
-        val entry: java.util.Map.Entry[TemporalField, java.lang.Long] = it.next
-        val field: TemporalField = entry.getKey
-        val value: Long = entry.getValue
-        if (temporal.isSupported(field)) {
-          var temporalValue: Long = 0L
-          try temporalValue = temporal.getLong(field)
-          catch {
-            case ex: RuntimeException =>
-              break
-          }
-          if (!break) {
-            if (temporalValue != value)
-              throw new DateTimeException(s"Cross check failed: $field $temporalValue vs $field $value")
-            it.remove()
-          }
+      val entry: java.util.Map.Entry[TemporalField, java.lang.Long] = it.next
+      val field: TemporalField                                      = entry.getKey
+      val value: Long                                               = entry.getValue
+      if (temporal.isSupported(field)) {
+        var temporalValue: Long = 0L
+        try temporalValue = temporal.getLong(field)
+        catch {
+          case ex: RuntimeException =>
+            break
         }
+        if (!break) {
+          if (temporalValue != value)
+            throw new DateTimeException(
+              s"Cross check failed: $field $temporalValue vs $field $value"
+            )
+          it.remove()
+        }
+      }
     }
   }
 
-  private def resolveFractional(): Unit = {
-    if (time == null && (fieldValues.containsKey(INSTANT_SECONDS) || fieldValues.containsKey(SECOND_OF_DAY) || fieldValues.containsKey(SECOND_OF_MINUTE))) {
+  private def resolveFractional(): Unit =
+    if (time == null && (fieldValues.containsKey(INSTANT_SECONDS) || fieldValues.containsKey(
+          SECOND_OF_DAY
+        ) || fieldValues.containsKey(SECOND_OF_MINUTE))) {
       if (fieldValues.containsKey(NANO_OF_SECOND)) {
         val nos: Long = fieldValues.get(NANO_OF_SECOND)
         fieldValues.put(MICRO_OF_SECOND, nos / 1000)
         fieldValues.put(MILLI_OF_SECOND, nos / 1000000)
-      }
-      else {
+      } else {
         fieldValues.put(NANO_OF_SECOND, 0L)
         fieldValues.put(MICRO_OF_SECOND, 0L)
         fieldValues.put(MILLI_OF_SECOND, 0L)
       }
     }
-  }
 
-  private def resolveInstant(): Unit = {
+  private def resolveInstant(): Unit =
     if (date != null && time != null) {
       val offsetSecs = fieldValues.get(OFFSET_SECONDS);
       if (offsetSecs != null) {
-        val offset = ZoneOffset.ofTotalSeconds(offsetSecs.intValue())
+        val offset  = ZoneOffset.ofTotalSeconds(offsetSecs.intValue())
         var instant = date.atTime(time).atZone(offset).getLong(ChronoField.INSTANT_SECONDS)
         fieldValues.put(INSTANT_SECONDS, instant)
       } else if (zone != null) {
@@ -520,7 +534,6 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
         fieldValues.put(INSTANT_SECONDS, instant)
       }
     }
-  }
 
   /** Builds the specified type from the values in this builder.
     *
@@ -538,7 +551,8 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     if (field == null)
       false
     else
-      fieldValues.containsKey(field) || (date != null && date.isSupported(field)) || (time != null && time.isSupported(field))
+      fieldValues.containsKey(field) || (date != null && date.isSupported(field)) || (time != null && time
+        .isSupported(field))
 
   def getLong(field: TemporalField): Long = {
     Objects.requireNonNull(field, "field")

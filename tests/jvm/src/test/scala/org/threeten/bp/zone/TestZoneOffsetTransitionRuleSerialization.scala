@@ -35,9 +35,22 @@ import org.scalatest.FunSuite
 import org.threeten.bp._
 import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
-class TestZoneOffsetTransitionRuleSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestZoneOffsetTransitionRuleSerialization
+    extends FunSuite
+    with AssertionsHelper
+    with AbstractTest {
   test("getters_floatingWeek") {
-    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(Month.MARCH, 20, DayOfWeek.SUNDAY, TestZoneOffsetTransitionRule.TIME_0100, timeEndOfDay = false, TimeDefinition.WALL, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0300)
+    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(
+      Month.MARCH,
+      20,
+      DayOfWeek.SUNDAY,
+      TestZoneOffsetTransitionRule.TIME_0100,
+      timeEndOfDay = false,
+      TimeDefinition.WALL,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0300
+    )
     assertEquals(test.getMonth, Month.MARCH)
     assertEquals(test.getDayOfMonthIndicator, 20)
     assertEquals(test.getDayOfWeek, DayOfWeek.SUNDAY)
@@ -51,7 +64,17 @@ class TestZoneOffsetTransitionRuleSerialization extends FunSuite with Assertions
   }
 
   test("getters_floatingWeekBackwards") {
-    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(Month.MARCH, -1, DayOfWeek.SUNDAY, TestZoneOffsetTransitionRule.TIME_0100, timeEndOfDay = false, TimeDefinition.WALL, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0300)
+    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(
+      Month.MARCH,
+      -1,
+      DayOfWeek.SUNDAY,
+      TestZoneOffsetTransitionRule.TIME_0100,
+      timeEndOfDay = false,
+      TimeDefinition.WALL,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0300
+    )
     assertEquals(test.getMonth, Month.MARCH)
     assertEquals(test.getDayOfMonthIndicator, -1)
     assertEquals(test.getDayOfWeek, DayOfWeek.SUNDAY)
@@ -65,7 +88,17 @@ class TestZoneOffsetTransitionRuleSerialization extends FunSuite with Assertions
   }
 
   test("getters_fixedDate") {
-    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(Month.MARCH, 20, null, TestZoneOffsetTransitionRule.TIME_0100, timeEndOfDay = false, TimeDefinition.WALL, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0300)
+    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(
+      Month.MARCH,
+      20,
+      null,
+      TestZoneOffsetTransitionRule.TIME_0100,
+      timeEndOfDay = false,
+      TimeDefinition.WALL,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0300
+    )
     assertEquals(test.getMonth, Month.MARCH)
     assertEquals(test.getDayOfMonthIndicator, 20)
     assertEquals(test.getDayOfWeek, null)
@@ -79,22 +112,62 @@ class TestZoneOffsetTransitionRuleSerialization extends FunSuite with Assertions
   }
 
   test("serialization_unusualOffsets") {
-    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(Month.MARCH, 20, null, TestZoneOffsetTransitionRule.TIME_0100, timeEndOfDay = false, TimeDefinition.STANDARD, ZoneOffset.ofHoursMinutesSeconds(-12, -20, -50), ZoneOffset.ofHoursMinutesSeconds(-4, -10, -34), ZoneOffset.ofHours(-18))
+    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(
+      Month.MARCH,
+      20,
+      null,
+      TestZoneOffsetTransitionRule.TIME_0100,
+      timeEndOfDay = false,
+      TimeDefinition.STANDARD,
+      ZoneOffset.ofHoursMinutesSeconds(-12, -20, -50),
+      ZoneOffset.ofHoursMinutesSeconds(-4, -10, -34),
+      ZoneOffset.ofHours(-18)
+    )
     assertSerializable(test)
   }
 
   test("serialization_endOfDay") {
-    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(Month.MARCH, 20, DayOfWeek.FRIDAY, LocalTime.MIDNIGHT, timeEndOfDay = true, TimeDefinition.UTC, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0300)
+    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(
+      Month.MARCH,
+      20,
+      DayOfWeek.FRIDAY,
+      LocalTime.MIDNIGHT,
+      timeEndOfDay = true,
+      TimeDefinition.UTC,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0300
+    )
     assertSerializable(test)
   }
 
   test("serialization_unusualTime") {
-    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(Month.MARCH, 20, DayOfWeek.WEDNESDAY, LocalTime.of(13, 34, 56), timeEndOfDay = false, TimeDefinition.STANDARD, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0300)
+    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(
+      Month.MARCH,
+      20,
+      DayOfWeek.WEDNESDAY,
+      LocalTime.of(13, 34, 56),
+      timeEndOfDay = false,
+      TimeDefinition.STANDARD,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0300
+    )
     assertSerializable(test)
   }
 
   test("serialization_format") {
-    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(Month.MARCH, 20, DayOfWeek.TUESDAY, LocalTime.of(13, 34, 56), timeEndOfDay = false, TimeDefinition.STANDARD, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0200, TestZoneOffsetTransitionRule.OFFSET_0300)
+    val test: ZoneOffsetTransitionRule = ZoneOffsetTransitionRule.of(
+      Month.MARCH,
+      20,
+      DayOfWeek.TUESDAY,
+      LocalTime.of(13, 34, 56),
+      timeEndOfDay = false,
+      TimeDefinition.STANDARD,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0200,
+      TestZoneOffsetTransitionRule.OFFSET_0300
+    )
     assertEqualsSerialisedForm(test)
   }
 }

@@ -56,7 +56,8 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
 
   protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
-    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE).filterNot(validFields.contains)
+    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
+      .filterNot(validFields.contains)
   }
 
   ignore("test_immutable") {
@@ -71,11 +72,11 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
 
   test("now") {
     var expected: MonthDay = MonthDay.now(Clock.systemDefaultZone)
-    var test: MonthDay = MonthDay.now
-    var i: Int = 0
+    var test: MonthDay     = MonthDay.now
+    var i: Int             = 0
     while (i < 100 && expected != test) {
       expected = MonthDay.now(Clock.systemDefaultZone)
-      test = MonthDay.now
+      test     = MonthDay.now
       i += 1
     }
     assertEquals(test, expected)
@@ -88,13 +89,13 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("now_ZoneId") {
-    val zone: ZoneId = ZoneId.of("UTC+01:02:03")
+    val zone: ZoneId       = ZoneId.of("UTC+01:02:03")
     var expected: MonthDay = MonthDay.now(Clock.system(zone))
-    var test: MonthDay = MonthDay.now(zone)
-    var i: Int = 0
+    var test: MonthDay     = MonthDay.now(zone)
+    var i: Int             = 0
     while (i < 100 && expected != test) {
       expected = MonthDay.now(Clock.system(zone))
-      test = MonthDay.now(zone)
+      test     = MonthDay.now(zone)
       i += 1
     }
     assertEquals(test, expected)
@@ -102,8 +103,8 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
 
   test("now_Clock") {
     val instant: Instant = LocalDateTime.of(2010, 12, 31, 0, 0).toInstant(ZoneOffset.UTC)
-    val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
-    val test: MonthDay = MonthDay.now(clock)
+    val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
+    val test: MonthDay   = MonthDay.now(clock)
     assertEquals(test.getMonth, Month.DECEMBER)
     assertEquals(test.getDayOfMonth, 31)
   }
@@ -205,24 +206,20 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
       ("--11-01", MonthDay.of(11, 1)),
       ("--11-30", MonthDay.of(11, 30)),
       ("--12-01", MonthDay.of(12, 1)),
-      ("--12-31", MonthDay.of(12, 31)))
+      ("--12-31", MonthDay.of(12, 31))
+    )
   }
 
   test("factory_parse_success") {
     provider_goodParseData.foreach {
       case (text, expected) =>
-      val monthDay: MonthDay = MonthDay.parse(text)
-      assertEquals(monthDay, expected)
+        val monthDay: MonthDay = MonthDay.parse(text)
+        assertEquals(monthDay, expected)
     }
   }
 
   val provider_badParseData: List[(String, Int)] = {
-    List(
-      ("", 0),
-      ("-00", 0),
-      ("--FEB-23", 2),
-      ("--01-0", 5),
-      ("--01-3A", 5))
+    List(("", 0), ("-00", 0), ("--FEB-23", 2), ("--01-0", 5), ("--01-3A", 5))
   }
 
   test("factory_parse_fail") {
@@ -231,13 +228,12 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
         try {
           MonthDay.parse(text)
           fail(f"Parse should have failed for $text%s at position $pos%d")
-        }
-        catch {
+        } catch {
           case ex: DateTimeParseException =>
             assertEquals(ex.getParsedString, text)
             assertEquals(ex.getErrorIndex, pos)
         }
-      }
+    }
   }
 
   test("factory_parse_illegalValue_Day") {
@@ -266,7 +262,7 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
 
   test("factory_parse_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("M d")
-    val test: MonthDay = MonthDay.parse("12 3", f)
+    val test: MonthDay       = MonthDay.parse("12 3", f)
     assertEquals(test, MonthDay.of(12, 3))
   }
 
@@ -307,22 +303,15 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
   }
 
   val provider_sampleDates: List[(Int, Int)] = {
-    List(
-      (1, 1),
-      (1, 31),
-      (2, 1),
-      (2, 28),
-      (2, 29),
-      (7, 4),
-      (7, 5))
+    List((1, 1), (1, 31), (2, 1), (2, 28), (2, 29), (7, 4), (7, 5))
   }
 
   test("test_get") {
     provider_sampleDates.foreach {
       case (m, d) =>
-      val a: MonthDay = MonthDay.of(m, d)
-      assertEquals(a.getMonth, Month.of(m))
-      assertEquals(a.getDayOfMonth, d)
+        val a: MonthDay = MonthDay.of(m, d)
+        assertEquals(a.getMonth, Month.of(m))
+        assertEquals(a.getDayOfMonth, d)
     }
   }
 
@@ -410,19 +399,19 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("test_adjustDate") {
-    val test: MonthDay = MonthDay.of(6, 30)
+    val test: MonthDay  = MonthDay.of(6, 30)
     val date: LocalDate = LocalDate.of(2007, 1, 1)
     assertEquals(test.adjustInto(date), LocalDate.of(2007, 6, 30))
   }
 
   test("test_adjustDate_resolve") {
-    val test: MonthDay = MonthDay.of(2, 29)
+    val test: MonthDay  = MonthDay.of(2, 29)
     val date: LocalDate = LocalDate.of(2007, 6, 30)
     assertEquals(test.adjustInto(date), LocalDate.of(2007, 2, 28))
   }
 
   test("test_adjustDate_equal") {
-    val test: MonthDay = MonthDay.of(6, 30)
+    val test: MonthDay  = MonthDay.of(6, 30)
     val date: LocalDate = LocalDate.of(2007, 6, 30)
     assertEquals(test.adjustInto(date), date)
   }
@@ -482,51 +471,52 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("test_comparisons") {
-    doTest_comparisons_MonthDay(MonthDay.of(1, 1), MonthDay.of(1, 31), MonthDay.of(2, 1), MonthDay.of(2, 29), MonthDay.of(3, 1), MonthDay.of(12, 31))
+    doTest_comparisons_MonthDay(MonthDay.of(1, 1),
+                                MonthDay.of(1, 31),
+                                MonthDay.of(2, 1),
+                                MonthDay.of(2, 29),
+                                MonthDay.of(3, 1),
+                                MonthDay.of(12, 31))
   }
 
   private[temporal] def doTest_comparisons_MonthDay(localDates: MonthDay*): Unit = {
-    {
-      var i: Int = 0
-      while (i < localDates.length) {
-        {
-          val a: MonthDay = localDates(i)
+    var i: Int = 0
+    while (i < localDates.length) {
+      {
+        val a: MonthDay = localDates(i)
 
-          {
-            var j: Int = 0
-            while (j < localDates.length) {
-              {
-                val b: MonthDay = localDates(j)
-                if (i < j) {
-                  assertTrue(a.compareTo(b) < 0)
-                  assertEquals(a.isBefore(b), true, a + " <=> " + b)
-                  assertEquals(a.isAfter(b), false, a + " <=> " + b)
-                  assertEquals(a == b, false, a + " <=> " + b)
-                }
-                else if (i > j) {
-                  assertTrue(a.compareTo(b) > 0)
-                  assertEquals(a.isBefore(b), false, a + " <=> " + b)
-                  assertEquals(a.isAfter(b), true, a + " <=> " + b)
-                  assertEquals(a == b, false, a + " <=> " + b)
-                }
-                else {
-                  assertEquals(a.compareTo(b), 0, a + " <=> " + b)
-                  assertEquals(a.isBefore(b), false, a + " <=> " + b)
-                  assertEquals(a.isAfter(b), false, a + " <=> " + b)
-                  assertEquals(a == b, true, a + " <=> " + b)
-                }
+        {
+          var j: Int = 0
+          while (j < localDates.length) {
+            {
+              val b: MonthDay = localDates(j)
+              if (i < j) {
+                assertTrue(a.compareTo(b) < 0)
+                assertEquals(a.isBefore(b), true, a + " <=> " + b)
+                assertEquals(a.isAfter(b), false, a + " <=> " + b)
+                assertEquals(a == b, false, a + " <=> " + b)
+              } else if (i > j) {
+                assertTrue(a.compareTo(b) > 0)
+                assertEquals(a.isBefore(b), false, a + " <=> " + b)
+                assertEquals(a.isAfter(b), true, a + " <=> " + b)
+                assertEquals(a == b, false, a + " <=> " + b)
+              } else {
+                assertEquals(a.compareTo(b), 0, a + " <=> " + b)
+                assertEquals(a.isBefore(b), false, a + " <=> " + b)
+                assertEquals(a.isAfter(b), false, a + " <=> " + b)
+                assertEquals(a == b, true, a + " <=> " + b)
               }
-              {
-                j += 1
-                j - 1
-              }
+            }
+            {
+              j += 1
+              j - 1
             }
           }
         }
-        {
-          i += 1
-          i - 1
-        }
+      }
+      {
+        i += 1
+        i - 1
       }
     }
   }
@@ -595,9 +585,9 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("test_hashCode_unique") {
-    val leapYear: Int = 2008
+    val leapYear: Int                   = 2008
     val uniques: java.util.Set[Integer] = new java.util.HashSet[Integer](366)
-    var i: Int = 1
+    var i: Int                          = 1
     while (i <= 12) {
       var j: Int = 1
       while (j <= 31) {
@@ -611,24 +601,21 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
   }
 
   val provider_sampleToString: List[(Int, Int, String)] = {
-    List(
-      (7, 5, "--07-05"),
-      (12, 31, "--12-31"),
-      (1, 2, "--01-02"))
+    List((7, 5, "--07-05"), (12, 31, "--12-31"), (1, 2, "--01-02"))
   }
 
   test("test_toString") {
     provider_sampleToString.foreach {
       case (m, d, expected) =>
         val test: MonthDay = MonthDay.of(m, d)
-        val str: String = test.toString
+        val str: String    = test.toString
         assertEquals(str, expected)
     }
   }
 
   test("test_format_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("M d")
-    val t: String = MonthDay.of(12, 3).format(f)
+    val t: String            = MonthDay.of(12, 3).format(f)
     assertEquals(t, "12 3")
   }
 

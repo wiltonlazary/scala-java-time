@@ -31,10 +31,15 @@
  */
 package org.threeten.bp
 
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.{ BeforeAndAfter, FunSuite }
 import org.threeten.bp.format.DateTimeParseException
-import org.threeten.bp.temporal.ChronoField.{INSTANT_SECONDS, MICRO_OF_SECOND, MILLI_OF_SECOND, NANO_OF_SECOND}
-import org.threeten.bp.temporal.ChronoUnit.{NANOS, SECONDS, DAYS}
+import org.threeten.bp.temporal.ChronoField.{
+  INSTANT_SECONDS,
+  MICRO_OF_SECOND,
+  MILLI_OF_SECOND,
+  NANO_OF_SECOND
+}
+import org.threeten.bp.temporal.ChronoUnit.{ DAYS, NANOS, SECONDS }
 import org.threeten.bp.temporal._
 
 /** Test Instant. */
@@ -50,17 +55,16 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     TEST_12345_123456789 = Instant.ofEpochSecond(12345, 123456789)
   }
 
-  protected def samples: List[TemporalAccessor] = {
+  protected def samples: List[TemporalAccessor] =
     List(TEST_12345_123456789, Instant.MIN, Instant.MAX, Instant.EPOCH)
-  }
 
-  protected def validFields: List[TemporalField] = {
+  protected def validFields: List[TemporalField] =
     List(NANO_OF_SECOND, MICRO_OF_SECOND, MILLI_OF_SECOND, INSTANT_SECONDS)
-  }
 
   protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
-    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE).filterNot(validFields.contains)
+    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
+      .filterNot(validFields.contains)
   }
 
   private def check(instant: Instant, epochSecs: Long, nos: Int): Unit = {
@@ -84,8 +88,8 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
 
   test("now") {
     val expected: Instant = Instant.now(Clock.systemUTC)
-    val test: Instant = Instant.now
-    val diff: Long = Math.abs(test.toEpochMilli - expected.toEpochMilli)
+    val test: Instant     = Instant.now
+    val diff: Long        = Math.abs(test.toEpochMilli - expected.toEpochMilli)
     assertTrue(diff < 100)
   }
 
@@ -101,8 +105,8 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       while (i < (2 * 24 * 60 * 60)) {
         {
           val expected: Instant = Instant.ofEpochSecond(i).plusNanos(123456789L)
-          val clock: Clock = Clock.fixed(expected, ZoneOffset.UTC)
-          val test: Instant = Instant.now(clock)
+          val clock: Clock      = Clock.fixed(expected, ZoneOffset.UTC)
+          val test: Instant     = Instant.now(clock)
           assertEquals(test, expected)
         }
         {
@@ -119,8 +123,8 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       while (i >= -(24 * 60 * 60)) {
         {
           val expected: Instant = Instant.ofEpochSecond(i).plusNanos(123456789L)
-          val clock: Clock = Clock.fixed(expected, ZoneOffset.UTC)
-          val test: Instant = Instant.now(clock)
+          val clock: Clock      = Clock.fixed(expected, ZoneOffset.UTC)
+          val test: Instant     = Instant.now(clock)
           assertEquals(test, expected)
         }
         {
@@ -240,11 +244,27 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List[Long](-1000, 0, -1, 0),
       List[Long](-1001, 0, -2, 999000000),
       List[Long](Long.MaxValue, 0, Long.MaxValue / 1000, (Long.MaxValue % 1000).toInt * 1000000),
-      List[Long](Long.MaxValue - 1, 0, (Long.MaxValue - 1) / 1000, ((Long.MaxValue - 1) % 1000).toInt * 1000000),
-      List[Long](Long.MinValue, 0, (Long.MinValue / 1000) - 1, (Long.MinValue % 1000).toInt * 1000000 + 1000000000),
-      List[Long](Long.MinValue, 1, (Long.MinValue / 1000) - 1, (Long.MinValue % 1000).toInt * 1000000 + 1000000000 + 1),
-      List[Long](Long.MinValue + 1, 0, ((Long.MinValue + 1) / 1000) - 1, ((Long.MinValue + 1) % 1000).toInt * 1000000 + 1000000000),
-      List[Long](Long.MinValue + 1, 1, ((Long.MinValue + 1) / 1000) - 1, ((Long.MinValue + 1) % 1000).toInt * 1000000 + 1000000000 + 1))
+      List[Long](Long.MaxValue - 1,
+                 0,
+                 (Long.MaxValue - 1) / 1000,
+                 ((Long.MaxValue - 1) % 1000).toInt * 1000000),
+      List[Long](Long.MinValue,
+                 0,
+                 (Long.MinValue / 1000) - 1,
+                 (Long.MinValue % 1000).toInt * 1000000 + 1000000000),
+      List[Long](Long.MinValue,
+                 1,
+                 (Long.MinValue / 1000) - 1,
+                 (Long.MinValue % 1000).toInt * 1000000 + 1000000000 + 1),
+      List[Long](Long.MinValue + 1,
+                 0,
+                 ((Long.MinValue + 1) / 1000) - 1,
+                 ((Long.MinValue + 1) % 1000).toInt * 1000000 + 1000000000),
+      List[Long](Long.MinValue + 1,
+                 1,
+                 ((Long.MinValue + 1) / 1000) - 1,
+                 ((Long.MinValue + 1) % 1000).toInt * 1000000 + 1000000000 + 1)
+    )
 
   test("factory_millis_long") {
     provider_factory_millis_long.foreach {
@@ -258,7 +278,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  def provider_factory_parse: List[List[Any]] = {
+  def provider_factory_parse: List[List[Any]] =
     List(
       List("1970-01-01T00:00:00Z", 0, 0),
       List("1970-01-01t00:00:00Z", 0, 0),
@@ -273,8 +293,8 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List("1970-01-01T00:01:01.000000001Z", 61, 1),
       List("1970-01-01T01:00:00.000000000Z", 3600, 0),
       List("1970-01-01T01:01:01.000000001Z", 3661, 1),
-      List("1970-01-02T01:01:01.100000000Z", 90061, 100000000))
-  }
+      List("1970-01-02T01:01:01.100000000Z", 90061, 100000000)
+    )
 
   test("factory_parse") {
     provider_factory_parse.foreach {
@@ -287,7 +307,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  test("factory_parseLowercase"){
+  test("factory_parseLowercase") {
     provider_factory_parse.foreach {
       case (text: String) :: expectedEpochSeconds :: expectedNanoOfSecond :: Nil =>
         val t: Instant = Instant.parse(text.toLowerCase)
@@ -298,14 +318,12 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  def provider_factory_parseFailures: List[List[AnyRef]] = {
-    List(
-      List(""),
-      List("Z"),
-      List("1970-01-01T00:00:00"),
-      List("1970-01-01T00:00:0Z"),
-      List("1970-01-01T00:00:00.0000000000Z"))
-  }
+  def provider_factory_parseFailures: List[List[AnyRef]] =
+    List(List(""),
+         List("Z"),
+         List("1970-01-01T00:00:00"),
+         List("1970-01-01T00:00:0Z"),
+         List("1970-01-01T00:00:00.0000000000Z"))
 
   test("factory_parseFailures") {
     provider_factory_parseFailures.foreach {
@@ -547,13 +565,15 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List(TestInstant.MAX_SECOND, 0, -1, 0, TestInstant.MAX_SECOND - 1, 0),
       List(TestInstant.MAX_SECOND, 0, 0, -500, TestInstant.MAX_SECOND - 1, 999999500),
       List(TestInstant.MAX_SECOND, 0, 0, -1000000000, TestInstant.MAX_SECOND - 1, 0),
-      List(TestInstant.MAX_SECOND, 0, -TestInstant.MAX_SECOND, 0, 0, 0))
+      List(TestInstant.MAX_SECOND, 0, -TestInstant.MAX_SECOND, 0, 0, 0)
+    )
   }
 
   test("plus_Duration") {
     provider_plus.foreach {
       case seconds :: nanos :: otherSeconds :: otherNanos :: expectedSeconds :: expectedNanoOfSecond :: Nil =>
-        val i: Instant = Instant.ofEpochSecond(seconds, nanos).plus(Duration.ofSeconds(otherSeconds, otherNanos))
+        val i: Instant =
+          Instant.ofEpochSecond(seconds, nanos).plus(Duration.ofSeconds(otherSeconds, otherNanos))
         assertEquals(i.getEpochSecond, expectedSeconds)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case x =>
@@ -578,7 +598,8 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
   test("plus_longTemporalUnit") {
     provider_plus.foreach {
       case seconds :: nanos :: otherSeconds :: otherNanos :: expectedSeconds :: expectedNanoOfSecond :: Nil =>
-        val i: Instant = Instant.ofEpochSecond(seconds, nanos).plus(otherSeconds, SECONDS).plus(otherNanos, NANOS)
+        val i: Instant =
+          Instant.ofEpochSecond(seconds, nanos).plus(otherSeconds, SECONDS).plus(otherNanos, NANOS)
         assertEquals(i.getEpochSecond, expectedSeconds)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case _ =>
@@ -601,7 +622,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  def provider_plusSeconds_long: List[List[Long]] = {
+  def provider_plusSeconds_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, 1, 0),
@@ -624,8 +645,8 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List(-1, 1, TestInstant.MAX_SECOND, TestInstant.MAX_SECOND - 1, 1),
       List(-1, 1, TestInstant.MIN_SECOND + 1, TestInstant.MIN_SECOND, 1),
       List(TestInstant.MAX_SECOND, 2, -TestInstant.MAX_SECOND, 0, 2),
-      List(TestInstant.MIN_SECOND, 2, -TestInstant.MIN_SECOND, 0, 2))
-  }
+      List(TestInstant.MIN_SECOND, 2, -TestInstant.MIN_SECOND, 0, 2)
+    )
 
   test("plusSeconds_long") {
     provider_plusSeconds_long.foreach {
@@ -653,57 +674,61 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  def provider_plusMillis_long: List[List[Long]] = {
-      List(
-        List(0, 0, 0, 0, 0),
-        List(0, 0, 1, 0, 1000000),
-        List(0, 0, 999, 0, 999000000),
-        List(0, 0, 1000, 1, 0),
-        List(0, 0, 1001, 1, 1000000),
-        List(0, 0, 1999, 1, 999000000),
-        List(0, 0, 2000, 2, 0),
-        List(0, 0, -1, -1, 999000000),
-        List(0, 0, -999, -1, 1000000),
-        List(0, 0, -1000, -1, 0),
-        List(0, 0, -1001, -2, 999000000),
-        List(0, 0, -1999, -2, 1000000),
-        List(0, 1, 0, 0, 1),
-        List(0, 1, 1, 0, 1000001),
-        List(0, 1, 998, 0, 998000001),
-        List(0, 1, 999, 0, 999000001),
-        List(0, 1, 1000, 1, 1),
-        List(0, 1, 1998, 1, 998000001),
-        List(0, 1, 1999, 1, 999000001),
-        List(0, 1, 2000, 2, 1),
-        List(0, 1, -1, -1, 999000001),
-        List(0, 1, -2, -1, 998000001),
-        List(0, 1, -1000, -1, 1),
-        List(0, 1, -1001, -2, 999000001),
-        List(0, 1000000, 0, 0, 1000000),
-        List(0, 1000000, 1, 0, 2000000),
-        List(0, 1000000, 998, 0, 999000000),
-        List(0, 1000000, 999, 1, 0),
-        List(0, 1000000, 1000, 1, 1000000),
-        List(0, 1000000, 1998, 1, 999000000),
-        List(0, 1000000, 1999, 2, 0),
-        List(0, 1000000, 2000, 2, 1000000),
-        List(0, 1000000, -1, 0, 0),
-        List(0, 1000000, -2, -1, 999000000),
-        List(0, 1000000, -999, -1, 2000000),
-        List(0, 1000000, -1000, -1, 1000000),
-        List(0, 1000000, -1001, -1, 0),
-        List(0, 1000000, -1002, -2, 999000000),
-        List(0, 999999999, 0, 0, 999999999),
-        List(0, 999999999, 1, 1, 999999),
-        List(0, 999999999, 999, 1, 998999999),
-        List(0, 999999999, 1000, 1, 999999999),
-        List(0, 999999999, 1001, 2, 999999),
-        List(0, 999999999, -1, 0, 998999999),
-        List(0, 999999999, -1000, -1, 999999999),
-        List(0, 999999999, -1001, -1, 998999999),
-        List(0, 0, Long.MaxValue, Long.MaxValue / 1000, (Long.MaxValue % 1000).toInt * 1000000),
-        List(0, 0, Long.MinValue, Long.MinValue / 1000 - 1, (Long.MinValue % 1000).toInt * 1000000 + 1000000000))
-  }
+  def provider_plusMillis_long: List[List[Long]] =
+    List(
+      List(0, 0, 0, 0, 0),
+      List(0, 0, 1, 0, 1000000),
+      List(0, 0, 999, 0, 999000000),
+      List(0, 0, 1000, 1, 0),
+      List(0, 0, 1001, 1, 1000000),
+      List(0, 0, 1999, 1, 999000000),
+      List(0, 0, 2000, 2, 0),
+      List(0, 0, -1, -1, 999000000),
+      List(0, 0, -999, -1, 1000000),
+      List(0, 0, -1000, -1, 0),
+      List(0, 0, -1001, -2, 999000000),
+      List(0, 0, -1999, -2, 1000000),
+      List(0, 1, 0, 0, 1),
+      List(0, 1, 1, 0, 1000001),
+      List(0, 1, 998, 0, 998000001),
+      List(0, 1, 999, 0, 999000001),
+      List(0, 1, 1000, 1, 1),
+      List(0, 1, 1998, 1, 998000001),
+      List(0, 1, 1999, 1, 999000001),
+      List(0, 1, 2000, 2, 1),
+      List(0, 1, -1, -1, 999000001),
+      List(0, 1, -2, -1, 998000001),
+      List(0, 1, -1000, -1, 1),
+      List(0, 1, -1001, -2, 999000001),
+      List(0, 1000000, 0, 0, 1000000),
+      List(0, 1000000, 1, 0, 2000000),
+      List(0, 1000000, 998, 0, 999000000),
+      List(0, 1000000, 999, 1, 0),
+      List(0, 1000000, 1000, 1, 1000000),
+      List(0, 1000000, 1998, 1, 999000000),
+      List(0, 1000000, 1999, 2, 0),
+      List(0, 1000000, 2000, 2, 1000000),
+      List(0, 1000000, -1, 0, 0),
+      List(0, 1000000, -2, -1, 999000000),
+      List(0, 1000000, -999, -1, 2000000),
+      List(0, 1000000, -1000, -1, 1000000),
+      List(0, 1000000, -1001, -1, 0),
+      List(0, 1000000, -1002, -2, 999000000),
+      List(0, 999999999, 0, 0, 999999999),
+      List(0, 999999999, 1, 1, 999999),
+      List(0, 999999999, 999, 1, 998999999),
+      List(0, 999999999, 1000, 1, 999999999),
+      List(0, 999999999, 1001, 2, 999999),
+      List(0, 999999999, -1, 0, 998999999),
+      List(0, 999999999, -1000, -1, 999999999),
+      List(0, 999999999, -1001, -1, 998999999),
+      List(0, 0, Long.MaxValue, Long.MaxValue / 1000, (Long.MaxValue % 1000).toInt * 1000000),
+      List(0,
+           0,
+           Long.MinValue,
+           Long.MinValue / 1000 - 1,
+           (Long.MinValue % 1000).toInt * 1000000 + 1000000000)
+    )
 
   test("plusMillis_long") {
     provider_plusMillis_long.foreach {
@@ -769,7 +794,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  def provider_plusNanos_long: List[List[Long]] = {
+  def provider_plusNanos_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, 0, 1),
@@ -835,9 +860,17 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List(TestInstant.MAX_SECOND - 1, 0, 1999999999, TestInstant.MAX_SECOND, 999999999),
       List(TestInstant.MIN_SECOND, 1, -1, TestInstant.MIN_SECOND, 0),
       List(TestInstant.MIN_SECOND + 1, 1, -1000000001, TestInstant.MIN_SECOND, 0),
-      List(0, 0, TestInstant.MAX_SECOND, TestInstant.MAX_SECOND / 1000000000, (TestInstant.MAX_SECOND % 1000000000).toInt),
-      List(0, 0, TestInstant.MIN_SECOND, TestInstant.MIN_SECOND / 1000000000 - 1, (TestInstant.MIN_SECOND % 1000000000).toInt + 1000000000))
-  }
+      List(0,
+           0,
+           TestInstant.MAX_SECOND,
+           TestInstant.MAX_SECOND / 1000000000,
+           (TestInstant.MAX_SECOND % 1000000000).toInt),
+      List(0,
+           0,
+           TestInstant.MIN_SECOND,
+           TestInstant.MIN_SECOND / 1000000000 - 1,
+           (TestInstant.MIN_SECOND % 1000000000).toInt + 1000000000)
+    )
 
   test("plusNanos_long") {
     provider_plusNanos_long.foreach {
@@ -1045,13 +1078,15 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List(TestInstant.MAX_SECOND, 0, 1, 0, TestInstant.MAX_SECOND - 1, 0),
       List(TestInstant.MAX_SECOND, 0, 0, 500, TestInstant.MAX_SECOND - 1, 999999500),
       List(TestInstant.MAX_SECOND, 0, 0, 1000000000, TestInstant.MAX_SECOND - 1, 0),
-      List(TestInstant.MAX_SECOND, 0, TestInstant.MAX_SECOND, 0, 0, 0))
+      List(TestInstant.MAX_SECOND, 0, TestInstant.MAX_SECOND, 0, 0, 0)
+    )
   }
 
   test("minus_Duration") {
     provider_minus.foreach {
       case (seconds: Long) :: (nanos: Long) :: (otherSeconds: Long) :: (otherNanos: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
-        val i: Instant = Instant.ofEpochSecond(seconds, nanos).minus(Duration.ofSeconds(otherSeconds, otherNanos))
+        val i: Instant =
+          Instant.ofEpochSecond(seconds, nanos).minus(Duration.ofSeconds(otherSeconds, otherNanos))
         assertEquals(i.getEpochSecond, expectedSeconds)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case _ =>
@@ -1076,7 +1111,10 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
   test("minus_longTemporalUnit") {
     provider_minus.foreach {
       case (seconds: Long) :: (nanos: Long) :: (otherSeconds: Long) :: (otherNanos: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
-        val i: Instant = Instant.ofEpochSecond(seconds, nanos).minus(otherSeconds, SECONDS).minus(otherNanos, NANOS)
+        val i: Instant = Instant
+          .ofEpochSecond(seconds, nanos)
+          .minus(otherSeconds, SECONDS)
+          .minus(otherNanos, NANOS)
         assertEquals(i.getEpochSecond, expectedSeconds)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case _ =>
@@ -1099,7 +1137,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  def provider_minusSeconds_long: List[List[Long]] = {
+  def provider_minusSeconds_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, -1, 0),
@@ -1122,14 +1160,14 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List(TestInstant.MIN_SECOND, 2, TestInstant.MIN_SECOND, 0, 2),
       List(TestInstant.MIN_SECOND + 1, 2, TestInstant.MIN_SECOND, 1, 2),
       List(TestInstant.MAX_SECOND - 1, 2, TestInstant.MAX_SECOND, -1, 2),
-      List(TestInstant.MAX_SECOND, 2, TestInstant.MAX_SECOND, 0, 2))
-  }
+      List(TestInstant.MAX_SECOND, 2, TestInstant.MAX_SECOND, 0, 2)
+    )
 
   test("minusSeconds_long") {
     provider_minusSeconds_long.foreach {
       case (seconds: Long) :: (nanos: Long) :: (amount: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
         val j: Instant = Instant.ofEpochSecond(seconds, nanos)
-        val i = j.minusSeconds(amount)
+        val i          = j.minusSeconds(amount)
         assertEquals(i.getEpochSecond, expectedSeconds)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case _ =>
@@ -1151,7 +1189,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  def provider_minusMillis_long: List[List[Long]] = {
+  def provider_minusMillis_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, -1, 999000000),
@@ -1199,15 +1237,19 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List(0, 999999999, -1, 1, 999999),
       List(0, 999999999, -1000, 1, 999999999),
       List(0, 999999999, -1001, 2, 999999),
-      List(0, 0, Long.MaxValue, -(Long.MaxValue / 1000) - 1, -(Long.MaxValue % 1000).toInt * 1000000 + 1000000000),
-      List(0, 0, Long.MinValue, -(Long.MinValue / 1000), -(Long.MinValue % 1000).toInt * 1000000))
-  }
+      List(0,
+           0,
+           Long.MaxValue,
+           -(Long.MaxValue / 1000) - 1,
+           -(Long.MaxValue % 1000).toInt * 1000000 + 1000000000),
+      List(0, 0, Long.MinValue, -(Long.MinValue / 1000), -(Long.MinValue % 1000).toInt * 1000000)
+    )
 
   test("minusMillis_long") {
     provider_minusMillis_long.foreach {
       case (seconds: Long) :: (nanos: Long) :: (amount: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
         val j: Instant = Instant.ofEpochSecond(seconds, nanos)
-        val i = j.minusMillis(amount)
+        val i          = j.minusMillis(amount)
         assertEquals(i.getEpochSecond, expectedSeconds)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case _ =>
@@ -1219,7 +1261,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     provider_minusMillis_long.foreach {
       case (seconds: Long) :: (nanos: Long) :: (amount: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
         val j: Instant = Instant.ofEpochSecond(seconds + 1, nanos)
-        val i = j.minusMillis(amount)
+        val i          = j.minusMillis(amount)
         assertEquals(i.getEpochSecond, expectedSeconds + 1)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case _ =>
@@ -1231,7 +1273,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     provider_minusMillis_long.foreach {
       case (seconds: Long) :: (nanos: Long) :: (amount: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
         val j: Instant = Instant.ofEpochSecond(seconds - 1, nanos)
-        val i = j.minusMillis(amount)
+        val i          = j.minusMillis(amount)
         assertEquals(i.getEpochSecond, expectedSeconds - 1)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case _ =>
@@ -1267,7 +1309,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     }
   }
 
-  def provider_minusNanos_long: List[List[Long]] = {
+  def provider_minusNanos_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, -1, 999999999),
@@ -1333,15 +1375,19 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List(TestInstant.MAX_SECOND - 1, 0, -1999999999, TestInstant.MAX_SECOND, 999999999),
       List(TestInstant.MIN_SECOND, 1, 1, TestInstant.MIN_SECOND, 0),
       List(TestInstant.MIN_SECOND + 1, 1, 1000000001, TestInstant.MIN_SECOND, 0),
-      List(0, 0, Long.MaxValue, -(Long.MaxValue / 1000000000) - 1, -(Long.MaxValue % 1000000000).toInt + 1000000000),
-      List(0, 0, Long.MinValue, -(Long.MinValue / 1000000000), -(Long.MinValue % 1000000000).toInt))
-  }
+      List(0,
+           0,
+           Long.MaxValue,
+           -(Long.MaxValue / 1000000000) - 1,
+           -(Long.MaxValue % 1000000000).toInt + 1000000000),
+      List(0, 0, Long.MinValue, -(Long.MinValue / 1000000000), -(Long.MinValue % 1000000000).toInt)
+    )
 
   test("minusNanos_long") {
     provider_minusNanos_long.foreach {
       case (seconds: Long) :: (nanos: Long) :: (amount: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
         val j: Instant = Instant.ofEpochSecond(seconds, nanos)
-        val i = j.minusNanos(amount)
+        val i          = j.minusNanos(amount)
         assertEquals(i.getEpochSecond, expectedSeconds)
         assertEquals(i.getNano, expectedNanoOfSecond)
       case _ =>
@@ -1364,20 +1410,28 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
   }
 
   test("truncatedTo") {
-    assertEquals(Instant.ofEpochSecond(2L, 1000000).truncatedTo(ChronoUnit.SECONDS), Instant.ofEpochSecond(2L))
-    assertEquals(Instant.ofEpochSecond(2L, -1000000).truncatedTo(ChronoUnit.SECONDS), Instant.ofEpochSecond(1L))
-    assertEquals(Instant.ofEpochSecond(0L, -1000000).truncatedTo(ChronoUnit.SECONDS), Instant.ofEpochSecond(-1L))
-    assertEquals(Instant.ofEpochSecond(-1L).truncatedTo(ChronoUnit.SECONDS), Instant.ofEpochSecond(-1L))
-    assertEquals(Instant.ofEpochSecond(-1L, -1000000).truncatedTo(ChronoUnit.SECONDS), Instant.ofEpochSecond(-2L))
-    assertEquals(Instant.ofEpochSecond(-2L).truncatedTo(ChronoUnit.SECONDS), Instant.ofEpochSecond(-2L))
+    assertEquals(Instant.ofEpochSecond(2L, 1000000).truncatedTo(ChronoUnit.SECONDS),
+                 Instant.ofEpochSecond(2L))
+    assertEquals(Instant.ofEpochSecond(2L, -1000000).truncatedTo(ChronoUnit.SECONDS),
+                 Instant.ofEpochSecond(1L))
+    assertEquals(Instant.ofEpochSecond(0L, -1000000).truncatedTo(ChronoUnit.SECONDS),
+                 Instant.ofEpochSecond(-1L))
+    assertEquals(Instant.ofEpochSecond(-1L).truncatedTo(ChronoUnit.SECONDS),
+                 Instant.ofEpochSecond(-1L))
+    assertEquals(Instant.ofEpochSecond(-1L, -1000000).truncatedTo(ChronoUnit.SECONDS),
+                 Instant.ofEpochSecond(-2L))
+    assertEquals(Instant.ofEpochSecond(-2L).truncatedTo(ChronoUnit.SECONDS),
+                 Instant.ofEpochSecond(-2L))
   }
 
   test("toEpochMilli") {
     assertEquals(Instant.ofEpochSecond(1L, 1000000).toEpochMilli, 1001L)
     assertEquals(Instant.ofEpochSecond(1L, 2000000).toEpochMilli, 1002L)
     assertEquals(Instant.ofEpochSecond(1L, 567).toEpochMilli, 1000L)
-    assertEquals(Instant.ofEpochSecond(Long.MaxValue / 1000).toEpochMilli, (Long.MaxValue / 1000) * 1000)
-    assertEquals(Instant.ofEpochSecond(Long.MinValue / 1000).toEpochMilli, (Long.MinValue / 1000) * 1000)
+    assertEquals(Instant.ofEpochSecond(Long.MaxValue / 1000).toEpochMilli,
+                 (Long.MaxValue / 1000) * 1000)
+    assertEquals(Instant.ofEpochSecond(Long.MinValue / 1000).toEpochMilli,
+                 (Long.MinValue / 1000) * 1000)
     assertEquals(Instant.ofEpochSecond(0L, -1000000).toEpochMilli, -1L)
     assertEquals(Instant.ofEpochSecond(0L, 1000000).toEpochMilli, 1)
     assertEquals(Instant.ofEpochSecond(0L, 999999).toEpochMilli, 0)
@@ -1415,14 +1469,15 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       Instant.ofEpochSecond(0L, 2),
       Instant.ofEpochSecond(0L, 999999999),
       Instant.ofEpochSecond(1L, 0),
-      Instant.ofEpochSecond(2L, 0))
+      Instant.ofEpochSecond(2L, 0)
+    )
   }
 
   private def doTest_comparisons_Instant(instants: Instant*): Unit = {
     var i: Int = 0
     while (i < instants.length) {
       val a: Instant = instants(i)
-      var j: Int = 0
+      var j: Int     = 0
       while (j < instants.length) {
         val b: Instant = instants(j)
         if (i < j) {
@@ -1430,14 +1485,12 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
           assertEquals(a.isBefore(b), true, a + " <=> " + b)
           assertEquals(a.isAfter(b), false, a + " <=> " + b)
           assertEquals(a == b, false, a + " <=> " + b)
-        }
-        else if (i > j) {
+        } else if (i > j) {
           assertEquals(a.compareTo(b) > 0, true, a + " <=> " + b)
           assertEquals(a.isBefore(b), false, a + " <=> " + b)
           assertEquals(a.isAfter(b), true, a + " <=> " + b)
           assertEquals(a == b, false, a + " <=> " + b)
-        }
-        else {
+        } else {
           assertEquals(a.compareTo(b), 0, a + " <=> " + b)
           assertEquals(a.isBefore(b), false, a + " <=> " + b)
           assertEquals(a.isAfter(b), false, a + " <=> " + b)
@@ -1455,7 +1508,6 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       a.compareTo(null)
     }
   }
-
 
   test("isBefore_ObjectNull") {
     assertThrows[Platform.NPE] {
@@ -1475,7 +1527,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     val test5a: Instant = Instant.ofEpochSecond(5L, 20)
     val test5b: Instant = Instant.ofEpochSecond(5L, 20)
     val test5n: Instant = Instant.ofEpochSecond(5L, 30)
-    val test6: Instant = Instant.ofEpochSecond(6L, 20)
+    val test6: Instant  = Instant.ofEpochSecond(6L, 20)
     assertEquals(test5a == test5a, true)
     assertEquals(test5a == test5b, true)
     assertEquals(test5a == test5n, false)
@@ -1508,7 +1560,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
     val test5a: Instant = Instant.ofEpochSecond(5L, 20)
     val test5b: Instant = Instant.ofEpochSecond(5L, 20)
     val test5n: Instant = Instant.ofEpochSecond(5L, 30)
-    val test6: Instant = Instant.ofEpochSecond(6L, 20)
+    val test6: Instant  = Instant.ofEpochSecond(6L, 20)
     assertEquals(test5a.hashCode == test5a.hashCode, true)
     assertEquals(test5a.hashCode == test5b.hashCode, true)
     assertEquals(test5b.hashCode == test5b.hashCode, true)
@@ -1525,70 +1577,125 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
       List(Instant.ofEpochSecond(-1, 0), "1969-12-31T23:59:59Z"),
       List(LocalDateTime.of(0, 1, 2, 0, 0).toInstant(ZoneOffset.UTC), "0000-01-02T00:00:00Z"),
       List(LocalDateTime.of(0, 1, 1, 12, 30).toInstant(ZoneOffset.UTC), "0000-01-01T12:30:00Z"),
-      List(LocalDateTime.of(0, 1, 1, 0, 0, 0, 1).toInstant(ZoneOffset.UTC), "0000-01-01T00:00:00.000000001Z"),
+      List(LocalDateTime.of(0, 1, 1, 0, 0, 0, 1).toInstant(ZoneOffset.UTC),
+           "0000-01-01T00:00:00.000000001Z"),
       List(LocalDateTime.of(0, 1, 1, 0, 0).toInstant(ZoneOffset.UTC), "0000-01-01T00:00:00Z"),
-      List(LocalDateTime.of(-1, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC), "-0001-12-31T23:59:59.999999999Z"),
+      List(LocalDateTime.of(-1, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC),
+           "-0001-12-31T23:59:59.999999999Z"),
       List(LocalDateTime.of(-1, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "-0001-12-31T12:30:00Z"),
       List(LocalDateTime.of(-1, 12, 30, 12, 30).toInstant(ZoneOffset.UTC), "-0001-12-30T12:30:00Z"),
-      List(LocalDateTime.of(-9999, 1, 2, 12, 30).toInstant(ZoneOffset.UTC), "-9999-01-02T12:30:00Z"),
-      List(LocalDateTime.of(-9999, 1, 1, 12, 30).toInstant(ZoneOffset.UTC), "-9999-01-01T12:30:00Z"),
+      List(LocalDateTime.of(-9999, 1, 2, 12, 30).toInstant(ZoneOffset.UTC),
+           "-9999-01-02T12:30:00Z"),
+      List(LocalDateTime.of(-9999, 1, 1, 12, 30).toInstant(ZoneOffset.UTC),
+           "-9999-01-01T12:30:00Z"),
       List(LocalDateTime.of(-9999, 1, 1, 0, 0).toInstant(ZoneOffset.UTC), "-9999-01-01T00:00:00Z"),
-      List(LocalDateTime.of(-10000, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC), "-10000-12-31T23:59:59.999999999Z"),
-      List(LocalDateTime.of(-10000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "-10000-12-31T12:30:00Z"),
-      List(LocalDateTime.of(-10000, 12, 30, 12, 30).toInstant(ZoneOffset.UTC), "-10000-12-30T12:30:00Z"),
-      List(LocalDateTime.of(-15000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "-15000-12-31T12:30:00Z"),
-      List(LocalDateTime.of(-19999, 1, 2, 12, 30).toInstant(ZoneOffset.UTC), "-19999-01-02T12:30:00Z"),
-      List(LocalDateTime.of(-19999, 1, 1, 12, 30).toInstant(ZoneOffset.UTC), "-19999-01-01T12:30:00Z"),
-      List(LocalDateTime.of(-19999, 1, 1, 0, 0).toInstant(ZoneOffset.UTC), "-19999-01-01T00:00:00Z"),
-      List(LocalDateTime.of(-20000, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC), "-20000-12-31T23:59:59.999999999Z"),
-      List(LocalDateTime.of(-20000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "-20000-12-31T12:30:00Z"),
-      List(LocalDateTime.of(-20000, 12, 30, 12, 30).toInstant(ZoneOffset.UTC), "-20000-12-30T12:30:00Z"),
-      List(LocalDateTime.of(-25000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "-25000-12-31T12:30:00Z"),
-      List(LocalDateTime.of(9999, 12, 30, 12, 30).toInstant(ZoneOffset.UTC), "9999-12-30T12:30:00Z"),
-      List(LocalDateTime.of(9999, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "9999-12-31T12:30:00Z"),
-      List(LocalDateTime.of(9999, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC), "9999-12-31T23:59:59.999999999Z"),
+      List(LocalDateTime.of(-10000, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC),
+           "-10000-12-31T23:59:59.999999999Z"),
+      List(LocalDateTime.of(-10000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC),
+           "-10000-12-31T12:30:00Z"),
+      List(LocalDateTime.of(-10000, 12, 30, 12, 30).toInstant(ZoneOffset.UTC),
+           "-10000-12-30T12:30:00Z"),
+      List(LocalDateTime.of(-15000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC),
+           "-15000-12-31T12:30:00Z"),
+      List(LocalDateTime.of(-19999, 1, 2, 12, 30).toInstant(ZoneOffset.UTC),
+           "-19999-01-02T12:30:00Z"),
+      List(LocalDateTime.of(-19999, 1, 1, 12, 30).toInstant(ZoneOffset.UTC),
+           "-19999-01-01T12:30:00Z"),
+      List(LocalDateTime.of(-19999, 1, 1, 0, 0).toInstant(ZoneOffset.UTC),
+           "-19999-01-01T00:00:00Z"),
+      List(LocalDateTime.of(-20000, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC),
+           "-20000-12-31T23:59:59.999999999Z"),
+      List(LocalDateTime.of(-20000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC),
+           "-20000-12-31T12:30:00Z"),
+      List(LocalDateTime.of(-20000, 12, 30, 12, 30).toInstant(ZoneOffset.UTC),
+           "-20000-12-30T12:30:00Z"),
+      List(LocalDateTime.of(-25000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC),
+           "-25000-12-31T12:30:00Z"),
+      List(LocalDateTime.of(9999, 12, 30, 12, 30).toInstant(ZoneOffset.UTC),
+           "9999-12-30T12:30:00Z"),
+      List(LocalDateTime.of(9999, 12, 31, 12, 30).toInstant(ZoneOffset.UTC),
+           "9999-12-31T12:30:00Z"),
+      List(LocalDateTime.of(9999, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC),
+           "9999-12-31T23:59:59.999999999Z"),
       List(LocalDateTime.of(10000, 1, 1, 0, 0).toInstant(ZoneOffset.UTC), "+10000-01-01T00:00:00Z"),
-      List(LocalDateTime.of(10000, 1, 1, 12, 30).toInstant(ZoneOffset.UTC), "+10000-01-01T12:30:00Z"),
-      List(LocalDateTime.of(10000, 1, 2, 12, 30).toInstant(ZoneOffset.UTC), "+10000-01-02T12:30:00Z"),
-      List(LocalDateTime.of(15000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "+15000-12-31T12:30:00Z"),
-      List(LocalDateTime.of(19999, 12, 30, 12, 30).toInstant(ZoneOffset.UTC), "+19999-12-30T12:30:00Z"),
-      List(LocalDateTime.of(19999, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "+19999-12-31T12:30:00Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.999999999Z"),
+      List(LocalDateTime.of(10000, 1, 1, 12, 30).toInstant(ZoneOffset.UTC),
+           "+10000-01-01T12:30:00Z"),
+      List(LocalDateTime.of(10000, 1, 2, 12, 30).toInstant(ZoneOffset.UTC),
+           "+10000-01-02T12:30:00Z"),
+      List(LocalDateTime.of(15000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC),
+           "+15000-12-31T12:30:00Z"),
+      List(LocalDateTime.of(19999, 12, 30, 12, 30).toInstant(ZoneOffset.UTC),
+           "+19999-12-30T12:30:00Z"),
+      List(LocalDateTime.of(19999, 12, 31, 12, 30).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T12:30:00Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 999999999).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.999999999Z"),
       List(LocalDateTime.of(20000, 1, 1, 0, 0).toInstant(ZoneOffset.UTC), "+20000-01-01T00:00:00Z"),
-      List(LocalDateTime.of(20000, 1, 1, 12, 30).toInstant(ZoneOffset.UTC), "+20000-01-01T12:30:00Z"),
-      List(LocalDateTime.of(20000, 1, 2, 12, 30).toInstant(ZoneOffset.UTC), "+20000-01-02T12:30:00Z"),
-      List(LocalDateTime.of(25000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC), "+25000-12-31T12:30:00Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 9999999).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.009999999Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 999999000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.999999Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 9999000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.009999Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 123000000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.123Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 100000000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.100Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 20000000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.020Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 3000000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.003Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 400000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000400Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 50000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000050Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 6000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000006Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 700).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000000700Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 80).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000000080Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 9).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000000009Z"),
-      List(LocalDateTime.of(-999999999, 1, 1, 12, 30).toInstant(ZoneOffset.UTC).minus(1, DAYS), "-1000000000-12-31T12:30:00Z"),
-      List(LocalDateTime.of(999999999, 12, 31, 12, 30).toInstant(ZoneOffset.UTC).plus(1, DAYS), "+1000000000-01-01T12:30:00Z"),
+      List(LocalDateTime.of(20000, 1, 1, 12, 30).toInstant(ZoneOffset.UTC),
+           "+20000-01-01T12:30:00Z"),
+      List(LocalDateTime.of(20000, 1, 2, 12, 30).toInstant(ZoneOffset.UTC),
+           "+20000-01-02T12:30:00Z"),
+      List(LocalDateTime.of(25000, 12, 31, 12, 30).toInstant(ZoneOffset.UTC),
+           "+25000-12-31T12:30:00Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 9999999).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.009999999Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 999999000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.999999Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 9999000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.009999Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 123000000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.123Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 100000000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.100Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 20000000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.020Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 3000000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.003Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 400000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000400Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 50000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000050Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 6000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000006Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 700).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000000700Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 80).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000000080Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 9).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000000009Z"),
+      List(LocalDateTime.of(-999999999, 1, 1, 12, 30).toInstant(ZoneOffset.UTC).minus(1, DAYS),
+           "-1000000000-12-31T12:30:00Z"),
+      List(LocalDateTime.of(999999999, 12, 31, 12, 30).toInstant(ZoneOffset.UTC).plus(1, DAYS),
+           "+1000000000-01-01T12:30:00Z"),
       List(Instant.MIN, "-1000000000-01-01T00:00:00Z"),
       List(Instant.MAX, "+1000000000-12-31T23:59:59.999999999Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 123000000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.123Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 100000000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.100Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 20000000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.020Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 3000000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.003Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 400000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000400Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 50000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000050Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 6000).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000006Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 700).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000000700Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 80).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000000080Z"),
-      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 9).toInstant(ZoneOffset.UTC), "+19999-12-31T23:59:59.000000009Z"),
-      List(LocalDateTime.of(-999999999, 1, 1, 12, 30).toInstant(ZoneOffset.UTC).minus(1, DAYS), "-1000000000-12-31T12:30:00Z"),
-      List(LocalDateTime.of(999999999, 12, 31, 12, 30).toInstant(ZoneOffset.UTC).plus(1, DAYS), "+1000000000-01-01T12:30:00Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 123000000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.123Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 100000000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.100Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 20000000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.020Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 3000000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.003Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 400000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000400Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 50000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000050Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 6000).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000006Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 700).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000000700Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 80).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000000080Z"),
+      List(LocalDateTime.of(19999, 12, 31, 23, 59, 59, 9).toInstant(ZoneOffset.UTC),
+           "+19999-12-31T23:59:59.000000009Z"),
+      List(LocalDateTime.of(-999999999, 1, 1, 12, 30).toInstant(ZoneOffset.UTC).minus(1, DAYS),
+           "-1000000000-12-31T12:30:00Z"),
+      List(LocalDateTime.of(999999999, 12, 31, 12, 30).toInstant(ZoneOffset.UTC).plus(1, DAYS),
+           "+1000000000-01-01T12:30:00Z"),
       List(Instant.MIN, "-1000000000-01-01T00:00:00Z"),
-      List(Instant.MAX, "+1000000000-12-31T23:59:59.999999999Z"))
+      List(Instant.MAX, "+1000000000-12-31T23:59:59.999999999Z")
+    )
 
   test("toString") {
     data_toString.foreach {

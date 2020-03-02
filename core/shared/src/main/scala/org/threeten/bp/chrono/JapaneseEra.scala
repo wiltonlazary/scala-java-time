@@ -37,7 +37,7 @@ import java.io.IOException
 import java.io.InvalidObjectException
 import java.io.ObjectStreamException
 import java.io.Serializable
-import java.util.{Objects, Arrays}
+import java.util.{ Arrays, Objects }
 import java.util.concurrent.atomic.AtomicReference
 
 import org.threeten.bp.DateTimeException
@@ -50,32 +50,38 @@ import scala.annotation.meta.field
 
 @SerialVersionUID(1466499369062886794L)
 object JapaneseEra {
-  private[chrono] val ERA_OFFSET: Int = 2
-  private[chrono] val ERA_NAMES: Array[String] = Array("Meiji", "Taisho", "Showa", "Heisei")
+  private[chrono] val ERA_OFFSET: Int                  = 2
+  private[chrono] val ERA_NAMES: Array[String]         = Array("Meiji", "Taisho", "Showa", "Heisei")
   private[chrono] val ERA_ABBREVIATIONS: Array[String] = Array("M", "T", "S", "H")
 
   /** The singleton instance for the 'Meiji' era (1868-09-08 - 1912-07-29)
     * which has the value -1.
     */
   val MEIJI: JapaneseEra = new JapaneseEra(-1, LocalDate.of(1868, 9, 8), "Meiji")
+
   /** The singleton instance for the 'Taisho' era (1912-07-30 - 1926-12-24)
     * which has the value 0.
     */
   val TAISHO: JapaneseEra = new JapaneseEra(0, LocalDate.of(1912, 7, 30), "Taisho")
+
   /** The singleton instance for the 'Showa' era (1926-12-25 - 1989-01-07)
     * which has the value 1.
     */
   val SHOWA: JapaneseEra = new JapaneseEra(1, LocalDate.of(1926, 12, 25), "Showa")
+
   /** The singleton instance for the 'Heisei' era (1989-01-08 - current)
     * which has the value 2.
     */
   val HEISEI: JapaneseEra = new JapaneseEra(2, LocalDate.of(1989, 1, 8), "Heisei")
+
   /**
     * The value of the additional era.
     */
   private[chrono] val ADDITIONAL_VALUE: Int = 3
 
-  private[chrono] val KNOWN_ERAS: AtomicReference[Array[JapaneseEra]] = new AtomicReference(Array(MEIJI, TAISHO, SHOWA, HEISEI))
+  private[chrono] val KNOWN_ERAS: AtomicReference[Array[JapaneseEra]] = new AtomicReference(
+    Array(MEIJI, TAISHO, SHOWA, HEISEI)
+  )
 
   /** Obtains an instance of {@code JapaneseEra} from an {@code int} value.
     *
@@ -88,10 +94,11 @@ object JapaneseEra {
     * @throws DateTimeException if the value is invalid
     */
   def of(japaneseEra: Int): JapaneseEra = {
-      val known = KNOWN_ERAS.get
-      if (japaneseEra < MEIJI.eraValue || japaneseEra > known(known.length - 1).eraValue) throw new DateTimeException("japaneseEra is invalid")
-      known(ordinal(japaneseEra))
-    }
+    val known = KNOWN_ERAS.get
+    if (japaneseEra < MEIJI.eraValue || japaneseEra > known(known.length - 1).eraValue)
+      throw new DateTimeException("japaneseEra is invalid")
+    known(ordinal(japaneseEra))
+  }
 
   /** Returns the {@code JapaneseEra} with the name.
     *
@@ -172,7 +179,12 @@ object JapaneseEra {
   * @param since  the date representing the first date of the era, validated not null
   */
 @SerialVersionUID(1466499369062886794L)
-final class JapaneseEra private[chrono](private val eraValue: Int, @(transient @field) private[chrono] val since: LocalDate, @(transient @field) private val name: String) extends Era with Serializable {
+final class JapaneseEra private[chrono] (
+  private val eraValue:                          Int,
+  @(transient @field) private[chrono] val since: LocalDate,
+  @(transient @field) private val name:          String
+) extends Era
+    with Serializable {
 
   /** Returns the singleton {@code JapaneseEra} corresponding to this object.
     * It's possible that this version of {@code JapaneseEra} doesn't support the latest era value.
@@ -182,7 +194,7 @@ final class JapaneseEra private[chrono](private val eraValue: Int, @(transient @
     * @throws ObjectStreamException if the deserialized object has any unknown numeric era value.
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = {
+  private def readResolve: AnyRef =
     try JapaneseEra.of(eraValue)
     catch {
       case e: DateTimeException =>
@@ -190,7 +202,6 @@ final class JapaneseEra private[chrono](private val eraValue: Int, @(transient @
         ex.initCause(e)
         throw ex
     }
-  }
 
   /** Returns the start date of the era.
     * @return the start date
@@ -201,7 +212,7 @@ final class JapaneseEra private[chrono](private val eraValue: Int, @(transient @
     * @return the end date
     */
   private[chrono] def endDate: LocalDate = {
-    val ordinal: Int = JapaneseEra.ordinal(eraValue)
+    val ordinal: Int             = JapaneseEra.ordinal(eraValue)
     val eras: Array[JapaneseEra] = JapaneseEra.values
     if (ordinal >= eras.length - 1) LocalDate.MAX
     else eras(ordinal + 1).startDate.minusDays(1)

@@ -36,22 +36,21 @@ import java.io._
 import org.scalatest.FunSuite
 
 class TestPeriodSerialization extends FunSuite with AssertionsHelper {
-  def data_serialization: List[List[Period]] = {
+  def data_serialization: List[List[Period]] =
     List(List(Period.ZERO), List(Period.ofDays(1)), List(Period.of(1, 2, 3)))
-  }
 
   test("serialization(period: Period") {
     data_serialization.foreach {
       case (period: Period) :: Nil =>
         val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-        val oos: ObjectOutputStream = new ObjectOutputStream(baos)
+        val oos: ObjectOutputStream     = new ObjectOutputStream(baos)
         oos.writeObject(period)
         oos.close()
-        val ois: ObjectInputStream = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray))
+        val ois: ObjectInputStream =
+          new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray))
         if (period.isZero) {
           assertSame(ois.readObject, period)
-        }
-        else {
+        } else {
           assertEquals(ois.readObject, period)
         }
       case _ =>

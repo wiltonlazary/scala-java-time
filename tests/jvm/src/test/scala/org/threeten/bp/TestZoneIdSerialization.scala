@@ -31,7 +31,7 @@
  */
 package org.threeten.bp
 
-import java.lang.reflect.{Field, Modifier}
+import java.lang.reflect.{ Field, Modifier }
 
 import org.scalatest.FunSuite
 
@@ -44,7 +44,10 @@ class TestZoneIdSerialization extends FunSuite with AssertionsHelper with Abstra
     for (field <- fields) {
       if (!Modifier.isStatic(field.getModifiers)) {
         assertTrue(Modifier.isPrivate(field.getModifiers))
-        assertTrue(Modifier.isFinal(field.getModifiers) || (Modifier.isVolatile(field.getModifiers) && Modifier.isTransient(field.getModifiers)))
+        assertTrue(
+          Modifier.isFinal(field.getModifiers) || (Modifier
+            .isVolatile(field.getModifiers) && Modifier.isTransient(field.getModifiers))
+        )
       }
     }
   }

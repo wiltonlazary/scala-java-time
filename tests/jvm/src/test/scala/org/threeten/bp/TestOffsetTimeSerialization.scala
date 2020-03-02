@@ -31,7 +31,7 @@
  */
 package org.threeten.bp
 
-import java.lang.reflect.{Constructor, InvocationTargetException}
+import java.lang.reflect.{ Constructor, InvocationTargetException }
 
 import org.scalatest.FunSuite
 
@@ -43,17 +43,19 @@ class TestOffsetTimeSerialization extends FunSuite with AssertionsHelper with Ab
   }
 
   test("test_serialization_format") {
-    assertEqualsSerialisedForm(OffsetTime.of(LocalTime.of(22, 17, 59, 464000000), ZoneOffset.ofHours(1)))
+    assertEqualsSerialisedForm(
+      OffsetTime.of(LocalTime.of(22, 17, 59, 464000000), ZoneOffset.ofHours(1))
+    )
   }
 
   test("constructor_nullTime") {
     assertThrows[NullPointerException] {
-      val con: Constructor[OffsetTime] = classOf[OffsetTime].getDeclaredConstructor(classOf[LocalTime], classOf[ZoneOffset])
+      val con: Constructor[OffsetTime] =
+        classOf[OffsetTime].getDeclaredConstructor(classOf[LocalTime], classOf[ZoneOffset])
       con.setAccessible(true)
       try {
         con.newInstance(null, TestOffsetTime.OFFSET_PONE)
-      }
-      catch {
+      } catch {
         case ex: InvocationTargetException =>
           throw ex.getCause
       }
@@ -62,12 +64,12 @@ class TestOffsetTimeSerialization extends FunSuite with AssertionsHelper with Ab
 
   test("constructor_nullOffset") {
     assertThrows[NullPointerException] {
-      val con: Constructor[OffsetTime] = classOf[OffsetTime].getDeclaredConstructor(classOf[LocalTime], classOf[ZoneOffset])
+      val con: Constructor[OffsetTime] =
+        classOf[OffsetTime].getDeclaredConstructor(classOf[LocalTime], classOf[ZoneOffset])
       con.setAccessible(true)
       try {
         con.newInstance(LocalTime.of(11, 30), null)
-      }
-      catch {
+      } catch {
         case ex: InvocationTargetException =>
           throw ex.getCause
       }

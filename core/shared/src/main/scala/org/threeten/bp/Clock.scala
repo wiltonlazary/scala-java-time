@@ -37,6 +37,7 @@ import java.io.Serializable
 import java.util.Objects
 
 object Clock {
+
   /** Obtains a clock that returns the current instant using the best available
     * system clock, converting to date and time using the UTC time-zone.
     *
@@ -172,11 +173,7 @@ object Clock {
       throw new IllegalArgumentException("Tick duration must not be negative")
     }
     val tickNanos: Long = tickDuration.toNanos
-    if (tickNanos % 1000000 == 0) {
-    }
-    else if (1000000000 % tickNanos == 0) {
-    }
-    else {
+    if (tickNanos % 1000000 == 0) {} else if (1000000000 % tickNanos == 0) {} else {
       throw new IllegalArgumentException("Invalid tick duration")
     }
     if (tickNanos <= 1) {
@@ -251,7 +248,7 @@ object Clock {
     override def equals(obj: Any): Boolean =
       obj match {
         case clock: SystemClock => zone == clock.zone
-        case _ => false
+        case _                  => false
       }
 
     override def hashCode: Int = zone.hashCode + 1
@@ -263,7 +260,9 @@ object Clock {
     * This is typically used for testing.
     */
   @SerialVersionUID(7430389292664866958L)
-  private[bp] final class FixedClock(val instant: Instant, val zone: ZoneId) extends Clock with Serializable {
+  private[bp] final class FixedClock(val instant: Instant, val zone: ZoneId)
+      extends Clock
+      with Serializable {
     if (zone == null) throw new NullPointerException("'zone' can not be null")
 
     def getZone: ZoneId = zone
@@ -278,7 +277,7 @@ object Clock {
       obj match {
         case other: FixedClock => (instant == other.instant) && (zone == other.zone)
         case _                 => false
-    }
+      }
 
     override def hashCode: Int = instant.hashCode ^ zone.hashCode
 
@@ -288,7 +287,9 @@ object Clock {
   /** Implementation of a clock that adds an offset to an underlying clock.
     */
   @SerialVersionUID(2007484719125426256L)
-  private[bp] final class OffsetClock(val baseClock: Clock, val offset: Duration) extends Clock with Serializable {
+  private[bp] final class OffsetClock(val baseClock: Clock, val offset: Duration)
+      extends Clock
+      with Serializable {
 
     def getZone: ZoneId = baseClock.getZone
 
@@ -314,9 +315,11 @@ object Clock {
   /** Implementation of a clock that adds an offset to an underlying clock.
     */
   @SerialVersionUID(6504659149906368850L)
-  private[bp] final class TickClock(val baseClock: Clock, val tickNanos: Long) extends Clock with Serializable {
+  private[bp] final class TickClock(val baseClock: Clock, val tickNanos: Long)
+      extends Clock
+      with Serializable {
 
-     def getZone: ZoneId = baseClock.getZone
+    def getZone: ZoneId = baseClock.getZone
 
     def withZone(zone: ZoneId): Clock =
       if (zone == baseClock.getZone) this
@@ -333,8 +336,8 @@ object Clock {
         return Instant.ofEpochMilli(millis - Math.floorMod(millis, tickNanos / 1000000L))
       }
       val instant: Instant = baseClock.instant
-      val nanos: Long = instant.getNano
-      val adjust: Long = Math.floorMod(nanos, tickNanos)
+      val nanos: Long      = instant.getNano
+      val adjust: Long     = Math.floorMod(nanos, tickNanos)
       instant.minusNanos(adjust)
     }
 
@@ -401,7 +404,7 @@ object Clock {
   * Implementations should implement {@code Serializable} wherever possible and must
   * document whether or not they do support serialization.
   */
-abstract class Clock protected() {
+abstract class Clock protected () {
 
   /** Gets the time-zone being used to create dates and times.
     *

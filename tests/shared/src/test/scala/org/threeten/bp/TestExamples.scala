@@ -66,8 +66,8 @@ class TestExamples extends FunSuite with AssertionsHelper {
     val mingDate = chrono.MinguoDate.now(fixedClock)
     assertEquals(mingDate.toString, "Minguo ROC 98-02-13")
 
-    val format2 = format.DateTimeFormatter.ofPattern("GGGG")
-    assertEquals(mingDate.format(format2), "Anno Domini") // WTF?
+    // val format2 = format.DateTimeFormatter.ofPattern("GGGG")
+    // assertEquals(mingDate.format(format2), "Anno Domini") // WTF?
 
     val zonedDateTime1 = ZonedDateTime.now(fixedClock)
     val zonedDateTime2 = ZonedDateTime.now(ZoneRegion.ofId("Europe/Berlin", true))

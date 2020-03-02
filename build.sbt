@@ -2,11 +2,15 @@ import sbtcrossproject.CrossPlugin.autoImport.{ crossProject, CrossType }
 import sbt._
 import sbt.io.Using
 
-val scalaVer = "2.12.9"
-val tzdbVersion = "2019a"
-val scalaJavaTimeVer = "2.0.0-RC3"
+val scalaVer = "2.12.10"
+val tzdbVersion = "2019c"
+val scalaJavaTimeVer = "2.0.0-RC4-SNAPSHOT"
 val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
 val scalaTZDBVersion = s"${scalaJavaTimeVer}_$tzdbVersion"
+
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
+Global / resolvers += Resolver.sonatypeRepo("public")
 
 lazy val downloadFromZip: TaskKey[Unit] =
   taskKey[Unit]("Download the tzdb tarball and extract it")
@@ -19,13 +23,7 @@ lazy val commonSettings = Seq(
   licenses     := Seq("BSD 3-Clause License" -> url("https://opensource.org/licenses/BSD-3-Clause")),
 
   scalaVersion       := scalaVer,
-  crossScalaVersions := {
-    if (scalaJSVersion.startsWith("0.6")) {
-      Seq("2.10.7", "2.11.12", "2.12.10", "2.13.1")
-    } else {
-      Seq("2.11.12", "2.12.10", "2.13.1")
-    }
-  },
+  crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1"),
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature",
@@ -63,8 +61,6 @@ lazy val commonSettings = Seq(
   },
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
   autoAPIMappings := true,
-  useGpg := true,
-
   publishArtifact in Test := false,
   publishMavenStyle := true,
   publishTo := {
@@ -148,7 +144,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
         copyAndReplace(srcDirs, destinationDir)
       }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "0.3.16-cldr35"
+      "io.github.cquiroz" %%% "scala-java-locales" % "0.6.0-SNAPSHOT"
     )
   )
 
@@ -193,7 +189,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
           Seq("org.scalatest" %%% "scalatest" % "3.0.7" % "test")
         case _ => Seq.empty
       }
-    }
+    },
   )
   .jvmSettings(
     // Fork the JVM test to ensure that the custom flags are set
@@ -208,7 +204,10 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
       val srcDirs = (sourceDirectories in Test).value
       val destinationDir = (sourceManaged in Test).value
       copyAndReplace(srcDirs, destinationDir)
-    }.taskValue
+    }.taskValue,
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "locales-full-db" % "0.6.0-cldr36-SNAPSHOT"
+    )
   ).dependsOn(scalajavatime, scalajavatimeTZDB)
 
 lazy val scalajavatimeTestsJVM = scalajavatimeTests.jvm

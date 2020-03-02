@@ -14,12 +14,6 @@ object Platform {
   final val executingInJVM = true
 
   def setupLocales(): Unit = {
-    if (Platform.executingInJVM) {
-      import locales.LocaleRegistry
-      import locales.cldr.data.pt_BR
-
-      LocaleRegistry.installLocale(pt_BR)
-    }
   }
 
   def zoneMap(m: scala.collection.immutable.TreeMap[Int, String]): NavigableMap[Int, String] = ZoneMap(m)

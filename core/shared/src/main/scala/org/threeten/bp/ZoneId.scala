@@ -34,7 +34,7 @@ package org.threeten.bp
 import java.io.DataOutput
 import java.io.IOException
 import java.io.Serializable
-import java.util.{ Collections, Locale, Objects, TimeZone }
+import java.util.{ Locale, Objects, TimeZone }
 import org.threeten.bp.format.DateTimeFormatterBuilder
 import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.TemporalAccessor
@@ -458,7 +458,7 @@ abstract class ZoneId private[bp] () extends Serializable {
       if (rules.isFixedOffset)
         return rules.getOffset(Instant.EPOCH)
     } catch {
-      case ex: ZoneRulesException =>
+      case _: ZoneRulesException =>
     }
     this
   }

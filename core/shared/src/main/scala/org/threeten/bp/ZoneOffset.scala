@@ -341,7 +341,7 @@ object ZoneOffset {
 
   @throws[IOException]
   private[bp] def readExternal(in: DataInput): ZoneOffset = {
-    val offsetByte: Int = in.readByte
+    val offsetByte: Int = in.readByte.toInt
     if (offsetByte == 127) ZoneOffset.ofTotalSeconds(in.readInt)
     else ZoneOffset.ofTotalSeconds(offsetByte * 900)
   }
@@ -527,7 +527,7 @@ final class ZoneOffset private (private val totalSeconds: Int)
     */
   def getLong(field: TemporalField): Long =
     if (field eq OFFSET_SECONDS)
-      totalSeconds
+      totalSeconds.toLong
     else if (field.isInstanceOf[ChronoField])
       throw new DateTimeException(s"Unsupported field: $field")
     else
@@ -581,7 +581,8 @@ final class ZoneOffset private (private val totalSeconds: Int)
     * @throws DateTimeException if unable to make the adjustment
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def adjustInto(temporal: Temporal): Temporal = temporal.`with`(OFFSET_SECONDS, totalSeconds)
+  def adjustInto(temporal: Temporal): Temporal =
+    temporal.`with`(OFFSET_SECONDS, totalSeconds.toLong)
 
   /** Compares this offset to another offset in descending order.
     *
@@ -637,7 +638,7 @@ final class ZoneOffset private (private val totalSeconds: Int)
 
   @throws[IOException]
   private[bp] def write(out: DataOutput): Unit = {
-    out.writeByte(Ser.ZONE_OFFSET_TYPE)
+    out.writeByte(Ser.ZONE_OFFSET_TYPE.toInt)
     writeExternal(out)
   }
 

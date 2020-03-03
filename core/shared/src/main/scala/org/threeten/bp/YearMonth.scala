@@ -53,7 +53,6 @@ import org.threeten.bp.chrono.Chronology
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatterBuilder
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.format.SignStyle
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoUnit
@@ -157,8 +156,8 @@ object YearMonth {
     * @throws DateTimeException if either field value is invalid
     */
   def of(year: Int, month: Int): YearMonth = {
-    YEAR.checkValidValue(year)
-    MONTH_OF_YEAR.checkValidValue(month)
+    YEAR.checkValidValue(year.toLong)
+    MONTH_OF_YEAR.checkValidValue(month.toLong)
     new YearMonth(year, month)
   }
 
@@ -188,7 +187,7 @@ object YearMonth {
         _temporal = LocalDate.from(_temporal)
       of(_temporal.get(YEAR), _temporal.get(MONTH_OF_YEAR))
     } catch {
-      case ex: DateTimeException =>
+      case _: DateTimeException =>
         throw new DateTimeException(
           s"Unable to obtain YearMonth from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}"
         )
@@ -227,7 +226,7 @@ object YearMonth {
   private[bp] def readExternal(in: DataInput): YearMonth = {
     val year: Int   = in.readInt
     val month: Byte = in.readByte
-    YearMonth.of(year, month)
+    YearMonth.of(year, month.toInt)
   }
 }
 
@@ -318,8 +317,8 @@ final class YearMonth private (private val year: Int, private val month: Int)
     */
   override def range(field: TemporalField): ValueRange =
     if (field eq YEAR_OF_ERA)
-      if (getYear <= 0) ValueRange.of(1, Year.MAX_VALUE + 1)
-      else ValueRange.of(1, Year.MAX_VALUE)
+      if (getYear <= 0) ValueRange.of(1, Year.MAX_VALUE.toLong + 1L)
+      else ValueRange.of(1, Year.MAX_VALUE.toLong)
     else if (field.isInstanceOf[ChronoField])
       if (isSupported(field)) field.range
       else throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
@@ -375,12 +374,12 @@ final class YearMonth private (private val year: Int, private val month: Int)
     */
   def getLong(field: TemporalField): Long =
     field match {
-      case MONTH_OF_YEAR   => month
+      case MONTH_OF_YEAR   => month.toLong
       case PROLEPTIC_MONTH => getProlepticMonth
-      case YEAR_OF_ERA     => if (year < 1) 1 - year else year
-      case YEAR            => year
+      case YEAR_OF_ERA     => if (year < 1) 1L - year.toLong else year.toLong
+      case YEAR            => year.toLong
       case ERA             => if (year < 1) 0 else 1
-      case chrono: ChronoField =>
+      case _: ChronoField =>
         throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
       case _ => field.getFrom(this)
     }
@@ -436,7 +435,7 @@ final class YearMonth private (private val year: Int, private val month: Int)
     *
     * @return true if the year is leap, false otherwise
     */
-  def isLeapYear: Boolean = IsoChronology.INSTANCE.isLeapYear(year)
+  def isLeapYear: Boolean = IsoChronology.INSTANCE.isLeapYear(year.toLong)
 
   /** Checks if the day-of-month is valid for this year-month.
     *
@@ -566,7 +565,7 @@ final class YearMonth private (private val year: Int, private val month: Int)
     * @throws DateTimeException if the year value is invalid
     */
   def withYear(year: Int): YearMonth = {
-    YEAR.checkValidValue(year)
+    YEAR.checkValidValue(year.toLong)
     `with`(year, month)
   }
 
@@ -579,7 +578,7 @@ final class YearMonth private (private val year: Int, private val month: Int)
     * @throws DateTimeException if the month-of-year value is invalid
     */
   def withMonth(month: Int): YearMonth = {
-    MONTH_OF_YEAR.checkValidValue(month)
+    MONTH_OF_YEAR.checkValidValue(month.toLong)
     `with`(year, month)
   }
 

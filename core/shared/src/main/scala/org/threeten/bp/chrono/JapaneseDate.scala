@@ -208,8 +208,8 @@ object JapaneseDate {
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
     val year: Int       = in.readInt
-    val month: Int      = in.readByte
-    val dayOfMonth: Int = in.readByte
+    val month: Int      = in.readByte.toInt
+    val dayOfMonth: Int = in.readByte.toInt
     JapaneseChronology.INSTANCE.date(year, month, dayOfMonth)
   }
 }
@@ -347,7 +347,8 @@ final class JapaneseDate private[chrono] (
     val jcal: Calendar = Calendar.getInstance(JapaneseChronology.LOCALE)
     jcal.set(Calendar.ERA, era.getValue + JapaneseEra.ERA_OFFSET)
     jcal.set(yearOfEra, isoDate.getMonthValue - 1, isoDate.getDayOfMonth)
-    ValueRange.of(jcal.getActualMinimum(calendarField), jcal.getActualMaximum(calendarField))
+    ValueRange.of(jcal.getActualMinimum(calendarField).toLong,
+                  jcal.getActualMaximum(calendarField).toLong)
   }
 
   def getLong(field: TemporalField): Long =
@@ -357,8 +358,8 @@ final class JapaneseDate private[chrono] (
           case ALIGNED_DAY_OF_WEEK_IN_MONTH | ALIGNED_DAY_OF_WEEK_IN_YEAR | ALIGNED_WEEK_OF_MONTH |
               ALIGNED_WEEK_OF_YEAR =>
             throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-          case YEAR_OF_ERA => yearOfEra
-          case ERA         => era.getValue
+          case YEAR_OF_ERA => yearOfEra.toLong
+          case ERA         => era.getValue.toLong
           case DAY_OF_YEAR => getDayOfYear
           case _           => isoDate.getLong(field)
         }
@@ -368,9 +369,9 @@ final class JapaneseDate private[chrono] (
 
   private def getDayOfYear: Long =
     if (yearOfEra == 1)
-      isoDate.getDayOfYear - era.startDate.getDayOfYear + 1
+      isoDate.getDayOfYear.toLong - era.startDate.getDayOfYear.toLong + 1L
     else
-      isoDate.getDayOfYear
+      isoDate.getDayOfYear.toLong
 
   override def `with`(adjuster: TemporalAdjuster): JapaneseDate =
     super.`with`(adjuster).asInstanceOf[JapaneseDate]

@@ -156,7 +156,7 @@ object JapaneseEra {
   private def ordinal(eraValue: Int): Int = eraValue + 1
 
   @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): JapaneseEra = JapaneseEra.of(in.readByte)
+  private[chrono] def readExternal(in: DataInput): JapaneseEra = JapaneseEra.of(in.readByte.toInt)
 
 }
 

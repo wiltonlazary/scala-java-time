@@ -58,7 +58,7 @@ private object Ser {
 
   @throws[IOException]
   private[bp] def writeInternal(`type`: Byte, `object`: AnyRef, out: DataOutput): Unit = {
-    out.writeByte(`type`)
+    out.writeByte(`type`.toInt)
     `type` match {
       case DURATION_TYPE         => `object`.asInstanceOf[Duration].writeExternal(out)
       case INSTANT_TYPE          => `object`.asInstanceOf[Instant].writeExternal(out)

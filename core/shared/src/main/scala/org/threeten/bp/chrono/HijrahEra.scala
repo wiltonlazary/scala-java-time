@@ -73,7 +73,7 @@ object HijrahEra {
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): HijrahEra = {
     val eraValue: Byte = in.readByte
-    HijrahEra.of(eraValue)
+    HijrahEra.of(eraValue.toInt)
   }
 }
 

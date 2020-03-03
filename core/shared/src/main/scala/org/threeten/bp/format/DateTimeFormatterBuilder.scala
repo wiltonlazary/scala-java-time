@@ -33,8 +33,7 @@ package org.threeten.bp.format
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.{ Collections, Comparator, Locale, Objects }
-import java.lang.StringBuilder
+import java.util.{ Comparator, Locale, Objects }
 import java.lang.Long
 
 import org.threeten.bp.ZoneId
@@ -1617,6 +1616,7 @@ final class DateTimeFormatterBuilder private (
         else
           appendValue(field, count)
     }
+    ()
   }
 
   /** Causes the next added printer/parser to pad to a fixed width using a space.

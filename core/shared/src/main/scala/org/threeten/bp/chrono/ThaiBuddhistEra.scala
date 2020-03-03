@@ -68,7 +68,7 @@ object ThaiBuddhistEra {
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): ThaiBuddhistEra = {
     val eraValue: Byte = in.readByte
-    ThaiBuddhistEra.of(eraValue)
+    ThaiBuddhistEra.of(eraValue.toInt)
   }
 }
 

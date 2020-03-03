@@ -50,9 +50,6 @@ import org.threeten.bp.temporal.ChronoField.SECOND_OF_MINUTE
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.NANOS
 import org.threeten.bp.temporal.ChronoUnit.SECONDS
-import java.lang.reflect.Constructor
-import java.lang.reflect.InvocationTargetException
-
 import org.scalatest.{ BeforeAndAfter, FunSuite }
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException

@@ -35,7 +35,6 @@ import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.TemporalAdjusters.nextOrSame
 import org.threeten.bp.temporal.TemporalAdjusters.previousOrSame
 import java.util.{ Collections, Comparator, Objects }
-import org.threeten.bp.DateTimeException
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -75,7 +74,7 @@ class ZoneRulesBuilder() {
 
   /** The list of windows.
     */
-  private var windowList: java.util.List[ZoneRulesBuilder#TZWindow] =
+  private val windowList: java.util.List[ZoneRulesBuilder#TZWindow] =
     new java.util.ArrayList[ZoneRulesBuilder#TZWindow]
 
   /** A map for deduplicating the output.
@@ -263,8 +262,8 @@ class ZoneRulesBuilder() {
     Objects.requireNonNull(month, "month")
     Objects.requireNonNull(time, "time")
     Objects.requireNonNull(timeDefinition, "timeDefinition")
-    YEAR.checkValidValue(startYear)
-    YEAR.checkValidValue(endYear)
+    YEAR.checkValidValue(startYear.toLong)
+    YEAR.checkValidValue(endYear.toLong)
     if (dayOfMonthIndicator < -28 || dayOfMonthIndicator > 31 || dayOfMonthIndicator == 0)
       throw new IllegalArgumentException(
         "Day of month indicator must be between -28 and 31 inclusive excluding zero"
@@ -635,7 +634,7 @@ class ZoneRulesBuilder() {
     * @param timeDefinition  the time definition, not null
     * @param savingAmountSecs  the savings amount in seconds
     */
-  private[zone] class TZRule private[zone] (
+  protected[zone] class TZRule private[zone] (
     private[zone] var year:                Int,
     private[zone] var month:               Month,
     private[zone] var dayOfMonthIndicator: Int,
@@ -710,7 +709,7 @@ class ZoneRulesBuilder() {
     private[zone] def toLocalDate: LocalDate = {
       var date: LocalDate = null
       if (dayOfMonthIndicator < 0) {
-        val monthLen: Int = month.length(IsoChronology.INSTANCE.isLeapYear(year))
+        val monthLen: Int = month.length(IsoChronology.INSTANCE.isLeapYear(year.toLong))
         date = LocalDate.of(year, month, monthLen + 1 + dayOfMonthIndicator)
         if (dayOfWeek != null) {
           date = date.`with`(previousOrSame(dayOfWeek))

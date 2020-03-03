@@ -31,9 +31,9 @@
  */
 package org.threeten.bp
 
-import java.util.{ Arrays, Locale }
+import java.util.Locale
 
-import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.scalatest.FunSuite
 import org.threeten.bp.DayOfWeek.{ MONDAY, SUNDAY, WEDNESDAY }
 import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.ChronoField.DAY_OF_WEEK

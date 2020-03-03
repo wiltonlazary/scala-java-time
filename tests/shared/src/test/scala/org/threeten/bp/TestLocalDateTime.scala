@@ -66,13 +66,6 @@ import org.threeten.bp.temporal.ChronoUnit.MILLIS
 import org.threeten.bp.temporal.ChronoUnit.MINUTES
 import org.threeten.bp.temporal.ChronoUnit.NANOS
 import org.threeten.bp.temporal.ChronoUnit.SECONDS
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
-
 import org.scalatest.{ BeforeAndAfter, FunSuite }
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter

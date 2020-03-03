@@ -2,7 +2,6 @@ package org.threeten.bp
 
 import org.scalatest.FunSuite
 import org.threeten.bp.Platform.zoneMap
-import scala.collection.mutable
 import scala.collection.immutable.TreeMap
 import java.util.AbstractMap.SimpleEntry
 

@@ -46,7 +46,6 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
     c = JapaneseChronology.INSTANCE
     c = MinguoChronology.INSTANCE
     c = ThaiBuddhistChronology.INSTANCE
-    c.toString
   }
 
   val data_of_calendars: List[(String, String, String)] = {
@@ -61,7 +60,7 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
 
   test("test_getters") {
     data_of_calendars.foreach {
-      case (chronoId, calendarSystemType, description) =>
+      case (chronoId, calendarSystemType, _) =>
         val chrono: Chronology = Chronology.of(chronoId)
         assertNotNull(chrono)
         assertEquals(chrono.getId, chronoId)
@@ -73,7 +72,7 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
 
   test("test_required_calendars") {
     data_of_calendars.foreach {
-      case (chronoId, calendarSystemType, description) =>
+      case (chronoId, calendarSystemType, _) =>
         var chrono: Chronology = Chronology.of(chronoId)
         assertNotNull(chrono)
         chrono = Chronology.of(calendarSystemType)
@@ -91,7 +90,7 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
     import scala.collection.JavaConverters._
     for (chrono <- chronos.asScala) {
       val lookup: Chronology = Chronology.of(chrono.getId)
-      assertNotNull(lookup, "Required calendar not found: " + chrono)
+      assertNotNull(lookup, s"Required calendar not found: $chrono")
     }
     assertTrue(chronos.size >= data_of_calendars.length)
   }
@@ -99,7 +98,7 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
   /** Compute the number of days from the Epoch and compute the date from the number of days. */
   test("test_epoch") {
     data_of_calendars.foreach {
-      case (name, alias, description) =>
+      case (name, _, _) =>
         val chrono: Chronology     = Chronology.of(name)
         val date1: ChronoLocalDate = chrono.dateNow
         val epoch1: Long           = date1.getLong(ChronoField.EPOCH_DAY)

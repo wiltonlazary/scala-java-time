@@ -40,7 +40,6 @@ import java.io.DataOutput
 import java.io.IOException
 import java.io.Serializable
 import org.threeten.bp.Clock
-import org.threeten.bp.DateTimeException
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
 import org.threeten.bp.Period
@@ -132,8 +131,8 @@ object ThaiBuddhistDate {
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
     val year: Int       = in.readInt
-    val month: Int      = in.readByte
-    val dayOfMonth: Int = in.readByte
+    val month: Int      = in.readByte.toInt
+    val dayOfMonth: Int = in.readByte.toInt
     ThaiBuddhistChronology.INSTANCE.date(year, month, dayOfMonth)
   }
 }
@@ -189,11 +188,11 @@ final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
       case PROLEPTIC_MONTH => getProlepticMonth
       case YEAR_OF_ERA =>
         val prolepticYear: Int = getProlepticYear
-        if (prolepticYear >= 1) prolepticYear else 1 - prolepticYear
-      case YEAR                => getProlepticYear
-      case ERA                 => if (getProlepticYear >= 1) 1 else 0
-      case chrono: ChronoField => isoDate.getLong(field)
-      case _                   => field.getFrom(this)
+        if (prolepticYear >= 1) prolepticYear.toLong else 1 - prolepticYear.toLong
+      case YEAR           => getProlepticYear.toLong
+      case ERA            => if (getProlepticYear >= 1) 1 else 0
+      case _: ChronoField => isoDate.getLong(field)
+      case _              => field.getFrom(this)
     }
 
   private def getProlepticMonth: Long = getProlepticYear * 12L + isoDate.getMonthValue - 1

@@ -63,7 +63,7 @@ class TestIsoFields extends FunSuite with AssertionsHelper {
 
   test("WOWBY") {
     data_week.foreach {
-      case (date: LocalDate) :: (dow: DayOfWeek) :: (week: Int) :: (wby: Int) :: Nil =>
+      case (date: LocalDate) :: (dow: DayOfWeek) :: (week: Int) :: (_: Int) :: Nil =>
         assertEquals(date.getDayOfWeek, dow)
         assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.getFrom(date), week)
         assertEquals(date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR), week)
@@ -74,7 +74,7 @@ class TestIsoFields extends FunSuite with AssertionsHelper {
 
   test("WBY") {
     data_week.foreach {
-      case (date: LocalDate) :: (dow: DayOfWeek) :: (week: Int) :: (wby: Int) :: Nil =>
+      case (date: LocalDate) :: (dow: DayOfWeek) :: (_: Int) :: (wby: Int) :: Nil =>
         assertEquals(date.getDayOfWeek, dow)
         assertEquals(IsoFields.WEEK_BASED_YEAR.getFrom(date), wby)
         assertEquals(date.get(IsoFields.WEEK_BASED_YEAR), wby)

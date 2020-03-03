@@ -910,7 +910,7 @@ object DateTimeFormatter {
       var unresolved: TTBPDateTimeParseContext#Parsed = null
       try unresolved = formatter.parseUnresolved0(text, pos)
       catch {
-        case ex: IndexOutOfBoundsException =>
+        case _: IndexOutOfBoundsException =>
           if (pos.getErrorIndex < 0)
             pos.setErrorIndex(0)
           return null
@@ -927,7 +927,7 @@ object DateTimeFormatter {
           return builder
         builder.build(query)
       } catch {
-        case ex: RuntimeException =>
+        case _: RuntimeException =>
           pos.setErrorIndex(0)
           null
       }
@@ -1339,12 +1339,14 @@ final class DateTimeFormatter private[format] (
     Objects.requireNonNull(appendable, "appendable")
     try {
       val context: TTBPDateTimePrintContext = new TTBPDateTimePrintContext(temporal, this)
-      if (appendable.isInstanceOf[StringBuilder])
+      if (appendable.isInstanceOf[StringBuilder]) {
         printerParser.print(context, appendable.asInstanceOf[StringBuilder])
-      else {
+        ()
+      } else {
         val buf = new StringBuilder(32)
         printerParser.print(context, buf)
         appendable.append(buf)
+        ()
       }
     } catch {
       case ex: IOException =>
@@ -1486,7 +1488,7 @@ final class DateTimeFormatter private[format] (
       for (tpe <- types) {
         try return builder.build(tpe).asInstanceOf[TemporalAccessor]
         catch {
-          case ex: RuntimeException =>
+          case _: RuntimeException =>
         }
       }
       throw new DateTimeException(

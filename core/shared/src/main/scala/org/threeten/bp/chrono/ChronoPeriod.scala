@@ -33,11 +33,9 @@ package org.threeten.bp.chrono
 
 import java.util.Objects
 
-import org.threeten.bp.DateTimeException
 import org.threeten.bp.temporal.Temporal
 import org.threeten.bp.temporal.TemporalAmount
 import org.threeten.bp.temporal.TemporalUnit
-import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 
 object ChronoPeriod {
 

@@ -22,7 +22,7 @@ class TestTimeZone extends FunSuite {
     val zonesWithOffsets = sampleTimeZones.zip(sampleOffsets)
 
     for ((tzId, offset) <- zonesWithOffsets) {
-      val zoneId = ZoneId.of(tzId)
+      ZoneId.of(tzId)
       val tz = TimeZone.getTimeZone(tzId)
 
       assert(tz.getID === tzId)

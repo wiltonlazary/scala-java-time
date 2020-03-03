@@ -34,7 +34,7 @@ package org.threeten.bp.format
 import java.util.Locale
 import java.lang.Long
 
-import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.scalatest.FunSuite
 import org.threeten.bp.{ AssertionsHelper, LocalDateTime, Month }
 import org.threeten.bp.temporal.ChronoField.{ DAY_OF_MONTH, DAY_OF_WEEK, MONTH_OF_YEAR }
 import org.threeten.bp.temporal.TemporalField

@@ -70,7 +70,7 @@ object MinguoEra {
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): MinguoEra = {
     val eraValue: Byte = in.readByte
-    MinguoEra.of(eraValue)
+    MinguoEra.of(eraValue.toInt)
   }
 }
 

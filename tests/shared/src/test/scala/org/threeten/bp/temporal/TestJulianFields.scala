@@ -69,7 +69,7 @@ class TestJulianFields extends FunSuite with AssertionsHelper {
     data_samples.foreach {
       case (field: TemporalField) :: (date: LocalDate) :: (expected: Number) :: Nil =>
         assertEquals(date.getLong(field), expected)
-      case x =>
+      case _ =>
         fail()
     }
   }

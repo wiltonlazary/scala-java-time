@@ -159,7 +159,7 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
         val era: Era = JapaneseChronology.INSTANCE.eraOf(badEra)
         fail(s"JapaneseChronology.eraOf returned $era + for invalid eraValue $badEra")
       } catch {
-        case ex: DateTimeException =>
+        case _: DateTimeException =>
       }
     try {
       val era = JapaneseEra.valueOf("Rubbish")
@@ -188,7 +188,7 @@ class TestJapaneseChronology extends FunSuite with AssertionsHelper {
       fail("JapaneseEra.registerEra should have failed")
 
     } catch {
-      case ex: DateTimeException =>
+      case _: DateTimeException =>
       // ignore expected exception
     }
   }

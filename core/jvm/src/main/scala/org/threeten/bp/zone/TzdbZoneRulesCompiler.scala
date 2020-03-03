@@ -250,7 +250,7 @@ object TzdbZoneRulesCompiler {
             val dstFile: File = new File(dstDir, s"threeten-TZDB-$loopVersion.jar")
             if (verbose)
               System.out.println(s"Outputting file: $dstFile")
-            outputFile(dstFile, loopVersion, builtZones, parsedLeapSeconds)
+            outputFile(dstFile, loopVersion, builtZones)
           }
           allBuiltZones.put(loopVersion, builtZones)
           allRegionIds.addAll(builtZones.keySet)
@@ -272,12 +272,12 @@ object TzdbZoneRulesCompiler {
     if (unpacked) {
       if (verbose)
         System.out.println(s"Outputting combined files: $dstDir")
-      outputFilesDat(dstDir, allBuiltZones, allRegionIds, allRules, bestLeapSeconds)
+      outputFilesDat(dstDir, allBuiltZones, allRegionIds, allRules)
     } else {
       val dstFile: File = new File(dstDir, "threeten-TZDB-all.jar")
       if (verbose)
         System.out.println(s"Outputting combined file: $dstFile")
-      outputFile(dstFile, allBuiltZones, allRegionIds, allRules, bestLeapSeconds)
+      outputFile(dstFile, allBuiltZones, allRegionIds, allRules)
     }
   }
 
@@ -286,8 +286,7 @@ object TzdbZoneRulesCompiler {
     dstDir:        File,
     allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]],
     allRegionIds:  java.util.Set[String],
-    allRules:      java.util.Set[ZoneRules],
-    leapSeconds:   java.util.SortedMap[LocalDate, Byte]
+    allRules:      java.util.Set[ZoneRules]
   ): Unit = {
     val tzdbFile: File = new File(dstDir, "TZDB.dat")
     tzdbFile.delete
@@ -310,17 +309,17 @@ object TzdbZoneRulesCompiler {
 
   /** Outputs the file. */
   private def outputFile(
-    dstFile:     File,
-    version:     String,
-    builtZones:  java.util.SortedMap[String, ZoneRules],
-    leapSeconds: java.util.SortedMap[LocalDate, Byte]
+    dstFile:    File,
+    version:    String,
+    builtZones: java.util.SortedMap[String, ZoneRules]
   ): Unit = {
     val loopAllBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]] =
       new java.util.TreeMap[String, java.util.SortedMap[String, ZoneRules]]
     loopAllBuiltZones.put(version, builtZones)
     val loopAllRegionIds: java.util.Set[String] = new java.util.TreeSet[String](builtZones.keySet)
     val loopAllRules: java.util.Set[ZoneRules]  = new java.util.HashSet[ZoneRules](builtZones.values)
-    outputFile(dstFile, loopAllBuiltZones, loopAllRegionIds, loopAllRules, leapSeconds)
+    outputFile(dstFile, loopAllBuiltZones, loopAllRegionIds, loopAllRules)
+    ()
   }
 
   /** Outputs the file. */
@@ -328,8 +327,7 @@ object TzdbZoneRulesCompiler {
     dstFile:       File,
     allBuiltZones: java.util.Map[String, java.util.SortedMap[String, ZoneRules]],
     allRegionIds:  java.util.Set[String],
-    allRules:      java.util.Set[ZoneRules],
-    leapSeconds:   java.util.SortedMap[LocalDate, Byte]
+    allRules:      java.util.Set[ZoneRules]
   ): Unit = {
     var jos: JarOutputStream = null
     try {
@@ -344,7 +342,7 @@ object TzdbZoneRulesCompiler {
       if (jos != null) {
         try jos.close()
         catch {
-          case ex: IOException =>
+          case _: IOException =>
         }
       }
     }
@@ -563,7 +561,7 @@ final class TzdbZoneRulesCompiler(
         if (in != null)
           in.close()
       } catch {
-        case ex: Exception =>
+        case _: Exception =>
       }
     }
   }
@@ -721,7 +719,7 @@ final class TzdbZoneRulesCompiler(
         zone.fixedSavingsSecs = parsePeriod(savingsRule)
         zone.savingsRule      = null
       } catch {
-        case ex: Exception =>
+        case _: Exception =>
           zone.fixedSavingsSecs = null
           zone.savingsRule      = savingsRule
       }
@@ -776,7 +774,7 @@ final class TzdbZoneRulesCompiler(
           mdt.endOfDay = true
           secsOfDay    = 0
         }
-        val time: LocalTime = deduplicate(LocalTime.ofSecondOfDay(secsOfDay))
+        val time: LocalTime = deduplicate(LocalTime.ofSecondOfDay(secsOfDay.toLong))
         mdt.time           = time
         mdt.timeDefinition = parseTimeDefinition(timeStr.charAt(timeStr.length - 1))
       }
@@ -904,6 +902,7 @@ final class TzdbZoneRulesCompiler(
     builtZones.remove("GMT0")
     builtZones.remove("GMT+0")
     builtZones.remove("GMT-0")
+    ()
   }
 
   /** Deduplicates an object instance.
@@ -985,6 +984,7 @@ final class TzdbZoneRulesCompiler(
                           endOfDay,
                           timeDefinition,
                           savingsAmount)
+      ()
     }
   }
 
@@ -1034,7 +1034,7 @@ final class TzdbZoneRulesCompiler(
       adjustToFowards(year)
       var date: LocalDate = null
       if (dayOfMonth == -1) {
-        dayOfMonth = month.length(Year.isLeap(year))
+        dayOfMonth = month.length(Year.isLeap(year.toLong))
         date       = LocalDate.of(year, month, dayOfMonth)
         if (dayOfWeek != null)
           date = date.`with`(TemporalAdjusters.previousOrSame(dayOfWeek))

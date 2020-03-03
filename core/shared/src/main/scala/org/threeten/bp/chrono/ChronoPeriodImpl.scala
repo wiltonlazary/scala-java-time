@@ -56,9 +56,9 @@ final class ChronoPeriodImpl(
     with Serializable {
 
   def get(unit: TemporalUnit): Long =
-    if (unit eq YEARS) years
-    else if (unit eq MONTHS) months
-    else if (unit eq DAYS) days
+    if (unit eq YEARS) years.toLong
+    else if (unit eq MONTHS) months.toLong
+    else if (unit eq DAYS) days.toLong
     else throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
 
   def getUnits: java.util.List[TemporalUnit] =
@@ -115,11 +115,11 @@ final class ChronoPeriodImpl(
         s"Invalid chronology, required: ${chronology.getId}, but was: ${temporalChrono.getId}"
       )
     if (years != 0)
-      _temporal = _temporal.plus(years, YEARS)
+      _temporal = _temporal.plus(years.toLong, YEARS)
     if (months != 0)
-      _temporal = _temporal.plus(months, MONTHS)
+      _temporal = _temporal.plus(months.toLong, MONTHS)
     if (days != 0)
-      _temporal = _temporal.plus(days, DAYS)
+      _temporal = _temporal.plus(days.toLong, DAYS)
     _temporal
   }
 
@@ -132,11 +132,11 @@ final class ChronoPeriodImpl(
         s"Invalid chronology, required: ${chronology.getId}, but was: ${temporalChrono.getId}"
       )
     if (years != 0)
-      _temporal = _temporal.minus(years, YEARS)
+      _temporal = _temporal.minus(years.toLong, YEARS)
     if (months != 0)
-      _temporal = _temporal.minus(months, MONTHS)
+      _temporal = _temporal.minus(months.toLong, MONTHS)
     if (days != 0)
-      _temporal = _temporal.minus(days, DAYS)
+      _temporal = _temporal.minus(days.toLong, DAYS)
     _temporal
   }
 

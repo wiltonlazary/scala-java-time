@@ -64,7 +64,7 @@ private[zone] object Ser {
 
   @throws[IOException]
   private def writeInternal(`type`: Byte, `object`: AnyRef, out: DataOutput): Unit = {
-    out.writeByte(`type`)
+    out.writeByte(`type`.toInt)
     `type` match {
       case SZR     => `object`.asInstanceOf[StandardZoneRules].writeExternal(out)
       case ZOT     => `object`.asInstanceOf[ZoneOffsetTransition].writeExternal(out)
@@ -113,7 +113,7 @@ private[zone] object Ser {
     */
   @throws[IOException]
   private[zone] def readOffset(in: DataInput): ZoneOffset = {
-    val offsetByte: Int = in.readByte
+    val offsetByte: Int = in.readByte.toInt
     if (offsetByte == 127) ZoneOffset.ofTotalSeconds(in.readInt)
     else ZoneOffset.ofTotalSeconds(offsetByte * 900)
   }
@@ -150,7 +150,7 @@ private[zone] object Ser {
     else {
       val midByte: Int = in.readByte & 255
       val loByte: Int  = in.readByte & 255
-      val tot: Long    = (hiByte << 16) + (midByte << 8) + loByte
+      val tot: Long    = (hiByte.toLong << 16) + (midByte.toLong << 8) + loByte
       (tot * 900) - 4575744000L
     }
   }

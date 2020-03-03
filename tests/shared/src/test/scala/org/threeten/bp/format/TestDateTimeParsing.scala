@@ -187,7 +187,7 @@ class TestDateTimeParsing extends FunSuite with GenTestPrinterParser with Assert
 
   test("test_parse_instantZones_supported") {
     data_instantZones.foreach {
-      case (formatter, text, expected) =>
+      case (formatter, text, _) =>
         val actual: TemporalAccessor = formatter.parse(text)
         assertEquals(actual.isSupported(INSTANT_SECONDS), true)
         assertEquals(actual.isSupported(EPOCH_DAY), true)
@@ -214,7 +214,7 @@ class TestDateTimeParsing extends FunSuite with GenTestPrinterParser with Assert
 
   test("test_parse_instantNoZone_ZDT") {
     data_instantNoZone.foreach {
-      case (formatter, text, expected) =>
+      case (formatter, text, _) =>
         assertThrows[DateTimeException] {
           val actual: TemporalAccessor = formatter.parse(text)
           ZonedDateTime.from(actual)
@@ -226,7 +226,7 @@ class TestDateTimeParsing extends FunSuite with GenTestPrinterParser with Assert
 
   test("test_parse_instantNoZone_LDT") {
     data_instantNoZone.foreach {
-      case (formatter, text, expected) =>
+      case (formatter, text, _) =>
         assertThrows[DateTimeException] {
           val actual: TemporalAccessor = formatter.parse(text)
           LocalDateTime.from(actual)
@@ -248,7 +248,7 @@ class TestDateTimeParsing extends FunSuite with GenTestPrinterParser with Assert
 
   test("test_parse_instantNoZone_supported") {
     data_instantNoZone.foreach {
-      case (formatter, text, expected) =>
+      case (formatter, text, _) =>
         val actual: TemporalAccessor = formatter.parse(text)
         assertEquals(actual.isSupported(INSTANT_SECONDS), true)
         assertEquals(actual.isSupported(EPOCH_DAY), false)

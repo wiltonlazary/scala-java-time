@@ -138,7 +138,8 @@ object ZoneOffsetTransitionRule {
     val beforeByte: Int = (data & (3 << 2)) >>> 2
     val afterByte: Int  = data & 3
     val time: LocalTime =
-      if (timeByte == 31) LocalTime.ofSecondOfDay(in.readInt) else LocalTime.of(timeByte % 24, 0)
+      if (timeByte == 31) LocalTime.ofSecondOfDay(in.readInt.toLong)
+      else LocalTime.of(timeByte % 24, 0)
     val std: ZoneOffset =
       if (stdByte == 255) ZoneOffset.ofTotalSeconds(in.readInt)
       else ZoneOffset.ofTotalSeconds((stdByte - 128) * 900)
@@ -202,10 +203,10 @@ object ZoneOffsetTransitionRule {
       this match {
         case TimeDefinition.UTC =>
           val difference: Int = wallOffset.getTotalSeconds - ZoneOffset.UTC.getTotalSeconds
-          dateTime.plusSeconds(difference)
+          dateTime.plusSeconds(difference.toLong)
         case TimeDefinition.STANDARD =>
           val difference: Int = wallOffset.getTotalSeconds - standardOffset.getTotalSeconds
-          dateTime.plusSeconds(difference)
+          dateTime.plusSeconds(difference.toLong)
         case _ =>
           dateTime
       }
@@ -316,7 +317,7 @@ final class ZoneOffsetTransitionRule private[zone] (
     *
     * @return the day-of-month indicator, from -28 to 31 excluding 0
     */
-  def getDayOfMonthIndicator: Int = dom
+  def getDayOfMonthIndicator: Int = dom.toInt
 
   /** Gets the day-of-week of the transition.
     *
@@ -385,13 +386,14 @@ final class ZoneOffsetTransitionRule private[zone] (
   def createTransition(year: Int): ZoneOffsetTransition = {
     var date: LocalDate = null
     if (dom < 0) {
-      date =
-        LocalDate.of(year, month, month.length(IsoChronology.INSTANCE.isLeapYear(year)) + 1 + dom)
+      date = LocalDate.of(year,
+                          month,
+                          month.length(IsoChronology.INSTANCE.isLeapYear(year.toLong)) + 1 + dom)
       if (dayOfWeek != null) {
         date = date.`with`(previousOrSame(dayOfWeek))
       }
     } else {
-      date = LocalDate.of(year, month, dom)
+      date = LocalDate.of(year, month, dom.toInt)
       if (dayOfWeek != null) {
         date = date.`with`(nextOrSame(dayOfWeek))
       }

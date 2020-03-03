@@ -31,8 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
-
 /** Strategy for querying a temporal object.
   *
   * Queries are a key tool for extracting information from temporal objects.

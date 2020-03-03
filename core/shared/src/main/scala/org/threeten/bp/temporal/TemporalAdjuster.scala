@@ -31,8 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
-
 /** Strategy for adjusting a temporal object.
   *
   * Adjusters are a key tool for modifying temporal objects.

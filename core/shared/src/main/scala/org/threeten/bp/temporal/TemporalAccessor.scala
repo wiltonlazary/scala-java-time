@@ -31,8 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
-
 /** Framework-level interface defining read-only access to a temporal object,
   * such as a date, time, offset or some combination of these.
   *

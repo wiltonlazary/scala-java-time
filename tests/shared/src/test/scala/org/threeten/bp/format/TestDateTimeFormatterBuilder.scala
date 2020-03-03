@@ -693,7 +693,7 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
       "sss"
     )
 
-  def test_appendPattern_invalid(input: String): Unit =
+  def test_appendPattern_invalid(): Unit =
     dataInvalid.foreach { input =>
       assertThrows[IllegalArgumentException] {
         builder.appendPattern(input)

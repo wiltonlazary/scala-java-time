@@ -54,7 +54,7 @@ private object Ser {
 
   @throws[IOException]
   private def writeInternal(`type`: Byte, `object`: AnyRef, out: ObjectOutput): Unit = {
-    out.writeByte(`type`)
+    out.writeByte(`type`.toInt)
     `type` match {
       case JAPANESE_DATE_TYPE     => `object`.asInstanceOf[JapaneseDate].writeExternal(out)
       case JAPANESE_ERA_TYPE      => `object`.asInstanceOf[JapaneseEra].writeExternal(out)

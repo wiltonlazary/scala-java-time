@@ -1365,7 +1365,7 @@ class TestOffsetDateTime
 
   test("test_equals_true") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offset: ZoneOffset) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
         val a: OffsetDateTime = OffsetDateTime.of(LocalDate.of(y, o, d),
                                                   LocalTime.of(h, m, s, n),
                                                   TestOffsetDateTime.OFFSET_PONE)
@@ -1381,7 +1381,7 @@ class TestOffsetDateTime
 
   test("test_equals_false_year_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offset: ZoneOffset) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
         val a: OffsetDateTime = OffsetDateTime.of(LocalDate.of(y, o, d),
                                                   LocalTime.of(h, m, s, n),
                                                   TestOffsetDateTime.OFFSET_PONE)
@@ -1396,7 +1396,7 @@ class TestOffsetDateTime
 
   test("test_equals_false_hour_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offset: ZoneOffset) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
         var _h = h
         _h = if (_h == 23) 22 else _h
         val a: OffsetDateTime = OffsetDateTime.of(LocalDate.of(y, o, d),
@@ -1413,7 +1413,7 @@ class TestOffsetDateTime
 
   test("test_equals_false_minute_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offset: ZoneOffset) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
         var _m = m
         _m = if (_m == 59) 58 else _m
         val a: OffsetDateTime = OffsetDateTime.of(LocalDate.of(y, o, d),
@@ -1430,7 +1430,7 @@ class TestOffsetDateTime
 
   test("test_equals_false_second_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offset: ZoneOffset) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
         var _s = s
         _s = if (_s == 59) 58 else _s
         val a: OffsetDateTime = OffsetDateTime.of(LocalDate.of(y, o, d),
@@ -1447,7 +1447,7 @@ class TestOffsetDateTime
 
   test("test_equals_false_nano_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offset: ZoneOffset) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
         var _n = n
         _n = if (_n == 999999999) 999999998 else _n
         val a: OffsetDateTime = OffsetDateTime.of(LocalDate.of(y, o, d),
@@ -1464,7 +1464,7 @@ class TestOffsetDateTime
 
   test("test_equals_false_offset_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offset: ZoneOffset) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
         val a: OffsetDateTime = OffsetDateTime.of(LocalDate.of(y, o, d),
                                                   LocalTime.of(h, m, s, n),
                                                   TestOffsetDateTime.OFFSET_PONE)

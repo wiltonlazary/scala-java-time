@@ -43,7 +43,6 @@ import org.threeten.bp.chrono.Chronology
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatterBuilder
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.format.SignStyle
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoField.ERA
@@ -132,7 +131,7 @@ object Year {
     * @throws DateTimeException if the field is invalid
     */
   def of(isoYear: Int): Year = {
-    YEAR.checkValidValue(isoYear)
+    YEAR.checkValidValue(isoYear.toLong)
     new Year(isoYear)
   }
 
@@ -164,7 +163,7 @@ object Year {
           }
           of(_temporal.get(YEAR))
         } catch {
-          case ex: DateTimeException =>
+          case _: DateTimeException =>
             throw new DateTimeException(
               s"Unable to obtain Year from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}"
             )
@@ -328,8 +327,8 @@ final class Year private (private val year: Int)
     */
   override def range(field: TemporalField): ValueRange =
     if (field eq YEAR_OF_ERA)
-      if (year <= 0) ValueRange.of(1, Year.MAX_VALUE + 1)
-      else ValueRange.of(1, Year.MAX_VALUE)
+      if (year <= 0) ValueRange.of(1, Year.MAX_VALUE.toLong + 1L)
+      else ValueRange.of(1, Year.MAX_VALUE.toLong)
     else
       super.range(field)
 
@@ -383,8 +382,8 @@ final class Year private (private val year: Int)
     field match {
       case f: ChronoField =>
         f match {
-          case YEAR_OF_ERA => if (year < 1) 1 - year else year
-          case YEAR        => year
+          case YEAR_OF_ERA => if (year < 1) 1L - year.toLong else year.toLong
+          case YEAR        => year.toLong
           case ERA         => if (year < 1) 0 else 1
           case _           => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
@@ -408,7 +407,7 @@ final class Year private (private val year: Int)
     *
     * @return true if the year is leap, false otherwise
     */
-  def isLeap: Boolean = Year.isLeap(year)
+  def isLeap: Boolean = Year.isLeap(year.toLong)
 
   /** Checks if the month-day is valid for this year.
     *
@@ -644,7 +643,7 @@ final class Year private (private val year: Int)
     if (!(Chronology.from(temporal) == IsoChronology.INSTANCE))
       throw new DateTimeException("Adjustment only supported on ISO date-time")
     else
-      temporal.`with`(YEAR, year)
+      temporal.`with`(YEAR, year.toLong)
 
   /** Calculates the period between this year and another year in
     * terms of the specified unit.

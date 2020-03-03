@@ -155,7 +155,7 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate]
   override def range(field: TemporalField): ValueRange =
     field match {
       case INSTANT_SECONDS | OFFSET_SECONDS => field.range
-      case chrono: ChronoField              => toLocalDateTime.range(field)
+      case _: ChronoField                   => toLocalDateTime.range(field)
       case _                                => field.rangeRefinedBy(this)
     }
 
@@ -163,17 +163,17 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate]
     field match {
       case INSTANT_SECONDS =>
         throw new UnsupportedTemporalTypeException(s"Field too large for an int: $field")
-      case OFFSET_SECONDS      => getOffset.getTotalSeconds
-      case chrono: ChronoField => toLocalDateTime.get(field)
-      case _                   => super.get(field)
+      case OFFSET_SECONDS => getOffset.getTotalSeconds
+      case _: ChronoField => toLocalDateTime.get(field)
+      case _              => super.get(field)
     }
 
   def getLong(field: TemporalField): Long =
     field match {
-      case INSTANT_SECONDS     => toEpochSecond
-      case OFFSET_SECONDS      => getOffset.getTotalSeconds
-      case chrono: ChronoField => toLocalDateTime.getLong(field)
-      case _                   => field.getFrom(this)
+      case INSTANT_SECONDS => toEpochSecond
+      case OFFSET_SECONDS  => getOffset.getTotalSeconds.toLong
+      case _: ChronoField  => toLocalDateTime.getLong(field)
+      case _               => field.getFrom(this)
     }
 
   /** Gets the local date part of this date-time.
@@ -347,7 +347,7 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate]
     *
     * @return an { @code Instant} representing the same instant, not null
     */
-  def toInstant: Instant = Instant.ofEpochSecond(toEpochSecond, toLocalTime.getNano)
+  def toInstant: Instant = Instant.ofEpochSecond(toEpochSecond, toLocalTime.getNano.toLong)
 
   /** Converts this date-time to the number of seconds from the epoch
     * of 1970-01-01T00:00:00Z.

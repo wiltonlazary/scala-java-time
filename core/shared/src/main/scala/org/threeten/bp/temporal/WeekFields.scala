@@ -94,7 +94,7 @@ object WeekFields {
     val newLocale               = new Locale(locale.getLanguage, locale.getCountry)
     val gcal: GregorianCalendar = new GregorianCalendar(newLocale)
     val calDow: Int             = gcal.getFirstDayOfWeek
-    val dow: DayOfWeek          = DayOfWeek.SUNDAY.plus(calDow - 1)
+    val dow: DayOfWeek          = DayOfWeek.SUNDAY.plus(calDow.toLong - 1)
     val minDays: Int            = gcal.getMinimalDaysInFirstWeek
     WeekFields.of(dow, minDays)
   }
@@ -217,19 +217,19 @@ object WeekFields {
       val isoDow: Int = temporal.get(ChronoField.DAY_OF_WEEK)
       val dow: Int    = Math.floorMod(isoDow - sow, 7) + 1
       if (rangeUnit eq ChronoUnit.WEEKS)
-        dow
+        dow.toLong
       else if (rangeUnit eq ChronoUnit.MONTHS) {
         val dom: Int    = temporal.get(ChronoField.DAY_OF_MONTH)
         val offset: Int = startOfWeekOffset(dom, dow)
-        computeWeek(offset, dom)
+        computeWeek(offset, dom).toLong
       } else if (rangeUnit eq ChronoUnit.YEARS) {
         val doy: Int    = temporal.get(ChronoField.DAY_OF_YEAR)
         val offset: Int = startOfWeekOffset(doy, dow)
-        computeWeek(offset, doy)
+        computeWeek(offset, doy).toLong
       } else if (rangeUnit eq IsoFields.WEEK_BASED_YEARS)
-        localizedWOWBY(temporal)
+        localizedWOWBY(temporal).toLong
       else if (rangeUnit eq ChronoUnit.FOREVER)
-        localizedWBY(temporal)
+        localizedWBY(temporal).toLong
       else
         throw new IllegalStateException("unreachable")
     }
@@ -242,13 +242,13 @@ object WeekFields {
     private def localizedWeekOfMonth(temporal: TemporalAccessor, dow: Int): Long = {
       val dom: Int    = temporal.get(DAY_OF_MONTH)
       val offset: Int = startOfWeekOffset(dom, dow)
-      computeWeek(offset, dom)
+      computeWeek(offset, dom).toLong
     }
 
     private def localizedWeekOfYear(temporal: TemporalAccessor, dow: Int): Long = {
       val doy: Int    = temporal.get(DAY_OF_YEAR)
       val offset: Int = startOfWeekOffset(doy, dow)
-      computeWeek(offset, doy)
+      computeWeek(offset, doy).toLong
     }
 
     private def localizedWOWBY(temporal: TemporalAccessor): Int = {
@@ -263,7 +263,7 @@ object WeekFields {
       } else if (woy >= 53) {
         val offset: Int  = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
         val year: Int    = temporal.get(YEAR)
-        val yearLen: Int = if (Year.isLeap(year)) 366 else 365
+        val yearLen: Int = if (Year.isLeap(year.toLong)) 366 else 365
         val weekIndexOfFirstWeekNextYear: Int =
           computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
         if (woy >= weekIndexOfFirstWeekNextYear) {
@@ -284,7 +284,7 @@ object WeekFields {
       else if (woy < 53)
         return year
       val offset: Int  = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
-      val yearLen: Int = if (Year.isLeap(year)) 366 else 365
+      val yearLen: Int = if (Year.isLeap(year.toLong)) 366 else 365
       val weekIndexOfFirstWeekNextYear: Int =
         computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
       if (woy >= weekIndexOfFirstWeekNextYear)
@@ -326,19 +326,19 @@ object WeekFields {
         var result: Temporal = temporal.plus(diffWeeks, ChronoUnit.WEEKS)
         if (result.get(this) > newVal) {
           val newWowby: Int = result.get(weekDef.weekOfWeekBasedYear)
-          result = result.minus(newWowby, ChronoUnit.WEEKS)
+          result = result.minus(newWowby.toLong, ChronoUnit.WEEKS)
         } else {
           if (result.get(this) < newVal)
             result = result.plus(2, ChronoUnit.WEEKS)
           val newWowby: Int = result.get(weekDef.weekOfWeekBasedYear)
-          result = result.plus(baseWowby - newWowby, ChronoUnit.WEEKS)
+          result = result.plus(baseWowby.toLong - newWowby.toLong, ChronoUnit.WEEKS)
           if (result.get(this) > newVal)
             result = result.minus(1, ChronoUnit.WEEKS)
         }
         return result.asInstanceOf[R]
       }
       val delta: Int = newVal - currentVal
-      temporal.plus(delta, baseUnit).asInstanceOf[R]
+      temporal.plus(delta.toLong, baseUnit).asInstanceOf[R]
     }
 
     def resolve(
@@ -373,10 +373,12 @@ object WeekFields {
           days = weeks * 7 + (dow - dateDow)
         } else {
           date = chrono.date(wby, 1, weekDef.getMinimalDaysInFirstWeek)
-          val wowby: Long = weekDef.weekOfWeekBasedYear.range.checkValidIntValue(
-            fieldValues.get(weekDef.weekOfWeekBasedYear),
-            weekDef.weekOfWeekBasedYear
-          )
+          val wowby: Long = weekDef.weekOfWeekBasedYear.range
+            .checkValidIntValue(
+              fieldValues.get(weekDef.weekOfWeekBasedYear),
+              weekDef.weekOfWeekBasedYear
+            )
+            .toLong
           val dateDow: Int = localizedDayOfWeek(date, sow)
           val weeks: Long  = wowby - localizedWeekOfYear(date, dateDow)
           days = weeks * 7 + (dow - dateDow)
@@ -498,8 +500,8 @@ object WeekFields {
       val dow: Int               = Math.floorMod(isoDow - sow, 7) + 1
       val offset: Int            = startOfWeekOffset(temporal.get(field), dow)
       val fieldRange: ValueRange = temporal.range(field)
-      ValueRange.of(computeWeek(offset, fieldRange.getMinimum.toInt),
-                    computeWeek(offset, fieldRange.getMaximum.toInt))
+      ValueRange.of(computeWeek(offset, fieldRange.getMinimum.toInt).toLong,
+                    computeWeek(offset, fieldRange.getMaximum.toInt).toLong)
     }
 
     private def rangeWOWBY(temporal: TemporalAccessor): ValueRange = {
@@ -511,12 +513,12 @@ object WeekFields {
         return rangeWOWBY(Chronology.from(temporal).date(temporal).minus(2, ChronoUnit.WEEKS))
       val offset: Int  = startOfWeekOffset(temporal.get(DAY_OF_YEAR), dow)
       val year: Int    = temporal.get(YEAR)
-      val yearLen: Int = if (Year.isLeap(year)) 366 else 365
+      val yearLen: Int = if (Year.isLeap(year.toLong)) 366 else 365
       val weekIndexOfFirstWeekNextYear: Int =
         computeWeek(offset, yearLen + weekDef.getMinimalDaysInFirstWeek)
       if (woy >= weekIndexOfFirstWeekNextYear)
         return rangeWOWBY(Chronology.from(temporal).date(temporal).plus(2, ChronoUnit.WEEKS))
-      ValueRange.of(1, weekIndexOfFirstWeekNextYear - 1)
+      ValueRange.of(1, weekIndexOfFirstWeekNextYear.toLong - 1)
     }
 
     def getDisplayName(locale: Locale): String = {

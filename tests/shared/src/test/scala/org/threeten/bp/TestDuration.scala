@@ -31,14 +31,6 @@
  */
 package org.threeten.bp
 
-import java.io.{
-  ByteArrayInputStream,
-  ByteArrayOutputStream,
-  ObjectInputStream,
-  ObjectOutputStream
-}
-import java.util.Locale
-
 import org.scalatest.FunSuite
 import org.threeten.bp.temporal.ChronoUnit._
 import org.threeten.bp.temporal.TemporalUnit
@@ -1799,7 +1791,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
 
   test("dividedByZero") {
     provider_dividedBy.foreach {
-      case (seconds: Int) :: (nanos: Int) :: (divisor: Int) :: (expectedSeconds: Int) :: (expectedNanos: Int) :: Nil =>
+      case (seconds: Int) :: (nanos: Int) :: (_: Int) :: (_: Int) :: (_: Int) :: Nil =>
         assertThrows[ArithmeticException] {
           val t: Duration = Duration.ofSeconds(seconds, nanos)
           t.dividedBy(0)

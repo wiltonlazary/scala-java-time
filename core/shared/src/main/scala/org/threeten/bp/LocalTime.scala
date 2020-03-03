@@ -40,7 +40,6 @@ import java.io.ObjectStreamException
 import java.io.Serializable
 
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoField.HOUR_OF_DAY
 import org.threeten.bp.temporal.ChronoField.MICRO_OF_DAY
@@ -184,11 +183,11 @@ object LocalTime {
     * @throws DateTimeException if the value of any field is out of range
     */
   def of(hour: Int, minute: Int): LocalTime = {
-    HOUR_OF_DAY.checkValidValue(hour)
+    HOUR_OF_DAY.checkValidValue(hour.toLong)
     if (minute == 0)
       HOURS(hour)
     else {
-      MINUTE_OF_HOUR.checkValidValue(minute)
+      MINUTE_OF_HOUR.checkValidValue(minute.toLong)
       new LocalTime(hour, minute, 0, 0)
     }
   }
@@ -206,11 +205,11 @@ object LocalTime {
     * @throws DateTimeException if the value of any field is out of range
     */
   def of(hour: Int, minute: Int, second: Int): LocalTime = {
-    HOUR_OF_DAY.checkValidValue(hour)
+    HOUR_OF_DAY.checkValidValue(hour.toLong)
     if ((minute | second) == 0)
       return HOURS(hour)
-    MINUTE_OF_HOUR.checkValidValue(minute)
-    SECOND_OF_MINUTE.checkValidValue(second)
+    MINUTE_OF_HOUR.checkValidValue(minute.toLong)
+    SECOND_OF_MINUTE.checkValidValue(second.toLong)
     new LocalTime(hour, minute, second, 0)
   }
 
@@ -226,10 +225,10 @@ object LocalTime {
     * @throws DateTimeException if the value of any field is out of range
     */
   def of(hour: Int, minute: Int, second: Int, nanoOfSecond: Int): LocalTime = {
-    HOUR_OF_DAY.checkValidValue(hour)
-    MINUTE_OF_HOUR.checkValidValue(minute)
-    SECOND_OF_MINUTE.checkValidValue(second)
-    NANO_OF_SECOND.checkValidValue(nanoOfSecond)
+    HOUR_OF_DAY.checkValidValue(hour.toLong)
+    MINUTE_OF_HOUR.checkValidValue(minute.toLong)
+    SECOND_OF_MINUTE.checkValidValue(second.toLong)
+    NANO_OF_SECOND.checkValidValue(nanoOfSecond.toLong)
     create(hour, minute, second, nanoOfSecond)
   }
 
@@ -264,7 +263,7 @@ object LocalTime {
   private[bp] def ofSecondOfDay(secondOfDay: Long, nanoOfSecond: Int): LocalTime = {
     var _secondOfDay = secondOfDay
     SECOND_OF_DAY.checkValidValue(_secondOfDay)
-    NANO_OF_SECOND.checkValidValue(nanoOfSecond)
+    NANO_OF_SECOND.checkValidValue(nanoOfSecond.toLong)
     val hours: Int = (_secondOfDay / SECONDS_PER_HOUR).toInt
     _secondOfDay -= hours * SECONDS_PER_HOUR
     val minutes: Int = (_secondOfDay / SECONDS_PER_MINUTE).toInt
@@ -360,18 +359,18 @@ object LocalTime {
 
   @throws[IOException]
   private[bp] def readExternal(in: DataInput): LocalTime = {
-    var hour: Int   = in.readByte
+    var hour: Int   = in.readByte.toInt
     var minute: Int = 0
     var second: Int = 0
     var nano: Int   = 0
     if (hour < 0)
       hour = ~hour
     else {
-      minute = in.readByte
+      minute = in.readByte.toInt
       if (minute < 0)
         minute = ~minute
       else {
-        second = in.readByte
+        second = in.readByte.toInt
         if (second < 0)
           second = ~second
         else
@@ -515,7 +514,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     * @throws ArithmeticException if numeric overflow occurs
     */
   override def get(field: TemporalField): Int =
-    if (field.isInstanceOf[ChronoField]) get0(field)
+    if (field.isInstanceOf[ChronoField]) get0(field).toInt
     else super.get(field)
 
   /** Gets the value of the specified field from this time as a {@code long}.
@@ -550,24 +549,24 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
       field.getFrom(this)
     }
 
-  private def get0(field: TemporalField): Int = {
+  private def get0(field: TemporalField): Long = {
     import ChronoField._
     field.asInstanceOf[ChronoField] match {
-      case NANO_OF_SECOND     => nano
+      case NANO_OF_SECOND     => nano.toLong
       case NANO_OF_DAY        => throw new DateTimeException(s"Field too large for an int: $field")
-      case MICRO_OF_SECOND    => nano / 1000
+      case MICRO_OF_SECOND    => nano.toLong / 1000L
       case MICRO_OF_DAY       => throw new DateTimeException(s"Field too large for an int: $field")
-      case MILLI_OF_SECOND    => nano / 1000000
-      case MILLI_OF_DAY       => (toNanoOfDay / 1000000).toInt
-      case SECOND_OF_MINUTE   => second
-      case SECOND_OF_DAY      => toSecondOfDay
-      case MINUTE_OF_HOUR     => minute
-      case MINUTE_OF_DAY      => hour * 60 + minute
-      case HOUR_OF_AMPM       => hour % 12
-      case CLOCK_HOUR_OF_AMPM => val ham: Int = hour % 12; if (ham % 12 == 0) 12 else ham
-      case HOUR_OF_DAY        => hour
-      case CLOCK_HOUR_OF_DAY  => if (hour == 0) 24 else hour
-      case AMPM_OF_DAY        => hour / 12
+      case MILLI_OF_SECOND    => nano.toLong / 1000000L
+      case MILLI_OF_DAY       => (toNanoOfDay / 1000000L)
+      case SECOND_OF_MINUTE   => second.toLong
+      case SECOND_OF_DAY      => toSecondOfDay.toLong
+      case MINUTE_OF_HOUR     => minute.toLong
+      case MINUTE_OF_DAY      => hour * 60L + minute
+      case HOUR_OF_AMPM       => hour % 12L
+      case CLOCK_HOUR_OF_AMPM => val ham: Long = hour % 12L; if (ham % 12 == 0) 12 else ham
+      case HOUR_OF_DAY        => hour.toLong
+      case CLOCK_HOUR_OF_DAY  => if (hour == 0) 24 else hour.toLong
+      case AMPM_OF_DAY        => hour.toLong / 12L
       case _                  => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
     }
   }
@@ -576,19 +575,19 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     *
     * @return the hour-of-day, from 0 to 23
     */
-  def getHour: Int = hour
+  def getHour: Int = hour.toInt
 
   /** Gets the minute-of-hour field.
     *
     * @return the minute-of-hour, from 0 to 59
     */
-  def getMinute: Int = minute
+  def getMinute: Int = minute.toInt
 
   /** Gets the second-of-minute field.
     *
     * @return the second-of-minute, from 0 to 59
     */
-  def getSecond: Int = second
+  def getSecond: Int = second.toInt
 
   /** Gets the nano-of-second field.
     *
@@ -741,8 +740,8 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     if (this.hour == hour)
       this
     else {
-      HOUR_OF_DAY.checkValidValue(hour)
-      LocalTime.create(hour, minute, second, nano)
+      HOUR_OF_DAY.checkValidValue(hour.toLong)
+      LocalTime.create(hour, minute.toInt, second.toInt, nano)
     }
 
   /** Returns a copy of this {@code LocalTime} with the minute-of-hour value altered.
@@ -757,8 +756,8 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     if (this.minute == minute)
       this
     else {
-      MINUTE_OF_HOUR.checkValidValue(minute)
-      LocalTime.create(hour, minute, second, nano)
+      MINUTE_OF_HOUR.checkValidValue(minute.toLong)
+      LocalTime.create(hour.toInt, minute, second.toInt, nano)
     }
 
   /** Returns a copy of this {@code LocalTime} with the second-of-minute value altered.
@@ -773,8 +772,8 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     if (this.second == second)
       this
     else {
-      SECOND_OF_MINUTE.checkValidValue(second)
-      LocalTime.create(hour, minute, second, nano)
+      SECOND_OF_MINUTE.checkValidValue(second.toLong)
+      LocalTime.create(hour.toInt, minute.toInt, second, nano)
     }
 
   /** Returns a copy of this {@code LocalTime} with the nano-of-second value altered.
@@ -789,8 +788,8 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     if (this.nano == nanoOfSecond)
       this
     else {
-      NANO_OF_SECOND.checkValidValue(nanoOfSecond)
-      LocalTime.create(hour, minute, second, nanoOfSecond)
+      NANO_OF_SECOND.checkValidValue(nanoOfSecond.toLong)
+      LocalTime.create(hour.toInt, minute.toInt, second.toInt, nanoOfSecond)
     }
 
   /** Returns a copy of this {@code LocalTime} with the time truncated.
@@ -888,7 +887,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
       return this
     val newHour: Int =
       ((hoursToAdd % LocalTime.HOURS_PER_DAY).toInt + hour + LocalTime.HOURS_PER_DAY) % LocalTime.HOURS_PER_DAY
-    LocalTime.create(newHour, minute, second, nano)
+    LocalTime.create(newHour, minute.toInt, second.toInt, nano)
   }
 
   /** Returns a copy of this {@code LocalTime} with the specified period in minutes added.
@@ -911,7 +910,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
       return this
     val newHour: Int   = newMofd / LocalTime.MINUTES_PER_HOUR
     val newMinute: Int = newMofd % LocalTime.MINUTES_PER_HOUR
-    LocalTime.create(newHour, newMinute, second, nano)
+    LocalTime.create(newHour, newMinute, second.toInt, nano)
   }
 
   /** Returns a copy of this {@code LocalTime} with the specified period in seconds added.
@@ -1223,11 +1222,11 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     * @throws NullPointerException if { @code other} is null
     */
   def compare(other: LocalTime): Int = {
-    var cmp: Int = Integer.compare(hour, other.hour)
+    var cmp: Int = Integer.compare(hour.toInt, other.hour.toInt)
     if (cmp == 0) {
-      cmp = Integer.compare(minute, other.minute)
+      cmp = Integer.compare(minute.toInt, other.minute.toInt)
       if (cmp == 0) {
-        cmp = Integer.compare(second, other.second)
+        cmp = Integer.compare(second.toInt, other.second.toInt)
         if (cmp == 0)
           cmp = Integer.compare(nano, other.nano)
       }
@@ -1301,9 +1300,9 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     */
   override def toString: String = {
     val buf: StringBuilder = new StringBuilder(18)
-    val hourValue: Int     = hour
-    val minuteValue: Int   = minute
-    val secondValue: Int   = second
+    val hourValue: Int     = hour.toInt
+    val minuteValue: Int   = minute.toInt
+    val secondValue: Int   = second.toInt
     val nanoValue: Int     = nano
     buf
       .append(if (hourValue < 10) "0" else "")
@@ -1357,18 +1356,18 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
         if (minute == 0)
           out.writeByte(~hour)
         else {
-          out.writeByte(hour)
+          out.writeByte(hour.toInt)
           out.writeByte(~minute)
         }
       } else {
-        out.writeByte(hour)
-        out.writeByte(minute)
+        out.writeByte(hour.toInt)
+        out.writeByte(minute.toInt)
         out.writeByte(~second)
       }
     } else {
-      out.writeByte(hour)
-      out.writeByte(minute)
-      out.writeByte(second)
+      out.writeByte(hour.toInt)
+      out.writeByte(minute.toInt)
+      out.writeByte(second.toInt)
       out.writeInt(nano)
     }
 }

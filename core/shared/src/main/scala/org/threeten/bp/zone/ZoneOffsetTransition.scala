@@ -189,7 +189,7 @@ final class ZoneOffsetTransition private[zone] (
     *
     * @return the transition date-time expressed with the after offset, not null
     */
-  def getDateTimeAfter: LocalDateTime = transition.plusSeconds(getDurationSeconds)
+  def getDateTimeAfter: LocalDateTime = transition.plusSeconds(getDurationSeconds.toLong)
 
   /** Gets the offset before the transition.
     *
@@ -215,7 +215,7 @@ final class ZoneOffsetTransition private[zone] (
     *
     * @return the duration of the transition, positive for gaps, negative for overlaps
     */
-  def getDuration: Duration = Duration.ofSeconds(getDurationSeconds)
+  def getDuration: Duration = Duration.ofSeconds(getDurationSeconds.toLong)
 
   /** Gets the duration of the transition in seconds.
     *

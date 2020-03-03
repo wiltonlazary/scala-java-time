@@ -89,7 +89,7 @@ object TTBPSimpleDateTimeTextProvider {
         case ((all, map), (style, entries)) =>
           val reverse =
             entries.toList.sortBy(_._1).foldLeft((true, Map.empty[String, (String, Long)])) {
-              case (a @ (false, acc), _) => a
+              case (a @ (false, _), _) => a
               case ((true, acc), (k, v)) =>
                 val continue = !acc.contains(v)
                 (continue, acc + (v -> (v -> k)))

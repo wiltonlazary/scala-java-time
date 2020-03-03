@@ -201,7 +201,7 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_strict_caseSensitive_parseUpper") {
     provider_text.foreach {
-      case (field, style, value, input) =>
+      case (field, style, _, input) =>
         super.beforeEach()
         parseContext.setCaseSensitive(true)
         val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
@@ -232,7 +232,7 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_strict_caseSensitive_parseLower") {
     provider_text.foreach {
-      case (field, style, value, input) =>
+      case (field, style, _, input) =>
         super.beforeEach()
         parseContext.setCaseSensitive(true)
         val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =

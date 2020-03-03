@@ -2423,7 +2423,7 @@ class TestZonedDateTime
 
   test("test_toEpochSecond_UTC") {
     data_toInstant.foreach {
-      case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (expectedNos: Int) :: Nil =>
+      case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (_: Int) :: Nil =>
         val dt: ZonedDateTime = ldt.atZone(ZoneOffset.UTC)
         assertEquals(dt.toEpochSecond, expectedEpSec)
       case _ =>
@@ -2433,7 +2433,7 @@ class TestZonedDateTime
 
   test("test_toEpochSecond_P0100") {
     data_toInstant.foreach {
-      case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (expectedNos: Int) :: Nil =>
+      case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (_: Int) :: Nil =>
         val dt: ZonedDateTime = ldt.atZone(TestZonedDateTime.ZONE_0100)
         assertEquals(dt.toEpochSecond, expectedEpSec - 3600)
       case _ =>
@@ -2443,7 +2443,7 @@ class TestZonedDateTime
 
   test("test_toEpochSecond_M0100") {
     data_toInstant.foreach {
-      case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (expectedNos: Int) :: Nil =>
+      case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (_: Int) :: Nil =>
         val dt: ZonedDateTime = ldt.atZone(TestZonedDateTime.ZONE_M0100)
         assertEquals(dt.toEpochSecond, expectedEpSec + 3600)
       case _ =>
@@ -2602,7 +2602,7 @@ class TestZonedDateTime
 
   test("test_equals_true") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (zone: ZoneId) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
                                                 TestZonedDateTime.ZONE_0100)
         val b: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
@@ -2616,7 +2616,7 @@ class TestZonedDateTime
 
   test("test_equals_false_year_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (zone: ZoneId) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
                                                 TestZonedDateTime.ZONE_0100)
         val b: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y + 1, o, d, h, m, s, n),
@@ -2629,7 +2629,7 @@ class TestZonedDateTime
 
   test("test_equals_false_hour_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (zone: ZoneId) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         var _h = h
         _h = if (_h == 23) 22 else _h
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, _h, m, s, n),
@@ -2645,7 +2645,7 @@ class TestZonedDateTime
 
   test("test_equals_false_minute_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (zone: ZoneId) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         var _m = m
         _m = if (_m == 59) 58 else _m
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, _m, s, n),
@@ -2661,7 +2661,7 @@ class TestZonedDateTime
 
   test("test_equals_false_second_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (zone: ZoneId) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         var _s = s
         _s = if (_s == 59) 58 else _s
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, _s, n),
@@ -2677,7 +2677,7 @@ class TestZonedDateTime
 
   test("test_equals_false_nano_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (zone: ZoneId) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         var _n = n
         _n = if (_n == 999999999) 999999998 else _n
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, _n),
@@ -2693,7 +2693,7 @@ class TestZonedDateTime
 
   test("test_equals_false_offset_differs") {
     provider_sampleTimes.foreach {
-      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (zone: ZoneId) :: Nil =>
+      case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
                                                 TestZonedDateTime.ZONE_0100)
         val b: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),

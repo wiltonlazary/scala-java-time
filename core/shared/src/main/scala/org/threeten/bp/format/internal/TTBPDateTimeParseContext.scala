@@ -239,7 +239,10 @@ final class TTBPDateTimeParseContext(
 
   /** Starts the parsing of an optional segment of the input.
     */
-  def startOptional(): Unit = parsed.add(currentParsed.copy)
+  def startOptional(): Unit = {
+    parsed.add(currentParsed.copy)
+    ()
+  }
 
   /** Ends the parsing of an optional segment of the input.
     *
@@ -248,8 +251,10 @@ final class TTBPDateTimeParseContext(
   def endOptional(successful: Boolean): Unit =
     if (successful) {
       parsed.remove(parsed.size - 2)
+      ()
     } else {
       parsed.remove(parsed.size - 1)
+      ()
     }
 
   /** Gets the currently active temporal objects.
@@ -328,6 +333,7 @@ final class TTBPDateTimeParseContext(
                     errorPos.asInstanceOf[AnyRef],
                     successPos.asInstanceOf[AnyRef])
     )
+    ()
   }
 
   /** Stores the parsed zone.

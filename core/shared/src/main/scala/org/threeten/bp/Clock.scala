@@ -336,7 +336,7 @@ object Clock {
         return Instant.ofEpochMilli(millis - Math.floorMod(millis, tickNanos / 1000000L))
       }
       val instant: Instant = baseClock.instant
-      val nanos: Long      = instant.getNano
+      val nanos: Long      = instant.getNano.toLong
       val adjust: Long     = Math.floorMod(nanos, tickNanos)
       instant.minusNanos(adjust)
     }

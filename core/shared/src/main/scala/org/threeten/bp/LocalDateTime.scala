@@ -51,7 +51,6 @@ import org.threeten.bp.LocalTime.SECONDS_PER_DAY
 import org.threeten.bp.chrono.ChronoLocalDate
 import org.threeten.bp.chrono.ChronoLocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoUnit
 import org.threeten.bp.temporal.Temporal
@@ -332,10 +331,10 @@ object LocalDateTime {
   def ofEpochSecond(epochSecond: Long, nanoOfSecond: Int, offset: ZoneOffset): LocalDateTime = {
     Objects.requireNonNull(offset, "offset")
     val localSecond: Long   = epochSecond + offset.getTotalSeconds
-    val localEpochDay: Long = Math.floorDiv(localSecond, SECONDS_PER_DAY)
-    val secsOfDay: Int      = Math.floorMod(localSecond, SECONDS_PER_DAY).toInt
+    val localEpochDay: Long = Math.floorDiv(localSecond, SECONDS_PER_DAY.toLong)
+    val secsOfDay: Int      = Math.floorMod(localSecond, SECONDS_PER_DAY.toLong).toInt
     val date: LocalDate     = LocalDate.ofEpochDay(localEpochDay)
-    val time: LocalTime     = LocalTime.ofSecondOfDay(secsOfDay, nanoOfSecond)
+    val time: LocalTime     = LocalTime.ofSecondOfDay(secsOfDay.toLong, nanoOfSecond)
     new LocalDateTime(date, time)
   }
 
@@ -363,7 +362,7 @@ object LocalDateTime {
           val time: LocalTime = LocalTime.from(temporal)
           new LocalDateTime(date, time)
         } catch {
-          case ex: DateTimeException =>
+          case _: DateTimeException =>
             throw new DateTimeException(
               s"Unable to obtain LocalDateTime from TemporalAccessor: $temporal, type ${temporal.getClass.getName}"
             )
@@ -1394,13 +1393,13 @@ final class LocalDateTime private (private val date: LocalDate, private val time
               return Math.addExact(Math.multiplyExact(daysUntil, MILLIS_PER_DAY),
                                    timeUntil / 1000000)
             case SECONDS =>
-              return Math.addExact(Math.multiplyExact(daysUntil, SECONDS_PER_DAY),
+              return Math.addExact(Math.multiplyExact(daysUntil, SECONDS_PER_DAY.toLong),
                                    timeUntil / NANOS_PER_SECOND)
             case MINUTES =>
-              return Math.addExact(Math.multiplyExact(daysUntil, MINUTES_PER_DAY),
+              return Math.addExact(Math.multiplyExact(daysUntil, MINUTES_PER_DAY.toLong),
                                    timeUntil / NANOS_PER_MINUTE)
             case HOURS =>
-              return Math.addExact(Math.multiplyExact(daysUntil, HOURS_PER_DAY),
+              return Math.addExact(Math.multiplyExact(daysUntil, HOURS_PER_DAY.toLong),
                                    timeUntil / NANOS_PER_HOUR)
             case HALF_DAYS =>
               return Math.addExact(Math.multiplyExact(daysUntil, 2),

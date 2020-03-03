@@ -337,7 +337,7 @@ final class Month private (name: String, ordinal: Int)
     */
   def getLong(field: TemporalField): Long =
     if (field eq MONTH_OF_YEAR)
-      getValue
+      getValue.toLong
     else if (field.isInstanceOf[ChronoField])
       throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
     else
@@ -522,5 +522,5 @@ final class Month private (name: String, ordinal: Int)
     if (Chronology.from(temporal) != IsoChronology.INSTANCE)
       throw new DateTimeException("Adjustment only supported on ISO date-time")
     else
-      temporal.`with`(MONTH_OF_YEAR, getValue)
+      temporal.`with`(MONTH_OF_YEAR, getValue.toLong)
 }

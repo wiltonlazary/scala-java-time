@@ -36,7 +36,6 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.FileInputStream
-import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.ObjectStreamConstants
@@ -176,7 +175,7 @@ trait AbstractTest extends FunSuite with AssertionsHelper {
               assertEquals(possible, mtch)
               matched = true
             } catch {
-              case ex: AssertionError =>
+              case _: AssertionError =>
                 dis.reset()
                 dis.readByte()
             }

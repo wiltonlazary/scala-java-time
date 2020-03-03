@@ -33,7 +33,6 @@ package org.threeten.bp.zone
 
 import org.scalatest.FunSuite
 import org.threeten.bp._
-import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
 class TestStandardZoneRulesNegative extends FunSuite with AssertionsHelper {
   private def createZDT(year: Int, month: Int, day: Int, zone: ZoneId): ZonedDateTime = {

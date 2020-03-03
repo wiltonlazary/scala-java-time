@@ -31,8 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
-
 /** Framework-level interface defining an amount of time,
   * such as "6 hours", "8 days" or "2 years and 3 months".
   *

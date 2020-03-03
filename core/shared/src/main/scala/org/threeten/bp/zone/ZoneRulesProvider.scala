@@ -31,11 +31,10 @@
  */
 package org.threeten.bp.zone
 
-import java.util.{ Collections, Objects, ServiceConfigurationError }
+import java.util.{ Collections, Objects }
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.CopyOnWriteArrayList
-import org.threeten.bp.DateTimeException
 
 object ZoneRulesProvider {
 
@@ -145,6 +144,7 @@ object ZoneRulesProvider {
     Objects.requireNonNull(provider, "provider")
     registerProvider0(provider)
     PROVIDERS.add(provider)
+    ()
   }
 
   /** Registers the provider.

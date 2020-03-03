@@ -232,12 +232,12 @@ final class ChronoUnit private (name: String, ordinal: Int, private val duration
       temporal.plus(1, this)
       true
     } catch {
-      case ex: RuntimeException =>
+      case _: RuntimeException =>
         try {
           temporal.plus(-1, this)
           true
         } catch {
-          case ex2: RuntimeException => false
+          case _: RuntimeException => false
         }
     }
   }

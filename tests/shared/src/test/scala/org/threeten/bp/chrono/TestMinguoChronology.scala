@@ -90,11 +90,11 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
   // properly on scala 2.10
   ignore("test_MinguoDate") {
     data_samples.foreach {
-      case (minguoDate, iso) =>
-        val hd: ChronoLocalDate          = minguoDate
-        var hdt: ChronoLocalDateTime[_]  = hd.atTime(LocalTime.NOON)
-        val zo: ZoneOffset               = ZoneOffset.ofHours(1)
-        val hzdt: ChronoZonedDateTime[_] = hdt.atZone(zo)
+      case (minguoDate, _) =>
+        val hd: ChronoLocalDate         = minguoDate
+        var hdt: ChronoLocalDateTime[_] = hd.atTime(LocalTime.NOON)
+        val zo: ZoneOffset              = ZoneOffset.ofHours(1)
+        hdt.atZone(zo)
         hdt = hdt.plus(1, ChronoUnit.YEARS)
         hdt = hdt.plus(1, ChronoUnit.MONTHS)
         hdt = hdt.plus(1, ChronoUnit.DAYS)
@@ -109,10 +109,10 @@ class TestMinguoChronology extends FunSuite with AssertionsHelper {
   }
 
   test("test_MinguoChrono") {
-    val h1: ChronoLocalDate                                           = MinguoChronology.INSTANCE.date(MinguoEra.ROC, 1, 2, 3)
-    val h2: ChronoLocalDate                                           = h1
-    val h3: ChronoLocalDateTime[_]                                    = h2.atTime(LocalTime.NOON)
-    @SuppressWarnings(Array("unused")) val h4: ChronoZonedDateTime[_] = h3.atZone(ZoneOffset.UTC)
+    val h1: ChronoLocalDate        = MinguoChronology.INSTANCE.date(MinguoEra.ROC, 1, 2, 3)
+    val h2: ChronoLocalDate        = h1
+    val h3: ChronoLocalDateTime[_] = h2.atTime(LocalTime.NOON)
+    h3.atZone(ZoneOffset.UTC)
   }
 
   val data_badDates: List[(Int, Int, Int)] = {

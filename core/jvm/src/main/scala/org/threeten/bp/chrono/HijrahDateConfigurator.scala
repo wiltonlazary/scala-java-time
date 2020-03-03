@@ -82,7 +82,7 @@ object HijrahDateConfigurator {
         var offset: Int = 0
         try offset = offsetString.toInt
         catch {
-          case ex: NumberFormatException =>
+          case _: NumberFormatException =>
             throw new ParseException(s"Offset is not properly set at line $num.", num)
         }
         val separatorIndex: Int = deviationElement.indexOf('-')
@@ -101,12 +101,12 @@ object HijrahDateConfigurator {
               startDateStg.substring(startDateYearSepIndex + 1, startDateStg.length)
             try startYear = startYearStg.toInt
             catch {
-              case ex: NumberFormatException =>
+              case _: NumberFormatException =>
                 throw new ParseException(s"Start year is not properly set at line $num.", num)
             }
             try startMonth = startMonthStg.toInt
             catch {
-              case ex: NumberFormatException =>
+              case _: NumberFormatException =>
                 throw new ParseException(s"Start month is not properly set at line $num.", num)
             }
           } else
@@ -117,13 +117,13 @@ object HijrahDateConfigurator {
               endDateStg.substring(endDateYearSepIndex + 1, endDateStg.length)
             try endYear = endYearStg.toInt
             catch {
-              case ex: NumberFormatException =>
+              case _: NumberFormatException =>
                 throw new ParseException(s"End year is not properly set at line $num.", num)
             }
             try {
               endMonth = endMonthStg.toInt
             } catch {
-              case ex: NumberFormatException =>
+              case _: NumberFormatException =>
                 throw new ParseException(s"End month is not properly set at line $num.", num)
             }
           } else
@@ -198,7 +198,7 @@ object HijrahDateConfigurator {
             var zip: ZipFile = null
             try zip = new ZipFile(file)
             catch {
-              case ioe: IOException => zip = null
+              case _: IOException => zip = null
             }
             if (zip != null) {
               var targetFile: String = DEFAULT_CONFIG_PATH + FILE_SEP + fileName

@@ -220,7 +220,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
             date.minus(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException")
           } catch {
-            case cce: Throwable =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoLocalDate = date.minus(adjuster)
@@ -244,7 +244,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
               "PeriodUnit.doAdd plus should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass
             )
           } catch {
-            case cce: Throwable =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoLocalDate = date.plus(1, adjuster)
@@ -268,7 +268,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
               "PeriodUnit.doAdd minus should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass
             )
           } catch {
-            case cce: Throwable =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoLocalDate = date.minus(1, adjuster)
@@ -292,7 +292,7 @@ class TestChronoLocalDate extends FunSuite with AssertionsHelper {
               "DateTimeField doSet should have thrown a ClassCastException" + date.getClass + ", can not be cast to " + date2.getClass
             )
           } catch {
-            case cce: Platform.CCE =>
+            case _: Platform.CCE =>
           }
         } else {
           val result: ChronoLocalDate = date.`with`(adjuster, 1)

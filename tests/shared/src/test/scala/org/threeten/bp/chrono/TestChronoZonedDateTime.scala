@@ -35,13 +35,10 @@ import org.scalatest.FunSuite
 
 import java.util.Locale
 import org.threeten.bp.AssertionsHelper
-import org.threeten.bp.Platform
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
-import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
-import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.ResolverStyle
 import org.threeten.bp.temporal.ChronoUnit
 import org.threeten.bp.temporal.Temporal
@@ -352,7 +349,7 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
       dates.add(date.plus(1, ChronoUnit.MONTHS))
       dates.add(date.plus(1, ChronoUnit.YEARS))
       dates.add(date.plus(100, ChronoUnit.YEARS))
-      for (clist <- data_of_calendars) {
+      for (_ <- data_of_calendars) {
         val otherDates: java.util.List[ChronoZonedDateTime[_ <: ChronoLocalDate]] =
           new java.util.ArrayList[ChronoZonedDateTime[_ <: ChronoLocalDate]]
         val chrono2: Chronology = IsoChronology.INSTANCE

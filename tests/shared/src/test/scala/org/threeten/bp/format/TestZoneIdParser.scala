@@ -62,13 +62,13 @@ class TestZoneIdParser extends FunSuite with GenTestPrinterParser with Assertion
 
   test("test_parse_error") {
     data_error.foreach {
-      case (pp: TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser) :: (text: String) :: (pos: Int) :: (expected: Class[
+      case (pp: TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser) :: (text: String) :: (pos: Int) :: (_: Class[
             _
           ]) :: Nil =>
         try {
           pp.parse(parseContext, text, pos)
         } catch {
-          case ex: Throwable =>
+          case _: Throwable =>
             //assertTrue(expected.isInstance(ex))
             assertEquals(parseContext.toParsed.fieldValues.size, 0)
         }

@@ -1,6 +1,5 @@
 package org.threeten.bp.zone
 
-import java.util
 import java.util.{ Collection => JCollection, Map => JMap, SortedMap => JSortedMap, Set => JSet }
 import java.util.AbstractMap
 import java.util.AbstractMap.SimpleEntry
@@ -19,10 +18,7 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
   def this()(implicit ordering: Ordering[K]) =
     this(immutable.TreeMap[K, V]())
 
-  override def descendingMap(): java.util.NavigableMap[K, V] = {
-    val ord = ordering.reverse
-    new ZoneMap[K, V](map)
-  }
+  override def descendingMap(): java.util.NavigableMap[K, V] = new ZoneMap[K, V](map)
 
   override def firstEntry(): java.util.Map.Entry[K, V] = {
     val fk = firstKey()

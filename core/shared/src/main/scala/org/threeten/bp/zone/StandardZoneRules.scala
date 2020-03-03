@@ -99,7 +99,7 @@ object StandardZoneRules {
         i += 1
       }
     }
-    val ruleSize: Int                          = in.readByte
+    val ruleSize: Int                          = in.readByte.toInt
     val rules: Array[ZoneOffsetTransitionRule] = new Array[ZoneOffsetTransitionRule](ruleSize)
 
     {
@@ -437,7 +437,7 @@ final class StandardZoneRules private (
   def getDaylightSavings(instant: Instant): Duration = {
     val standardOffset: ZoneOffset = getStandardOffset(instant)
     val actualOffset: ZoneOffset   = getOffset(instant)
-    Duration.ofSeconds(actualOffset.getTotalSeconds - standardOffset.getTotalSeconds)
+    Duration.ofSeconds(actualOffset.getTotalSeconds.toLong - standardOffset.getTotalSeconds.toLong)
   }
 
   def isDaylightSavings(instant: Instant): Boolean =
@@ -543,7 +543,7 @@ final class StandardZoneRules private (
           lastRules.asInstanceOf[Array[AnyRef]],
           other.lastRules.asInstanceOf[Array[AnyRef]]
         ))
-      case other: ZoneRules.Fixed =>
+      case _: ZoneRules.Fixed =>
         isFixedOffset && (getOffset(Instant.EPOCH) == obj
           .asInstanceOf[ZoneRules.Fixed]
           .getOffset(Instant.EPOCH))

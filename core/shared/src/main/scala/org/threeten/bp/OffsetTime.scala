@@ -47,7 +47,6 @@ import java.io.InvalidObjectException
 import java.io.ObjectStreamException
 import java.io.Serializable
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoUnit
 import org.threeten.bp.temporal.Temporal
@@ -204,7 +203,7 @@ object OffsetTime {
           val offset: ZoneOffset = ZoneOffset.from(temporal)
           new OffsetTime(time, offset)
         } catch {
-          case ex: DateTimeException =>
+          case _: DateTimeException =>
             throw new DateTimeException(
               s"Unable to obtain OffsetTime from TemporalAccessor: $temporal, type ${temporal.getClass.getName}"
             )
@@ -402,7 +401,7 @@ final class OffsetTime(private val time: LocalTime, private val offset: ZoneOffs
     */
   def getLong(field: TemporalField): Long =
     if (field.isInstanceOf[ChronoField])
-      if (field eq OFFSET_SECONDS) getOffset.getTotalSeconds
+      if (field eq OFFSET_SECONDS) getOffset.getTotalSeconds.toLong
       else time.getLong(field)
     else
       field.getFrom(this)
@@ -457,7 +456,7 @@ final class OffsetTime(private val time: LocalTime, private val offset: ZoneOffs
       this
     else {
       val difference: Int     = offset.getTotalSeconds - this.offset.getTotalSeconds
-      val adjusted: LocalTime = time.plusSeconds(difference)
+      val adjusted: LocalTime = time.plusSeconds(difference.toLong)
       new OffsetTime(adjusted, offset)
     }
 
@@ -857,7 +856,9 @@ final class OffsetTime(private val time: LocalTime, private val offset: ZoneOffs
     * @throws ArithmeticException if numeric overflow occurs
     */
   def adjustInto(temporal: Temporal): Temporal =
-    temporal.`with`(NANO_OF_DAY, time.toNanoOfDay).`with`(OFFSET_SECONDS, getOffset.getTotalSeconds)
+    temporal
+      .`with`(NANO_OF_DAY, time.toNanoOfDay)
+      .`with`(OFFSET_SECONDS, getOffset.getTotalSeconds.toLong)
 
   /** Calculates the period between this time and another time in
     * terms of the specified unit.

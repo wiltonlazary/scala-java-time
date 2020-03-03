@@ -246,7 +246,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoLocalDate") {
     provider_sample_isoLocalDate.foreach {
-      case (year, month, day, offsetId, zoneId, input, expectedEx) =>
+      case (year, month, day, _, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected = createDate(year, month, day)
           assertParseMatch(
@@ -345,7 +345,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoOffsetDate") {
     provider_sample_isoOffsetDate.foreach {
-      case (year, month, day, offsetId, zoneId, input, invalid) =>
+      case (year, month, day, offsetId, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected = createDate(year, month, day)
           buildCalendrical(expected, offsetId, null)
@@ -398,7 +398,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoDate") {
     provider_sample_isoDate.foreach {
-      case (year, month, day, offsetId, zoneId, input, invalid) =>
+      case (year, month, day, offsetId, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected = createDate(year, month, day)
           if (offsetId != null) {
@@ -462,7 +462,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoLocalTime") {
     provider_sample_isoLocalTime.foreach {
-      case (hour, min, sec, nano, offsetId, zoneId, input, invalid) =>
+      case (hour, min, sec, nano, _, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected = createTime(hour, min, sec, nano)
           assertParseMatch(
@@ -525,7 +525,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoOffsetTime") {
     provider_sample_isoOffsetTime.foreach {
-      case (hour, min, sec, nano, offsetId, zoneId, input, invalid) =>
+      case (hour, min, sec, nano, offsetId, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected = createTime(hour, min, sec, nano)
           buildCalendrical(expected, offsetId, null)
@@ -589,7 +589,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoTime") {
     provider_sample_isoTime.foreach {
-      case (hour, min, sec, nano, offsetId, zoneId, input, invalid) =>
+      case (hour, min, sec, nano, offsetId, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected = createTime(hour, min, sec, nano)
           if (offsetId != null) {
@@ -683,7 +683,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoLocalDateTime") {
     provider_sample_isoLocalDateTime.foreach {
-      case (year, month, day, hour, min, sec, nano, offsetId, zoneId, input, invalid) =>
+      case (year, month, day, hour, min, sec, nano, _, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected =
             createDateTime(year, month, day, hour, min, sec, nano)
@@ -797,7 +797,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoOffsetDateTime") {
     provider_sample_isoOffsetDateTime.foreach {
-      case (year, month, day, hour, min, sec, nano, offsetId, zoneId, input, invalid) =>
+      case (year, month, day, hour, min, sec, nano, offsetId, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected =
             createDateTime(year, month, day, hour, min, sec, nano)
@@ -947,7 +947,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoZonedDateTime") {
     provider_sample_isoZonedDateTime.foreach {
-      case (year, month, day, hour, min, sec, nano, offsetId, zoneId, input, invalid) =>
+      case (year, month, day, hour, min, sec, nano, offsetId, zoneId, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected =
             createDateTime(year, month, day, hour, min, sec, nano)
@@ -1086,7 +1086,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
 
   test("test_parse_isoDateTime") {
     provider_sample_isoDateTime.foreach {
-      case (year, month, day, hour, min, sec, nano, offsetId, zoneId, input, invalid) =>
+      case (year, month, day, hour, min, sec, nano, offsetId, zoneId, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected =
             createDateTime(year, month, day, hour, min, sec, nano)
@@ -1241,7 +1241,7 @@ class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with Ass
     new java.util.Iterator[(TemporalAccessor, String)]() {
       private var date: ZonedDateTime =
         ZonedDateTime.of(LocalDateTime.of(2003, 12, 29, 11, 5, 30), ZoneId.of("Europe/Paris"))
-      private var endDate: ZonedDateTime = date.withYear(2005).withMonth(1).withDayOfMonth(2)
+      private val endDate: ZonedDateTime = date.withYear(2005).withMonth(1).withDayOfMonth(2)
       private var week: Int              = 1
       private var day: Int               = 1
 

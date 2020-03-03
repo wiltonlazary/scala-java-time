@@ -172,7 +172,7 @@ class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper
         ZoneOffset.of(values(i))
         fail("Should have failed:" + values(i))
       } catch {
-        case ex: DateTimeException =>
+        case _: DateTimeException =>
       }
       i += 1
     }

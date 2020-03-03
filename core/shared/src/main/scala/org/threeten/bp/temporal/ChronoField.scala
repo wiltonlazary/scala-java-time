@@ -409,11 +409,13 @@ object ChronoField {
     * will typically be the same as that used by the ISO calendar system.
     * The year-of-era value should typically always be positive, however this is not required.
     */
-  val YEAR_OF_ERA = new ChronoField("YearOfEra",
-                                    25,
-                                    YEARS,
-                                    FOREVER,
-                                    ValueRange.of(1, Year.MAX_VALUE, Year.MAX_VALUE + 1))
+  val YEAR_OF_ERA = new ChronoField(
+    "YearOfEra",
+    25,
+    YEARS,
+    FOREVER,
+    ValueRange.of(1, Year.MAX_VALUE.toLong, Year.MAX_VALUE.toLong + 1)
+  )
 
   /** The proleptic year, such as 2012.
     *
@@ -438,7 +440,11 @@ object ChronoField {
     * the best option.
     */
   val YEAR =
-    new ChronoField("Year", 26, YEARS, FOREVER, ValueRange.of(Year.MIN_VALUE, Year.MAX_VALUE))
+    new ChronoField("Year",
+                    26,
+                    YEARS,
+                    FOREVER,
+                    ValueRange.of(Year.MIN_VALUE.toLong, Year.MAX_VALUE.toLong))
 
   /** The era.
     *

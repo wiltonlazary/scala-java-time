@@ -216,9 +216,9 @@ object IsoFields {
         val doy: Int   = temporal.get(DAY_OF_YEAR)
         val moy: Int   = temporal.get(MONTH_OF_YEAR)
         val year: Long = temporal.getLong(YEAR)
-        doy - QUARTER_DAYS(
+        doy.toLong - QUARTER_DAYS(
           ((moy - 1) / 3) + (if (IsoChronology.INSTANCE.isLeapYear(year)) 4 else 0)
-        )
+        ).toInt
       }
       def adjustInto[R <: Temporal](temporal: R, newValue: Long): R = {
         val curValue: Long = getFrom(temporal)
@@ -249,11 +249,11 @@ object IsoFields {
           if (resolverStyle eq ResolverStyle.STRICT) {
             var max: Int = 92
             if (qoy == 1) {
-              max = if (IsoChronology.INSTANCE.isLeapYear(y)) 91 else 90
+              max = if (IsoChronology.INSTANCE.isLeapYear(y.toLong)) 91 else 90
             } else if (qoy == 2) {
               max = 91
             }
-            ValueRange.of(1, max).checkValidValue(doq, this)
+            ValueRange.of(1, max.toLong).checkValidValue(doq, this)
           } else {
             range.checkValidValue(doq, this)
           }
@@ -309,7 +309,7 @@ object IsoFields {
         if (!temporal.isSupported(this))
           throw new UnsupportedTemporalTypeException("Unsupported field: WeekOfWeekBasedYear")
         else
-          getWeek(LocalDate.from(temporal))
+          getWeek(LocalDate.from(temporal)).toLong
       def adjustInto[R <: Temporal](temporal: R, newValue: Long): R = {
         range.checkValidValue(newValue, this)
         temporal.plus(Math.subtractExact(newValue, getFrom(temporal)), WEEKS).asInstanceOf[R]
@@ -347,7 +347,7 @@ object IsoFields {
           } else {
             range.checkValidValue(wowby, this)
           }
-          date = LocalDate.of(wby, 1, 4).plusWeeks(wowby - 1).`with`(DAY_OF_WEEK, dow)
+          date = LocalDate.of(wby, 1, 4).plusWeeks(wowby - 1).`with`(DAY_OF_WEEK, dow.toLong)
         }
         fieldValues.remove(this)
         fieldValues.remove(WEEK_BASED_YEAR)
@@ -367,7 +367,7 @@ object IsoFields {
       def getFrom(temporal:        TemporalAccessor): Long =
         if (!temporal.isSupported(this))
           throw new UnsupportedTemporalTypeException("Unsupported field: WeekBasedYear")
-        else getWeekBasedYear(LocalDate.from(temporal))
+        else getWeekBasedYear(LocalDate.from(temporal)).toLong
       def adjustInto[R <: Temporal](temporal: R, newValue: Long): R = {
         if (!isSupportedBy(temporal))
           throw new UnsupportedTemporalTypeException("Unsupported field: WeekBasedYear")
@@ -380,7 +380,7 @@ object IsoFields {
         }
         var resolved: LocalDate = LocalDate.of(newWby, 1, 4)
         val days: Int           = (dow - resolved.get(DAY_OF_WEEK)) + ((week - 1) * 7)
-        resolved = resolved.plusDays(days)
+        resolved = resolved.plusDays(days.toLong)
         temporal.`with`(resolved).asInstanceOf[R]
       }
     }
@@ -392,7 +392,7 @@ object IsoFields {
 
     private def getWeekRange(date: LocalDate): ValueRange = {
       val wby: Int = getWeekBasedYear(date)
-      ValueRange.of(1, getWeekRange(wby))
+      ValueRange.of(1, getWeekRange(wby).toLong)
     }
 
     private def getWeekRange(wby: Int): Int = {
@@ -484,7 +484,7 @@ object IsoFields {
     def addTo[R <: Temporal](temporal: R, periodToAdd: Long): R =
       this match {
         case Unit.WEEK_BASED_YEARS =>
-          val added: Long = Math.addExact(temporal.get(WEEK_BASED_YEAR), periodToAdd)
+          val added: Long = Math.addExact(temporal.get(WEEK_BASED_YEAR).toLong, periodToAdd)
           temporal.`with`(WEEK_BASED_YEAR, added).asInstanceOf[R]
         case Unit.QUARTER_YEARS =>
           temporal

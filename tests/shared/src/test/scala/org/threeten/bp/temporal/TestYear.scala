@@ -31,14 +31,10 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
-import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.Platform
 import org.threeten.bp.temporal.ChronoField.ERA
 import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR_OF_ERA
-import java.io.IOException
-import java.util.Arrays
 import org.threeten.bp._
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter

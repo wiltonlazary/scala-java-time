@@ -146,10 +146,10 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
     * @return the date-time, not null
     */
   private def `with`(newDate: Temporal, newTime: LocalTime): ChronoLocalDateTimeImpl[D] =
-    if ((date eq newDate) && (time eq newTime))
+    if ((date eq newDate) && (time eq newTime)) {
       this
-    else {
-      val cd: D = date.getChronology.ensureChronoLocalDate(newDate)
+    } else {
+      val cd: D = date.getChronology.ensureChronoLocalDate[D](newDate)
       new ChronoLocalDateTimeImpl[D](cd, newTime)
     }
 
@@ -281,10 +281,11 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
           case MICROS => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MICROS_PER_DAY)
           case MILLIS => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MILLIS_PER_DAY)
           case SECONDS =>
-            amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.SECONDS_PER_DAY)
+            amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.SECONDS_PER_DAY.toLong)
           case MINUTES =>
-            amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MINUTES_PER_DAY)
-          case HOURS     => amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.HOURS_PER_DAY)
+            amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.MINUTES_PER_DAY.toLong)
+          case HOURS =>
+            amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.HOURS_PER_DAY.toLong)
           case HALF_DAYS => amount = Math.multiplyExact(amount, 2)
         }
         return Math.addExact(amount, time.until(end.toLocalTime, unit))

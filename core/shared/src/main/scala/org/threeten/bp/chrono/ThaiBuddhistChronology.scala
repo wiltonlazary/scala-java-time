@@ -60,46 +60,46 @@ object ThaiBuddhistChronology {
   private[chrono] val YEARS_DIFFERENCE: Int = 543
 
   /** Fallback language for the era names. */
-  private val FALLBACK_LANGUAGE: String = "en"
+  // private val FALLBACK_LANGUAGE: String = "en"
 
   /** Language that has the era names. */
-  private val TARGET_LANGUAGE: String = "th"
+  // private val TARGET_LANGUAGE: String = "th"
 
   /** Narrow names for eras. */
-  private val ERA_NARROW_NAMES: java.util.HashMap[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("BB", "BE"))
-    names.put(TARGET_LANGUAGE, Array[String]("BB", "BE"))
-    names
-  }
-
-  /** Short names for eras. */
-  private val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("B.B.", "B.E."))
-    names.put(
-      TARGET_LANGUAGE,
-      Array[String](
-        "\u0e1e.\u0e28.",
-        "\u0e1b\u0e35\u0e01\u0e48\u0e2d\u0e19\u0e04\u0e23\u0e34\u0e2a\u0e15\u0e4c\u0e01\u0e32\u0e25\u0e17\u0e35\u0e48"
-      )
-    )
-    names
-  }
-
-  /** Full names for eras. */
-  private val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("Before Buddhist", "Budhhist Era"))
-    names.put(
-      TARGET_LANGUAGE,
-      Array[String](
-        "\u0e1e\u0e38\u0e17\u0e18\u0e28\u0e31\u0e01\u0e23\u0e32\u0e0a",
-        "\u0e1b\u0e35\u0e01\u0e48\u0e2d\u0e19\u0e04\u0e23\u0e34\u0e2a\u0e15\u0e4c\u0e01\u0e32\u0e25\u0e17\u0e35\u0e48"
-      )
-    )
-    names
-  }
+  // private val ERA_NARROW_NAMES: java.util.HashMap[String, Array[String]] = {
+  //   val names = new java.util.HashMap[String, Array[String]]
+  //   names.put(FALLBACK_LANGUAGE, Array[String]("BB", "BE"))
+  //   names.put(TARGET_LANGUAGE, Array[String]("BB", "BE"))
+  //   names
+  // }
+  //
+  // /** Short names for eras. */
+  // private val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
+  //   val names = new java.util.HashMap[String, Array[String]]
+  //   names.put(FALLBACK_LANGUAGE, Array[String]("B.B.", "B.E."))
+  //   names.put(
+  //     TARGET_LANGUAGE,
+  //     Array[String](
+  //       "\u0e1e.\u0e28.",
+  //       "\u0e1b\u0e35\u0e01\u0e48\u0e2d\u0e19\u0e04\u0e23\u0e34\u0e2a\u0e15\u0e4c\u0e01\u0e32\u0e25\u0e17\u0e35\u0e48"
+  //     )
+  //   )
+  //   names
+  // }
+  //
+  // /** Full names for eras. */
+  // private val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
+  //   val names = new java.util.HashMap[String, Array[String]]
+  //   names.put(FALLBACK_LANGUAGE, Array[String]("Before Buddhist", "Budhhist Era"))
+  //   names.put(
+  //     TARGET_LANGUAGE,
+  //     Array[String](
+  //       "\u0e1e\u0e38\u0e17\u0e18\u0e28\u0e31\u0e01\u0e23\u0e32\u0e0a",
+  //       "\u0e1b\u0e35\u0e01\u0e48\u0e2d\u0e19\u0e04\u0e23\u0e34\u0e2a\u0e15\u0e4c\u0e01\u0e32\u0e25\u0e17\u0e35\u0e48"
+  //     )
+  //   )
+  //   names
+  // }
 }
 
 /** The Thai Buddhist calendar system.
@@ -321,7 +321,8 @@ final class ThaiBuddhistChronology private () extends Chronology with Serializab
             val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(
               fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH)
             )
-            val tbDate: ThaiBuddhistDate = date(y, moy, 1).plus((aw - 1) * 7 + (ad - 1), DAYS)
+            val tbDate: ThaiBuddhistDate =
+              date(y, moy, 1).plus((aw.toLong - 1) * 7 + (ad - 1), DAYS)
             if ((resolverStyle eq ResolverStyle.STRICT) && tbDate.get(MONTH_OF_YEAR) != moy)
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             return tbDate
@@ -339,7 +340,7 @@ final class ThaiBuddhistChronology private () extends Chronology with Serializab
               ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
             val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
             val tbDate: ThaiBuddhistDate =
-              date(y, moy, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
+              date(y, moy, 1).plus(aw.toLong - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
             if ((resolverStyle eq ResolverStyle.STRICT) && tbDate.get(MONTH_OF_YEAR) != moy)
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             return tbDate
@@ -368,7 +369,7 @@ final class ThaiBuddhistChronology private () extends Chronology with Serializab
           val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(
             fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR)
           )
-          val tbDate: ThaiBuddhistDate = date(y, 1, 1).plusDays((aw - 1) * 7 + (ad - 1))
+          val tbDate: ThaiBuddhistDate = date(y, 1, 1).plusDays((aw.toLong - 1) * 7 + (ad - 1))
           if ((resolverStyle eq ResolverStyle.STRICT) && tbDate.get(YEAR) != y)
             throw new DateTimeException("Strict mode rejected date parsed to a different year")
           return tbDate
@@ -384,7 +385,7 @@ final class ThaiBuddhistChronology private () extends Chronology with Serializab
             ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
           val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
           val tbDate: ThaiBuddhistDate =
-            date(y, 1, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
+            date(y, 1, 1).plus(aw.toLong - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
           if ((resolverStyle eq ResolverStyle.STRICT) && tbDate.get(YEAR) != y)
             throw new DateTimeException("Strict mode rejected date parsed to a different month")
           return tbDate

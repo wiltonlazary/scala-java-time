@@ -32,7 +32,6 @@
 package org.threeten.bp.temporal
 
 import java.util.Locale
-import org.threeten.bp.DateTimeException
 import org.threeten.bp.format.ResolverStyle
 
 /** A field of date-time, such as month-of-year or hour-of-minute.

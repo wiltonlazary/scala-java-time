@@ -297,7 +297,7 @@ final class DayOfWeek(name: String, ordinal: Int)
     */
   def getLong(field: TemporalField): Long =
     if (field eq DAY_OF_WEEK)
-      getValue
+      getValue.toLong
     else if (field.isInstanceOf[ChronoField])
       throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
     else
@@ -393,5 +393,5 @@ final class DayOfWeek(name: String, ordinal: Int)
     * @throws DateTimeException if unable to make the adjustment
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def adjustInto(temporal: Temporal): Temporal = temporal.`with`(DAY_OF_WEEK, getValue)
+  def adjustInto(temporal: Temporal): Temporal = temporal.`with`(DAY_OF_WEEK, getValue.toLong)
 }

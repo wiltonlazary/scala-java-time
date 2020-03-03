@@ -264,7 +264,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
             var val1: Long = 0L
             try val1 = date.getLong(field)
             catch {
-              case ex: DateTimeException =>
+              case _: DateTimeException =>
                 break = true
             }
             if (!break) {
@@ -367,10 +367,12 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     }
     if (fieldValues.containsKey(MICRO_OF_SECOND)) {
       val cos: Long = fieldValues.remove(MICRO_OF_SECOND)
-      addFieldValue(NANO_OF_SECOND, cos * 1000)
+      addFieldValue(NANO_OF_SECOND, cos * 1000L)
+      ()
     } else if (fieldValues.containsKey(MILLI_OF_SECOND)) {
       val los: Long = fieldValues.remove(MILLI_OF_SECOND)
-      addFieldValue(NANO_OF_SECOND, los * 1000000)
+      addFieldValue(NANO_OF_SECOND, los * 1000000L)
+      ()
     }
   }
 
@@ -446,6 +448,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     fieldValues.remove(MINUTE_OF_HOUR)
     fieldValues.remove(SECOND_OF_MINUTE)
     fieldValues.remove(NANO_OF_SECOND)
+    ()
   }
 
   private def mergeInstantFields(): Unit =
@@ -469,6 +472,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     else
       resolveMakeChanges(INSTANT_SECONDS, zdt.toLocalDate)
     addFieldValue(SECOND_OF_DAY, zdt.toLocalTime.toSecondOfDay.toLong)
+    ()
   }
 
   private def crossCheck(): Unit =
@@ -484,7 +488,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
   private def crossCheck(temporal: TemporalAccessor): Unit = {
     val it: java.util.Iterator[java.util.Map.Entry[TemporalField, java.lang.Long]] =
       fieldValues.entrySet.iterator
-    var break = false
+    val break = false
     while (!break && it.hasNext) {
       val entry: java.util.Map.Entry[TemporalField, java.lang.Long] = it.next
       val field: TemporalField                                      = entry.getKey
@@ -493,7 +497,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
         var temporalValue: Long = 0L
         try temporalValue = temporal.getLong(field)
         catch {
-          case ex: RuntimeException =>
+          case _: RuntimeException =>
             break
         }
         if (!break) {
@@ -515,10 +519,12 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
         val nos: Long = fieldValues.get(NANO_OF_SECOND)
         fieldValues.put(MICRO_OF_SECOND, nos / 1000)
         fieldValues.put(MILLI_OF_SECOND, nos / 1000000)
+        ()
       } else {
         fieldValues.put(NANO_OF_SECOND, 0L)
         fieldValues.put(MICRO_OF_SECOND, 0L)
         fieldValues.put(MILLI_OF_SECOND, 0L)
+        ()
       }
     }
 
@@ -527,12 +533,13 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
       val offsetSecs = fieldValues.get(OFFSET_SECONDS);
       if (offsetSecs != null) {
         val offset  = ZoneOffset.ofTotalSeconds(offsetSecs.intValue())
-        var instant = date.atTime(time).atZone(offset).getLong(ChronoField.INSTANT_SECONDS)
+        val instant = date.atTime(time).atZone(offset).getLong(ChronoField.INSTANT_SECONDS)
         fieldValues.put(INSTANT_SECONDS, instant)
       } else if (zone != null) {
         val instant = date.atTime(time).atZone(zone).getLong(ChronoField.INSTANT_SECONDS)
         fieldValues.put(INSTANT_SECONDS, instant)
       }
+      ()
     }
 
   /** Builds the specified type from the values in this builder.

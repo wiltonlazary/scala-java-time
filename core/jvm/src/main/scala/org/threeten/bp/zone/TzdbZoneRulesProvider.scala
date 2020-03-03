@@ -70,12 +70,12 @@ private[zone] object TzdbZoneRulesProvider {
 
     @throws[Exception]
     private[zone] def createRule(index: Short): ZoneRules = {
-      var obj: AnyRef = ruleData.get(index)
+      var obj: AnyRef = ruleData.get(index.toInt)
       obj match {
         case bytes: Array[Byte] =>
           val dis: DataInputStream = new DataInputStream(new ByteArrayInputStream(bytes))
           obj = Ser.read(dis)
-          ruleData.set(index, obj)
+          ruleData.set(index.toInt, obj)
         case _ =>
       }
       obj.asInstanceOf[ZoneRules]
@@ -222,7 +222,7 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
     val groupId: String = dis.readUTF
     if (!("TZDB" == groupId))
       throw new StreamCorruptedException("File format not recognised")
-    val versionCount: Int           = dis.readShort
+    val versionCount: Int           = dis.readShort.toInt
     val versionArray: Array[String] = new Array[String](versionCount)
 
     {
@@ -232,7 +232,7 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
         i += 1
       }
     }
-    val regionCount: Int           = dis.readShort
+    val regionCount: Int           = dis.readShort.toInt
     val regionArray: Array[String] = new Array[String](regionCount)
 
     {
@@ -243,13 +243,13 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
       }
     }
     regionIds.addAll(Arrays.asList(regionArray: _*))
-    val ruleCount: Int           = dis.readShort
+    val ruleCount: Int           = dis.readShort.toInt
     val ruleArray: Array[AnyRef] = new Array[AnyRef](ruleCount)
 
     {
       var i: Int = 0
       while (i < ruleCount) {
-        val bytes: Array[Byte] = new Array[Byte](dis.readShort)
+        val bytes: Array[Byte] = new Array[Byte](dis.readShort.toInt)
         dis.readFully(bytes)
         ruleArray(i) = bytes
         i += 1
@@ -262,13 +262,13 @@ final class TzdbZoneRulesProvider extends ZoneRulesProvider {
     {
       var i: Int = 0
       while (i < versionCount) {
-        val versionRegionCount: Int           = dis.readShort
+        val versionRegionCount: Int           = dis.readShort.toInt
         val versionRegionArray: Array[String] = new Array[String](versionRegionCount)
         val versionRulesArray: Array[Short]   = new Array[Short](versionRegionCount)
 
         var j: Int = 0
         while (j < versionRegionCount) {
-          versionRegionArray(j) = regionArray(dis.readShort)
+          versionRegionArray(j) = regionArray(dis.readShort.toInt)
           versionRulesArray(j)  = dis.readShort
           j += 1
         }

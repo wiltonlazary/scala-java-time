@@ -31,7 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
 import org.threeten.bp.Duration
 
 /** A unit of date-time, such as Days or Hours.

@@ -36,10 +36,8 @@ import java.lang.Long
 
 import org.scalatest.FunSuite
 import org.threeten.bp.AssertionsHelper
-import org.threeten.bp.Platform
 import org.threeten.bp.temporal.ChronoField.{ AMPM_OF_DAY, DAY_OF_WEEK, MONTH_OF_YEAR }
-import org.threeten.bp.temporal.{ ChronoField, TemporalField }
-import org.threeten.bp.format.internal.TTBPSimpleDateTimeTextProvider
+import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.internal.TTBPDateTimeTextProvider
 
 /** Test TTBPSimpleDateTimeTextProvider. */

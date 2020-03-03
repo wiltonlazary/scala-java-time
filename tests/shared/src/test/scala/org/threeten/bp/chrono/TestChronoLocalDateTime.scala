@@ -35,10 +35,8 @@ import org.scalatest.FunSuite
 
 import java.util.Locale
 import org.threeten.bp.AssertionsHelper
-import org.threeten.bp.Platform
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import org.threeten.bp.format.ResolverStyle
 import org.threeten.bp.temporal.ChronoUnit
@@ -179,7 +177,7 @@ class TestChronoLocalDateTime extends FunSuite with AssertionsHelper {
               "WithAdjuster should have thrown a ClassCastException, " + "required: " + cdt + ", supplied: " + cdt2
             )
           } catch {
-            case cce: Throwable =>
+            case _: Throwable =>
           }
         } else {
           val result: ChronoLocalDateTime[_] = cdt.`with`(adjuster)

@@ -9,15 +9,15 @@ abstract class Calendar private[util] (timezone: TimeZone = null, locale: Locale
     with Ordered[Calendar] {
 
   if (timezone == null && locale == null) {
-    init(TimeZone.getDefault, Locale.getDefault)
+    init(TimeZone.getDefault)
   } else if (locale == null) {
     setLenient(true)
     setTimeZone(timezone)
   } else {
-    init(timezone, locale)
+    init(timezone)
   }
 
-  def init(timezone: TimeZone, locale: Locale): Unit = {
+  def init(timezone: TimeZone): Unit = {
     setLenient(true)
     setTimeZone(timezone)
     // TODO: need to set firstDayOfWeekfirstDayOfWeek and minimalDaysInFirstWeek
@@ -31,7 +31,7 @@ abstract class Calendar private[util] (timezone: TimeZone = null, locale: Locale
   private var lenient: Boolean            = false
   private var firstDayOfWeek: Int         = 0
   private var minimalDaysInFirstWeek: Int = 0
-  private var zone: TimeZone              = null
+  // private var zone: TimeZone              = null
 
   protected def computeTime(): Unit
   protected def computeFields(): Unit
@@ -66,6 +66,8 @@ abstract class Calendar private[util] (timezone: TimeZone = null, locale: Locale
     ???
 
   def setLenient(value: Boolean): Unit = lenient = value
+
+  def getLenient: Boolean = lenient
 
   def setTimeZone(timezone: TimeZone): Unit = ???
 

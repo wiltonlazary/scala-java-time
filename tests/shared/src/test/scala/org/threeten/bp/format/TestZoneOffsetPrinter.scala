@@ -123,7 +123,7 @@ class TestZoneOffsetPrinter extends FunSuite with GenTestPrinterParser with Asse
 
   test("test_toString") {
     provider_offsets.foreach {
-      case (pattern: String) :: (expected: String) :: (offset: ZoneOffset) :: Nil =>
+      case (pattern: String) :: (_: String) :: (_: ZoneOffset) :: Nil =>
         val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser =
           new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("NO-OFFSET", pattern)
         assertEquals(pp.toString, "Offset(" + pattern + ",'NO-OFFSET')")

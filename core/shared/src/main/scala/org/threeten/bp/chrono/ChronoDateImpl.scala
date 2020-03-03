@@ -130,7 +130,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
       case _ =>
         getChronology
           .ensureChronoLocalDate(unit.addTo(this, amountToAdd))
-          .asInstanceOf[ChronoDateImpl[D]]
+      // .asInstanceOf[ChronoDateImpl[D]]
     }
   }
 

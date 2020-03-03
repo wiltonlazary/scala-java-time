@@ -234,7 +234,7 @@ abstract class ChronoLocalDateTime[D <: ChronoLocalDate]
     * @return an {@code Instant} representing the same instant, not null
     */
   def toInstant(offset: ZoneOffset): Instant =
-    Instant.ofEpochSecond(toEpochSecond(offset), toLocalTime.getNano)
+    Instant.ofEpochSecond(toEpochSecond(offset), toLocalTime.getNano.toLong)
 
   /** Converts this date-time to the number of seconds from the epoch
     * of 1970-01-01T00:00:00Z.

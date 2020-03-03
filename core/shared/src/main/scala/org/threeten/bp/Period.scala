@@ -324,9 +324,9 @@ final class Period private (private val years: Int, private val months: Int, pri
   def getChronology: Chronology = IsoChronology.INSTANCE
 
   def get(unit: TemporalUnit): Long =
-    if (unit eq YEARS) years
-    else if (unit eq MONTHS) months
-    else if (unit eq DAYS) days
+    if (unit eq YEARS) years.toLong
+    else if (unit eq MONTHS) months.toLong
+    else if (unit eq DAYS) days.toLong
     else throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
 
   /** Checks if all three units of this period are zero.
@@ -462,7 +462,7 @@ final class Period private (private val years: Int, private val months: Int, pri
     */
   def plusYears(yearsToAdd: Long): Period =
     if (yearsToAdd == 0) this
-    else Period.create(Math.toIntExact(Math.addExact(years, yearsToAdd)), months, days)
+    else Period.create(Math.toIntExact(Math.addExact(years.toLong, yearsToAdd)), months, days)
 
   /** Returns a copy of this period with the specified months added.
     *
@@ -478,7 +478,7 @@ final class Period private (private val years: Int, private val months: Int, pri
     */
   def plusMonths(monthsToAdd: Long): Period =
     if (monthsToAdd == 0) this
-    else Period.create(years, Math.toIntExact(Math.addExact(months, monthsToAdd)), days)
+    else Period.create(years, Math.toIntExact(Math.addExact(months.toLong, monthsToAdd)), days)
 
   /** Returns a copy of this period with the specified days added.
     *
@@ -494,7 +494,7 @@ final class Period private (private val years: Int, private val months: Int, pri
     */
   def plusDays(daysToAdd: Long): Period =
     if (daysToAdd == 0) this
-    else Period.create(years, months, Math.toIntExact(Math.addExact(days, daysToAdd)))
+    else Period.create(years, months, Math.toIntExact(Math.addExact(days.toLong, daysToAdd)))
 
   /** Returns a copy of this period with the specified amount subtracted.
     *
@@ -659,11 +659,11 @@ final class Period private (private val years: Int, private val months: Int, pri
     Objects.requireNonNull(_temporal, "temporal")
     if (years != 0)
       if (months != 0) _temporal = _temporal.plus(toTotalMonths, MONTHS)
-      else _temporal             = _temporal.plus(years, YEARS)
+      else _temporal             = _temporal.plus(years.toLong, YEARS)
     else if (months != 0)
-      _temporal = _temporal.plus(months, MONTHS)
+      _temporal = _temporal.plus(months.toLong, MONTHS)
     if (days != 0)
-      _temporal = _temporal.plus(days, DAYS)
+      _temporal = _temporal.plus(days.toLong, DAYS)
     _temporal
   }
 
@@ -703,11 +703,11 @@ final class Period private (private val years: Int, private val months: Int, pri
     Objects.requireNonNull(_temporal, "temporal")
     if (years != 0)
       if (months != 0) _temporal = _temporal.minus(toTotalMonths, MONTHS)
-      else _temporal             = _temporal.minus(years, YEARS)
+      else _temporal             = _temporal.minus(years.toLong, YEARS)
     else if (months != 0)
-      _temporal = _temporal.minus(months, MONTHS)
+      _temporal = _temporal.minus(months.toLong, MONTHS)
     if (days != 0)
-      _temporal = _temporal.minus(days, DAYS)
+      _temporal = _temporal.minus(days.toLong, DAYS)
     _temporal
   }
 

@@ -43,7 +43,6 @@ import org.threeten.bp.LocalTime.SECONDS_PER_DAY
 import org.threeten.bp.LocalTime.SECONDS_PER_HOUR
 import org.threeten.bp.LocalTime.SECONDS_PER_MINUTE
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoField.INSTANT_SECONDS
 import org.threeten.bp.temporal.ChronoField.MICRO_OF_SECOND
@@ -164,8 +163,9 @@ object Instant {
     * @throws ArithmeticException if numeric overflow occurs
     */
   def ofEpochSecond(epochSecond: Long, nanoAdjustment: Long): Instant = {
-    val secs: Long = Math.addExact(epochSecond, Math.floorDiv(nanoAdjustment, NANOS_PER_SECOND))
-    val nos: Int   = Math.floorMod(nanoAdjustment, NANOS_PER_SECOND).toInt
+    val secs: Long =
+      Math.addExact(epochSecond, Math.floorDiv(nanoAdjustment, NANOS_PER_SECOND.toLong))
+    val nos: Int = Math.floorMod(nanoAdjustment, NANOS_PER_SECOND.toLong).toInt
     create(secs, nos)
   }
 
@@ -203,7 +203,7 @@ object Instant {
     try {
       val instantSecs: Long = temporal.getLong(INSTANT_SECONDS)
       val nanoOfSecond: Int = temporal.get(NANO_OF_SECOND)
-      Instant.ofEpochSecond(instantSecs, nanoOfSecond)
+      Instant.ofEpochSecond(instantSecs, nanoOfSecond.toLong)
     } catch {
       case ex: DateTimeException =>
         throw new DateTimeException(
@@ -245,7 +245,7 @@ object Instant {
   private[bp] def readExternal(in: DataInput): Instant = {
     val seconds: Long = in.readLong
     val nanos: Int    = in.readInt
-    Instant.ofEpochSecond(seconds, nanos)
+    Instant.ofEpochSecond(seconds, nanos.toLong)
   }
 }
 
@@ -467,9 +467,9 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
     field match {
       case f: ChronoField =>
         f match {
-          case NANO_OF_SECOND  => nanos
-          case MICRO_OF_SECOND => nanos / 1000
-          case MILLI_OF_SECOND => nanos / Instant.NANOS_PER_MILLI
+          case NANO_OF_SECOND  => nanos.toLong
+          case MICRO_OF_SECOND => nanos / 1000L
+          case MILLI_OF_SECOND => nanos.toLong / Instant.NANOS_PER_MILLI
           case INSTANT_SECONDS => seconds
           case _               => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
@@ -564,7 +564,7 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
         f.checkValidValue(newValue)
         f match {
           case MILLI_OF_SECOND =>
-            val nval: Int = newValue.toInt * Instant.NANOS_PER_MILLI
+            val nval: Int = newValue.toInt * Instant.NANOS_PER_MILLI.toInt
             return if (nval != nanos) Instant.create(seconds, nval) else this
           case MICRO_OF_SECOND =>
             val nval: Int = newValue.toInt * 1000
@@ -573,8 +573,9 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
             return if (newValue != nanos) Instant.create(seconds, newValue.toInt) else this
           case INSTANT_SECONDS =>
             return if (newValue != seconds) Instant.create(newValue, nanos) else this
+          case _ =>
+            throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
-        throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
       case _ =>
     }
     field.adjustInto(this, newValue)
@@ -642,15 +643,16 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
           case SECONDS =>
             return plusSeconds(amountToAdd)
           case MINUTES =>
-            return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_MINUTE))
+            return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_MINUTE.toLong))
           case HOURS =>
-            return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_HOUR))
+            return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_HOUR.toLong))
           case HALF_DAYS =>
-            return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY / 2))
+            return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY / 2L))
           case DAYS =>
-            return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY))
+            return plusSeconds(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY.toLong))
+          case _ =>
+            throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
-        throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
       case _ =>
     }
     unit.addTo(this, amountToAdd)
@@ -823,7 +825,7 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
     * @throws ArithmeticException if numeric overflow occurs
     */
   def adjustInto(temporal: Temporal): Temporal =
-    temporal.`with`(INSTANT_SECONDS, seconds).`with`(NANO_OF_SECOND, nanos)
+    temporal.`with`(INSTANT_SECONDS, seconds).`with`(NANO_OF_SECOND, nanos.toLong)
 
   /** Calculates the period between this instant and another instant in
     * terms of the specified unit.
@@ -887,8 +889,9 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
             return secondsUntil(end) / (12 * SECONDS_PER_HOUR)
           case DAYS =>
             return secondsUntil(end) / SECONDS_PER_DAY
+          case _ =>
+            throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
-        throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
       case _ =>
     }
     unit.between(this, end)
@@ -896,13 +899,13 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
 
   private def nanosUntil(end: Instant): Long = {
     val secsDiff: Long   = Math.subtractExact(end.seconds, seconds)
-    val totalNanos: Long = Math.multiplyExact(secsDiff, Instant.NANOS_PER_SECOND)
-    Math.addExact(totalNanos, end.nanos - nanos)
+    val totalNanos: Long = Math.multiplyExact(secsDiff, Instant.NANOS_PER_SECOND.toLong)
+    Math.addExact(totalNanos, end.nanos.toLong - nanos.toLong)
   }
 
   private def secondsUntil(end: Instant): Long = {
     var secsDiff: Long  = Math.subtractExact(end.seconds, seconds)
-    val nanosDiff: Long = end.nanos - nanos
+    val nanosDiff: Long = end.nanos.toLong - nanos.toLong
     if (secsDiff > 0 && nanosDiff < 0) {
       secsDiff -= 1
     } else if (secsDiff < 0 && nanosDiff > 0) {
@@ -956,8 +959,8 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
     */
   def toEpochMilli: Long =
     if (seconds >= 0) {
-      val millis: Long = Math.multiplyExact(seconds, Instant.MILLIS_PER_SEC)
-      Math.addExact(millis, nanos / Instant.NANOS_PER_MILLI)
+      val millis: Long = Math.multiplyExact(seconds, Instant.MILLIS_PER_SEC.toLong)
+      Math.addExact(millis, nanos / Instant.NANOS_PER_MILLI.toLong)
     } else {
       // prevent an overflow in seconds * 1000
       // instead of going form the second farther away from 0
@@ -965,8 +968,11 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
       // we go from the second closer to 0 away from 0
       // that way we always stay in the valid long range
       // seconds + 1 can not overflow because it is negative
-      val millis = Math.multiplyExact(seconds + 1, Instant.MILLIS_PER_SEC)
-      Math.subtractExact(millis, Instant.MILLIS_PER_SEC - nanos / Instant.NANOS_PER_MILLI)
+      val millis = Math.multiplyExact(seconds + 1, Instant.MILLIS_PER_SEC.toLong)
+      Math.subtractExact(
+        millis,
+        Instant.MILLIS_PER_SEC.toLong - nanos.toLong / Instant.NANOS_PER_MILLI.toLong
+      )
     }
 
   /** Compares this instant to the specified instant.

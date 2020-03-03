@@ -576,7 +576,7 @@ class TestInstant extends FunSuite with GenDateTimeTest with AssertionsHelper wi
           Instant.ofEpochSecond(seconds, nanos).plus(Duration.ofSeconds(otherSeconds, otherNanos))
         assertEquals(i.getEpochSecond, expectedSeconds)
         assertEquals(i.getNano, expectedNanoOfSecond)
-      case x =>
+      case _ =>
         fail()
     }
   }

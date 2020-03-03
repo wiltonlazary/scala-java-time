@@ -46,7 +46,6 @@ import java.util.{ Comparator, Objects }
 
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoUnit
 import org.threeten.bp.temporal.Temporal
@@ -97,7 +96,7 @@ object OffsetDateTime {
       override def compare(datetime1: OffsetDateTime, datetime2: OffsetDateTime): Int = {
         var cmp: Int = java.lang.Long.compare(datetime1.toEpochSecond, datetime2.toEpochSecond)
         if (cmp == 0)
-          cmp = java.lang.Long.compare(datetime1.getNano, datetime2.getNano)
+          cmp = java.lang.Long.compare(datetime1.getNano.toLong, datetime2.getNano.toLong)
         cmp
       }
     }
@@ -255,12 +254,12 @@ object OffsetDateTime {
             val ldt: LocalDateTime = LocalDateTime.from(temporal)
             OffsetDateTime.of(ldt, offset)
           } catch {
-            case ignore: DateTimeException =>
+            case _: DateTimeException =>
               val instant: Instant = Instant.from(temporal)
               OffsetDateTime.ofInstant(instant, offset)
           }
         } catch {
-          case ex: DateTimeException =>
+          case _: DateTimeException =>
             throw new DateTimeException(
               s"Unable to obtain OffsetDateTime from TemporalAccessor: $temporal, type ${temporal.getClass.getName}"
             )
@@ -498,7 +497,7 @@ final class OffsetDateTime private (
       case f: ChronoField =>
         f match {
           case INSTANT_SECONDS => toEpochSecond
-          case OFFSET_SECONDS  => getOffset.getTotalSeconds
+          case OFFSET_SECONDS  => getOffset.getTotalSeconds.toLong
           case _               => dateTime.getLong(field)
         }
       case _ =>
@@ -553,7 +552,7 @@ final class OffsetDateTime private (
     if (offset == this.offset)
       return this
     val difference: Int         = offset.getTotalSeconds - this.offset.getTotalSeconds
-    val adjusted: LocalDateTime = dateTime.plusSeconds(difference)
+    val adjusted: LocalDateTime = dateTime.plusSeconds(difference.toLong)
     new OffsetDateTime(adjusted, offset)
   }
 
@@ -745,7 +744,7 @@ final class OffsetDateTime private (
       case f: ChronoField =>
         f match {
           case INSTANT_SECONDS =>
-            OffsetDateTime.ofInstant(Instant.ofEpochSecond(newValue, getNano), offset)
+            OffsetDateTime.ofInstant(Instant.ofEpochSecond(newValue, getNano.toLong), offset)
           case OFFSET_SECONDS =>
             `with`(dateTime, ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue)))
           case _ => `with`(dateTime.`with`(field, newValue), offset)
@@ -1251,7 +1250,7 @@ final class OffsetDateTime private (
     temporal
       .`with`(EPOCH_DAY, toLocalDate.toEpochDay)
       .`with`(NANO_OF_DAY, toLocalTime.toNanoOfDay)
-      .`with`(OFFSET_SECONDS, getOffset.getTotalSeconds)
+      .`with`(OFFSET_SECONDS, getOffset.getTotalSeconds.toLong)
 
   /** Calculates the period between this date-time and another date-time in
     * terms of the specified unit.

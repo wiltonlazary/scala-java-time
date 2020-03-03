@@ -43,7 +43,6 @@ import java.io.ObjectStreamException
 import java.io.Serializable
 import org.threeten.bp.chrono.ChronoZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoUnit
 import org.threeten.bp.temporal.Temporal
@@ -54,7 +53,6 @@ import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.temporal.TemporalQueries
 import org.threeten.bp.temporal.TemporalQuery
 import org.threeten.bp.temporal.TemporalUnit
-import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 import org.threeten.bp.zone.ZoneOffsetTransition
 import org.threeten.bp.zone.ZoneRules
@@ -322,7 +320,7 @@ object ZonedDateTime {
     */
   private def create(epochSecond: Long, nanoOfSecond: Int, zone: ZoneId): ZonedDateTime = {
     val rules: ZoneRules   = zone.getRules
-    val instant: Instant   = Instant.ofEpochSecond(epochSecond, nanoOfSecond)
+    val instant: Instant   = Instant.ofEpochSecond(epochSecond, nanoOfSecond.toLong)
     val offset: ZoneOffset = rules.getOffset(instant)
     new ZonedDateTime(LocalDateTime.ofEpochSecond(epochSecond, nanoOfSecond, offset), offset, zone)
   }
@@ -422,13 +420,13 @@ object ZonedDateTime {
               val nanoOfSecond: Int = temporal.get(NANO_OF_SECOND)
               return create(epochSecond, nanoOfSecond, zone)
             } catch {
-              case ex: DateTimeException =>
+              case _: DateTimeException =>
             }
           }
           val ldt: LocalDateTime = LocalDateTime.from(temporal)
           of(ldt, zone)
         } catch {
-          case ex: DateTimeException =>
+          case _: DateTimeException =>
             throw new DateTimeException(
               s"Unable to obtain ZonedDateTime from TemporalAccessor: $temporal, type ${temporal.getClass.getName}"
             )
@@ -727,7 +725,7 @@ final class ZonedDateTime(
       case f: ChronoField =>
         f match {
           case INSTANT_SECONDS => toEpochSecond
-          case OFFSET_SECONDS  => getOffset.getTotalSeconds
+          case OFFSET_SECONDS  => getOffset.getTotalSeconds.toLong
           case _               => dateTime.getLong(field)
         }
       case _ =>

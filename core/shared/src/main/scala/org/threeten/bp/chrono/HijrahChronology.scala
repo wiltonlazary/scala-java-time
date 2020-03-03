@@ -69,28 +69,28 @@ object HijrahChronology {
   val INSTANCE: HijrahChronology = new HijrahChronology
 
   /** Fallback language for the era names. */
-  private val FALLBACK_LANGUAGE: String = "en"
+  // private val FALLBACK_LANGUAGE: String = "en"
 
   /** Narrow names for eras. */
-  private val ERA_NARROW_NAMES: java.util.HashMap[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("BH", "HE"))
-    names
-  }
-
-  /** Short names for eras. */
-  private val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("B.H.", "H.E."))
-    names
-  }
-
-  /** Full names for eras. */
-  private val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("Before Hijrah", "Hijrah Era"))
-    names
-  }
+  // private val ERA_NARROW_NAMES: java.util.HashMap[String, Array[String]] = {
+  //   val names = new java.util.HashMap[String, Array[String]]
+  //   names.put(FALLBACK_LANGUAGE, Array[String]("BH", "HE"))
+  //   names
+  // }
+  //
+  // /** Short names for eras. */
+  // private val ERA_SHORT_NAMES: java.util.HashMap[String, Array[String]] = {
+  //   val names = new java.util.HashMap[String, Array[String]]
+  //   names.put(FALLBACK_LANGUAGE, Array[String]("B.H.", "H.E."))
+  //   names
+  // }
+  //
+  // /** Full names for eras. */
+  // private val ERA_FULL_NAMES: java.util.HashMap[String, Array[String]] = {
+  //   val names = new java.util.HashMap[String, Array[String]]
+  //   names.put(FALLBACK_LANGUAGE, Array[String]("Before Hijrah", "Hijrah Era"))
+  //   names
+  // }
 }
 
 /** The Hijrah calendar system.
@@ -234,7 +234,7 @@ final class HijrahChronology private () extends Chronology with Serializable {
     super.dateYearDay(era, yearOfEra, dayOfYear).asInstanceOf[HijrahDate]
 
   def dateYearDay(prolepticYear: Int, dayOfYear: Int): HijrahDate =
-    HijrahDate.of(prolepticYear, 1, 1).plusDays(dayOfYear - 1)
+    HijrahDate.of(prolepticYear, 1, 1).plusDays(dayOfYear.toLong - 1)
 
   def dateEpochDay(epochDay: Long): HijrahDate = HijrahDate.of(LocalDate.ofEpochDay(epochDay))
 
@@ -361,7 +361,7 @@ final class HijrahChronology private () extends Chronology with Serializable {
             val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(
               fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH)
             )
-            val hijrahDate: HijrahDate = date(y, moy, 1).plus((aw - 1) * 7 + (ad - 1), DAYS)
+            val hijrahDate: HijrahDate = date(y, moy, 1).plus((aw.toLong - 1) * 7 + (ad - 1), DAYS)
             if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(MONTH_OF_YEAR) != moy) {
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             }
@@ -380,7 +380,7 @@ final class HijrahChronology private () extends Chronology with Serializable {
               ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
             val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
             val hijrahDate: HijrahDate =
-              date(y, moy, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
+              date(y, moy, 1).plus(aw.toLong - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
             if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(MONTH_OF_YEAR) != moy) {
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             }
@@ -410,7 +410,7 @@ final class HijrahChronology private () extends Chronology with Serializable {
           val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(
             fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR)
           )
-          val hijrahDate: HijrahDate = date(y, 1, 1).plusDays((aw - 1) * 7 + (ad - 1))
+          val hijrahDate: HijrahDate = date(y, 1, 1).plusDays((aw.toLong - 1) * 7 + (ad - 1))
           if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(YEAR) != y) {
             throw new DateTimeException("Strict mode rejected date parsed to a different year")
           }
@@ -427,7 +427,7 @@ final class HijrahChronology private () extends Chronology with Serializable {
             ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
           val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
           val hijrahDate: HijrahDate =
-            date(y, 1, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
+            date(y, 1, 1).plus(aw.toLong - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
           if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(YEAR) != y) {
             throw new DateTimeException("Strict mode rejected date parsed to a different month")
           }

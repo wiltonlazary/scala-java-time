@@ -1024,7 +1024,7 @@ class TestLocalTime
         TEST_12_30_40_987654321.plus(1, unit)
         fail("Unit should not be allowed " + unit)
       } catch {
-        case ex: DateTimeException =>
+        case _: DateTimeException =>
       }
     }
   }
@@ -1497,7 +1497,7 @@ class TestLocalTime
         TEST_12_30_40_987654321.minus(1, unit)
         fail("Unit should not be allowed " + unit)
       } catch {
-        case ex: DateTimeException =>
+        case _: DateTimeException =>
       }
     }
   }
@@ -1861,7 +1861,7 @@ class TestLocalTime
         assertEquals(min, t.getMinute)
         assertEquals(sec, t.getSecond)
         assertEquals(nanos, t.getNano)
-      case x =>
+      case _ =>
         fail()
     }
   }

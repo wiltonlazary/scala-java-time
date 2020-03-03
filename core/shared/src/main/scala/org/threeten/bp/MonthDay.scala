@@ -43,7 +43,6 @@ import org.threeten.bp.chrono.Chronology
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatterBuilder
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoField.DAY_OF_MONTH
 import org.threeten.bp.temporal.ChronoField.MONTH_OF_YEAR
@@ -123,7 +122,7 @@ object MonthDay {
     */
   def of(month: Month, dayOfMonth: Int): MonthDay = {
     Objects.requireNonNull(month, "month")
-    DAY_OF_MONTH.checkValidValue(dayOfMonth)
+    DAY_OF_MONTH.checkValidValue(dayOfMonth.toLong)
     if (dayOfMonth > month.maxLength) {
       throw new DateTimeException(
         s"Illegal value for DayOfMonth field, value $dayOfMonth is not valid for month ${month.name}"
@@ -177,7 +176,7 @@ object MonthDay {
           }
           of(_temporal.get(MONTH_OF_YEAR), _temporal.get(DAY_OF_MONTH))
         } catch {
-          case ex: DateTimeException =>
+          case _: DateTimeException =>
             throw new DateTimeException(
               s"Unable to obtain MonthDay from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}"
             )
@@ -216,7 +215,7 @@ object MonthDay {
   private[bp] def readExternal(in: DataInput): MonthDay = {
     val month: Byte = in.readByte
     val day: Byte   = in.readByte
-    MonthDay.of(month, day)
+    MonthDay.of(month.toInt, day.toInt)
   }
 }
 
@@ -315,7 +314,7 @@ final class MonthDay private (private val month: Int, private val day: Int)
     if (field eq MONTH_OF_YEAR)
       field.range
     else if (field eq DAY_OF_MONTH)
-      ValueRange.of(1, getMonth.minLength, getMonth.maxLength)
+      ValueRange.of(1, getMonth.minLength.toLong, getMonth.maxLength.toLong)
     else if (field.isInstanceOf[ChronoField])
       if (isSupported(field)) field.range
       else throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
@@ -372,8 +371,8 @@ final class MonthDay private (private val month: Int, private val day: Int)
     field match {
       case field1: ChronoField =>
         field1 match {
-          case DAY_OF_MONTH  => day
-          case MONTH_OF_YEAR => month
+          case DAY_OF_MONTH  => day.toLong
+          case MONTH_OF_YEAR => month.toLong
           case _             => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
       case _ => field.getFrom(this)
@@ -419,7 +418,7 @@ final class MonthDay private (private val month: Int, private val day: Int)
     * @return true if the year is valid for this month-day
     * @see Year#isValidMonthDay(MonthDay)
     */
-  def isValidYear(year: Int): Boolean = !(day == 29 && month == 2 && !Year.isLeap(year))
+  def isValidYear(year: Int): Boolean = !(day == 29 && month == 2 && !Year.isLeap(year.toLong))
 
   /** Returns a copy of this {@code MonthDay} with the month-of-year altered.
     *
@@ -527,8 +526,8 @@ final class MonthDay private (private val month: Int, private val day: Int)
     if (!(Chronology.from(_temporal) == IsoChronology.INSTANCE)) {
       throw new DateTimeException("Adjustment only supported on ISO date-time")
     }
-    _temporal = _temporal.`with`(MONTH_OF_YEAR, month)
-    _temporal.`with`(DAY_OF_MONTH, Math.min(_temporal.range(DAY_OF_MONTH).getMaximum, day))
+    _temporal = _temporal.`with`(MONTH_OF_YEAR, month.toLong)
+    _temporal.`with`(DAY_OF_MONTH, Math.min(_temporal.range(DAY_OF_MONTH).getMaximum, day.toLong))
   }
 
   /** Combines this month-day with a year to create a {@code LocalDate}.

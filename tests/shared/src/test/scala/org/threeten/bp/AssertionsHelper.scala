@@ -16,11 +16,12 @@ trait AssertionsHelper { this: FunSuite =>
     else
       true
 
-  def assertEquals[A, B](o1: A, o2: B, msg: String)(
-    implicit prettifier:     Prettifier,
-    pos:                     source.Position
-  ): Assertion =
-    assertEquals(o1, o2)
+  def assertEquals[A, B](
+    o1:                  A,
+    o2:                  B,
+    msg:                 String
+  )(implicit prettifier: Prettifier, pos: source.Position): Assertion =
+    assert(o1 == o2, msg)
 
   def assertEquals[A, B](
     o1:                  A,
@@ -48,6 +49,12 @@ trait AssertionsHelper { this: FunSuite =>
 
   def assertNull[A](a: A)(implicit prettifier: Prettifier, pos: source.Position): Assertion =
     assert(a == null)
+
+  def assertNotNull[A](
+    a:                   A,
+    msg:                 String
+  )(implicit prettifier: Prettifier, pos: source.Position): Assertion =
+    assert(a != null, msg)
 
   def assertNotNull[A](a: A)(implicit prettifier: Prettifier, pos: source.Position): Assertion =
     assert(a != null)

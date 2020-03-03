@@ -43,19 +43,12 @@ import org.threeten.bp.temporal.ChronoField.MONTH_OF_YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR_OF_ERA
 import org.threeten.bp.temporal.ChronoField.ERA
-import java.io.BufferedReader
 import java.io.DataInput
 import java.io.DataOutput
-import java.io.File
-import java.io.FileInputStream
 import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
 import java.io.Serializable
 import java.text.ParseException
-import java.util.{ Objects, StringTokenizer }
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile
+import java.util.Objects
 import org.threeten.bp.Clock
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.DayOfWeek
@@ -111,7 +104,7 @@ object HijrahDate {
     *
     * Minimum values.
     */
-  private val MIN_VALUES: Array[Int] = Array(0, MIN_VALUE_OF_ERA, 0, 1, 0, 1, 1)
+  // private val MIN_VALUES: Array[Int] = Array(0, MIN_VALUE_OF_ERA, 0, 1, 0, 1, 1)
 
   /** Least maximum values. */
   private val LEAST_MAX_VALUES: Array[Int] = Array(1, MAX_VALUE_OF_ERA, 11, 51, 5, 29, 354)
@@ -164,22 +157,22 @@ object HijrahDate {
     val cycles = new Array[Long](MAX_ADJUSTED_CYCLE)
     var i: Int = 0
     while (i < MAX_ADJUSTED_CYCLE) {
-      cycles(i) = java.lang.Long.valueOf(10631 * i)
+      cycles(i) = java.lang.Long.valueOf(10631L * i)
       i += 1
     }
     cycles
   }
 
   /** Holding the adjusted min values. */
-  private val ADJUSTED_MIN_VALUES: Array[Integer] = {
-    val values = new Array[Integer](MIN_VALUES.length)
-    var i: Int = 0
-    while (i < MIN_VALUES.length) {
-      values(i) = Integer.valueOf(MIN_VALUES(i))
-      i += 1
-    }
-    values
-  }
+  // private val ADJUSTED_MIN_VALUES: Array[Integer] = {
+  //   val values = new Array[Integer](MIN_VALUES.length)
+  //   var i: Int = 0
+  //   while (i < MIN_VALUES.length) {
+  //     values(i) = Integer.valueOf(MIN_VALUES(i))
+  //     i += 1
+  //   }
+  //   values
+  // }
 
   /** Holding the adjusted max least max values. */
   private val ADJUSTED_LEAST_MAX_VALUES: Array[Integer] = {
@@ -265,8 +258,8 @@ object HijrahDate {
 
   try HijrahDateConfigurator.readDeviationConfig()
   catch {
-    case e: IOException    =>
-    case e: ParseException =>
+    case _: IOException    =>
+    case _: ParseException =>
   }
 
   /** Obtains the current {@code HijrahDate} of the Islamic Umm Al-Qura calendar
@@ -438,7 +431,7 @@ object HijrahDate {
     if (epochDay >= 0) {
       cycleNumber = getCycleNumber(epochDay)
       dayOfCycle  = getDayOfCycle(epochDay, cycleNumber)
-      yearInCycle = getYearInCycle(cycleNumber, dayOfCycle)
+      yearInCycle = getYearInCycle(cycleNumber, dayOfCycle.toLong)
       dayOfYear   = getDayOfYear(cycleNumber, dayOfCycle, yearInCycle)
       year        = cycleNumber * 30 + yearInCycle + 1
       month       = getMonthOfYear(dayOfYear, year)
@@ -452,11 +445,11 @@ object HijrahDate {
         dayOfCycle = -10631
         cycleNumber += 1
       }
-      yearInCycle = getYearInCycle(cycleNumber, dayOfCycle)
+      yearInCycle = getYearInCycle(cycleNumber, dayOfCycle.toLong)
       dayOfYear   = getDayOfYear(cycleNumber, dayOfCycle, yearInCycle)
       year        = cycleNumber * 30 - yearInCycle
       year        = 1 - year
-      dayOfYear   = if (isLeapYear(year)) dayOfYear + 355 else dayOfYear + 354
+      dayOfYear   = if (isLeapYear(year.toLong)) dayOfYear + 355 else dayOfYear + 354
       month       = getMonthOfYear(dayOfYear, year)
       date        = getDayOfMonth(dayOfYear, month, year)
       date += 1
@@ -497,11 +490,11 @@ object HijrahDate {
     try {
       cycleDays = ADJUSTED_CYCLES(cycleNumber)
     } catch {
-      case e: ArrayIndexOutOfBoundsException =>
+      case _: ArrayIndexOutOfBoundsException =>
         cycleDays = null
     }
     if (cycleDays == null) {
-      cycleDays = java.lang.Long.valueOf(cycleNumber * 10631)
+      cycleDays = java.lang.Long.valueOf(cycleNumber.toLong * 10631)
     }
     (cycleDays.longValue + dayInCycle + HIJRAH_JAN_1_1_GREGORIAN_DAY - 1)
   }
@@ -523,7 +516,7 @@ object HijrahDate {
       }
       cycleNumber = epochDay.toInt / 10631
     } catch {
-      case e: ArrayIndexOutOfBoundsException => cycleNumber = epochDay.toInt / 10631
+      case _: ArrayIndexOutOfBoundsException => cycleNumber = epochDay.toInt / 10631
     }
     cycleNumber
   }
@@ -538,11 +531,11 @@ object HijrahDate {
     var day: java.lang.Long = null
     try day = ADJUSTED_CYCLES(cycleNumber)
     catch {
-      case e: ArrayIndexOutOfBoundsException =>
+      case _: ArrayIndexOutOfBoundsException =>
         day = null
     }
     if (day == null) {
-      day = java.lang.Long.valueOf(cycleNumber * 10631)
+      day = java.lang.Long.valueOf(cycleNumber.toLong * 10631)
     }
     (epochDay - day.longValue).toInt
   }
@@ -592,7 +585,7 @@ object HijrahDate {
     var cycles: Array[Integer] = null
     try cycles = ADJUSTED_CYCLE_YEARS.get(Integer.valueOf(cycleNumber))
     catch {
-      case e: ArrayIndexOutOfBoundsException =>
+      case _: ArrayIndexOutOfBoundsException =>
         cycles = null
     }
     if (cycles == null)
@@ -609,11 +602,11 @@ object HijrahDate {
     var newMonths: Array[Integer] = null
     try newMonths = ADJUSTED_MONTH_DAYS.get(Integer.valueOf(year))
     catch {
-      case e: ArrayIndexOutOfBoundsException =>
+      case _: ArrayIndexOutOfBoundsException =>
         newMonths = null
     }
     if (newMonths == null) {
-      if (isLeapYear(year))
+      if (isLeapYear(year.toLong))
         newMonths = DEFAULT_LEAP_MONTH_DAYS
       else
         newMonths = DEFAULT_MONTH_DAYS
@@ -630,11 +623,11 @@ object HijrahDate {
     var newMonths: Array[Integer] = null
     try newMonths = ADJUSTED_MONTH_LENGTHS.get(Integer.valueOf(year))
     catch {
-      case e: ArrayIndexOutOfBoundsException =>
+      case _: ArrayIndexOutOfBoundsException =>
         newMonths = null
     }
     if (newMonths == null) {
-      if (isLeapYear(year))
+      if (isLeapYear(year.toLong))
         newMonths = DEFAULT_LEAP_MONTH_LENGTHS
       else
         newMonths = DEFAULT_MONTH_LENGTHS
@@ -676,7 +669,7 @@ object HijrahDate {
       }
       11
     } else {
-      _dayOfYear = if (isLeapYear(year)) _dayOfYear + 355 else _dayOfYear + 354
+      _dayOfYear = if (isLeapYear(year.toLong)) _dayOfYear + 355 else _dayOfYear + 354
 
       var i: Int = 0
       while (i < newMonths.length) {
@@ -704,7 +697,7 @@ object HijrahDate {
       else
         _dayOfYear
     } else {
-      _dayOfYear = if (isLeapYear(year)) dayOfYear + 355 else dayOfYear + 354
+      _dayOfYear = if (isLeapYear(year.toLong)) dayOfYear + 355 else dayOfYear + 354
       if (month > 0)
         _dayOfYear - newMonths(month).intValue
       else
@@ -752,7 +745,7 @@ object HijrahDate {
     var cycleYears: Array[Integer] = null
     try cycleYears = ADJUSTED_CYCLE_YEARS.get(cycleNumber)
     catch {
-      case e: ArrayIndexOutOfBoundsException =>
+      case _: ArrayIndexOutOfBoundsException =>
         cycleYears = null
     }
     if (cycleYears != null) {
@@ -764,7 +757,7 @@ object HijrahDate {
       }
       cycleYears(yearInCycle + 1).intValue - cycleYears(yearInCycle).intValue
     } else {
-      if (isLeapYear(year)) 355 else 354
+      if (isLeapYear(year.toLong)) 355 else 354
     }
   }
 
@@ -829,7 +822,7 @@ object HijrahDate {
       throw new IllegalArgumentException("startYear > endYear")
     if (endYear == startYear && endMonth < startMonth)
       throw new IllegalArgumentException("startYear == endYear && endMonth < startMonth")
-    val isStartYLeap: Boolean             = isLeapYear(startYear)
+    val isStartYLeap: Boolean             = isLeapYear(startYear.toLong)
     var orgStartMonthNums: Array[Integer] = ADJUSTED_MONTH_DAYS.get(Integer.valueOf(startYear))
     if (orgStartMonthNums == null) {
       if (isStartYLeap) {
@@ -962,7 +955,7 @@ object HijrahDate {
       }
       ADJUSTED_CYCLE_YEARS.put(Integer.valueOf(eCycleNumber), endCycles)
     }
-    val isEndYLeap: Boolean             = isLeapYear(endYear)
+    val isEndYLeap: Boolean             = isLeapYear(endYear.toLong)
     var orgEndMonthDays: Array[Integer] = ADJUSTED_MONTH_DAYS.get(Integer.valueOf(endYear))
     if (orgEndMonthDays == null) {
       if (isEndYLeap) {
@@ -1079,8 +1072,8 @@ object HijrahDate {
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
     val year: Int       = in.readInt
-    val month: Int      = in.readByte
-    val dayOfMonth: Int = in.readByte
+    val month: Int      = in.readByte.toInt
+    val dayOfMonth: Int = in.readByte.toInt
     HijrahChronology.INSTANCE.date(year, month, dayOfMonth)
   }
 }
@@ -1177,7 +1170,7 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
     this.dayOfMonth  = dateInfo(3)
     this.dayOfYear   = dateInfo(4)
     this.dayOfWeek   = DayOfWeek.of(dateInfo(5))
-    this._isLeapYear = HijrahDate.isLeapYear(this.yearOfEra)
+    this._isLeapYear = HijrahDate.isLeapYear(this.yearOfEra.toLong)
   }
 
   /** Replaces the date instance from the stream with a valid one.
@@ -1195,8 +1188,8 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
       if (isSupported(field)) {
         val f: ChronoField = field.asInstanceOf[ChronoField]
         f match {
-          case DAY_OF_MONTH          => ValueRange.of(1, lengthOfMonth)
-          case DAY_OF_YEAR           => ValueRange.of(1, lengthOfYear)
+          case DAY_OF_MONTH          => ValueRange.of(1, lengthOfMonth.toLong)
+          case DAY_OF_YEAR           => ValueRange.of(1, lengthOfYear.toLong)
           case ALIGNED_WEEK_OF_MONTH => ValueRange.of(1, 5)
           case YEAR_OF_ERA           => ValueRange.of(1, 1000)
           case _                     => getChronology.range(f)
@@ -1212,18 +1205,18 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
     field match {
       case chronoField: ChronoField =>
         chronoField match {
-          case DAY_OF_WEEK                  => dayOfWeek.getValue
-          case ALIGNED_DAY_OF_WEEK_IN_MONTH => ((dayOfMonth - 1) % 7) + 1
-          case ALIGNED_DAY_OF_WEEK_IN_YEAR  => ((dayOfYear - 1) % 7) + 1
-          case DAY_OF_MONTH                 => this.dayOfMonth
-          case DAY_OF_YEAR                  => this.dayOfYear
-          case EPOCH_DAY                    => toEpochDay
-          case ALIGNED_WEEK_OF_MONTH        => ((dayOfMonth - 1) / 7) + 1
-          case ALIGNED_WEEK_OF_YEAR         => ((dayOfYear - 1) / 7) + 1
-          case MONTH_OF_YEAR                => monthOfYear
-          case YEAR_OF_ERA                  => yearOfEra
-          case YEAR                         => yearOfEra
-          case ERA                          => era.getValue
+          case DAY_OF_WEEK                  => dayOfWeek.getValue.toLong
+          case ALIGNED_DAY_OF_WEEK_IN_MONTH => ((dayOfMonth.toLong - 1) % 7) + 1
+          case ALIGNED_DAY_OF_WEEK_IN_YEAR  => ((dayOfYear.toLong - 1) % 7) + 1
+          case DAY_OF_MONTH                 => this.dayOfMonth.toLong
+          case DAY_OF_YEAR                  => this.dayOfYear.toLong
+          case EPOCH_DAY                    => toEpochDay.toLong
+          case ALIGNED_WEEK_OF_MONTH        => ((dayOfMonth.toLong - 1) / 7) + 1
+          case ALIGNED_WEEK_OF_YEAR         => ((dayOfYear.toLong - 1) / 7) + 1
+          case MONTH_OF_YEAR                => monthOfYear.toLong
+          case YEAR_OF_ERA                  => yearOfEra.toLong
+          case YEAR                         => yearOfEra.toLong
+          case ERA                          => era.getValue.toLong
           case _                            => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
       case _ => field.getFrom(this)
@@ -1248,7 +1241,7 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
           HijrahDate.resolvePreviousValid(yearOfEra,
                                           ((nvalue - 1) / 30) + 1,
                                           ((nvalue - 1) % 30) + 1)
-        case EPOCH_DAY             => new HijrahDate(nvalue)
+        case EPOCH_DAY             => new HijrahDate(nvalue.toLong)
         case ALIGNED_WEEK_OF_MONTH => plusDays((newValue - getLong(ALIGNED_WEEK_OF_MONTH)) * 7)
         case ALIGNED_WEEK_OF_YEAR  => plusDays((newValue - getLong(ALIGNED_WEEK_OF_YEAR)) * 7)
         case MONTH_OF_YEAR         => HijrahDate.resolvePreviousValid(yearOfEra, nvalue, dayOfMonth)

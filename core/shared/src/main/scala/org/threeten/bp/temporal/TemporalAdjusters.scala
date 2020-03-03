@@ -315,14 +315,14 @@ object TemporalAdjusters {
         val curDow: Int    = temp.get(DAY_OF_WEEK)
         var dowDiff: Int   = (dowValue - curDow + 7) % 7
         dowDiff += ((ordinal - 1L) * 7L).toInt
-        temp.plus(dowDiff, DAYS)
+        temp.plus(dowDiff.toLong, DAYS)
       } else {
         val temp: Temporal = temporal.`with`(DAY_OF_MONTH, temporal.range(DAY_OF_MONTH).getMaximum)
         val curDow: Int    = temp.get(DAY_OF_WEEK)
         var daysDiff: Int  = dowValue - curDow
         daysDiff = if (daysDiff == 0) 0 else (if (daysDiff > 0) daysDiff - 7 else daysDiff)
         daysDiff -= ((-ordinal - 1L) * 7L).toInt
-        temp.plus(daysDiff, DAYS)
+        temp.plus(daysDiff.toLong, DAYS)
       }
   }
 
@@ -416,10 +416,10 @@ object TemporalAdjusters {
         temporal
       } else if ((relative & 1) == 0) {
         val daysDiff: Int = calDow - dowValue
-        temporal.plus(if (daysDiff >= 0) 7 - daysDiff else -daysDiff, DAYS)
+        temporal.plus(if (daysDiff >= 0) 7L - daysDiff.toLong else -daysDiff.toLong, DAYS)
       } else {
         val daysDiff: Int = dowValue - calDow
-        temporal.minus(if (daysDiff >= 0) 7 - daysDiff else -daysDiff, DAYS)
+        temporal.minus(if (daysDiff >= 0) 7L - daysDiff.toLong else -daysDiff.toLong, DAYS)
       }
     }
   }

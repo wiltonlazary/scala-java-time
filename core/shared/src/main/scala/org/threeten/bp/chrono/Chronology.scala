@@ -36,7 +36,7 @@ import java.io.DataOutput
 import java.io.IOException
 import java.io.InvalidObjectException
 import java.io.ObjectStreamException
-import java.util.{ Locale, Objects, ServiceLoader }
+import java.util.{ Locale, Objects }
 import java.util.concurrent.ConcurrentHashMap
 
 import org.threeten.bp.Clock
@@ -207,6 +207,7 @@ object Chronology {
     val `type`: String = chrono.getCalendarType
     if (`type` != null)
       CHRONOS_BY_TYPE.putIfAbsent(`type`, chrono)
+    ()
   }
 
   @throws[IOException]
@@ -520,7 +521,7 @@ trait Chronology extends Ordered[Chronology] {
         val instant: Instant = Instant.from(temporal)
         zonedDateTime(instant, zone)
       } catch {
-        case ex1: DateTimeException =>
+        case _: DateTimeException =>
           val cldt
             : ChronoLocalDateTime[_] = localDateTime(temporal) /// !!! was _ <: ChronoLocalDate
           val cldtImpl: ChronoLocalDateTimeImpl[_ <: ChronoLocalDate] = ensureChronoLocalDateTime(
@@ -711,7 +712,10 @@ trait Chronology extends Ordered[Chronology] {
       throw new DateTimeException(
         s"Invalid state, field: $field $current conflicts with $field $value"
       )
-    else fieldValues.put(field, value)
+    else {
+      fieldValues.put(field, value)
+      ()
+    }
   }
 
   /** Compares this chronology to another chronology.

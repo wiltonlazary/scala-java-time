@@ -163,7 +163,7 @@ final class ZoneRegion private[bp] (
 
   @throws[IOException]
   private[bp] def write(out: DataOutput): Unit = {
-    out.writeByte(Ser.ZONE_REGION_TYPE)
+    out.writeByte(Ser.ZONE_REGION_TYPE.toInt)
     writeExternal(out)
   }
 

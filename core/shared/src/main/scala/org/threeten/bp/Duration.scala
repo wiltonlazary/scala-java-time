@@ -73,7 +73,7 @@ object Duration {
   private val NANOS_PER_MILLI: Int = 1000000
 
   /** Constant for nanos per second. */
-  private val BI_NANOS_PER_SECOND: BigInteger = BigInteger.valueOf(NANOS_PER_SECOND)
+  private val BI_NANOS_PER_SECOND: BigInteger = BigInteger.valueOf(NANOS_PER_SECOND.toLong)
 
   /** The pattern for parsing. */
   private val PATTERN: Pattern = Pattern.compile(
@@ -145,8 +145,8 @@ object Duration {
     * @throws ArithmeticException if the adjustment causes the seconds to exceed the capacity of { @code Duration}
     */
   def ofSeconds(seconds: Long, nanoAdjustment: Long): Duration = {
-    val secs: Long = Math.addExact(seconds, Math.floorDiv(nanoAdjustment, NANOS_PER_SECOND))
-    val nos: Int   = Math.floorMod(nanoAdjustment, NANOS_PER_SECOND).toInt
+    val secs: Long = Math.addExact(seconds, Math.floorDiv(nanoAdjustment, NANOS_PER_SECOND.toLong))
+    val nos: Int   = Math.floorMod(nanoAdjustment, NANOS_PER_SECOND.toLong).toInt
     create(secs, nos)
   }
 
@@ -264,8 +264,8 @@ object Duration {
           secs = startInclusive.until(adjustedEnd, SECONDS)
         }
       } catch {
-        case ex2: DateTimeException   =>
-        case ex2: ArithmeticException =>
+        case _: DateTimeException   =>
+        case _: ArithmeticException =>
       }
     }
     ofSeconds(secs, nanos)
@@ -359,7 +359,7 @@ object Duration {
       if (_parsed.startsWith("+"))
         _parsed = _parsed.substring(1)
       val `val`: Long = java.lang.Long.parseLong(_parsed)
-      Math.multiplyExact(`val`, multiplier)
+      Math.multiplyExact(`val`, multiplier.toLong)
     } catch {
       case ex: NumberFormatException =>
         throw new DateTimeParseException(s"Text cannot be parsed to a Duration: $errorText",
@@ -406,9 +406,9 @@ object Duration {
     val seconds: Long =
       Math.addExact(daysAsSecs, Math.addExact(hoursAsSecs, Math.addExact(minsAsSecs, secs)))
     if (negate)
-      ofSeconds(seconds, nanos).negated
+      ofSeconds(seconds, nanos.toLong).negated
     else
-      ofSeconds(seconds, nanos)
+      ofSeconds(seconds, nanos.toLong)
   }
 
   /** Obtains an instance of {@code Duration} using seconds and nanoseconds.
@@ -431,14 +431,14 @@ object Duration {
     val divRem: Array[BigInteger] = nanos.divideAndRemainder(BI_NANOS_PER_SECOND)
     if (divRem(0).bitLength > 63)
       throw new ArithmeticException(s"Exceeds capacity of Duration: $nanos")
-    ofSeconds(divRem(0).longValue, divRem(1).intValue)
+    ofSeconds(divRem(0).longValue, divRem(1).longValue)
   }
 
   @throws[IOException]
   private[bp] def readExternal(in: DataInput): Duration = {
     val seconds: Long = in.readLong
     val nanos: Int    = in.readInt
-    Duration.ofSeconds(seconds, nanos)
+    Duration.ofSeconds(seconds, nanos.toLong)
   }
 }
 
@@ -484,7 +484,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
 
   def get(unit: TemporalUnit): Long =
     if (unit eq SECONDS) seconds
-    else if (unit eq NANOS) nanos
+    else if (unit eq NANOS) nanos.toLong
     else throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
 
   /** Checks if this duration is zero length.
@@ -561,7 +561,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     * @throws DateTimeException if the nano-of-second is invalid
     */
   def withNanos(nanoOfSecond: Int): Duration = {
-    NANO_OF_SECOND.checkValidIntValue(nanoOfSecond)
+    NANO_OF_SECOND.checkValidIntValue(nanoOfSecond.toLong)
     Duration.create(seconds, nanoOfSecond)
   }
 
@@ -573,7 +573,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     * @return a { @code Duration} based on this duration with the specified duration added, not null
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def plus(duration: Duration): Duration = plus(duration.getSeconds, duration.getNano)
+  def plus(duration: Duration): Duration = plus(duration.getSeconds, duration.getNano.toLong)
 
   /** Returns a copy of this duration with the specified duration added.
     *
@@ -592,7 +592,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
   def plus(amountToAdd: Long, unit: TemporalUnit): Duration = {
     Objects.requireNonNull(unit, "unit")
     if (unit eq DAYS)
-      return plus(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY), 0)
+      return plus(Math.multiplyExact(amountToAdd, SECONDS_PER_DAY.toLong), 0)
     if (unit.isDurationEstimated)
       throw new DateTimeException("Unit must not have an estimated duration")
     if (amountToAdd == 0)
@@ -610,7 +610,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
         }
       case _ =>
         val duration: Duration = unit.getDuration.multipliedBy(amountToAdd)
-        plusSeconds(duration.getSeconds).plusNanos(duration.getNano)
+        plusSeconds(duration.getSeconds).plusNanos(duration.getNano.toLong)
     }
   }
 
@@ -622,7 +622,8 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     * @return a { @code Duration} based on this duration with the specified days added, not null
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def plusDays(daysToAdd: Long): Duration = plus(Math.multiplyExact(daysToAdd, SECONDS_PER_DAY), 0)
+  def plusDays(daysToAdd: Long): Duration =
+    plus(Math.multiplyExact(daysToAdd, SECONDS_PER_DAY.toLong), 0)
 
   /** Returns a copy of this duration with the specified duration in hours added.
     *
@@ -633,7 +634,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     * @throws ArithmeticException if numeric overflow occurs
     */
   def plusHours(hoursToAdd: Long): Duration =
-    plus(Math.multiplyExact(hoursToAdd, SECONDS_PER_HOUR), 0)
+    plus(Math.multiplyExact(hoursToAdd, SECONDS_PER_HOUR.toLong), 0)
 
   /** Returns a copy of this duration with the specified duration in minutes added.
     *
@@ -644,7 +645,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     * @throws ArithmeticException if numeric overflow occurs
     */
   def plusMinutes(minutesToAdd: Long): Duration =
-    plus(Math.multiplyExact(minutesToAdd, SECONDS_PER_MINUTE), 0)
+    plus(Math.multiplyExact(minutesToAdd, SECONDS_PER_MINUTE.toLong), 0)
 
   /** Returns a copy of this duration with the specified duration in seconds added.
     *
@@ -708,8 +709,8 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
   def minus(duration: Duration): Duration = {
     val secsToSubtract: Long = duration.getSeconds
     val nanosToSubtract: Int = duration.getNano
-    if (secsToSubtract == Long.MinValue) plus(Long.MaxValue, -nanosToSubtract).plus(1, 0)
-    else plus(-secsToSubtract, -nanosToSubtract)
+    if (secsToSubtract == Long.MinValue) plus(Long.MaxValue, -nanosToSubtract.toLong).plus(1, 0)
+    else plus(-secsToSubtract, -nanosToSubtract.toLong)
   }
 
   /** Returns a copy of this duration with the specified duration subtracted.
@@ -834,7 +835,8 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     *
     * @return the total length of the duration in seconds, with a scale of 9, not null
     */
-  private def toSeconds: BigDecimal = BigDecimal.valueOf(seconds).add(BigDecimal.valueOf(nanos, 9))
+  private def toSeconds: BigDecimal =
+    BigDecimal.valueOf(seconds).add(BigDecimal.valueOf(nanos.toLong, 9))
 
   /** Returns a copy of this duration with the length negated.
     *
@@ -888,7 +890,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     if (seconds != 0)
       _temporal = _temporal.plus(seconds, SECONDS)
     if (nanos != 0)
-      _temporal = _temporal.plus(nanos, NANOS)
+      _temporal = _temporal.plus(nanos.toLong, NANOS)
     _temporal
   }
 
@@ -920,7 +922,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     if (seconds != 0)
       _temporal = _temporal.minus(seconds, SECONDS)
     if (nanos != 0)
-      _temporal = _temporal.minus(nanos, NANOS)
+      _temporal = _temporal.minus(nanos.toLong, NANOS)
     _temporal
   }
 
@@ -972,7 +974,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     */
   def toMillis: Long = {
     val result: Long = Math.multiplyExact(seconds, 1000)
-    Math.addExact(result, nanos / Duration.NANOS_PER_MILLI)
+    Math.addExact(result, nanos.toLong / Duration.NANOS_PER_MILLI)
   }
 
   /** Converts this duration to the total length in nanoseconds expressed as a {@code long}.
@@ -984,8 +986,8 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     * @throws ArithmeticException if numeric overflow occurs
     */
   def toNanos: Long = {
-    val result: Long = Math.multiplyExact(seconds, Duration.NANOS_PER_SECOND)
-    Math.addExact(result, nanos)
+    val result: Long = Math.multiplyExact(seconds, Duration.NANOS_PER_SECOND.toLong)
+    Math.addExact(result, nanos.toLong)
   }
 
   /** Compares this duration to the specified {@code Duration}.

@@ -33,9 +33,9 @@ package org.threeten.bp
 
 import java.lang.reflect.{ Constructor, InvocationTargetException }
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestOffsetTimeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestOffsetTimeSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("test_serialization") {
     assertSerializable(OffsetTime.of(LocalTime.of(11, 30, 59, 500), TestOffsetTime.OFFSET_PONE))
     assertSerializable(OffsetTime.MIN)

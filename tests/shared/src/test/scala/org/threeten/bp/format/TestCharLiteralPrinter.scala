@@ -31,12 +31,12 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 
 /** Test CharLiteralPrinterParser. */
-class TestCharLiteralPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestCharLiteralPrinter extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   test("print_emptyCalendrical") {
     buf.append("EXISTING")
     val pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =

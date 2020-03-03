@@ -58,8 +58,8 @@ import org.threeten.bp.temporal.ChronoUnit.NANOS
 import org.threeten.bp.temporal.ChronoUnit.SECONDS
 import org.threeten.bp.temporal.ChronoUnit.WEEKS
 import org.threeten.bp.temporal.ChronoUnit.YEARS
-
-import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
@@ -90,7 +90,7 @@ object TestLocalTime {
 }
 
 class TestLocalTime
-    extends FunSuite
+    extends AnyFunSuite
     with GenDateTimeTest
     with AssertionsHelper
     with BeforeAndAfter {

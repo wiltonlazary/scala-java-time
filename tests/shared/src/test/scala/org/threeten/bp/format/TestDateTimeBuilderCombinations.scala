@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH
 import org.threeten.bp.temporal.ChronoField.ALIGNED_DAY_OF_WEEK_IN_YEAR
@@ -62,7 +62,7 @@ object TestDateTimeBuilderCombinations {
   }
 }
 
-class TestDateTimeBuilderCombinations extends FunSuite with AssertionsHelper {
+class TestDateTimeBuilderCombinations extends AnyFunSuite with AssertionsHelper {
   import TestDateTimeBuilderCombinations.localDateFrom
 
   val data_combine: List[

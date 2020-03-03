@@ -31,9 +31,9 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestLocalTimeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestLocalTimeSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("test_serialization_format") {
     assertEqualsSerialisedForm(LocalTime.of(22, 17, 59, 460 * 1000000))
   }

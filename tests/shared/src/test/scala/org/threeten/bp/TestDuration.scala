@@ -31,12 +31,12 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.temporal.ChronoUnit._
 import org.threeten.bp.temporal.TemporalUnit
 
 /** Test Duration. */
-class TestDuration extends FunSuite with AssertionsHelper {
+class TestDuration extends AnyFunSuite with AssertionsHelper {
 
   test("zero") {
     assertEquals(Duration.ZERO.getSeconds, 0L)

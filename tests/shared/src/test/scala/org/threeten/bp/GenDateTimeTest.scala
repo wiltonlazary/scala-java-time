@@ -31,11 +31,11 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.temporal.{ TemporalAccessor, TemporalField, TemporalQuery }
 
 /** Base test class for {@code DateTime}. */
-trait GenDateTimeTest extends FunSuite with AssertionsHelper {
+trait GenDateTimeTest extends AnyFunSuite with AssertionsHelper {
 
   /** Sample {@code DateTime} objects.
     *

@@ -36,7 +36,7 @@ import org.threeten.bp.temporal.ChronoField.DAY_OF_WEEK
 import org.threeten.bp.temporal.ChronoField.MONTH_OF_YEAR
 import java.util.Locale
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.LocalDate
@@ -50,7 +50,7 @@ object TestTextPrinter {
   private val PROVIDER: TTBPDateTimeTextProvider = TTBPDateTimeTextProvider.getInstance
 }
 
-class TestTextPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_print_emptyCalendrical") {
     assertThrows[DateTimeException] {
       val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =

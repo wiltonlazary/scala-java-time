@@ -31,7 +31,7 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test fixed clock. */
 object TestClock_Fixed {
@@ -41,7 +41,7 @@ object TestClock_Fixed {
     LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2)).toInstant
 }
 
-class TestClock_Fixed extends FunSuite with AssertionsHelper {
+class TestClock_Fixed extends AnyFunSuite with AssertionsHelper {
   test("fixed_InstantZoneId") {
     val test: Clock = Clock.fixed(TestClock_Fixed.INSTANT, TestClock_Fixed.PARIS)
     assertEquals(test.instant, TestClock_Fixed.INSTANT)

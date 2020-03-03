@@ -35,7 +35,7 @@ import java.util.Locale
 import java.util.SimpleTimeZone
 import java.util.TimeZone
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.TemporalAccessor
 import org.threeten.bp.zone.ZoneOffsetTransition
@@ -50,7 +50,7 @@ object TestZoneId {
   private val GAP: Int           = 0
 }
 
-class TestZoneId extends FunSuite with AssertionsHelper {
+class TestZoneId extends AnyFunSuite with AssertionsHelper {
   test("systemDefault_unableToConvert_badFormat") {
     assertThrows[DateTimeException] {
       val current: TimeZone = TimeZone.getDefault

@@ -38,10 +38,13 @@ import java.io.{
   ObjectOutputStream
 }
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp._
 
-class TestStandardZoneRulesSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestStandardZoneRulesSerialization
+    extends AnyFunSuite
+    with AssertionsHelper
+    with AbstractTest {
   test("serialization_loaded") {
     assertSerialization(europeLondon)
     assertSerialization(europeParis)

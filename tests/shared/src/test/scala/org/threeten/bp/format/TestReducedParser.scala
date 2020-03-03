@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.DAY_OF_YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR
@@ -40,7 +40,7 @@ import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.temporal.TemporalQueries
 
 /** Test ReducedPrinterParser. */
-class TestReducedParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestReducedParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_error
     : List[(TTBPDateTimeFormatterBuilder.ReducedPrinterParser, String, Int, Class[_])] = {
     List(

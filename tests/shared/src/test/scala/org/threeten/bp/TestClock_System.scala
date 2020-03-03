@@ -31,7 +31,7 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test system clock. */
 object TestClock_System {
@@ -39,7 +39,7 @@ object TestClock_System {
   val PARIS: ZoneId  = ZoneId.of("Europe/Paris")
 }
 
-class TestClock_System extends FunSuite with AssertionsHelper {
+class TestClock_System extends AnyFunSuite with AssertionsHelper {
   test("instant") {
     val system: Clock = Clock.systemUTC
     assertEquals(system.getZone, ZoneOffset.UTC)

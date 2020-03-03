@@ -38,11 +38,11 @@ import java.io.{
   ObjectOutputStream
 }
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.{ AbstractTest, AssertionsHelper }
 
 /** Test. */
-class TestValueRangeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestValueRangeSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   ignore("immutable") {
     assertImmutable(classOf[ValueRange])
   }

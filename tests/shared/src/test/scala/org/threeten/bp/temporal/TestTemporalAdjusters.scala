@@ -31,13 +31,13 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.DayOfWeek.{ MONDAY, TUESDAY }
 import org.threeten.bp.{ AssertionsHelper, DayOfWeek, LocalDate, Month }
 import org.threeten.bp.Month.{ DECEMBER, JANUARY }
 
 /** Test DateTimeAdjusters. */
-class TestTemporalAdjusters extends FunSuite with AssertionsHelper {
+class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
   test("factory_firstDayOfMonth") {
     assertNotNull(TemporalAdjusters.firstDayOfMonth)
   }

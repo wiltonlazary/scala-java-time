@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.temporal.ChronoField.NANO_OF_SECOND
 import org.threeten.bp.temporal.ChronoField.SECOND_OF_MINUTE
 import org.threeten.bp.{ AssertionsHelper, DateTimeException, LocalTime }
@@ -40,7 +40,10 @@ import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.internal.{ TTBPDateTimeFormatterBuilder, TTBPDateTimeParseContext }
 
 /** Test FractionPrinterParser. */
-class TestFractionPrinterParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestFractionPrinterParser
+    extends AnyFunSuite
+    with GenTestPrinterParser
+    with AssertionsHelper {
   test("test_print_emptyCalendrical") {
     assertThrows[DateTimeException] {
       val pp: TTBPDateTimeFormatterBuilder.FractionPrinterParser =

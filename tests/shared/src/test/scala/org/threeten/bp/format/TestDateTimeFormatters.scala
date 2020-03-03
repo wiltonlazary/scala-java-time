@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import java.text.ParsePosition
 import java.util.Locale
@@ -151,7 +151,7 @@ object TestDateTimeFormatters {
 
 }
 
-class TestDateTimeFormatters extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
 
   def toTemporalQuery[T](f: TemporalAccessor => T): TemporalQuery[T] =
     new TemporalQuery[T] {

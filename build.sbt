@@ -23,33 +23,9 @@ lazy val commonSettings = Seq(
   licenses := Seq("BSD 3-Clause License" -> url("https://opensource.org/licenses/BSD-3-Clause")),
   scalaVersion := scalaVer,
   crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1"),
-  scalacOptions ++= Seq(
-    "-deprecation",
-    "-feature",
-    "-encoding",
-    "UTF-8"
-  ),
   // Don't include threeten on the binaries
   mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter {
     case (f, s) => !s.contains("threeten")
-  },
-  scalacOptions := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, scalaMajor)) if scalaMajor >= 11 && scalaMajor <= 12 =>
-        scalacOptions.value ++ Seq("-deprecation:false",
-                                   "-Xfatal-warnings",
-                                   "-Yrangepos",
-                                   "-unchecked",
-                                   "-target:jvm-1.8")
-      case Some((2, 13)) =>
-        scalacOptions.value ++ Seq("-deprecation:false",
-                                   "-Xsource:2.13",
-                                   "-Xfatal-warnings",
-                                   "-Yrangepos",
-                                   "-target:jvm-1.8")
-      case Some((2, 10)) =>
-        scalacOptions.value ++ Seq("-target:jvm-1.8")
-    }
   },
   scalacOptions in (Compile, doc) := {
     CrossVersion.partialVersion(scalaVersion.value) match {
@@ -59,6 +35,7 @@ lazy val commonSettings = Seq(
         Seq.empty
     }
   },
+  scalacOptions ++= Seq("-target:jvm-1.8", "-deprecation:false"),
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
   autoAPIMappings := true,
   publishArtifact in Test := false,

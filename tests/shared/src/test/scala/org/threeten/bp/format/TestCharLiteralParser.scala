@@ -31,13 +31,13 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 import org.threeten.bp.temporal.TemporalQueries
 
 /** Test CharLiteralPrinterParser. */
-class TestCharLiteralParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestCharLiteralParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_success: List[List[Any]] = {
     List(
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "a", 0, 1),

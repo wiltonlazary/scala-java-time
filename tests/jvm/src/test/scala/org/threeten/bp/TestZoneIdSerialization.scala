@@ -33,10 +33,10 @@ package org.threeten.bp
 
 import java.lang.reflect.{ Field, Modifier }
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test ZoneId. */
-class TestZoneIdSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestZoneIdSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("immutable") {
     val cls: Class[ZoneId] = classOf[ZoneId]
     assertTrue(Modifier.isPublic(cls.getModifiers))

@@ -31,7 +31,7 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test offset clock. */
 object TestClock_Offset {
@@ -42,7 +42,7 @@ object TestClock_Offset {
   val OFFSET: Duration = Duration.ofSeconds(2)
 }
 
-class TestClock_Offset extends FunSuite with AssertionsHelper {
+class TestClock_Offset extends AnyFunSuite with AssertionsHelper {
   test("offset_ClockDuration") {
     val test: Clock = Clock.offset(Clock.fixed(TestClock_Offset.INSTANT, TestClock_Offset.PARIS),
                                    TestClock_Offset.OFFSET)

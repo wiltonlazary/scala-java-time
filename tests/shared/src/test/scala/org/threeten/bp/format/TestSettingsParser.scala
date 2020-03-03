@@ -33,13 +33,13 @@ package org.threeten.bp.format
 
 import java.lang.StringBuilder
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder.SettingsParser
 
 /** Test SettingsParser. */
-class TestSettingsParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestSettingsParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_print_sensitive") {
     val pp: TTBPDateTimeFormatterBuilder.SettingsParser = SettingsParser.SENSITIVE
     val buf: StringBuilder                              = new StringBuilder

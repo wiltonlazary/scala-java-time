@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.chrono
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -43,7 +43,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
 class TestChronoLocalDateTimeSerialization
-    extends FunSuite
+    extends AnyFunSuite
     with AssertionsHelper
     with AbstractTest {
   val data_of_calendars: List[Chronology] = {

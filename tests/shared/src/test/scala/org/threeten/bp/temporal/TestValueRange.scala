@@ -31,11 +31,11 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 
 /** Test. */
-class TestValueRange extends FunSuite with AssertionsHelper {
+class TestValueRange extends AnyFunSuite with AssertionsHelper {
 
   test("of_longlong") {
     val test: ValueRange = ValueRange.of(1, 12)

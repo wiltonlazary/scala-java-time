@@ -33,12 +33,12 @@ package org.threeten.bp
 
 import java.util.Arrays
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
 import org.threeten.bp.temporal._
 
 /** Test ZoneOffset. */
-class TestZoneOffset extends FunSuite with GenDateTimeTest with AssertionsHelper {
+class TestZoneOffset extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
   protected def samples: List[TemporalAccessor] =
     List(ZoneOffset.ofHours(1), ZoneOffset.ofHoursMinutesSeconds(-5, -6, -30))
 

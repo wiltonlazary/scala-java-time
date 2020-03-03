@@ -31,12 +31,12 @@
  */
 package org.threeten.bp.zone
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp._
 import org.threeten.bp.temporal.ChronoUnit.HOURS
 
 class TestZoneOffsetTransitionSerialization
-    extends FunSuite
+    extends AnyFunSuite
     with AssertionsHelper
     with AbstractTest {
 

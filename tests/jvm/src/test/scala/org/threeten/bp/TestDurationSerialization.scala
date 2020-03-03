@@ -32,10 +32,10 @@
 package org.threeten.bp
 
 import java.io._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test Duration. */
-class TestDurationSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestDurationSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("serialization") {
     assertSerializable(Duration.ofHours(5))
     assertSerializable(Duration.ofHours(-5))

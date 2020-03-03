@@ -1,12 +1,12 @@
 package java.util
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.ZoneId
 
-class TestTimeZone extends FunSuite {
+class TestTimeZone extends AnyFunSuite {
 
   val sampleTimeZones = Seq("UTC", "GMT", "Europe/Madrid", "Australia/Sydney")
-  val sampleOffsets = Seq(0, 0, 3600000, 36000000)
+  val sampleOffsets   = Seq(0, 0, 3600000, 36000000)
   val sampleDisplayNames = Seq(
     "Coordinated Universal Time",
     "Greenwich Mean Time",

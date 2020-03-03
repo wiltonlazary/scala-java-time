@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.Platform
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
@@ -40,7 +40,7 @@ import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 import org.threeten.bp.temporal.TemporalQueries
 
 /** Test OffsetIdPrinterParser. */
-class TestZoneOffsetParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestZoneOffsetParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_error
     : List[(TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser, String, Int, Class[_])] = {
     List(

@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.chrono
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.DAY_OF_MONTH
@@ -52,7 +52,7 @@ object TestThaiBuddhistChronology {
   private val YDIFF: Int = 543
 }
 
-class TestThaiBuddhistChronology extends FunSuite with AssertionsHelper {
+class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
   test("test_chrono_byName") {
     val c: Chronology    = ThaiBuddhistChronology.INSTANCE
     val test: Chronology = Chronology.of("ThaiBuddhist")

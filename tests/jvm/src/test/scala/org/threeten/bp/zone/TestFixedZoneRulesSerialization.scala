@@ -38,11 +38,11 @@ import java.io.{
   ObjectOutputStream
 }
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp._
 
 /** Test ZoneRules Serialization for fixed offset time-zones. */
-class TestFixedZoneRulesSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestFixedZoneRulesSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   private def make(offset: ZoneOffset): ZoneRules =
     offset.getRules
 

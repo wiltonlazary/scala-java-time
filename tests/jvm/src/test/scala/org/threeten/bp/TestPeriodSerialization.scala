@@ -33,9 +33,9 @@ package org.threeten.bp
 
 import java.io._
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestPeriodSerialization extends FunSuite with AssertionsHelper {
+class TestPeriodSerialization extends AnyFunSuite with AssertionsHelper {
   def data_serialization: List[List[Period]] =
     List(List(Period.ZERO), List(Period.ofDays(1)), List(Period.of(1, 2, 3)))
 

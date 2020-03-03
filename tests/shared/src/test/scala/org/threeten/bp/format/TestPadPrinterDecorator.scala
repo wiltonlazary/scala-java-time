@@ -31,14 +31,14 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 
 /** Test PadPrinterDecorator. */
-class TestPadPrinterDecorator extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestPadPrinterDecorator extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_print_emptyCalendrical") {
     val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
       new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(

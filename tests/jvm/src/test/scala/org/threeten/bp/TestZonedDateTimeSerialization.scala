@@ -31,9 +31,9 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestZonedDateTimeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestZonedDateTimeSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("test_serialization") {
     assertSerializable(
       ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 11, 30, 59, 500), TestZonedDateTime.ZONE_0100)

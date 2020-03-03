@@ -33,7 +33,7 @@ package org.threeten.bp
 
 import java.io._
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test. */
 object TestPeriod {
@@ -44,7 +44,7 @@ object TestPeriod {
     LocalDate.of(y, m, d)
 }
 
-class TestPeriod extends FunSuite with AssertionsHelper {
+class TestPeriod extends AnyFunSuite with AssertionsHelper {
   test("interfaces") {
     assertTrue(classOf[Serializable].isAssignableFrom(classOf[Period]))
   }

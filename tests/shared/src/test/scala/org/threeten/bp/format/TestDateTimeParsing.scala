@@ -40,7 +40,7 @@ import org.threeten.bp.temporal.ChronoField.NANO_OF_SECOND
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
 import org.threeten.bp.temporal.ChronoField.SECOND_OF_DAY
 import org.threeten.bp.temporal.ChronoField.SECOND_OF_MINUTE
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.Instant
@@ -95,7 +95,7 @@ object TestDateTimeParsing {
       .toFormatter;
 }
 
-class TestDateTimeParsing extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestDateTimeParsing extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_instantZones: List[(DateTimeFormatter, String, ZonedDateTime)] = {
     List(
       (TestDateTimeParsing.LOCALFIELDS_ZONEID,

@@ -2,12 +2,12 @@ package org.threeten.bp
 
 import org.scalactic.{ Prettifier, source }
 import org.scalatest.Assertion
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
   * Helper methods to avoid rewriting much of the TestNG tests
   */
-trait AssertionsHelper { this: FunSuite =>
+trait AssertionsHelper { this: AnyFunSuite =>
   def isIsoLeap(year: Long): Boolean =
     if (year % 4 != 0)
       false

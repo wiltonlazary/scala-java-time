@@ -31,14 +31,14 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.{ DAY_OF_MONTH, DAY_OF_WEEK }
 import org.threeten.bp.temporal.{ TemporalField, TemporalQueries }
 import org.threeten.bp.format.internal.{ TTBPDateTimeFormatterBuilder, TTBPDateTimeParseContext }
 
 /** Test NumberPrinterParser. */
-class TestNumberParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_error: List[List[Any]] = {
     List[List[Any]](
       List(

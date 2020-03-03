@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.zone
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.DayOfWeek.FRIDAY
 import org.threeten.bp.DayOfWeek.MONDAY
 import org.threeten.bp.DayOfWeek.SUNDAY
@@ -72,7 +72,7 @@ object TestZoneRulesBuilder {
     LocalDateTime.of(year, month, day, h, m)
 }
 
-class TestZoneRulesBuilder extends FunSuite with AssertionsHelper {
+class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
 
   private def assertGap(
     test:   ZoneRules,

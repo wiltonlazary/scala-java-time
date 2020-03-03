@@ -34,14 +34,14 @@ package org.threeten.bp.format
 import java.util.Locale
 import java.lang.Long
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.{ AMPM_OF_DAY, DAY_OF_WEEK, MONTH_OF_YEAR }
 import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.internal.TTBPDateTimeTextProvider
 
 /** Test TTBPSimpleDateTimeTextProvider. */
-class TestTTBPSimpleDateTimeTextProvider extends FunSuite with AssertionsHelper {
+class TestTTBPSimpleDateTimeTextProvider extends AnyFunSuite with AssertionsHelper {
   private val enUS: Locale = new Locale("en", "US")
   private val ptBR: Locale = new Locale("pt", "BR")
   private val frFR: Locale = new Locale("fr", "FR")

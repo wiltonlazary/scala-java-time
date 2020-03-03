@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.chrono
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import java.util.Locale
 import org.threeten.bp.AssertionsHelper
@@ -155,7 +155,7 @@ object TestChronoLocalDate {
 
 }
 
-class TestChronoLocalDate extends FunSuite with AssertionsHelper {
+class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
   val data_of_calendars: List[Chronology] = {
     List[Chronology]((HijrahChronology.INSTANCE),
                      (IsoChronology.INSTANCE),

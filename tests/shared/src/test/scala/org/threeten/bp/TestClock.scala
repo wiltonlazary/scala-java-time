@@ -31,7 +31,7 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test Clock. */
 object TestClock {
@@ -59,7 +59,7 @@ object TestClock {
   private val MOCK_INSTANT: Clock = new TestClock.MockInstantClock(INSTANT.toEpochMilli, ZONE)
 }
 
-class TestClock extends FunSuite with AssertionsHelper {
+class TestClock extends AnyFunSuite with AssertionsHelper {
   test("mockInstantClock_get") {
     assertEquals(TestClock.MOCK_INSTANT.instant, TestClock.INSTANT)
     assertEquals(TestClock.MOCK_INSTANT.millis, TestClock.INSTANT.toEpochMilli)

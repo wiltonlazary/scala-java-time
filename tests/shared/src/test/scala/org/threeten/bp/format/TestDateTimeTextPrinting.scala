@@ -34,13 +34,13 @@ package org.threeten.bp.format
 import java.util.Locale
 import java.lang.Long
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.{ AssertionsHelper, LocalDateTime, Month }
 import org.threeten.bp.temporal.ChronoField.{ DAY_OF_MONTH, DAY_OF_WEEK, MONTH_OF_YEAR }
 import org.threeten.bp.temporal.TemporalField
 
 /** Test text printing. */
-class TestDateTimeTextPrinting extends FunSuite with AssertionsHelper {
+class TestDateTimeTextPrinting extends AnyFunSuite with AssertionsHelper {
 
   def data_text: List[List[Any]] =
     List(

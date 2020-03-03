@@ -33,7 +33,7 @@ package org.threeten.bp
 
 import java.util.Locale
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.Month.{ DECEMBER, JANUARY, JUNE }
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.TextStyle
@@ -45,7 +45,7 @@ object TestMonth {
   val MAX_LENGTH: Int = 12
 }
 
-class TestMonth extends FunSuite with GenDateTimeTest with AssertionsHelper {
+class TestMonth extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
   protected def samples: List[TemporalAccessor] =
     List(JANUARY, JUNE, DECEMBER)
 

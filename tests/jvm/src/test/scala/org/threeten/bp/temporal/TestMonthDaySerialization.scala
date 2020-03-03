@@ -31,12 +31,12 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import org.threeten.bp._
 
 /** Test MonthDay. */
-class TestMonthDaySerialization extends FunSuite with AbstractTest {
+class TestMonthDaySerialization extends AnyFunSuite with AbstractTest {
   test("test_serialization") {
     assertSerializable(MonthDay.of(7, 15))
   }

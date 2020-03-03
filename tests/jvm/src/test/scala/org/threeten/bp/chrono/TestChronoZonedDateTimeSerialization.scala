@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.chrono
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -44,7 +44,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 
 class TestChronoZonedDateTimeSerialization
-    extends FunSuite
+    extends AnyFunSuite
     with AssertionsHelper
     with AbstractTest {
   val data_of_calendars: List[Chronology] = {

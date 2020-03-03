@@ -1,8 +1,8 @@
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestExamples extends FunSuite with AssertionsHelper {
+class TestExamples extends AnyFunSuite with AssertionsHelper {
 
   test("testExamples") {
 

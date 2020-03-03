@@ -33,14 +33,14 @@ package org.threeten.bp
 
 import java.util.Locale
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.DayOfWeek.{ MONDAY, SUNDAY, WEDNESDAY }
 import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.ChronoField.DAY_OF_WEEK
 import org.threeten.bp.temporal._
 
 /** Test DayOfWeek. */
-class TestDayOfWeek extends FunSuite with GenDateTimeTest with AssertionsHelper {
+class TestDayOfWeek extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
 
   protected def samples: List[TemporalAccessor] =
     List(MONDAY, WEDNESDAY, SUNDAY)

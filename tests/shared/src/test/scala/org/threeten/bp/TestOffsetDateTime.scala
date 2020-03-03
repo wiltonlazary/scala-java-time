@@ -65,8 +65,8 @@ import org.threeten.bp.temporal.ChronoField.YEAR_OF_ERA
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.NANOS
 import org.threeten.bp.temporal.ChronoUnit.SECONDS
-
-import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.ChronoField
@@ -89,7 +89,7 @@ object TestOffsetDateTime {
 }
 
 class TestOffsetDateTime
-    extends FunSuite
+    extends AnyFunSuite
     with GenDateTimeTest
     with AssertionsHelper
     with BeforeAndAfter {

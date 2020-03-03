@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.zone
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp._
 import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
@@ -44,7 +44,7 @@ object TestFixedZoneRules {
   val INSTANT: Instant        = LDT.toInstant(OFFSET_PONE)
 }
 
-class TestFixedZoneRules extends FunSuite with AssertionsHelper {
+class TestFixedZoneRules extends AnyFunSuite with AssertionsHelper {
   private def make(offset: ZoneOffset): ZoneRules =
     offset.getRules
 

@@ -31,14 +31,14 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.DayOfWeek._
 import org.threeten.bp.{ AssertionsHelper, DayOfWeek, LocalDate }
 import org.threeten.bp.format.{ DateTimeFormatter, DateTimeFormatterBuilder }
 import org.threeten.bp.temporal.ChronoField.DAY_OF_WEEK
 
 /** Test. */
-class TestIsoFields extends FunSuite with AssertionsHelper {
+class TestIsoFields extends AnyFunSuite with AssertionsHelper {
   test("enum") {
     assertTrue(IsoFields.WEEK_OF_WEEK_BASED_YEAR.isInstanceOf[Enum[_]])
     assertTrue(IsoFields.WEEK_BASED_YEAR.isInstanceOf[Enum[_]])

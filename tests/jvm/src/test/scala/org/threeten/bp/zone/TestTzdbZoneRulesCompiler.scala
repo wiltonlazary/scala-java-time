@@ -36,7 +36,7 @@ import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.StringTokenizer
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp._
 import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
@@ -95,7 +95,7 @@ object TestTzdbZoneRulesCompiler {
 
 /** Test TzdbZoneRulesCompiler.
   */
-class TestTzdbZoneRulesCompiler extends FunSuite with AssertionsHelper {
+class TestTzdbZoneRulesCompiler extends AnyFunSuite with AssertionsHelper {
   test("parseYear_specific") {
     val test: TzdbZoneRulesCompiler =
       new TzdbZoneRulesCompiler("2010c", new java.util.ArrayList[File], null, false)

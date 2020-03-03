@@ -31,7 +31,7 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test OffsetDateTime creation. */
 object TestOffsetDateTime_instants {
@@ -40,7 +40,7 @@ object TestOffsetDateTime_instants {
   private val OFFSET_MIN: ZoneOffset  = ZoneOffset.ofHours(-18)
 }
 
-class TestOffsetDateTime_instants extends FunSuite with AssertionsHelper {
+class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
   test("factory_ofInstant_nullInstant") {
     assertThrows[NullPointerException] {
       OffsetDateTime.ofInstant(null.asInstanceOf[Instant], TestOffsetDateTime_instants.OFFSET_PONE)

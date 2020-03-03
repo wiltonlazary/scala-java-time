@@ -31,12 +31,12 @@
  */
 package org.threeten.bp.zone
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp._
 import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
 class TestZoneOffsetTransitionRuleSerialization
-    extends FunSuite
+    extends AnyFunSuite
     with AssertionsHelper
     with AbstractTest {
   test("getters_floatingWeek") {

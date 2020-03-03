@@ -1,11 +1,11 @@
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.Platform.zoneMap
 import scala.collection.immutable.TreeMap
 import java.util.AbstractMap.SimpleEntry
 
-class TestZoneMap extends FunSuite with AssertionsHelper {
+class TestZoneMap extends AnyFunSuite with AssertionsHelper {
   val m = TreeMap(0 -> "0", 1 -> "1", 3 -> "3", 2 -> "2")
   val r = TreeMap(0 -> "0", 1 -> "1", 3 -> "3", 2 -> "2")(implicitly[Ordering[Int]].reverse)
 

@@ -32,7 +32,7 @@
 package org.threeten.bp.format
 
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.DAY_OF_MONTH
 import java.lang.StringBuilder
@@ -57,7 +57,7 @@ object TestDateTimeFormatter {
 }
 
 class TestDateTimeFormatter
-    extends FunSuite
+    extends AnyFunSuite
     with GenTestPrinterParser
     with AssertionsHelper
     with BeforeAndAfterEach {

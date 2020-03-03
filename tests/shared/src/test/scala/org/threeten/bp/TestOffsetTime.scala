@@ -50,7 +50,8 @@ import org.threeten.bp.temporal.ChronoField.SECOND_OF_MINUTE
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.NANOS
 import org.threeten.bp.temporal.ChronoUnit.SECONDS
-import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
@@ -69,7 +70,7 @@ object TestOffsetTime {
 }
 
 class TestOffsetTime
-    extends FunSuite
+    extends AnyFunSuite
     with GenDateTimeTest
     with AssertionsHelper
     with BeforeAndAfter {

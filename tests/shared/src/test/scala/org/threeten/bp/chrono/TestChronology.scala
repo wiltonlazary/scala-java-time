@@ -35,10 +35,11 @@ import java.util.Locale
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.AssertionsHelper
 
-import org.scalatest.{ BeforeAndAfterEach, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfterEach
 
 /** Test Chrono class. */
-class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHelper {
+class TestChronology extends AnyFunSuite with BeforeAndAfterEach with AssertionsHelper {
   override def beforeEach(): Unit = {
     var c: Chronology = null
     c = HijrahChronology.INSTANCE

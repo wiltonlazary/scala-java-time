@@ -36,11 +36,14 @@ import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import org.threeten.bp.AssertionsHelper
-
-import org.scalatest.{ BeforeAndAfterEach, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfterEach
 
 /** Test Chrono class. */
-class TestChronologySerialization extends FunSuite with BeforeAndAfterEach with AssertionsHelper {
+class TestChronologySerialization
+    extends AnyFunSuite
+    with BeforeAndAfterEach
+    with AssertionsHelper {
   val data_CalendarType: List[(Chronology, String)] = {
     List(
       (HijrahChronology.INSTANCE, "islamic-umalqura"),

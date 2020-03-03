@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
 import org.threeten.bp.DateTimeException
@@ -43,7 +43,7 @@ object TestZoneOffsetPrinter {
   private val OFFSET_0130: ZoneOffset = ZoneOffset.of("+01:30")
 }
 
-class TestZoneOffsetPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestZoneOffsetPrinter extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val provider_offsets: List[List[AnyRef]] = {
     List(
       List("+HH", "NO-OFFSET", ZoneOffset.UTC),

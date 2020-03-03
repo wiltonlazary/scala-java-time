@@ -31,7 +31,7 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test tick clock. */
 object TestClock_Tick {
@@ -43,7 +43,7 @@ object TestClock_Tick {
   val INSTANT: Instant = ZDT.toInstant
 }
 
-class TestClock_Tick extends FunSuite with AssertionsHelper {
+class TestClock_Tick extends AnyFunSuite with AssertionsHelper {
   test("tick_ClockDuration_250millis") {
     {
       var i: Int = 0

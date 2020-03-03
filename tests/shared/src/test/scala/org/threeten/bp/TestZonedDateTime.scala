@@ -67,7 +67,8 @@ import org.threeten.bp.temporal.ChronoUnit.MINUTES
 import org.threeten.bp.temporal.ChronoUnit.NANOS
 import org.threeten.bp.temporal.ChronoUnit.SECONDS
 
-import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
@@ -134,7 +135,7 @@ object TestZonedDateTime {
 }
 
 class TestZonedDateTime
-    extends FunSuite
+    extends AnyFunSuite
     with GenDateTimeTest
     with AssertionsHelper
     with BeforeAndAfter {

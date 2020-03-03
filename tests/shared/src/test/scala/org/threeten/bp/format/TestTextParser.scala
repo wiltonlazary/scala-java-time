@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.DAY_OF_MONTH
 import org.threeten.bp.temporal.ChronoField.DAY_OF_WEEK
@@ -48,7 +48,7 @@ object TestTextParser {
   private val PROVIDER: TTBPDateTimeTextProvider = TTBPDateTimeTextProvider.getInstance
 }
 
-class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestTextParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_error: List[(TTBPDateTimeFormatterBuilder.TextPrinterParser, String, Int, Class[_])] = {
     List(
       (new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,

@@ -34,7 +34,8 @@ package org.threeten.bp.format
 import java.util.Locale
 import java.lang.StringBuilder
 
-import org.scalatest.{ BeforeAndAfterEach, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfterEach
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
@@ -56,7 +57,7 @@ object GenTestPrinterParser {
   }
 }
 
-trait GenTestPrinterParser extends BeforeAndAfterEach { this: FunSuite =>
+trait GenTestPrinterParser extends BeforeAndAfterEach { this: AnyFunSuite =>
   protected var printEmptyContext: TTBPDateTimePrintContext = null
   protected var printContext: TTBPDateTimePrintContext      = null
   protected var parseContext: TTBPDateTimeParseContext      = null

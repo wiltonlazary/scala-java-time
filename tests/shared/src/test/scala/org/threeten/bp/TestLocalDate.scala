@@ -31,7 +31,8 @@
  */
 package org.threeten.bp
 
-import org.scalatest.{ BeforeAndAfter, FunSuite }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.{ DateTimeFormatter, DateTimeParseException }
 import org.threeten.bp.temporal.ChronoField._
@@ -46,7 +47,7 @@ object TestLocalDate {
 }
 
 class TestLocalDate
-    extends FunSuite
+    extends AnyFunSuite
     with GenDateTimeTest
     with AssertionsHelper
     with BeforeAndAfter {

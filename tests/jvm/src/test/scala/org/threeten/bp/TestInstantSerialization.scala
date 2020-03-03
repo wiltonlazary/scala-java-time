@@ -31,9 +31,9 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestInstantSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestInstantSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
 
   test("serialization") {
     assertSerializable(Instant.ofEpochMilli(134L))

@@ -31,8 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
-
 /** Framework-level interface defining an amount of time,
   * such as "6 hours", "8 days" or "2 years and 3 months".
   *
@@ -60,6 +58,7 @@ import org.threeten.bp.DateTimeException
   * however immutability is strongly recommended.
   */
 trait TemporalAmount {
+
   /** Gets the list of units, from largest to smallest, that fully define this amount.
     *
     * @return the list of units.

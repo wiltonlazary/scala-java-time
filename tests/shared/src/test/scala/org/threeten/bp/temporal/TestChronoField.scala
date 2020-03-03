@@ -31,11 +31,11 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 
 /** Test. */
-class TestChronoField extends FunSuite with AssertionsHelper {
+class TestChronoField extends AnyFunSuite with AssertionsHelper {
   test("isDateBased") {
     for (field <- ChronoField.values) {
       if ((field eq ChronoField.INSTANT_SECONDS) || (field eq ChronoField.OFFSET_SECONDS)) {

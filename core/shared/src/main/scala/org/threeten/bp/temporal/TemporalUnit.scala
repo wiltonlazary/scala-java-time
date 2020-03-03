@@ -31,7 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
 import org.threeten.bp.Duration
 
 /** A unit of date-time, such as Days or Hours.
@@ -57,6 +56,7 @@ import org.threeten.bp.Duration
   * It is recommended to use an enum where possible.
   */
 trait TemporalUnit {
+
   /** Gets the duration of this unit, which may be an estimate.
     *
     * All units return a duration measured in standard nanoseconds from this method.

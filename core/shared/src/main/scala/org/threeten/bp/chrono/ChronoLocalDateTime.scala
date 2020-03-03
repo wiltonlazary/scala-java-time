@@ -34,7 +34,7 @@ package org.threeten.bp.chrono
 import org.threeten.bp.temporal.ChronoField.EPOCH_DAY
 import org.threeten.bp.temporal.ChronoField.NANO_OF_DAY
 import org.threeten.bp.temporal.ChronoUnit.NANOS
-import java.util.{Objects, Comparator}
+import java.util.{ Comparator, Objects }
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
@@ -52,6 +52,7 @@ import org.threeten.bp.temporal.TemporalQuery
 import org.threeten.bp.temporal.TemporalUnit
 
 object ChronoLocalDateTime {
+
   /** Gets a comparator that compares {@code ChronoLocalDateTime} in
     * time-line order ignoring the chronology.
     *
@@ -70,10 +71,15 @@ object ChronoLocalDateTime {
 
   private val DATE_TIME_COMPARATOR: Comparator[ChronoLocalDateTime[_ <: ChronoLocalDate]] =
     new Comparator[ChronoLocalDateTime[_ <: ChronoLocalDate]] {
-      override def compare(datetime1: ChronoLocalDateTime[_ <: ChronoLocalDate], datetime2: ChronoLocalDateTime[_ <: ChronoLocalDate]): Int = {
-        var cmp: Int = java.lang.Long.compare(datetime1.toLocalDate.toEpochDay, datetime2.toLocalDate.toEpochDay)
+      override def compare(
+        datetime1: ChronoLocalDateTime[_ <: ChronoLocalDate],
+        datetime2: ChronoLocalDateTime[_ <: ChronoLocalDate]
+      ): Int = {
+        var cmp: Int =
+          java.lang.Long.compare(datetime1.toLocalDate.toEpochDay, datetime2.toLocalDate.toEpochDay)
         if (cmp == 0)
-          cmp = java.lang.Long.compare(datetime1.toLocalTime.toNanoOfDay, datetime2.toLocalTime.toNanoOfDay)
+          cmp = java.lang.Long
+            .compare(datetime1.toLocalTime.toNanoOfDay, datetime2.toLocalTime.toNanoOfDay)
         cmp
       }
     }
@@ -104,12 +110,18 @@ object ChronoLocalDateTime {
       return temporal.asInstanceOf[ChronoLocalDateTime[_]]
     val chrono: Chronology = temporal.query(TemporalQueries.chronology)
     if (chrono == null)
-      throw new DateTimeException(s"No Chronology found to create ChronoLocalDateTime: ${temporal.getClass}")
+      throw new DateTimeException(
+        s"No Chronology found to create ChronoLocalDateTime: ${temporal.getClass}"
+      )
     chrono.localDateTime(temporal)
   }
 }
 
-abstract class ChronoLocalDateTime[D <: ChronoLocalDate] extends Temporal with TemporalAdjuster with Ordered[ChronoLocalDateTime[_]] {
+abstract class ChronoLocalDateTime[D <: ChronoLocalDate]
+    extends Temporal
+    with TemporalAdjuster
+    with Ordered[ChronoLocalDateTime[_]] {
+
   /** Gets the chronology of this date-time.
     *
     * The {@code Chronology} represents the calendar system in use.
@@ -159,10 +171,9 @@ abstract class ChronoLocalDateTime[D <: ChronoLocalDate] extends Temporal with T
       case TemporalQueries.precision  => NANOS.asInstanceOf[R]
       case TemporalQueries.localDate  => LocalDate.ofEpochDay(toLocalDate.toEpochDay).asInstanceOf[R]
       case TemporalQueries.localTime  => toLocalTime.asInstanceOf[R]
-      case TemporalQueries.zone
-         | TemporalQueries.zoneId
-         | TemporalQueries.offset     => null.asInstanceOf[R]
-      case _                          => super.query(query)
+      case TemporalQueries.zone | TemporalQueries.zoneId | TemporalQueries.offset =>
+        null.asInstanceOf[R]
+      case _ => super.query(query)
     }
 
   def adjustInto(temporal: Temporal): Temporal =
@@ -222,7 +233,8 @@ abstract class ChronoLocalDateTime[D <: ChronoLocalDate] extends Temporal with T
     * @param offset  the offset to use for the conversion, not null
     * @return an {@code Instant} representing the same instant, not null
     */
-  def toInstant(offset: ZoneOffset): Instant = Instant.ofEpochSecond(toEpochSecond(offset), toLocalTime.getNano)
+  def toInstant(offset: ZoneOffset): Instant =
+    Instant.ofEpochSecond(toEpochSecond(offset), toLocalTime.getNano.toLong)
 
   /** Converts this date-time to the number of seconds from the epoch
     * of 1970-01-01T00:00:00Z.
@@ -237,7 +249,7 @@ abstract class ChronoLocalDateTime[D <: ChronoLocalDate] extends Temporal with T
   def toEpochSecond(offset: ZoneOffset): Long = {
     Objects.requireNonNull(offset, "offset")
     val epochDay: Long = toLocalDate.toEpochDay
-    var secs: Long = epochDay * 86400 + toLocalTime.toSecondOfDay
+    var secs: Long     = epochDay * 86400 + toLocalTime.toSecondOfDay
     secs -= offset.getTotalSeconds
     secs
   }
@@ -286,7 +298,7 @@ abstract class ChronoLocalDateTime[D <: ChronoLocalDate] extends Temporal with T
     * @return true if this is after the specified date-time
     */
   def isAfter(other: ChronoLocalDateTime[_ <: ChronoLocalDate]): Boolean = {
-    val thisEpDay: Long = this.toLocalDate.toEpochDay
+    val thisEpDay: Long  = this.toLocalDate.toEpochDay
     val otherEpDay: Long = other.toLocalDate.toEpochDay
     thisEpDay > otherEpDay || (thisEpDay == otherEpDay && this.toLocalTime.toNanoOfDay > other.toLocalTime.toNanoOfDay)
   }
@@ -302,7 +314,7 @@ abstract class ChronoLocalDateTime[D <: ChronoLocalDate] extends Temporal with T
     * @return true if this is before the specified date-time
     */
   def isBefore(other: ChronoLocalDateTime[_ <: ChronoLocalDate]): Boolean = {
-    val thisEpDay: Long = this.toLocalDate.toEpochDay
+    val thisEpDay: Long  = this.toLocalDate.toEpochDay
     val otherEpDay: Long = other.toLocalDate.toEpochDay
     thisEpDay < otherEpDay || (thisEpDay == otherEpDay && this.toLocalTime.toNanoOfDay < other.toLocalTime.toNanoOfDay)
   }

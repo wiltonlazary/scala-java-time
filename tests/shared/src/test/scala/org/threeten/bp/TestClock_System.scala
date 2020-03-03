@@ -31,15 +31,15 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test system clock. */
 object TestClock_System {
   val MOSCOW: ZoneId = ZoneId.of("Europe/Moscow")
-  val PARIS: ZoneId = ZoneId.of("Europe/Paris")
+  val PARIS: ZoneId  = ZoneId.of("Europe/Paris")
 }
 
-class TestClock_System extends FunSuite with AssertionsHelper {
+class TestClock_System extends AnyFunSuite with AssertionsHelper {
   test("instant") {
     val system: Clock = Clock.systemUTC
     assertEquals(system.getZone, ZoneOffset.UTC)
@@ -47,7 +47,7 @@ class TestClock_System extends FunSuite with AssertionsHelper {
     var i: Int = 0
     while (i < 10000) {
       {
-        val instant: Instant = system.instant
+        val instant: Instant   = system.instant
         val systemMillis: Long = System.currentTimeMillis
         if (systemMillis - instant.toEpochMilli < 10) {
           i = 9999
@@ -69,7 +69,7 @@ class TestClock_System extends FunSuite with AssertionsHelper {
     var i: Int = 0
     while (i < 10000) {
       {
-        val instant: Long = system.millis
+        val instant: Long      = system.millis
         val systemMillis: Long = System.currentTimeMillis
         if (systemMillis - instant < 10) {
           i = 9999
@@ -107,20 +107,20 @@ class TestClock_System extends FunSuite with AssertionsHelper {
   }
 
   test("withZone") {
-    val test: Clock = Clock.system(TestClock_System.PARIS)
+    val test: Clock    = Clock.system(TestClock_System.PARIS)
     val changed: Clock = test.withZone(TestClock_System.MOSCOW)
     assertEquals(test.getZone, TestClock_System.PARIS)
     assertEquals(changed.getZone, TestClock_System.MOSCOW)
   }
 
   test("withZone_same") {
-    val test: Clock = Clock.system(TestClock_System.PARIS)
+    val test: Clock    = Clock.system(TestClock_System.PARIS)
     val changed: Clock = test.withZone(TestClock_System.PARIS)
     assertSame(test, changed)
   }
 
   test("withZone_fromUTC") {
-    val test: Clock = Clock.systemUTC
+    val test: Clock    = Clock.systemUTC
     val changed: Clock = test.withZone(TestClock_System.PARIS)
     assertEquals(changed.getZone, TestClock_System.PARIS)
   }

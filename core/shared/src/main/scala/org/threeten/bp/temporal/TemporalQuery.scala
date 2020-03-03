@@ -31,8 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
-
 /** Strategy for querying a temporal object.
   *
   * Queries are a key tool for extracting information from temporal objects.
@@ -66,6 +64,7 @@ import org.threeten.bp.DateTimeException
   * however immutability is strongly recommended.
   */
 trait TemporalQuery[+R] {
+
   /** Queries the specified temporal object.
     *
     * This queries the specified temporal object to return an object using the logic

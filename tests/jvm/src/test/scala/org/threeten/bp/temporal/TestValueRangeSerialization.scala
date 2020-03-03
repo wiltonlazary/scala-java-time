@@ -31,21 +31,26 @@
  */
 package org.threeten.bp.temporal
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
+import java.io.{
+  ByteArrayInputStream,
+  ByteArrayOutputStream,
+  ObjectInputStream,
+  ObjectOutputStream
+}
 
-import org.scalatest.FunSuite
-import org.threeten.bp.{AbstractTest, AssertionsHelper}
+import org.scalatest.funsuite.AnyFunSuite
+import org.threeten.bp.{ AbstractTest, AssertionsHelper }
 
 /** Test. */
-class TestValueRangeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestValueRangeSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   ignore("immutable") {
     assertImmutable(classOf[ValueRange])
   }
 
   test("serialization") {
-    val obj: AnyRef = ValueRange.of(1, 2, 3, 4)
+    val obj: AnyRef                 = ValueRange.of(1, 2, 3, 4)
     val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-    val oos: ObjectOutputStream = new ObjectOutputStream(baos)
+    val oos: ObjectOutputStream     = new ObjectOutputStream(baos)
     oos.writeObject(obj)
     oos.close()
     val ois: ObjectInputStream = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray))

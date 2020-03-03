@@ -31,11 +31,11 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 
 /** Test. */
-class TestValueRange extends FunSuite with AssertionsHelper {
+class TestValueRange extends AnyFunSuite with AssertionsHelper {
 
   test("of_longlong") {
     val test: ValueRange = ValueRange.of(1, 12)
@@ -85,18 +85,16 @@ class TestValueRange extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_valid: List[List[Int]] = {
-    List(
-      List(1, 1, 1, 1),
-      List(1, 1, 1, 2),
-      List(1, 1, 2, 2),
-      List(1, 2, 3, 4),
-      List(1, 1, 28, 31),
-      List(1, 3, 31, 31),
-      List(-5, -4, -3, -2),
-      List(-5, -4, 3, 4),
-      List(1, 20, 10, 31))
-  }
+  def data_valid: List[List[Int]] =
+    List(List(1, 1, 1, 1),
+         List(1, 1, 1, 2),
+         List(1, 1, 2, 2),
+         List(1, 2, 3, 4),
+         List(1, 1, 28, 31),
+         List(1, 3, 31, 31),
+         List(-5, -4, -3, -2),
+         List(-5, -4, 3, 4),
+         List(1, 20, 10, 31))
 
   test("of_longlonglonglong") {
     data_valid.foreach {
@@ -113,16 +111,14 @@ class TestValueRange extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_invalid: List[List[Int]] = {
-    List(
-      List(1, 2, 31, 28),
-      List(1, 31, 2, 28),
-      List(31, 2, 1, 28),
-      List(31, 2, 3, 28),
-      List(2, 1, 28, 31),
-      List(2, 1, 31, 28),
-      List(12, 13, 1, 2))
-  }
+  def data_invalid: List[List[Int]] =
+    List(List(1, 2, 31, 28),
+         List(1, 31, 2, 28),
+         List(31, 2, 1, 28),
+         List(31, 2, 3, 28),
+         List(2, 1, 28, 31),
+         List(2, 1, 31, 28),
+         List(12, 13, 1, 2))
 
   test("of_longlonglonglong_invalid") {
     data_invalid.foreach {

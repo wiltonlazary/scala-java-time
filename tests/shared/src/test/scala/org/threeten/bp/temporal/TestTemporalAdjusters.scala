@@ -31,13 +31,13 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
-import org.threeten.bp.DayOfWeek.{MONDAY, TUESDAY}
-import org.threeten.bp.{AssertionsHelper, DayOfWeek, LocalDate, Month}
-import org.threeten.bp.Month.{DECEMBER, JANUARY}
+import org.scalatest.funsuite.AnyFunSuite
+import org.threeten.bp.DayOfWeek.{ MONDAY, TUESDAY }
+import org.threeten.bp.{ AssertionsHelper, DayOfWeek, LocalDate, Month }
+import org.threeten.bp.Month.{ DECEMBER, JANUARY }
 
 /** Test DateTimeAdjusters. */
-class TestTemporalAdjusters extends FunSuite with AssertionsHelper {
+class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
   test("factory_firstDayOfMonth") {
     assertNotNull(TemporalAdjusters.firstDayOfMonth)
   }
@@ -264,7 +264,7 @@ class TestTemporalAdjusters extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_dayOfWeekInMonth_positive: List[List[Any]] = {
+  def data_dayOfWeekInMonth_positive: List[List[Any]] =
     List(
       List(2011, 1, TUESDAY, date(2011, 1, 4)),
       List(2011, 2, TUESDAY, date(2011, 2, 1)),
@@ -279,7 +279,6 @@ class TestTemporalAdjusters extends FunSuite with AssertionsHelper {
       List(2011, 11, TUESDAY, date(2011, 11, 1)),
       List(2011, 12, TUESDAY, date(2011, 12, 6))
     )
-  }
 
   test("dayOfWeekInMonth_positive") {
     data_dayOfWeekInMonth_positive.foreach {
@@ -303,7 +302,7 @@ class TestTemporalAdjusters extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_dayOfWeekInMonth_zero: List[List[Any]] = {
+  def data_dayOfWeekInMonth_zero: List[List[Any]] =
     List(
       List(2011, 1, TUESDAY, date(2010, 12, 28)),
       List(2011, 2, TUESDAY, date(2011, 1, 25)),
@@ -318,7 +317,6 @@ class TestTemporalAdjusters extends FunSuite with AssertionsHelper {
       List(2011, 11, TUESDAY, date(2011, 10, 25)),
       List(2011, 12, TUESDAY, date(2011, 11, 29))
     )
-  }
 
   test("dayOfWeekInMonth_zero") {
     data_dayOfWeekInMonth_zero.foreach {
@@ -338,7 +336,7 @@ class TestTemporalAdjusters extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_dayOfWeekInMonth_negative: List[List[Any]] = {
+  def data_dayOfWeekInMonth_negative: List[List[Any]] =
     List(
       List(2011, 1, TUESDAY, date(2011, 1, 25)),
       List(2011, 2, TUESDAY, date(2011, 2, 22)),
@@ -353,7 +351,6 @@ class TestTemporalAdjusters extends FunSuite with AssertionsHelper {
       List(2011, 11, TUESDAY, date(2011, 11, 29)),
       List(2011, 12, TUESDAY, date(2011, 12, 27))
     )
-  }
 
   test("dayOfWeekInMonth_negative") {
     data_dayOfWeekInMonth_negative.foreach {

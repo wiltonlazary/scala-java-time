@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
 import org.threeten.bp.DateTimeException
@@ -43,7 +43,7 @@ object TestZoneOffsetPrinter {
   private val OFFSET_0130: ZoneOffset = ZoneOffset.of("+01:30")
 }
 
-class TestZoneOffsetPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestZoneOffsetPrinter extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val provider_offsets: List[List[AnyRef]] = {
     List(
       List("+HH", "NO-OFFSET", ZoneOffset.UTC),
@@ -102,7 +102,8 @@ class TestZoneOffsetPrinter extends FunSuite with GenTestPrinterParser with Asse
       List("+HH:MM:SS", "+01:02:03", ZoneOffset.ofHoursMinutesSeconds(1, 2, 3)),
       List("+HH:MM:SS", "-01:02:03", ZoneOffset.ofHoursMinutesSeconds(-1, -2, -3)),
       List("+HH:MM:SS", "+01:02:00", ZoneOffset.ofHoursMinutesSeconds(1, 2, 0)),
-      List("+HH:MM:SS", "-01:02:00", ZoneOffset.ofHoursMinutesSeconds(-1, -2, 0)))
+      List("+HH:MM:SS", "-01:02:00", ZoneOffset.ofHoursMinutesSeconds(-1, -2, 0))
+    )
   }
 
   test("test_print") {
@@ -111,7 +112,8 @@ class TestZoneOffsetPrinter extends FunSuite with GenTestPrinterParser with Asse
         super.beforeEach
         buf.append("EXISTING")
         printContext.setDateTime(new DateTimeBuilder(OFFSET_SECONDS, offset.getTotalSeconds))
-        val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser = new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("NO-OFFSET", pattern)
+        val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser =
+          new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("NO-OFFSET", pattern)
         pp.print(printContext, buf)
         assertEquals(buf.toString, "EXISTING" + expected)
       case _ =>
@@ -121,8 +123,9 @@ class TestZoneOffsetPrinter extends FunSuite with GenTestPrinterParser with Asse
 
   test("test_toString") {
     provider_offsets.foreach {
-      case (pattern: String) :: (expected: String) :: (offset: ZoneOffset) :: Nil =>
-        val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser = new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("NO-OFFSET", pattern)
+      case (pattern: String) :: (_: String) :: (_: ZoneOffset) :: Nil =>
+        val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser =
+          new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("NO-OFFSET", pattern)
         assertEquals(pp.toString, "Offset(" + pattern + ",'NO-OFFSET')")
       case _ =>
         fail()
@@ -130,15 +133,19 @@ class TestZoneOffsetPrinter extends FunSuite with GenTestPrinterParser with Asse
   }
 
   test("test_print_emptyCalendrical") {
-    val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser = new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("Z", "+HH:MM:ss")
+    val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser =
+      new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("Z", "+HH:MM:ss")
     assertThrows[DateTimeException] {
       pp.print(printEmptyContext, buf)
     }
   }
 
   test("test_print_emptyAppendable") {
-    printContext.setDateTime(new DateTimeBuilder(OFFSET_SECONDS, TestZoneOffsetPrinter.OFFSET_0130.getTotalSeconds))
-    val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser = new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("Z", "+HH:MM:ss")
+    printContext.setDateTime(
+      new DateTimeBuilder(OFFSET_SECONDS, TestZoneOffsetPrinter.OFFSET_0130.getTotalSeconds)
+    )
+    val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser =
+      new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("Z", "+HH:MM:ss")
     pp.print(printContext, buf)
     assertEquals(buf.toString, "+01:30")
   }

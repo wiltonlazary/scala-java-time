@@ -31,21 +31,21 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.DayOfWeek._
-import org.threeten.bp.{AssertionsHelper, DayOfWeek, LocalDate}
-import org.threeten.bp.format.{DateTimeFormatter, DateTimeFormatterBuilder}
+import org.threeten.bp.{ AssertionsHelper, DayOfWeek, LocalDate }
+import org.threeten.bp.format.{ DateTimeFormatter, DateTimeFormatterBuilder }
 import org.threeten.bp.temporal.ChronoField.DAY_OF_WEEK
 
 /** Test. */
-class TestIsoFields extends FunSuite with AssertionsHelper {
+class TestIsoFields extends AnyFunSuite with AssertionsHelper {
   test("enum") {
     assertTrue(IsoFields.WEEK_OF_WEEK_BASED_YEAR.isInstanceOf[Enum[_]])
     assertTrue(IsoFields.WEEK_BASED_YEAR.isInstanceOf[Enum[_]])
     assertTrue(IsoFields.WEEK_BASED_YEARS.isInstanceOf[Enum[_]])
   }
 
-  def data_week: List[List[Any]] = {
+  def data_week: List[List[Any]] =
     List(
       List(LocalDate.of(1969, 12, 29), MONDAY, 1, 1970),
       List(LocalDate.of(2012, 12, 23), SUNDAY, 51, 2012),
@@ -58,12 +58,12 @@ class TestIsoFields extends FunSuite with AssertionsHelper {
       List(LocalDate.of(2013, 1, 1), TUESDAY, 1, 2013),
       List(LocalDate.of(2013, 1, 2), WEDNESDAY, 1, 2013),
       List(LocalDate.of(2013, 1, 6), SUNDAY, 1, 2013),
-      List(LocalDate.of(2013, 1, 7), MONDAY, 2, 2013))
-  }
+      List(LocalDate.of(2013, 1, 7), MONDAY, 2, 2013)
+    )
 
   test("WOWBY") {
     data_week.foreach {
-      case (date: LocalDate) :: (dow: DayOfWeek) :: (week: Int) :: (wby: Int) :: Nil =>
+      case (date: LocalDate) :: (dow: DayOfWeek) :: (week: Int) :: (_: Int) :: Nil =>
         assertEquals(date.getDayOfWeek, dow)
         assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.getFrom(date), week)
         assertEquals(date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR), week)
@@ -74,7 +74,7 @@ class TestIsoFields extends FunSuite with AssertionsHelper {
 
   test("WBY") {
     data_week.foreach {
-      case (date: LocalDate) :: (dow: DayOfWeek) :: (week: Int) :: (wby: Int) :: Nil =>
+      case (date: LocalDate) :: (dow: DayOfWeek) :: (_: Int) :: (wby: Int) :: Nil =>
         assertEquals(date.getDayOfWeek, dow)
         assertEquals(IsoFields.WEEK_BASED_YEAR.getFrom(date), wby)
         assertEquals(date.get(IsoFields.WEEK_BASED_YEAR), wby)
@@ -86,7 +86,13 @@ class TestIsoFields extends FunSuite with AssertionsHelper {
   test("parse_weeks") {
     data_week.foreach {
       case (date: LocalDate) :: (dow: DayOfWeek) :: (week: Int) :: (wby: Int) :: Nil =>
-        val f: DateTimeFormatter = new DateTimeFormatterBuilder().appendValue(IsoFields.WEEK_BASED_YEAR).appendLiteral('-').appendValue(IsoFields.WEEK_OF_WEEK_BASED_YEAR).appendLiteral('-').appendValue(DAY_OF_WEEK).toFormatter
+        val f: DateTimeFormatter = new DateTimeFormatterBuilder()
+          .appendValue(IsoFields.WEEK_BASED_YEAR)
+          .appendLiteral('-')
+          .appendValue(IsoFields.WEEK_OF_WEEK_BASED_YEAR)
+          .appendLiteral('-')
+          .appendValue(DAY_OF_WEEK)
+          .toFormatter
         val parsed: LocalDate = LocalDate.parse(wby + "-" + week + "-" + dow.getValue, f)
         assertEquals(parsed, date)
       case _ =>
@@ -96,10 +102,10 @@ class TestIsoFields extends FunSuite with AssertionsHelper {
 
   test("loop") {
     var date: LocalDate = LocalDate.of(1960, 1, 5)
-    var year: Int = 1960
-    var wby: Int = 1960
-    var weekLen: Int = 52
-    var week: Int = 1
+    var year: Int       = 1960
+    var wby: Int        = 1960
+    var weekLen: Int    = 52
+    var week: Int       = 1
     while (date.getYear < 2400) {
       val loopDow: DayOfWeek = date.getDayOfWeek
       if (date.getYear != year) {
@@ -110,21 +116,34 @@ class TestIsoFields extends FunSuite with AssertionsHelper {
         if ((week == 53 && weekLen == 52) || week == 54) {
           week = 1
           val firstDayOfWeekBasedYear: LocalDate = date.plusDays(14).withDayOfYear(1)
-          val firstDay: DayOfWeek = firstDayOfWeekBasedYear.getDayOfWeek
-          weekLen = if ((firstDay eq THURSDAY) || ((firstDay eq WEDNESDAY) && firstDayOfWeekBasedYear.isLeapYear)) 53 else 52
+          val firstDay: DayOfWeek                = firstDayOfWeekBasedYear.getDayOfWeek
+          weekLen =
+            if ((firstDay eq THURSDAY) || ((firstDay eq WEDNESDAY) && firstDayOfWeekBasedYear.isLeapYear))
+              53
+            else 52
           wby += 1
         }
       }
-      assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.rangeRefinedBy(date), ValueRange.of(1, weekLen), "Failed on " + date + " " + date.getDayOfWeek)
-      assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.getFrom(date), week, "Failed on " + date + " " + date.getDayOfWeek)
-      assertEquals(date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR), week, "Failed on " + date + " " + date.getDayOfWeek)
-      assertEquals(IsoFields.WEEK_BASED_YEAR.getFrom(date), wby, "Failed on " + date + " " + date.getDayOfWeek)
-      assertEquals(date.get(IsoFields.WEEK_BASED_YEAR), wby, "Failed on " + date + " " + date.getDayOfWeek)
+      assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.rangeRefinedBy(date),
+                   ValueRange.of(1, weekLen),
+                   "Failed on " + date + " " + date.getDayOfWeek)
+      assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.getFrom(date),
+                   week,
+                   "Failed on " + date + " " + date.getDayOfWeek)
+      assertEquals(date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR),
+                   week,
+                   "Failed on " + date + " " + date.getDayOfWeek)
+      assertEquals(IsoFields.WEEK_BASED_YEAR.getFrom(date),
+                   wby,
+                   "Failed on " + date + " " + date.getDayOfWeek)
+      assertEquals(date.get(IsoFields.WEEK_BASED_YEAR),
+                   wby,
+                   "Failed on " + date + " " + date.getDayOfWeek)
       date = date.plusDays(1)
     }
   }
 
-  def data_quartersBetween: List[List[Any]] = {
+  def data_quartersBetween: List[List[Any]] =
     List(
       List(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 1, 1), 0),
       List(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 1, 2), 0),
@@ -150,8 +169,8 @@ class TestIsoFields extends FunSuite with AssertionsHelper {
       List(LocalDate.of(2000, 1, 1), LocalDate.of(1999, 1, 1), -4),
       List(LocalDate.of(2000, 1, 1), LocalDate.of(1998, 12, 31), -4),
       List(LocalDate.of(2000, 1, 1), LocalDate.of(1998, 10, 2), -4),
-      List(LocalDate.of(2000, 1, 1), LocalDate.of(1998, 10, 1), -5))
-  }
+      List(LocalDate.of(2000, 1, 1), LocalDate.of(1998, 10, 1), -5)
+    )
 
   test("quarters_between") {
     data_quartersBetween.foreach {

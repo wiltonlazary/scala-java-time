@@ -83,8 +83,8 @@ class UsabilityBasic {
   }
 
   private def lookup(): Unit = {
-    val date: LocalDate = LocalDate.now
-    val time: LocalTime = LocalTime.now
+    val date: LocalDate         = LocalDate.now
+    val time: LocalTime         = LocalTime.now
     val dateTime: LocalDateTime = LocalDateTime.now
     output(date, ChronoField.DAY_OF_MONTH)
     output(date, ChronoField.MONTH_OF_YEAR)
@@ -96,17 +96,14 @@ class UsabilityBasic {
     System.out.println("DoM: " + cal.get(DAY_OF_MONTH))
   }
 
-  protected def output(date: LocalDate, field: TemporalField): Unit = {
+  protected def output(date: LocalDate, field: TemporalField): Unit =
     System.out.println(field + " " + date.getLong(field))
-  }
 
-  protected def output(dateTime: LocalDateTime, field: TemporalField): Unit = {
+  protected def output(dateTime: LocalDateTime, field: TemporalField): Unit =
     System.out.println(field + " " + dateTime.getLong(field))
-  }
 
-  protected def output(time: LocalTime, field: TemporalField): Unit = {
+  protected def output(time: LocalTime, field: TemporalField): Unit =
     System.out.println(field + " " + time.getLong(field))
-  }
 
   private def period(): Unit = {
     var date1: LocalDate = LocalDate.now
@@ -131,13 +128,21 @@ class UsabilityBasic {
   }
 
   private def print1(): Unit = {
-    val f: DateTimeFormatter = new DateTimeFormatterBuilder().appendText(ChronoField.AMPM_OF_DAY).appendLiteral(' ').appendValue(ChronoField.AMPM_OF_DAY).toFormatter
+    val f: DateTimeFormatter = new DateTimeFormatterBuilder()
+      .appendText(ChronoField.AMPM_OF_DAY)
+      .appendLiteral(' ')
+      .appendValue(ChronoField.AMPM_OF_DAY)
+      .toFormatter
     System.out.println(f.format(LocalTime.of(12, 30)))
     System.out.println(f.format(ZonedDateTime.now))
   }
 
   private def print2(): Unit = {
-    val f: DateTimeFormatter = new DateTimeFormatterBuilder().appendText(ChronoField.MONTH_OF_YEAR).appendLiteral(' ').appendValue(ChronoField.YEAR).toFormatter
+    val f: DateTimeFormatter = new DateTimeFormatterBuilder()
+      .appendText(ChronoField.MONTH_OF_YEAR)
+      .appendLiteral(' ')
+      .appendValue(ChronoField.YEAR)
+      .toFormatter
     System.out.println(f.format(LocalDate.now))
     System.out.println(f.format(YearMonth.now))
     System.out.println(f.format(ZonedDateTime.now))

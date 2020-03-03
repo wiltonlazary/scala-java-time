@@ -31,8 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
-
 /** Framework-level interface defining read-only access to a temporal object,
   * such as a date, time, offset or some combination of these.
   *
@@ -66,6 +64,7 @@ import org.threeten.bp.DateTimeException
   * however immutability is strongly recommended.
   */
 trait TemporalAccessor {
+
   /** Checks if the specified field is supported.
     *
     * This checks if the date-time can be queried for the specified field.
@@ -209,9 +208,8 @@ trait TemporalAccessor {
     * @throws ArithmeticException if numeric overflow occurs
     */
   def query[R](query: TemporalQuery[R]): R = query match {
-    case TemporalQueries.zoneId
-       | TemporalQueries.chronology
-       | TemporalQueries.precision  => null.asInstanceOf[R]
-    case _                          => query.queryFrom(this)
+    case TemporalQueries.zoneId | TemporalQueries.chronology | TemporalQueries.precision =>
+      null.asInstanceOf[R]
+    case _ => query.queryFrom(this)
   }
 }

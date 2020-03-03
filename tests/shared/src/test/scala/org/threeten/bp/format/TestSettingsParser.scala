@@ -33,23 +33,23 @@ package org.threeten.bp.format
 
 import java.lang.StringBuilder
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder.SettingsParser
 
 /** Test SettingsParser. */
-class TestSettingsParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestSettingsParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_print_sensitive") {
     val pp: TTBPDateTimeFormatterBuilder.SettingsParser = SettingsParser.SENSITIVE
-    val buf: StringBuilder = new StringBuilder
+    val buf: StringBuilder                              = new StringBuilder
     pp.print(printContext, buf)
     assertEquals(buf.toString, "")
   }
 
   test("test_print_strict") {
     val pp: TTBPDateTimeFormatterBuilder.SettingsParser = SettingsParser.STRICT
-    val buf: StringBuilder = new StringBuilder
+    val buf: StringBuilder                              = new StringBuilder
     pp.print(printContext, buf)
     assertEquals(buf.toString, "")
   }
@@ -61,28 +61,28 @@ class TestSettingsParser extends FunSuite with GenTestPrinterParser with Asserti
 
   test("test_parse_changeStyle_sensitive") {
     val pp: TTBPDateTimeFormatterBuilder.SettingsParser = SettingsParser.SENSITIVE
-    val result: Int = pp.parse(parseContext, "a", 0)
+    val result: Int                                     = pp.parse(parseContext, "a", 0)
     assertEquals(result, 0)
     assertEquals(parseContext.isCaseSensitive, true)
   }
 
   test("test_parse_changeStyle_insensitive") {
     val pp: TTBPDateTimeFormatterBuilder.SettingsParser = SettingsParser.INSENSITIVE
-    val result: Int = pp.parse(parseContext, "a", 0)
+    val result: Int                                     = pp.parse(parseContext, "a", 0)
     assertEquals(result, 0)
     assertEquals(parseContext.isCaseSensitive, false)
   }
 
   test("test_parse_changeStyle_strict") {
     val pp: TTBPDateTimeFormatterBuilder.SettingsParser = SettingsParser.STRICT
-    val result: Int = pp.parse(parseContext, "a", 0)
+    val result: Int                                     = pp.parse(parseContext, "a", 0)
     assertEquals(result, 0)
     assertEquals(parseContext.isStrict, true)
   }
 
   test("test_parse_changeStyle_lenient") {
     val pp: TTBPDateTimeFormatterBuilder.SettingsParser = SettingsParser.LENIENT
-    val result: Int = pp.parse(parseContext, "a", 0)
+    val result: Int                                     = pp.parse(parseContext, "a", 0)
     assertEquals(result, 0)
     assertEquals(parseContext.isStrict, false)
   }

@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.zone
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp._
 import org.threeten.bp.temporal.ChronoUnit.HOURS
 
@@ -44,41 +44,53 @@ object TestZoneOffsetTransition {
   val OFFSET_0400: ZoneOffset = ZoneOffset.ofHours(4)
 }
 
-class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
+class TestZoneOffsetTransition extends AnyFunSuite with AssertionsHelper {
   test("factory_nullTransition") {
     assertThrows[NullPointerException] {
-      ZoneOffsetTransition.of(null, TestZoneOffsetTransition.OFFSET_0100, TestZoneOffsetTransition.OFFSET_0200)
+      ZoneOffsetTransition.of(null,
+                              TestZoneOffsetTransition.OFFSET_0100,
+                              TestZoneOffsetTransition.OFFSET_0200)
     }
   }
 
   test("factory_nullOffsetBefore") {
     assertThrows[NullPointerException] {
-      ZoneOffsetTransition.of(LocalDateTime.of(2010, 12, 3, 11, 30), null, TestZoneOffsetTransition.OFFSET_0200)
+      ZoneOffsetTransition.of(LocalDateTime.of(2010, 12, 3, 11, 30),
+                              null,
+                              TestZoneOffsetTransition.OFFSET_0200)
     }
   }
 
   test("factory_nullOffsetAfter") {
     assertThrows[NullPointerException] {
-      ZoneOffsetTransition.of(LocalDateTime.of(2010, 12, 3, 11, 30), TestZoneOffsetTransition.OFFSET_0200, null)
+      ZoneOffsetTransition.of(LocalDateTime.of(2010, 12, 3, 11, 30),
+                              TestZoneOffsetTransition.OFFSET_0200,
+                              null)
     }
   }
 
   test("factory_sameOffset") {
     assertThrows[IllegalArgumentException] {
-      ZoneOffsetTransition.of(LocalDateTime.of(2010, 12, 3, 11, 30), TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0200)
+      ZoneOffsetTransition.of(LocalDateTime.of(2010, 12, 3, 11, 30),
+                              TestZoneOffsetTransition.OFFSET_0200,
+                              TestZoneOffsetTransition.OFFSET_0200)
     }
   }
 
   test("factory_noNanos") {
     assertThrows[IllegalArgumentException] {
-      ZoneOffsetTransition.of(LocalDateTime.of(2010, 12, 3, 11, 30, 0, 500), TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
+      ZoneOffsetTransition.of(LocalDateTime.of(2010, 12, 3, 11, 30, 0, 500),
+                              TestZoneOffsetTransition.OFFSET_0200,
+                              TestZoneOffsetTransition.OFFSET_0300)
     }
   }
 
   test("getters_gap") {
     val before: LocalDateTime = LocalDateTime.of(2010, 3, 31, 1, 0)
-    val after: LocalDateTime = LocalDateTime.of(2010, 3, 31, 2, 0)
-    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(before, TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
+    val after: LocalDateTime  = LocalDateTime.of(2010, 3, 31, 2, 0)
+    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(before,
+                                                             TestZoneOffsetTransition.OFFSET_0200,
+                                                             TestZoneOffsetTransition.OFFSET_0300)
     assertEquals(test.isGap, true)
     assertEquals(test.isOverlap, false)
     assertEquals(test.getDateTimeBefore, before)
@@ -91,8 +103,10 @@ class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
 
   test("getters_overlap") {
     val before: LocalDateTime = LocalDateTime.of(2010, 10, 31, 1, 0)
-    val after: LocalDateTime = LocalDateTime.of(2010, 10, 31, 0, 0)
-    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(before, TestZoneOffsetTransition.OFFSET_0300, TestZoneOffsetTransition.OFFSET_0200)
+    val after: LocalDateTime  = LocalDateTime.of(2010, 10, 31, 0, 0)
+    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(before,
+                                                             TestZoneOffsetTransition.OFFSET_0300,
+                                                             TestZoneOffsetTransition.OFFSET_0200)
     assertEquals(test.isGap, false)
     assertEquals(test.isOverlap, true)
     assertEquals(test.getDateTimeBefore, before)
@@ -105,7 +119,9 @@ class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
 
   test("isValidOffset_gap") {
     val ldt: LocalDateTime = LocalDateTime.of(2010, 3, 31, 1, 0)
-    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(ldt, TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
+    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(ldt,
+                                                             TestZoneOffsetTransition.OFFSET_0200,
+                                                             TestZoneOffsetTransition.OFFSET_0300)
     assertEquals(test.isValidOffset(TestZoneOffsetTransition.OFFSET_0100), false)
     assertEquals(test.isValidOffset(TestZoneOffsetTransition.OFFSET_0200), false)
     assertEquals(test.isValidOffset(TestZoneOffsetTransition.OFFSET_0230), false)
@@ -115,7 +131,9 @@ class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
 
   test("isValidOffset_overlap") {
     val ldt: LocalDateTime = LocalDateTime.of(2010, 10, 31, 1, 0)
-    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(ldt, TestZoneOffsetTransition.OFFSET_0300, TestZoneOffsetTransition.OFFSET_0200)
+    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(ldt,
+                                                             TestZoneOffsetTransition.OFFSET_0300,
+                                                             TestZoneOffsetTransition.OFFSET_0200)
     assertEquals(test.isValidOffset(TestZoneOffsetTransition.OFFSET_0100), false)
     assertEquals(test.isValidOffset(TestZoneOffsetTransition.OFFSET_0200), true)
     assertEquals(test.isValidOffset(TestZoneOffsetTransition.OFFSET_0230), false)
@@ -124,9 +142,21 @@ class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
   }
 
   test("compareTo") {
-    val a: ZoneOffsetTransition = ZoneOffsetTransition.of(LocalDateTime.ofEpochSecond(23875287L - 1, 0, TestZoneOffsetTransition.OFFSET_0200), TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
-    val b: ZoneOffsetTransition = ZoneOffsetTransition.of(LocalDateTime.ofEpochSecond(23875287L, 0, TestZoneOffsetTransition.OFFSET_0300), TestZoneOffsetTransition.OFFSET_0300, TestZoneOffsetTransition.OFFSET_0200)
-    val c: ZoneOffsetTransition = ZoneOffsetTransition.of(LocalDateTime.ofEpochSecond(23875287L + 1, 0, TestZoneOffsetTransition.OFFSET_0100), TestZoneOffsetTransition.OFFSET_0100, TestZoneOffsetTransition.OFFSET_0400)
+    val a: ZoneOffsetTransition = ZoneOffsetTransition.of(
+      LocalDateTime.ofEpochSecond(23875287L - 1, 0, TestZoneOffsetTransition.OFFSET_0200),
+      TestZoneOffsetTransition.OFFSET_0200,
+      TestZoneOffsetTransition.OFFSET_0300
+    )
+    val b: ZoneOffsetTransition = ZoneOffsetTransition.of(
+      LocalDateTime.ofEpochSecond(23875287L, 0, TestZoneOffsetTransition.OFFSET_0300),
+      TestZoneOffsetTransition.OFFSET_0300,
+      TestZoneOffsetTransition.OFFSET_0200
+    )
+    val c: ZoneOffsetTransition = ZoneOffsetTransition.of(
+      LocalDateTime.ofEpochSecond(23875287L + 1, 0, TestZoneOffsetTransition.OFFSET_0100),
+      TestZoneOffsetTransition.OFFSET_0100,
+      TestZoneOffsetTransition.OFFSET_0400
+    )
     assertEquals(a.compareTo(a) == 0, true)
     assertEquals(a.compareTo(b) < 0, true)
     assertEquals(a.compareTo(c) < 0, true)
@@ -139,9 +169,21 @@ class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
   }
 
   test("compareTo_sameInstant") {
-    val a: ZoneOffsetTransition = ZoneOffsetTransition.of(LocalDateTime.ofEpochSecond(23875287L, 0, TestZoneOffsetTransition.OFFSET_0200), TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
-    val b: ZoneOffsetTransition = ZoneOffsetTransition.of(LocalDateTime.ofEpochSecond(23875287L, 0, TestZoneOffsetTransition.OFFSET_0300), TestZoneOffsetTransition.OFFSET_0300, TestZoneOffsetTransition.OFFSET_0200)
-    val c: ZoneOffsetTransition = ZoneOffsetTransition.of(LocalDateTime.ofEpochSecond(23875287L, 0, TestZoneOffsetTransition.OFFSET_0100), TestZoneOffsetTransition.OFFSET_0100, TestZoneOffsetTransition.OFFSET_0400)
+    val a: ZoneOffsetTransition = ZoneOffsetTransition.of(
+      LocalDateTime.ofEpochSecond(23875287L, 0, TestZoneOffsetTransition.OFFSET_0200),
+      TestZoneOffsetTransition.OFFSET_0200,
+      TestZoneOffsetTransition.OFFSET_0300
+    )
+    val b: ZoneOffsetTransition = ZoneOffsetTransition.of(
+      LocalDateTime.ofEpochSecond(23875287L, 0, TestZoneOffsetTransition.OFFSET_0300),
+      TestZoneOffsetTransition.OFFSET_0300,
+      TestZoneOffsetTransition.OFFSET_0200
+    )
+    val c: ZoneOffsetTransition = ZoneOffsetTransition.of(
+      LocalDateTime.ofEpochSecond(23875287L, 0, TestZoneOffsetTransition.OFFSET_0100),
+      TestZoneOffsetTransition.OFFSET_0100,
+      TestZoneOffsetTransition.OFFSET_0400
+    )
     assertEquals(a.compareTo(a) == 0, true)
     assertEquals(a.compareTo(b) == 0, true)
     assertEquals(a.compareTo(c) == 0, true)
@@ -155,10 +197,16 @@ class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
 
   test("equals") {
     val ldtA: LocalDateTime = LocalDateTime.of(2010, 3, 31, 1, 0)
-    val a1: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtA, TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
-    val a2: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtA, TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
+    val a1: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtA,
+                                                           TestZoneOffsetTransition.OFFSET_0200,
+                                                           TestZoneOffsetTransition.OFFSET_0300)
+    val a2: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtA,
+                                                           TestZoneOffsetTransition.OFFSET_0200,
+                                                           TestZoneOffsetTransition.OFFSET_0300)
     val ldtB: LocalDateTime = LocalDateTime.of(2010, 10, 31, 1, 0)
-    val b: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtB, TestZoneOffsetTransition.OFFSET_0300, TestZoneOffsetTransition.OFFSET_0200)
+    val b: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtB,
+                                                          TestZoneOffsetTransition.OFFSET_0300,
+                                                          TestZoneOffsetTransition.OFFSET_0200)
     assertEquals(a1 == a1, true)
     assertEquals(a1 == a2, true)
     assertEquals(a1 == b, false)
@@ -174,10 +222,16 @@ class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
 
   test("hashCode_floatingWeek_gap_notEndOfDay") {
     val ldtA: LocalDateTime = LocalDateTime.of(2010, 3, 31, 1, 0)
-    val a1: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtA, TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
-    val a2: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtA, TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
+    val a1: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtA,
+                                                           TestZoneOffsetTransition.OFFSET_0200,
+                                                           TestZoneOffsetTransition.OFFSET_0300)
+    val a2: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtA,
+                                                           TestZoneOffsetTransition.OFFSET_0200,
+                                                           TestZoneOffsetTransition.OFFSET_0300)
     val ldtB: LocalDateTime = LocalDateTime.of(2010, 10, 31, 1, 0)
-    val b: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtB, TestZoneOffsetTransition.OFFSET_0300, TestZoneOffsetTransition.OFFSET_0200)
+    val b: ZoneOffsetTransition = ZoneOffsetTransition.of(ldtB,
+                                                          TestZoneOffsetTransition.OFFSET_0300,
+                                                          TestZoneOffsetTransition.OFFSET_0200)
     assertEquals(a1.hashCode, a1.hashCode)
     assertEquals(a1.hashCode, a2.hashCode)
     assertEquals(b.hashCode, b.hashCode)
@@ -185,13 +239,17 @@ class TestZoneOffsetTransition extends FunSuite with AssertionsHelper {
 
   test("toString_gap") {
     val ldt: LocalDateTime = LocalDateTime.of(2010, 3, 31, 1, 0)
-    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(ldt, TestZoneOffsetTransition.OFFSET_0200, TestZoneOffsetTransition.OFFSET_0300)
+    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(ldt,
+                                                             TestZoneOffsetTransition.OFFSET_0200,
+                                                             TestZoneOffsetTransition.OFFSET_0300)
     assertEquals(test.toString, "Transition[Gap at 2010-03-31T01:00+02:00 to +03:00]")
   }
 
   test("toString_overlap") {
     val ldt: LocalDateTime = LocalDateTime.of(2010, 10, 31, 1, 0)
-    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(ldt, TestZoneOffsetTransition.OFFSET_0300, TestZoneOffsetTransition.OFFSET_0200)
+    val test: ZoneOffsetTransition = ZoneOffsetTransition.of(ldt,
+                                                             TestZoneOffsetTransition.OFFSET_0300,
+                                                             TestZoneOffsetTransition.OFFSET_0200)
     assertEquals(test.toString, "Transition[Overlap at 2010-10-31T01:00+03:00 to +02:00]")
   }
 }

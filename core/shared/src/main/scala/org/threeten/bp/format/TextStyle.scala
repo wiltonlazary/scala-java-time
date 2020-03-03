@@ -51,17 +51,19 @@ package org.threeten.bp.format
   * This is immutable and thread-safe enum.
   */
 object TextStyle {
-  val FULL              = new TextStyle("FULL",              0)
-  val FULL_STANDALONE   = new TextStyle("FULL_STANDALONE",   1)
-  val SHORT             = new TextStyle("SHORT",             2)
-  val SHORT_STANDALONE  = new TextStyle("SHORT_STANDALONE",  3)
-  val NARROW            = new TextStyle("NARROW",            4)
+  val FULL              = new TextStyle("FULL", 0)
+  val FULL_STANDALONE   = new TextStyle("FULL_STANDALONE", 1)
+  val SHORT             = new TextStyle("SHORT", 2)
+  val SHORT_STANDALONE  = new TextStyle("SHORT_STANDALONE", 3)
+  val NARROW            = new TextStyle("NARROW", 4)
   val NARROW_STANDALONE = new TextStyle("NARROW_STANDALONE", 5)
 
-  val values: Array[TextStyle] = Array(FULL, FULL_STANDALONE, SHORT, SHORT_STANDALONE, NARROW, NARROW_STANDALONE)
+  val values: Array[TextStyle] =
+    Array(FULL, FULL_STANDALONE, SHORT, SHORT_STANDALONE, NARROW, NARROW_STANDALONE)
 }
 
 final class TextStyle(name: String, ordinal: Int) extends Enum[TextStyle](name, ordinal) {
+
   /** Checks if the style is stand-alone.
     *
     * @return true if the style is stand-alone

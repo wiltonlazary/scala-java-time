@@ -31,17 +31,22 @@
  */
 package org.threeten.bp
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
-import java.lang.reflect.{Field, Modifier}
+import java.io.{
+  ByteArrayInputStream,
+  ByteArrayOutputStream,
+  ObjectInputStream,
+  ObjectOutputStream
+}
+import java.lang.reflect.{ Field, Modifier }
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 
-import org.scalatest.{BeforeAndAfter, FunSuite}
-
-class TestLocalDateSerialization extends FunSuite with AssertionsHelper with BeforeAndAfter {
+class TestLocalDateSerialization extends AnyFunSuite with AssertionsHelper with BeforeAndAfter {
   private val TEST_2007_07_15: LocalDate = LocalDate.of(2007, 7, 15)
 
   test("serialization") {
     val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-    val oos: ObjectOutputStream = new ObjectOutputStream(baos)
+    val oos: ObjectOutputStream     = new ObjectOutputStream(baos)
     oos.writeObject(TEST_2007_07_15)
     oos.close()
     val ois: ObjectInputStream = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray))
@@ -57,8 +62,7 @@ class TestLocalDateSerialization extends FunSuite with AssertionsHelper with Bef
       if (!field.getName.contains("$")) {
         if (Modifier.isStatic(field.getModifiers)) {
           assertTrue(Modifier.isFinal(field.getModifiers))
-        }
-        else {
+        } else {
           assertTrue(Modifier.isPrivate(field.getModifiers))
           assertTrue(Modifier.isFinal(field.getModifiers))
         }

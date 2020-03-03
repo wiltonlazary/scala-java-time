@@ -34,8 +34,7 @@ package org.threeten.bp.zone
 import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.TemporalAdjusters.nextOrSame
 import org.threeten.bp.temporal.TemporalAdjusters.previousOrSame
-import java.util.{Objects, Comparator, Collections}
-import org.threeten.bp.DateTimeException
+import java.util.{ Collections, Comparator, Objects }
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -72,9 +71,12 @@ import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
   * {@link #addRuleToWindow list of rules}.
   */
 class ZoneRulesBuilder() {
+
   /** The list of windows.
     */
-  private var windowList: java.util.List[ZoneRulesBuilder#TZWindow] = new java.util.ArrayList[ZoneRulesBuilder#TZWindow]
+  private val windowList: java.util.List[ZoneRulesBuilder#TZWindow] =
+    new java.util.ArrayList[ZoneRulesBuilder#TZWindow]
+
   /** A map for deduplicating the output.
     */
   private var deduplicateMap: java.util.Map[AnyRef, AnyRef] = null
@@ -97,7 +99,11 @@ class ZoneRulesBuilder() {
     * @return this, for chaining
     * @throws IllegalStateException if the window order is invalid
     */
-  def addWindow(standardOffset: ZoneOffset, until: LocalDateTime, untilDefinition: ZoneOffsetTransitionRule.TimeDefinition): ZoneRulesBuilder = {
+  def addWindow(
+    standardOffset:  ZoneOffset,
+    until:           LocalDateTime,
+    untilDefinition: ZoneOffsetTransitionRule.TimeDefinition
+  ): ZoneRulesBuilder = {
     Objects.requireNonNull(standardOffset, "standardOffset")
     Objects.requireNonNull(until, "until")
     Objects.requireNonNull(untilDefinition, "untilDefinition")
@@ -162,9 +168,23 @@ class ZoneRulesBuilder() {
     * @throws IllegalStateException if the window already has fixed savings
     * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
     */
-  def addRuleToWindow(transitionDateTime: LocalDateTime, timeDefinition: ZoneOffsetTransitionRule.TimeDefinition, savingAmountSecs: Int): ZoneRulesBuilder = {
+  def addRuleToWindow(
+    transitionDateTime: LocalDateTime,
+    timeDefinition:     ZoneOffsetTransitionRule.TimeDefinition,
+    savingAmountSecs:   Int
+  ): ZoneRulesBuilder = {
     Objects.requireNonNull(transitionDateTime, "transitionDateTime")
-    addRuleToWindow(transitionDateTime.getYear, transitionDateTime.getYear, transitionDateTime.getMonth, transitionDateTime.getDayOfMonth, null, transitionDateTime.toLocalTime, false, timeDefinition, savingAmountSecs)
+    addRuleToWindow(
+      transitionDateTime.getYear,
+      transitionDateTime.getYear,
+      transitionDateTime.getMonth,
+      transitionDateTime.getDayOfMonth,
+      null,
+      transitionDateTime.toLocalTime,
+      false,
+      timeDefinition,
+      savingAmountSecs
+    )
   }
 
   /** Adds a single transition rule to the current window.
@@ -186,8 +206,24 @@ class ZoneRulesBuilder() {
     * @throws IllegalStateException if the window already has fixed savings
     * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
     */
-  def addRuleToWindow(year: Int, month: Month, dayOfMonthIndicator: Int, time: LocalTime, timeEndOfDay: Boolean, timeDefinition: ZoneOffsetTransitionRule.TimeDefinition, savingAmountSecs: Int): ZoneRulesBuilder =
-    addRuleToWindow(year, year, month, dayOfMonthIndicator, null, time, timeEndOfDay, timeDefinition, savingAmountSecs)
+  def addRuleToWindow(
+    year:                Int,
+    month:               Month,
+    dayOfMonthIndicator: Int,
+    time:                LocalTime,
+    timeEndOfDay:        Boolean,
+    timeDefinition:      ZoneOffsetTransitionRule.TimeDefinition,
+    savingAmountSecs:    Int
+  ): ZoneRulesBuilder =
+    addRuleToWindow(year,
+                    year,
+                    month,
+                    dayOfMonthIndicator,
+                    null,
+                    time,
+                    timeEndOfDay,
+                    timeDefinition,
+                    savingAmountSecs)
 
   /** Adds a multi-year transition rule to the current window.
     *
@@ -212,20 +248,40 @@ class ZoneRulesBuilder() {
     * @throws IllegalStateException if the window already has fixed savings
     * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
     */
-  def addRuleToWindow(startYear: Int, endYear: Int, month: Month, dayOfMonthIndicator: Int, dayOfWeek: DayOfWeek, time: LocalTime, timeEndOfDay: Boolean, timeDefinition: ZoneOffsetTransitionRule.TimeDefinition, savingAmountSecs: Int): ZoneRulesBuilder = {
+  def addRuleToWindow(
+    startYear:           Int,
+    endYear:             Int,
+    month:               Month,
+    dayOfMonthIndicator: Int,
+    dayOfWeek:           DayOfWeek,
+    time:                LocalTime,
+    timeEndOfDay:        Boolean,
+    timeDefinition:      ZoneOffsetTransitionRule.TimeDefinition,
+    savingAmountSecs:    Int
+  ): ZoneRulesBuilder = {
     Objects.requireNonNull(month, "month")
     Objects.requireNonNull(time, "time")
     Objects.requireNonNull(timeDefinition, "timeDefinition")
-    YEAR.checkValidValue(startYear)
-    YEAR.checkValidValue(endYear)
+    YEAR.checkValidValue(startYear.toLong)
+    YEAR.checkValidValue(endYear.toLong)
     if (dayOfMonthIndicator < -28 || dayOfMonthIndicator > 31 || dayOfMonthIndicator == 0)
-      throw new IllegalArgumentException("Day of month indicator must be between -28 and 31 inclusive excluding zero")
+      throw new IllegalArgumentException(
+        "Day of month indicator must be between -28 and 31 inclusive excluding zero"
+      )
     if (timeEndOfDay && !(time == LocalTime.MIDNIGHT))
       throw new IllegalArgumentException("Time must be midnight when end of day flag is true")
     if (windowList.isEmpty)
       throw new IllegalStateException("Must add a window before adding a rule")
     val window: ZoneRulesBuilder#TZWindow = windowList.get(windowList.size - 1)
-    window.addRule(startYear, endYear, month, dayOfMonthIndicator, dayOfWeek, time, timeEndOfDay, timeDefinition, savingAmountSecs)
+    window.addRule(startYear,
+                   endYear,
+                   month,
+                   dayOfMonthIndicator,
+                   dayOfWeek,
+                   time,
+                   timeEndOfDay,
+                   timeDefinition,
+                   savingAmountSecs)
     this
   }
 
@@ -252,25 +308,33 @@ class ZoneRulesBuilder() {
     * @throws IllegalStateException if no windows have been added
     * @throws IllegalStateException if there is only one rule defined as being forever for any given window
     */
-  private[zone] def toRules(zoneId: String, deduplicateMap: java.util.Map[AnyRef, AnyRef]): ZoneRules = {
+  private[zone] def toRules(
+    zoneId:         String,
+    deduplicateMap: java.util.Map[AnyRef, AnyRef]
+  ): ZoneRules = {
     Objects.requireNonNull(zoneId, "zoneId")
     this.deduplicateMap = deduplicateMap
     if (windowList.isEmpty) {
       throw new IllegalStateException("No windows have been added to the builder")
     }
-    val standardTransitionList: java.util.List[ZoneOffsetTransition] = new java.util.ArrayList[ZoneOffsetTransition](4)
-    val transitionList: java.util.List[ZoneOffsetTransition] = new java.util.ArrayList[ZoneOffsetTransition](256)
-    val lastTransitionRuleList: java.util.List[ZoneOffsetTransitionRule] = new java.util.ArrayList[ZoneOffsetTransitionRule](2)
+    val standardTransitionList: java.util.List[ZoneOffsetTransition] =
+      new java.util.ArrayList[ZoneOffsetTransition](4)
+    val transitionList: java.util.List[ZoneOffsetTransition] =
+      new java.util.ArrayList[ZoneOffsetTransition](256)
+    val lastTransitionRuleList: java.util.List[ZoneOffsetTransitionRule] =
+      new java.util.ArrayList[ZoneOffsetTransitionRule](2)
     val firstWindow: ZoneRulesBuilder#TZWindow = windowList.get(0)
-    var loopStandardOffset: ZoneOffset = firstWindow.standardOffset
-    var loopSavings: Int = 0
+    var loopStandardOffset: ZoneOffset         = firstWindow.standardOffset
+    var loopSavings: Int                       = 0
     if (firstWindow.fixedSavingAmountSecs != null) {
       loopSavings = firstWindow.fixedSavingAmountSecs
     }
-    val firstWallOffset: ZoneOffset = deduplicate(ZoneOffset.ofTotalSeconds(loopStandardOffset.getTotalSeconds + loopSavings))
+    val firstWallOffset: ZoneOffset = deduplicate(
+      ZoneOffset.ofTotalSeconds(loopStandardOffset.getTotalSeconds + loopSavings)
+    )
     var loopWindowStart: LocalDateTime = deduplicate(LocalDateTime.of(Year.MIN_VALUE, 1, 1, 0, 0))
-    var loopWindowOffset: ZoneOffset = firstWallOffset
-    val windows = windowList.iterator
+    var loopWindowOffset: ZoneOffset   = firstWallOffset
+    val windows                        = windowList.iterator
     while (windows.hasNext) {
       val window = windows.next()
       window.tidy(loopWindowStart.getYear)
@@ -280,7 +344,7 @@ class ZoneRulesBuilder() {
         var break = false
         val rules = window.ruleList.iterator
         while (!break && rules.hasNext) {
-          val rule = rules.next()
+          val rule                        = rules.next()
           val trans: ZoneOffsetTransition = rule.toTransition(loopStandardOffset, loopSavings)
           if (trans.toEpochSecond > loopWindowStart.toEpochSecond(loopWindowOffset)) {
             break = true
@@ -291,20 +355,38 @@ class ZoneRulesBuilder() {
         }
       }
       if (loopStandardOffset != window.standardOffset) {
-        standardTransitionList.add(deduplicate(new ZoneOffsetTransition(LocalDateTime.ofEpochSecond(loopWindowStart.toEpochSecond(loopWindowOffset), 0, loopStandardOffset), loopStandardOffset, window.standardOffset)))
+        standardTransitionList.add(
+          deduplicate(
+            new ZoneOffsetTransition(LocalDateTime.ofEpochSecond(loopWindowStart
+                                                                   .toEpochSecond(loopWindowOffset),
+                                                                 0,
+                                                                 loopStandardOffset),
+                                     loopStandardOffset,
+                                     window.standardOffset)
+          )
+        )
         loopStandardOffset = deduplicate(window.standardOffset)
       }
-      val effectiveWallOffset: ZoneOffset = deduplicate(ZoneOffset.ofTotalSeconds(loopStandardOffset.getTotalSeconds + effectiveSavings))
+      val effectiveWallOffset: ZoneOffset = deduplicate(
+        ZoneOffset.ofTotalSeconds(loopStandardOffset.getTotalSeconds + effectiveSavings)
+      )
       if (loopWindowOffset != effectiveWallOffset) {
-        val trans: ZoneOffsetTransition = deduplicate(new ZoneOffsetTransition(loopWindowStart, loopWindowOffset, effectiveWallOffset))
+        val trans: ZoneOffsetTransition = deduplicate(
+          new ZoneOffsetTransition(loopWindowStart, loopWindowOffset, effectiveWallOffset)
+        )
         transitionList.add(trans)
       }
       loopSavings = effectiveSavings
       val rules = window.ruleList.iterator
       while (rules.hasNext) {
         val rule = rules.next()
-        val trans: ZoneOffsetTransition = deduplicate(rule.toTransition(loopStandardOffset, loopSavings))
-        if ((trans.toEpochSecond >= loopWindowStart.toEpochSecond(loopWindowOffset)) && (trans.toEpochSecond < window.createDateTimeEpochSecond(loopSavings)) && (trans.getOffsetBefore != trans.getOffsetAfter)) {
+        val trans: ZoneOffsetTransition = deduplicate(
+          rule.toTransition(loopStandardOffset, loopSavings)
+        )
+        if ((trans.toEpochSecond >= loopWindowStart.toEpochSecond(loopWindowOffset)) && (trans.toEpochSecond < window
+              .createDateTimeEpochSecond(
+                loopSavings
+              )) && (trans.getOffsetBefore != trans.getOffsetAfter)) {
           transitionList.add(trans)
           loopSavings = rule.savingAmountSecs
         }
@@ -312,14 +394,23 @@ class ZoneRulesBuilder() {
       val lastRules = window.lastRuleList.iterator
       while (lastRules.hasNext) {
         val lastRule = lastRules.next()
-        val transitionRule: ZoneOffsetTransitionRule = deduplicate(lastRule.toTransitionRule(loopStandardOffset, loopSavings))
+        val transitionRule: ZoneOffsetTransitionRule = deduplicate(
+          lastRule.toTransitionRule(loopStandardOffset, loopSavings)
+        )
         lastTransitionRuleList.add(transitionRule)
         loopSavings = lastRule.savingAmountSecs
       }
       loopWindowOffset = deduplicate(window.createWallOffset(loopSavings))
-      loopWindowStart = deduplicate(LocalDateTime.ofEpochSecond(window.createDateTimeEpochSecond(loopSavings), 0, loopWindowOffset))
+      loopWindowStart = deduplicate(
+        LocalDateTime
+          .ofEpochSecond(window.createDateTimeEpochSecond(loopSavings), 0, loopWindowOffset)
+      )
     }
-    StandardZoneRules(firstWindow.standardOffset, firstWallOffset, standardTransitionList, transitionList, lastTransitionRuleList)
+    StandardZoneRules(firstWindow.standardOffset,
+                      firstWallOffset,
+                      standardTransitionList,
+                      transitionList,
+                      lastTransitionRuleList)
   }
 
   /** Deduplicates an object instance.
@@ -344,17 +435,25 @@ class ZoneRulesBuilder() {
     * @param windowEnd  the end of the window, relative to the time definition, null if forever
     * @param timeDefinition  the time definition for calculating the true end, not null
     */
-  private[zone] class TZWindow private[zone](private[zone] val standardOffset: ZoneOffset,
-                                             private val windowEnd: LocalDateTime,
-                                             private val timeDefinition: ZoneOffsetTransitionRule.TimeDefinition) {
+  private[zone] class TZWindow private[zone] (
+    private[zone] val standardOffset: ZoneOffset,
+    private val windowEnd:            LocalDateTime,
+    private val timeDefinition:       ZoneOffsetTransitionRule.TimeDefinition
+  ) {
+
     /** The fixed amount of the saving to be applied during this window. */
     private[zone] var fixedSavingAmountSecs: Integer = null
+
     /** The rules for the current window. */
-    private[zone] var ruleList: java.util.List[ZoneRulesBuilder#TZRule] = new java.util.ArrayList[ZoneRulesBuilder#TZRule]
+    private[zone] var ruleList: java.util.List[ZoneRulesBuilder#TZRule] =
+      new java.util.ArrayList[ZoneRulesBuilder#TZRule]
+
     /** The latest year that the last year starts at. */
     private var maxLastRuleStartYear: Int = Year.MIN_VALUE
+
     /** The last rules. */
-    private[zone] var lastRuleList: java.util.List[ZoneRulesBuilder#TZRule] = new java.util.ArrayList[ZoneRulesBuilder#TZRule]
+    private[zone] var lastRuleList: java.util.List[ZoneRulesBuilder#TZRule] =
+      new java.util.ArrayList[ZoneRulesBuilder#TZRule]
 
     /** Sets the fixed savings amount for the window.
       *
@@ -382,7 +481,17 @@ class ZoneRulesBuilder() {
       * @throws IllegalStateException if the window already has fixed savings
       * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
       */
-    private[zone] def addRule(startYear: Int, endYear: Int, month: Month, dayOfMonthIndicator: Int, dayOfWeek: DayOfWeek, time: LocalTime, timeEndOfDay: Boolean, timeDefinition: ZoneOffsetTransitionRule.TimeDefinition, savingAmountSecs: Int): Unit = {
+    private[zone] def addRule(
+      startYear:           Int,
+      endYear:             Int,
+      month:               Month,
+      dayOfMonthIndicator: Int,
+      dayOfWeek:           DayOfWeek,
+      time:                LocalTime,
+      timeEndOfDay:        Boolean,
+      timeDefinition:      ZoneOffsetTransitionRule.TimeDefinition,
+      savingAmountSecs:    Int
+    ): Unit = {
       var _endYear = endYear
       if (fixedSavingAmountSecs != null) {
         throw new IllegalStateException("Window has a fixed DST saving, so cannot have DST rules")
@@ -397,12 +506,18 @@ class ZoneRulesBuilder() {
       }
       var year: Int = startYear
       while (year <= _endYear) {
-        val rule: ZoneRulesBuilder#TZRule = new TZRule(year, month, dayOfMonthIndicator, dayOfWeek, time, timeEndOfDay, timeDefinition, savingAmountSecs)
+        val rule: ZoneRulesBuilder#TZRule = new TZRule(year,
+                                                       month,
+                                                       dayOfMonthIndicator,
+                                                       dayOfWeek,
+                                                       time,
+                                                       timeEndOfDay,
+                                                       timeDefinition,
+                                                       savingAmountSecs)
         if (lastRule) {
           lastRuleList.add(rule)
           maxLastRuleStartYear = Math.max(startYear, maxLastRuleStartYear)
-        }
-        else {
+        } else {
           ruleList.add(rule)
         }
         year += 1
@@ -416,7 +531,9 @@ class ZoneRulesBuilder() {
       */
     private[zone] def validateWindowOrder(previous: ZoneRulesBuilder#TZWindow): Unit =
       if (windowEnd.isBefore(previous.windowEnd))
-        throw new IllegalStateException(s"Windows must be added in date-time order: $windowEnd < ${previous.windowEnd}")
+        throw new IllegalStateException(
+          s"Windows must be added in date-time order: $windowEnd < ${previous.windowEnd}"
+        )
 
     /** Adds rules to make the last rules all start from the same year.
       * Also add one more year to avoid weird case where penultimate year has odd offset.
@@ -432,20 +549,39 @@ class ZoneRulesBuilder() {
         val lastRules = lastRuleList.iterator
         while (lastRules.hasNext) {
           val lastRule = lastRules.next()
-          addRule(lastRule.year, maxLastRuleStartYear, lastRule.month, lastRule.dayOfMonthIndicator, lastRule.dayOfWeek, lastRule.time, lastRule.timeEndOfDay, lastRule.timeDefinition, lastRule.savingAmountSecs)
+          addRule(
+            lastRule.year,
+            maxLastRuleStartYear,
+            lastRule.month,
+            lastRule.dayOfMonthIndicator,
+            lastRule.dayOfWeek,
+            lastRule.time,
+            lastRule.timeEndOfDay,
+            lastRule.timeDefinition,
+            lastRule.savingAmountSecs
+          )
           lastRule.year = maxLastRuleStartYear + 1
         }
         if (maxLastRuleStartYear == Year.MAX_VALUE)
           lastRuleList.clear()
         else
           maxLastRuleStartYear += 1
-      }
-      else {
+      } else {
         val endYear: Int = windowEnd.getYear
-        val lastRules = lastRuleList.iterator
+        val lastRules    = lastRuleList.iterator
         while (lastRules.hasNext) {
           val lastRule = lastRules.next()
-          addRule(lastRule.year, endYear + 1, lastRule.month, lastRule.dayOfMonthIndicator, lastRule.dayOfWeek, lastRule.time, lastRule.timeEndOfDay, lastRule.timeDefinition, lastRule.savingAmountSecs)
+          addRule(
+            lastRule.year,
+            endYear + 1,
+            lastRule.month,
+            lastRule.dayOfMonthIndicator,
+            lastRule.dayOfWeek,
+            lastRule.time,
+            lastRule.timeEndOfDay,
+            lastRule.timeDefinition,
+            lastRule.savingAmountSecs
+          )
         }
         lastRuleList.clear()
         maxLastRuleStartYear = Year.MAX_VALUE
@@ -479,7 +615,7 @@ class ZoneRulesBuilder() {
       */
     private[zone] def createDateTimeEpochSecond(savingsSecs: Int): Long = {
       val wallOffset: ZoneOffset = createWallOffset(savingsSecs)
-      val ldt: LocalDateTime = timeDefinition.createDateTime(windowEnd, standardOffset, wallOffset)
+      val ldt: LocalDateTime     = timeDefinition.createDateTime(windowEnd, standardOffset, wallOffset)
       ldt.toEpochSecond(wallOffset)
     }
   }
@@ -498,14 +634,16 @@ class ZoneRulesBuilder() {
     * @param timeDefinition  the time definition, not null
     * @param savingAmountSecs  the savings amount in seconds
     */
-  private[zone] class TZRule private[zone](private[zone] var year: Int,
-                                           private[zone] var month: Month,
-                                           private[zone] var dayOfMonthIndicator: Int,
-                                           private[zone] var dayOfWeek: DayOfWeek,
-                                           private[zone] var time: LocalTime,
-                                           private[zone] var timeEndOfDay: Boolean,
-                                           private[zone] var timeDefinition: ZoneOffsetTransitionRule.TimeDefinition,
-                                           private[zone] var savingAmountSecs: Int) {
+  protected[zone] class TZRule private[zone] (
+    private[zone] var year:                Int,
+    private[zone] var month:               Month,
+    private[zone] var dayOfMonthIndicator: Int,
+    private[zone] var dayOfWeek:           DayOfWeek,
+    private[zone] var time:                LocalTime,
+    private[zone] var timeEndOfDay:        Boolean,
+    private[zone] var timeDefinition:      ZoneOffsetTransitionRule.TimeDefinition,
+    private[zone] var savingAmountSecs:    Int
+  ) {
 
     /** Converts this to a transition.
       *
@@ -513,13 +651,22 @@ class ZoneRulesBuilder() {
       * @param savingsBeforeSecs  the active savings in seconds
       * @return the transition, not null
       */
-    private[zone] def toTransition(standardOffset: ZoneOffset, savingsBeforeSecs: Int): ZoneOffsetTransition = {
+    private[zone] def toTransition(
+      standardOffset:    ZoneOffset,
+      savingsBeforeSecs: Int
+    ): ZoneOffsetTransition = {
       var date: LocalDate = toLocalDate
       date = deduplicate(date)
       val ldt: LocalDateTime = deduplicate(LocalDateTime.of(date, time))
-      val wallOffset: ZoneOffset = deduplicate(ZoneOffset.ofTotalSeconds(standardOffset.getTotalSeconds + savingsBeforeSecs))
-      val dt: LocalDateTime = deduplicate(timeDefinition.createDateTime(ldt, standardOffset, wallOffset))
-      val offsetAfter: ZoneOffset = deduplicate(ZoneOffset.ofTotalSeconds(standardOffset.getTotalSeconds + savingAmountSecs))
+      val wallOffset: ZoneOffset = deduplicate(
+        ZoneOffset.ofTotalSeconds(standardOffset.getTotalSeconds + savingsBeforeSecs)
+      )
+      val dt: LocalDateTime = deduplicate(
+        timeDefinition.createDateTime(ldt, standardOffset, wallOffset)
+      )
+      val offsetAfter: ZoneOffset = deduplicate(
+        ZoneOffset.ofTotalSeconds(standardOffset.getTotalSeconds + savingAmountSecs)
+      )
       new ZoneOffsetTransition(dt, wallOffset, offsetAfter)
     }
 
@@ -529,7 +676,10 @@ class ZoneRulesBuilder() {
       * @param savingsBeforeSecs  the active savings before the transition in seconds
       * @return the transition, not null
       */
-    private[zone] def toTransitionRule(standardOffset: ZoneOffset, savingsBeforeSecs: Int): ZoneOffsetTransitionRule = {
+    private[zone] def toTransitionRule(
+      standardOffset:    ZoneOffset,
+      savingsBeforeSecs: Int
+    ): ZoneOffsetTransitionRule = {
       if (dayOfMonthIndicator < 0) {
         if (month ne Month.FEBRUARY) {
           dayOfMonthIndicator = month.maxLength - 6
@@ -537,7 +687,7 @@ class ZoneRulesBuilder() {
       }
       if (timeEndOfDay && dayOfMonthIndicator > 0 && !(dayOfMonthIndicator == 28 && (month eq Month.FEBRUARY))) {
         val date: LocalDate = LocalDate.of(2004, month, dayOfMonthIndicator).plusDays(1)
-        month = date.getMonth
+        month               = date.getMonth
         dayOfMonthIndicator = date.getDayOfMonth
         if (dayOfWeek != null) {
           dayOfWeek = dayOfWeek.plus(1)
@@ -545,19 +695,26 @@ class ZoneRulesBuilder() {
         timeEndOfDay = false
       }
       val trans: ZoneOffsetTransition = toTransition(standardOffset, savingsBeforeSecs)
-      new ZoneOffsetTransitionRule(month, dayOfMonthIndicator, dayOfWeek, time, timeEndOfDay, timeDefinition, standardOffset, trans.getOffsetBefore, trans.getOffsetAfter)
+      new ZoneOffsetTransitionRule(month,
+                                   dayOfMonthIndicator,
+                                   dayOfWeek,
+                                   time,
+                                   timeEndOfDay,
+                                   timeDefinition,
+                                   standardOffset,
+                                   trans.getOffsetBefore,
+                                   trans.getOffsetAfter)
     }
 
     private[zone] def toLocalDate: LocalDate = {
       var date: LocalDate = null
       if (dayOfMonthIndicator < 0) {
-        val monthLen: Int = month.length(IsoChronology.INSTANCE.isLeapYear(year))
+        val monthLen: Int = month.length(IsoChronology.INSTANCE.isLeapYear(year.toLong))
         date = LocalDate.of(year, month, monthLen + 1 + dayOfMonthIndicator)
         if (dayOfWeek != null) {
           date = date.`with`(previousOrSame(dayOfWeek))
         }
-      }
-      else {
+      } else {
         date = LocalDate.of(year, month, dayOfMonthIndicator)
         if (dayOfWeek != null) {
           date = date.`with`(nextOrSame(dayOfWeek))
@@ -577,7 +734,7 @@ class ZoneRulesBuilder() {
       var cmp: Int = that.year - other.year
       cmp = if (cmp == 0) that.month.compareTo(other.month) else cmp
       if (cmp == 0) {
-        val thisDate: LocalDate = that.toLocalDate
+        val thisDate: LocalDate  = that.toLocalDate
         val otherDate: LocalDate = other.toLocalDate
         cmp = thisDate.compareTo(otherDate)
       }

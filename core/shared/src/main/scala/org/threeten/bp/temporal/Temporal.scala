@@ -31,8 +31,6 @@
  */
 package org.threeten.bp.temporal
 
-import org.threeten.bp.DateTimeException
-
 /** Framework-level interface defining read-write access to a temporal object,
   * such as a date, time, offset or some combination of these.
   *
@@ -93,6 +91,7 @@ import org.threeten.bp.DateTimeException
   * All implementations must be {@link Comparable}.
   */
 trait Temporal extends TemporalAccessor {
+
   /** Checks if the specified unit is supported.
     *
     * This checks if the date-time can be queried for the specified unit.

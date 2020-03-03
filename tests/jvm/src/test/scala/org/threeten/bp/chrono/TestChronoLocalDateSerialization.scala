@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.chrono
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -41,27 +41,26 @@ import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.AbstractTest
 import org.threeten.bp.LocalDate
 
-class TestChronoLocalDateSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestChronoLocalDateSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   val data_of_calendars: List[Chronology] = {
-    List[Chronology](
-      HijrahChronology.INSTANCE,
-      IsoChronology.INSTANCE,
-      JapaneseChronology.INSTANCE,
-      MinguoChronology.INSTANCE,
-      ThaiBuddhistChronology.INSTANCE)
+    List[Chronology](HijrahChronology.INSTANCE,
+                     IsoChronology.INSTANCE,
+                     JapaneseChronology.INSTANCE,
+                     MinguoChronology.INSTANCE,
+                     ThaiBuddhistChronology.INSTANCE)
   }
 
   test("test_ChronoSerialization") {
     data_of_calendars.foreach { chrono =>
-      val ref: LocalDate = LocalDate.of(1900, 1, 5)
-      val orginal: ChronoLocalDate = chrono.date(ref)
+      val ref: LocalDate              = LocalDate.of(1900, 1, 5)
+      val orginal: ChronoLocalDate    = chrono.date(ref)
       val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-      val out: ObjectOutputStream = new ObjectOutputStream(baos)
+      val out: ObjectOutputStream     = new ObjectOutputStream(baos)
       out.writeObject(orginal)
       out.close()
       val bais: ByteArrayInputStream = new ByteArrayInputStream(baos.toByteArray)
-      val in: ObjectInputStream = new ObjectInputStream(bais)
-      val ser: ChronoLocalDate = in.readObject.asInstanceOf[ChronoLocalDate]
+      val in: ObjectInputStream      = new ObjectInputStream(bais)
+      val ser: ChronoLocalDate       = in.readObject.asInstanceOf[ChronoLocalDate]
       assertEquals(ser, orginal, "deserialized date is wrong")
     }
   }

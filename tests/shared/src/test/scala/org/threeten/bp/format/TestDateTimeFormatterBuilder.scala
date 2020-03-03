@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.BeforeAndAfterEach
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.DAY_OF_MONTH
@@ -42,13 +42,15 @@ import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.TemporalAccessor
 import org.threeten.bp.Platform
 
-import scala.language.implicitConversions
 import scala.collection.JavaConverters._
 
 import java.text.ParsePosition
 
 /** Test DateTimeFormatterBuilder. */
-class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with BeforeAndAfterEach {
+class TestDateTimeFormatterBuilder
+    extends AnyFunSuite
+    with AssertionsHelper
+    with BeforeAndAfterEach {
   // We need these ugly converters to fit the signatures in everycase
   implicit def convLongMap(al: Map[Long, String]): java.util.Map[java.lang.Long, String] =
     al.map(k => (Long.box(k._1), k._2)).asJava
@@ -193,7 +195,10 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
   }
 
   test("test_appendValue_subsequent2_parse5") {
-    builder.appendValue(MONTH_OF_YEAR, 1, 2, SignStyle.NORMAL).appendValue(DAY_OF_MONTH, 2).appendLiteral('4')
+    builder
+      .appendValue(MONTH_OF_YEAR, 1, 2, SignStyle.NORMAL)
+      .appendValue(DAY_OF_MONTH, 2)
+      .appendLiteral('4')
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear,1,2,NORMAL)Value(DayOfMonth,2)'4'")
     val cal: TemporalAccessor = f.parseUnresolved("01234", new ParsePosition(0))
@@ -202,7 +207,10 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
   }
 
   test("test_appendValue_subsequent3_parse6") {
-    builder.appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD).appendValue(MONTH_OF_YEAR, 2).appendValue(DAY_OF_MONTH, 2)
+    builder
+      .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
+      .appendValue(MONTH_OF_YEAR, 2)
+      .appendValue(DAY_OF_MONTH, 2)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(Year,4,10,EXCEEDS_PAD)Value(MonthOfYear,2)Value(DayOfMonth,2)")
     val cal: TemporalAccessor = f.parseUnresolved("20090630", new ParsePosition(0))
@@ -307,19 +315,18 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
   }
 
   test("test_appendTextMap") {
-    val map = Map(
-      1L -> "JNY",
-      2L -> "FBY",
-      3L -> "MCH",
-      4L -> "APL",
-      5L -> "MAY",
-      6L -> "JUN",
-      7L -> "JLY",
-      8L -> "AGT",
-      9L -> "SPT",
-      10L -> "OBR",
-      11L -> "NVR",
-      12L -> "DBR")
+    val map = Map(1L -> "JNY",
+                  2L -> "FBY",
+                  3L -> "MCH",
+                  4L -> "APL",
+                  5L -> "MAY",
+                  6L -> "JUN",
+                  7L -> "JLY",
+                  8L -> "AGT",
+                  9L -> "SPT",
+                  10L -> "OBR",
+                  11L -> "NVR",
+                  12L -> "DBR")
     builder.appendText(MONTH_OF_YEAR, map)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Text(MonthOfYear)")
@@ -344,14 +351,7 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
   }
 
   val data_offsetPatterns: List[String] = {
-    List(
-      "+HH",
-      "+HHMM",
-      "+HH:MM",
-      "+HHMMss",
-      "+HH:MM:ss",
-      "+HHMMSS",
-      "+HH:MM:SS")
+    List("+HH", "+HHMM", "+HH:MM", "+HHMMss", "+HH:MM:ss", "+HHMMSS", "+HH:MM:SS")
   }
 
   test("test_appendOffset") {
@@ -364,18 +364,17 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
   }
 
   val data_badOffsetPatterns: List[String] =
-    List(
-      "HH",
-      "HHMM",
-      "HH:MM",
-      "HHMMss",
-      "HH:MM:ss",
-      "HHMMSS",
-      "HH:MM:SS",
-      "+H",
-      "+HMM",
-      "+HHM",
-      "+A")
+    List("HH",
+         "HHMM",
+         "HH:MM",
+         "HHMMss",
+         "HH:MM:ss",
+         "HHMMSS",
+         "HH:MM:SS",
+         "+H",
+         "+HMM",
+         "+HHM",
+         "+A")
 
   test("test_appendOffset_badPattern") {
     data_badOffsetPatterns.foreach { pattern =>
@@ -428,7 +427,11 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
   }
 
   test("test_padNext_2arg_dash") {
-    builder.appendValue(MONTH_OF_YEAR).padNext(2, '-').appendValue(DAY_OF_MONTH).appendValue(DAY_OF_WEEK)
+    builder
+      .appendValue(MONTH_OF_YEAR)
+      .padNext(2, '-')
+      .appendValue(DAY_OF_MONTH)
+      .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)Pad(Value(DayOfMonth),2,'-')Value(DayOfWeek)")
   }
@@ -440,19 +443,34 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
   }
 
   test("test_padOptional") {
-    builder.appendValue(MONTH_OF_YEAR).padNext(5).optionalStart.appendValue(DAY_OF_MONTH).optionalEnd.appendValue(DAY_OF_WEEK)
+    builder
+      .appendValue(MONTH_OF_YEAR)
+      .padNext(5)
+      .optionalStart
+      .appendValue(DAY_OF_MONTH)
+      .optionalEnd
+      .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)Pad([Value(DayOfMonth)],5)Value(DayOfWeek)")
   }
 
   test("test_optionalStart_noEnd") {
-    builder.appendValue(MONTH_OF_YEAR).optionalStart.appendValue(DAY_OF_MONTH).appendValue(DAY_OF_WEEK)
+    builder
+      .appendValue(MONTH_OF_YEAR)
+      .optionalStart
+      .appendValue(DAY_OF_MONTH)
+      .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[Value(DayOfMonth)Value(DayOfWeek)]")
   }
 
   test("test_optionalStart2_noEnd") {
-    builder.appendValue(MONTH_OF_YEAR).optionalStart.appendValue(DAY_OF_MONTH).optionalStart.appendValue(DAY_OF_WEEK)
+    builder
+      .appendValue(MONTH_OF_YEAR)
+      .optionalStart
+      .appendValue(DAY_OF_MONTH)
+      .optionalStart
+      .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[Value(DayOfMonth)[Value(DayOfWeek)]]")
   }
@@ -464,25 +482,50 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
   }
 
   test("test_optionalEnd") {
-    builder.appendValue(MONTH_OF_YEAR).optionalStart.appendValue(DAY_OF_MONTH).optionalEnd.appendValue(DAY_OF_WEEK)
+    builder
+      .appendValue(MONTH_OF_YEAR)
+      .optionalStart
+      .appendValue(DAY_OF_MONTH)
+      .optionalEnd
+      .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[Value(DayOfMonth)]Value(DayOfWeek)")
   }
 
   test("test_optionalEnd2") {
-    builder.appendValue(MONTH_OF_YEAR).optionalStart.appendValue(DAY_OF_MONTH).optionalStart.appendValue(DAY_OF_WEEK).optionalEnd.appendValue(DAY_OF_MONTH).optionalEnd
+    builder
+      .appendValue(MONTH_OF_YEAR)
+      .optionalStart
+      .appendValue(DAY_OF_MONTH)
+      .optionalStart
+      .appendValue(DAY_OF_WEEK)
+      .optionalEnd
+      .appendValue(DAY_OF_MONTH)
+      .optionalEnd
     val f: DateTimeFormatter = builder.toFormatter
-    assertEquals(f.toString, "Value(MonthOfYear)[Value(DayOfMonth)[Value(DayOfWeek)]Value(DayOfMonth)]")
+    assertEquals(f.toString,
+                 "Value(MonthOfYear)[Value(DayOfMonth)[Value(DayOfWeek)]Value(DayOfMonth)]")
   }
 
   test("test_optionalEnd_doubleStartSingleEnd") {
-    builder.appendValue(MONTH_OF_YEAR).optionalStart.optionalStart.appendValue(DAY_OF_MONTH).optionalEnd
+    builder
+      .appendValue(MONTH_OF_YEAR)
+      .optionalStart
+      .optionalStart
+      .appendValue(DAY_OF_MONTH)
+      .optionalEnd
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[[Value(DayOfMonth)]]")
   }
 
   test("test_optionalEnd_doubleStartDoubleEnd") {
-    builder.appendValue(MONTH_OF_YEAR).optionalStart.optionalStart.appendValue(DAY_OF_MONTH).optionalEnd.optionalEnd
+    builder
+      .appendValue(MONTH_OF_YEAR)
+      .optionalStart
+      .optionalStart
+      .appendValue(DAY_OF_MONTH)
+      .optionalEnd
+      .optionalEnd
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[[Value(DayOfMonth)]]")
   }
@@ -499,7 +542,7 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
     }
   }
 
-  def dataValid: List[(String, String)] = {
+  def dataValid: List[(String, String)] =
     List(
       ("'a'", "'a'"),
       ("''", "''"),
@@ -587,11 +630,15 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
       ("xxxxx", "Offset(+HH:MM:ss,'+00:00')"),
       ("ppH", "Pad(Value(HourOfDay),2)"),
       ("pppDD", "Pad(Value(DayOfYear,2),3)"),
-      ("uuuu[-MM[-dd", "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)['-'Value(DayOfMonth,2)]]"),
-      ("uuuu[-MM[-dd]]", "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)['-'Value(DayOfMonth,2)]]"),
-      ("uuuu[-MM[]-dd]", "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2)]"),
-      ("uuuu-MM-dd'T'HH:mm:ss.SSS", "Value(Year,4,19,EXCEEDS_PAD)'-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2)" + "'T'Value(HourOfDay,2)':'Value(MinuteOfHour,2)':'Value(SecondOfMinute,2)'.'Fraction(NanoOfSecond,3,3)"))
-  }
+      ("uuuu[-MM[-dd",
+       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)['-'Value(DayOfMonth,2)]]"),
+      ("uuuu[-MM[-dd]]",
+       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)['-'Value(DayOfMonth,2)]]"),
+      ("uuuu[-MM[]-dd]",
+       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2)]"),
+      ("uuuu-MM-dd'T'HH:mm:ss.SSS",
+       "Value(Year,4,19,EXCEEDS_PAD)'-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2)" + "'T'Value(HourOfDay,2)':'Value(MinuteOfHour,2)':'Value(SecondOfMinute,2)'.'Fraction(NanoOfSecond,3,3)")
+    )
 
   test("test_appendPattern_valid") {
     dataValid.foreach {
@@ -645,13 +692,13 @@ class TestDateTimeFormatterBuilder extends FunSuite with AssertionsHelper with B
       "kkk",
       "hhh",
       "mmm",
-      "sss")
+      "sss"
+    )
 
-  def test_appendPattern_invalid(input: String): Unit = {
+  def test_appendPattern_invalid(): Unit =
     dataInvalid.foreach { input =>
       assertThrows[IllegalArgumentException] {
         builder.appendPattern(input)
       }
     }
-  }
 }

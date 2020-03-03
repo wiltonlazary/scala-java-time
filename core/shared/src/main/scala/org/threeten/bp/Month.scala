@@ -71,56 +71,79 @@ import org.threeten.bp.temporal.ValueRange
   * This is an immutable and thread-safe enum.
   */
 object Month {
+
   /** The singleton instance for the month of January with 31 days.
     * This has the numeric value of {@code 1}.
     */
-  val JANUARY   = new Month("JANUARY", 0)
+  val JANUARY = new Month("JANUARY", 0)
+
   /** The singleton instance for the month of February with 28 days, or 29 in a leap year.
     * This has the numeric value of {@code 2}.
     */
-  val FEBRUARY  = new Month("FEBRUARY", 1)
+  val FEBRUARY = new Month("FEBRUARY", 1)
+
   /** The singleton instance for the month of March with 31 days.
     * This has the numeric value of {@code 3}.
     */
-  val MARCH     = new Month("MARCH", 2)
+  val MARCH = new Month("MARCH", 2)
+
   /** The singleton instance for the month of April with 30 days.
     * This has the numeric value of {@code 4}.
     */
-  val APRIL     = new Month("APRIL", 3)
+  val APRIL = new Month("APRIL", 3)
+
   /** The singleton instance for the month of May with 31 days.
     * This has the numeric value of {@code 5}.
     */
-  val MAY       = new Month("MAY", 4)
+  val MAY = new Month("MAY", 4)
+
   /** The singleton instance for the month of June with 30 days.
     * This has the numeric value of {@code 6}.
     */
-  val JUNE      = new Month("JUNE", 5)
+  val JUNE = new Month("JUNE", 5)
+
   /** The singleton instance for the month of July with 31 days.
     * This has the numeric value of {@code 7}.
     */
-  val JULY      = new Month("JULY", 6)
+  val JULY = new Month("JULY", 6)
+
   /** The singleton instance for the month of August with 31 days.
     * This has the numeric value of {@code 8}.
     */
-  val AUGUST    = new Month("AUGUST", 7)
+  val AUGUST = new Month("AUGUST", 7)
+
   /** The singleton instance for the month of September with 30 days.
     * This has the numeric value of {@code 9}.
     */
   val SEPTEMBER = new Month("SEPTEMBER", 8)
+
   /** The singleton instance for the month of October with 31 days.
     * This has the numeric value of {@code 10}.
     */
-  val OCTOBER   = new Month("OCTOBER", 9)
+  val OCTOBER = new Month("OCTOBER", 9)
+
   /** The singleton instance for the month of November with 30 days.
     * This has the numeric value of {@code 11}.
     */
-  val NOVEMBER  = new Month("NOVEMBER", 10)
+  val NOVEMBER = new Month("NOVEMBER", 10)
+
   /** The singleton instance for the month of December with 31 days.
     * This has the numeric value of {@code 12}.
     */
-  val DECEMBER  = new Month("DECEMBER", 11)
+  val DECEMBER = new Month("DECEMBER", 11)
 
-  val values: Array[Month] = Array(JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER)
+  val values: Array[Month] = Array(JANUARY,
+                                   FEBRUARY,
+                                   MARCH,
+                                   APRIL,
+                                   MAY,
+                                   JUNE,
+                                   JULY,
+                                   AUGUST,
+                                   SEPTEMBER,
+                                   OCTOBER,
+                                   NOVEMBER,
+                                   DECEMBER)
   def valueOf(enum: String): Month = values.find(_.name() == enum) match {
     case Some(month) => month
     case _           => throw new IllegalArgumentException(s"Unrecognized month name: $enum")
@@ -173,13 +196,19 @@ object Month {
           of(_temporal.get(MONTH_OF_YEAR))
         } catch {
           case ex: DateTimeException =>
-            throw new DateTimeException(s"Unable to obtain Month from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}", ex)
+            throw new DateTimeException(
+              s"Unable to obtain Month from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}",
+              ex
+            )
         }
     }
   }
 }
 
-final class Month private(name: String, ordinal: Int) extends Enum[Month](name, ordinal) with TemporalAccessor with TemporalAdjuster {
+final class Month private (name: String, ordinal: Int)
+    extends Enum[Month](name, ordinal)
+    with TemporalAccessor
+    with TemporalAdjuster {
   import Month._
 
   /** Gets the month-of-year {@code int} value.
@@ -308,7 +337,7 @@ final class Month private(name: String, ordinal: Int) extends Enum[Month](name, 
     */
   def getLong(field: TemporalField): Long =
     if (field eq MONTH_OF_YEAR)
-      getValue
+      getValue.toLong
     else if (field.isInstanceOf[ChronoField])
       throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
     else
@@ -493,5 +522,5 @@ final class Month private(name: String, ordinal: Int) extends Enum[Month](name, 
     if (Chronology.from(temporal) != IsoChronology.INSTANCE)
       throw new DateTimeException("Adjustment only supported on ISO date-time")
     else
-      temporal.`with`(MONTH_OF_YEAR, getValue)
+      temporal.`with`(MONTH_OF_YEAR, getValue.toLong)
 }

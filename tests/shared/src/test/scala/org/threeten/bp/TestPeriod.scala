@@ -33,20 +33,18 @@ package org.threeten.bp
 
 import java.io._
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test. */
 object TestPeriod {
-  def pymd(y: Int, m: Int, d: Int): Period = {
+  def pymd(y: Int, m: Int, d: Int): Period =
     Period.of(y, m, d)
-  }
 
-  def date(y: Int, m: Int, d: Int): LocalDate = {
+  def date(y: Int, m: Int, d: Int): LocalDate =
     LocalDate.of(y, m, d)
-  }
 }
 
-class TestPeriod extends FunSuite with AssertionsHelper {
+class TestPeriod extends AnyFunSuite with AssertionsHelper {
   test("interfaces") {
     assertTrue(classOf[Serializable].isAssignableFrom(classOf[Period]))
   }
@@ -91,7 +89,7 @@ class TestPeriod extends FunSuite with AssertionsHelper {
     assertPeriod(Period.ofDays(Int.MinValue), 0, 0, Int.MinValue)
   }
 
-  def data_between: List[List[Int]] = {
+  def data_between: List[List[Int]] =
     List(
       List(2010, 1, 1, 2010, 1, 1, 0, 0, 0),
       List(2010, 1, 1, 2010, 1, 2, 0, 0, 1),
@@ -161,15 +159,15 @@ class TestPeriod extends FunSuite with AssertionsHelper {
       List(2012, 2, 29, 2009, 2, 27, -3, 0, -2),
       List(2012, 2, 29, 2008, 3, 1, -3, -11, -28),
       List(2012, 2, 29, 2008, 2, 29, -4, 0, 0),
-      List(2012, 2, 29, 2008, 2, 28, -4, 0, -1))
-  }
+      List(2012, 2, 29, 2008, 2, 28, -4, 0, -1)
+    )
 
   test("factory_between_LocalDate") {
     data_between.foreach {
       case y1 :: m1 :: d1 :: y2 :: m2 :: d2 :: ye :: me :: de :: Nil =>
         val start: LocalDate = LocalDate.of(y1, m1, d1)
-        val end: LocalDate = LocalDate.of(y2, m2, d2)
-        val test: Period = Period.between(start, end)
+        val end: LocalDate   = LocalDate.of(y2, m2, d2)
+        val test: Period     = Period.between(start, end)
         assertPeriod(test, ye, me, de)
       case _ =>
         fail()
@@ -188,7 +186,7 @@ class TestPeriod extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_parse: List[List[AnyRef]] = {
+  def data_parse: List[List[AnyRef]] =
     List(
       List("P0D", Period.ZERO),
       List("P0W", Period.ZERO),
@@ -226,8 +224,8 @@ class TestPeriod extends FunSuite with AssertionsHelper {
       List("-P-2Y", Period.ofYears(2)),
       List("P" + Int.MaxValue + "Y", Period.ofYears(Int.MaxValue)),
       List("P" + Int.MinValue + "Y", Period.ofYears(Int.MinValue)),
-      List("P1Y2M3W4D", Period.of(1, 2, 3 * 7 + 4)))
-  }
+      List("P1Y2M3W4D", Period.of(1, 2, 3 * 7 + 4))
+    )
 
   test("parse") {
     data_parse.foreach {
@@ -321,7 +319,7 @@ class TestPeriod extends FunSuite with AssertionsHelper {
     assertSame(test.withDays(0), Period.ZERO)
   }
 
-  def data_plus: List[List[Period]] = {
+  def data_plus: List[List[Period]] =
     List(
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(0, 0, 0)),
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(5, 0, 0), TestPeriod.pymd(5, 0, 0)),
@@ -333,8 +331,8 @@ class TestPeriod extends FunSuite with AssertionsHelper {
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(2, 3, 4), TestPeriod.pymd(2, 3, 4)),
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(-2, -3, -4), TestPeriod.pymd(-2, -3, -4)),
       List(TestPeriod.pymd(4, 5, 6), TestPeriod.pymd(2, 3, 4), TestPeriod.pymd(6, 8, 10)),
-      List(TestPeriod.pymd(4, 5, 6), TestPeriod.pymd(-2, -3, -4), TestPeriod.pymd(2, 2, 2)))
-  }
+      List(TestPeriod.pymd(4, 5, 6), TestPeriod.pymd(-2, -3, -4), TestPeriod.pymd(2, 2, 2))
+    )
 
   test("plus") {
     data_plus.foreach {
@@ -438,7 +436,7 @@ class TestPeriod extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_minus: List[List[Period]] = {
+  def data_minus: List[List[Period]] =
     List(
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(0, 0, 0)),
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(5, 0, 0), TestPeriod.pymd(-5, 0, 0)),
@@ -450,8 +448,8 @@ class TestPeriod extends FunSuite with AssertionsHelper {
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(2, 3, 4), TestPeriod.pymd(-2, -3, -4)),
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.pymd(-2, -3, -4), TestPeriod.pymd(2, 3, 4)),
       List(TestPeriod.pymd(4, 5, 6), TestPeriod.pymd(2, 3, 4), TestPeriod.pymd(2, 2, 2)),
-      List(TestPeriod.pymd(4, 5, 6), TestPeriod.pymd(-2, -3, -4), TestPeriod.pymd(6, 8, 10)))
-  }
+      List(TestPeriod.pymd(4, 5, 6), TestPeriod.pymd(-2, -3, -4), TestPeriod.pymd(6, 8, 10))
+    )
 
   test("minus") {
     data_minus.foreach {
@@ -602,7 +600,7 @@ class TestPeriod extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_normalized: List[List[Int]] = {
+  def data_normalized: List[List[Int]] =
     List(
       List(0, 0, 0, 0),
       List(1, 0, 1, 0),
@@ -636,13 +634,16 @@ class TestPeriod extends FunSuite with AssertionsHelper {
       List(-1, -1, -1, -1),
       List(-1, -11, -1, -11),
       List(-1, -12, -2, 0),
-      List(-1, -13, -2, -1))
-  }
+      List(-1, -13, -2, -1)
+    )
 
   test("normalized") {
     data_normalized.foreach {
       case inputYears :: inputMonths :: expectedYears :: expectedMonths :: Nil =>
-        assertPeriod(Period.of(inputYears, inputMonths, 0).normalized, expectedYears, expectedMonths, 0)
+        assertPeriod(Period.of(inputYears, inputMonths, 0).normalized,
+                     expectedYears,
+                     expectedMonths,
+                     0)
       case _ =>
         fail()
     }
@@ -662,7 +663,7 @@ class TestPeriod extends FunSuite with AssertionsHelper {
     }
   }
 
-  def data_addTo: List[List[AnyRef]] = {
+  def data_addTo: List[List[AnyRef]] =
     List(
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.date(2012, 6, 30), TestPeriod.date(2012, 6, 30)),
       List(TestPeriod.pymd(1, 0, 0), TestPeriod.date(2012, 6, 10), TestPeriod.date(2013, 6, 10)),
@@ -681,8 +682,8 @@ class TestPeriod extends FunSuite with AssertionsHelper {
       List(TestPeriod.pymd(1, 0, 0), TestPeriod.date(2012, 2, 29), TestPeriod.date(2013, 2, 28)),
       List(TestPeriod.pymd(4, 0, 0), TestPeriod.date(2012, 2, 29), TestPeriod.date(2016, 2, 29)),
       List(TestPeriod.pymd(1, 1, 0), TestPeriod.date(2011, 1, 29), TestPeriod.date(2012, 2, 29)),
-      List(TestPeriod.pymd(1, 2, 0), TestPeriod.date(2012, 2, 29), TestPeriod.date(2013, 4, 29)))
-  }
+      List(TestPeriod.pymd(1, 2, 0), TestPeriod.date(2012, 2, 29), TestPeriod.date(2013, 4, 29))
+    )
 
   test("addTo") {
     data_addTo.foreach {
@@ -690,7 +691,7 @@ class TestPeriod extends FunSuite with AssertionsHelper {
         assertEquals(period.addTo(baseDate), expected)
       case _ =>
         fail()
-      }
+    }
   }
 
   test("addTo_usingLocalDatePlus(period: Period, baseDate: LocalDate, expected: LocalDate") {
@@ -699,7 +700,7 @@ class TestPeriod extends FunSuite with AssertionsHelper {
         assertEquals(baseDate.plus(period), expected)
       case _ =>
         fail()
-      }
+    }
   }
 
   test("addTo_nullZero") {
@@ -710,11 +711,11 @@ class TestPeriod extends FunSuite with AssertionsHelper {
 
   test("addTo_nullNonZero") {
     assertThrows[NullPointerException] {
-      Period.ofDays (2).addTo(null)
+      Period.ofDays(2).addTo(null)
     }
   }
 
-  def data_subtractFrom: List[List[AnyRef]] = {
+  def data_subtractFrom: List[List[AnyRef]] =
     List(
       List(TestPeriod.pymd(0, 0, 0), TestPeriod.date(2012, 6, 30), TestPeriod.date(2012, 6, 30)),
       List(TestPeriod.pymd(1, 0, 0), TestPeriod.date(2012, 6, 10), TestPeriod.date(2011, 6, 10)),
@@ -734,8 +735,8 @@ class TestPeriod extends FunSuite with AssertionsHelper {
       List(TestPeriod.pymd(1, 0, 0), TestPeriod.date(2012, 2, 29), TestPeriod.date(2011, 2, 28)),
       List(TestPeriod.pymd(4, 0, 0), TestPeriod.date(2012, 2, 29), TestPeriod.date(2008, 2, 29)),
       List(TestPeriod.pymd(1, 1, 0), TestPeriod.date(2013, 3, 29), TestPeriod.date(2012, 2, 29)),
-      List(TestPeriod.pymd(1, 2, 0), TestPeriod.date(2012, 2, 29), TestPeriod.date(2010, 12, 29)))
-  }
+      List(TestPeriod.pymd(1, 2, 0), TestPeriod.date(2012, 2, 29), TestPeriod.date(2010, 12, 29))
+    )
 
   test("subtractFrom(period: Period, baseDate: LocalDate, expected: LocalDate") {
     data_subtractFrom.foreach {
@@ -800,8 +801,8 @@ class TestPeriod extends FunSuite with AssertionsHelper {
   }
 
   test("hashCode") {
-    val test5: Period = Period.ofDays(5)
-    val test6: Period = Period.ofDays(6)
+    val test5: Period  = Period.ofDays(5)
+    val test6: Period  = Period.ofDays(6)
     val test5M: Period = Period.ofMonths(5)
     val test5Y: Period = Period.ofYears(5)
     assertEquals(test5.hashCode == test5.hashCode, true)
@@ -810,15 +811,15 @@ class TestPeriod extends FunSuite with AssertionsHelper {
     assertEquals(test5.hashCode == test5Y.hashCode, false)
   }
 
-  def data_toString: List[List[AnyRef]] = {
+  def data_toString: List[List[AnyRef]] =
     List(
       List(Period.ZERO, "P0D"),
       List(Period.ofDays(0), "P0D"),
       List(Period.ofYears(1), "P1Y"),
       List(Period.ofMonths(1), "P1M"),
       List(Period.ofDays(1), "P1D"),
-      List(Period.of(1, 2, 3), "P1Y2M3D"))
-  }
+      List(Period.of(1, 2, 3), "P1Y2M3D")
+    )
 
   test("toString") {
     data_toString.foreach {

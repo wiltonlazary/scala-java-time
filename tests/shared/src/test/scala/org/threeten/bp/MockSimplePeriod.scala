@@ -31,15 +31,17 @@
  */
 package org.threeten.bp
 
-import java.util.{Collections, Objects}
+import java.util.{ Collections, Objects }
 
-import org.threeten.bp.temporal.ChronoUnit.{DAYS, FOREVER, SECONDS}
-import org.threeten.bp.temporal.{Temporal, TemporalAmount, TemporalUnit}
+import org.threeten.bp.temporal.ChronoUnit.{ DAYS, FOREVER, SECONDS }
+import org.threeten.bp.temporal.{ Temporal, TemporalAmount, TemporalUnit }
 
 /** Mock period of time measured using a single unit, such as {@code 3 Days}. */
 object MockSimplePeriod {
+
   /** A constant for a period of zero, measured in days. */
   val ZERO_DAYS: MockSimplePeriod = new MockSimplePeriod(0, DAYS)
+
   /** A constant for a period of zero, measured in seconds. */
   val ZERO_SECONDS: MockSimplePeriod = new MockSimplePeriod(0, SECONDS)
 
@@ -58,7 +60,9 @@ object MockSimplePeriod {
 /** @param amount the amount of the period
   * @param unit the unit the period is measured in
   */
-final class MockSimplePeriod private(private val amount: Long, private val unit: TemporalUnit) extends TemporalAmount with Comparable[MockSimplePeriod] {
+final class MockSimplePeriod private (private val amount: Long, private val unit: TemporalUnit)
+    extends TemporalAmount
+    with Comparable[MockSimplePeriod] {
   Objects.requireNonNull(unit, "unit")
   if (unit eq FOREVER)
     throw new DateTimeException("Cannot create a period of the Forever unit")
@@ -81,13 +85,16 @@ final class MockSimplePeriod private(private val amount: Long, private val unit:
 
   def compareTo(otherPeriod: MockSimplePeriod): Int =
     if (unit != otherPeriod.getUnit)
-      throw new IllegalArgumentException("Units cannot be compared: " + unit + " and " + otherPeriod.getUnit)
+      throw new IllegalArgumentException(
+        "Units cannot be compared: " + unit + " and " + otherPeriod.getUnit
+      )
     else
       java.lang.Long.compare(amount, otherPeriod.amount)
 
   override def equals(obj: Any): Boolean =
     obj match {
-      case other: MockSimplePeriod => (this eq other) || (this.amount == other.amount && (this.unit == other.unit))
+      case other: MockSimplePeriod =>
+        (this eq other) || (this.amount == other.amount && (this.unit == other.unit))
       case _ => false
     }
 

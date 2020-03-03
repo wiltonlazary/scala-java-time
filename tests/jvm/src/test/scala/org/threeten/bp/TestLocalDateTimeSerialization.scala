@@ -37,15 +37,16 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 
-import org.scalatest.{BeforeAndAfter, FunSuite}
-
-class TestLocalDateTimeSerialization extends FunSuite with AssertionsHelper with BeforeAndAfter {
-  private val TEST_2007_07_15_12_30_40_987654321: LocalDateTime = LocalDateTime.of(2007, 7, 15, 12, 30, 40, 987654321)
+class TestLocalDateTimeSerialization extends AnyFunSuite with AssertionsHelper with BeforeAndAfter {
+  private val TEST_2007_07_15_12_30_40_987654321: LocalDateTime =
+    LocalDateTime.of(2007, 7, 15, 12, 30, 40, 987654321)
 
   test("serialization") {
     val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-    val oos: ObjectOutputStream = new ObjectOutputStream(baos)
+    val oos: ObjectOutputStream     = new ObjectOutputStream(baos)
     oos.writeObject(TEST_2007_07_15_12_30_40_987654321)
     oos.close()
     val ois: ObjectInputStream = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray))
@@ -61,8 +62,7 @@ class TestLocalDateTimeSerialization extends FunSuite with AssertionsHelper with
       if (!field.getName.contains("$")) {
         if (Modifier.isStatic(field.getModifiers)) {
           assertTrue(Modifier.isFinal(field.getModifiers))
-        }
-        else {
+        } else {
           assertTrue(Modifier.isPrivate(field.getModifiers))
           assertTrue(Modifier.isFinal(field.getModifiers))
         }

@@ -40,22 +40,27 @@ package org.threeten.bp.format
   * This is an immutable and thread-safe enum.
   */
 object FormatStyle {
+
   /** Full text style, with the most detail.
     * For example, the format might be 'Tuesday, April 12, 1952 AD' or '3:30:42pm PST'.
     */
   val FULL = new FormatStyle("FULL", 0)
+
   /** Long text style, with lots of detail.
     * For example, the format might be 'January 12, 1952'.
     */
   val LONG = new FormatStyle("LONG", 1)
+
   /** Medium text style, with some detail.
     * For example, the format might be 'Jan 12, 1952'.
     */
   val MEDIUM = new FormatStyle("MEDIUM", 2)
+
   /** Short text style, typically numeric.
     * For example, the format might be '12.13.52' or '3:30pm'.
     */
   val SHORT = new FormatStyle("SHORT", 3)
 }
 
-final class FormatStyle private(name: String, ordinal: Int) extends Enum[FormatStyle](name, ordinal)
+final class FormatStyle private (name: String, ordinal: Int)
+    extends Enum[FormatStyle](name, ordinal)

@@ -56,22 +56,31 @@ import org.threeten.bp.zone.ZoneRules
 object ZoneOffset {
 
   /** Cache of time-zone offset by offset in seconds. */
-  private val SECONDS_CACHE: ConcurrentMap[Integer, ZoneOffset] = new ConcurrentHashMap[Integer, ZoneOffset](16, 0.75f, 4)
+  private val SECONDS_CACHE: ConcurrentMap[Integer, ZoneOffset] =
+    new ConcurrentHashMap[Integer, ZoneOffset](16, 0.75f, 4)
+
   /** Cache of time-zone offset by ID. */
-  private val ID_CACHE: ConcurrentMap[String, ZoneOffset] = new ConcurrentHashMap[String, ZoneOffset](16, 0.75f, 4)
+  private val ID_CACHE: ConcurrentMap[String, ZoneOffset] =
+    new ConcurrentHashMap[String, ZoneOffset](16, 0.75f, 4)
 
   /** The number of seconds per hour. */
   private val SECONDS_PER_HOUR: Int = 60 * 60
+
   /** The number of seconds per minute. */
   private val SECONDS_PER_MINUTE: Int = 60
+
   /** The number of minutes per hour. */
   private val MINUTES_PER_HOUR: Int = 60
+
   /** The abs maximum seconds. */
   private val MAX_SECONDS: Int = 18 * SECONDS_PER_HOUR
+
   /** The time-zone offset for UTC, with an ID of 'Z'. */
   val UTC: ZoneOffset = ZoneOffset.ofTotalSeconds(0)
+
   /** Constant for the maximum supported offset. */
   val MIN: ZoneOffset = ZoneOffset.ofTotalSeconds(-MAX_SECONDS)
+
   /** Constant for the maximum supported offset. */
   val MAX: ZoneOffset = ZoneOffset.ofTotalSeconds(MAX_SECONDS)
 
@@ -112,7 +121,7 @@ object ZoneOffset {
     val offset: ZoneOffset = ID_CACHE.get(_offsetId)
     if (offset != null)
       return offset
-    var hours: Int = 0
+    var hours: Int   = 0
     var minutes: Int = 0
     var seconds: Int = 0
 
@@ -122,23 +131,23 @@ object ZoneOffset {
 
     _offsetId.length match {
       case 3 =>
-        hours = parseNumber(_offsetId, 1, precededByColon = false)
+        hours   = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = 0
         seconds = 0
       case 5 =>
-        hours = parseNumber(_offsetId, 1, precededByColon = false)
+        hours   = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = parseNumber(_offsetId, 3, precededByColon = false)
         seconds = 0
       case 6 =>
-        hours = parseNumber(_offsetId, 1, precededByColon = false)
+        hours   = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = parseNumber(_offsetId, 4, precededByColon = true)
         seconds = 0
       case 7 =>
-        hours = parseNumber(_offsetId, 1, precededByColon = false)
+        hours   = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = parseNumber(_offsetId, 3, precededByColon = false)
         seconds = parseNumber(_offsetId, 5, precededByColon = false)
       case 9 =>
-        hours = parseNumber(_offsetId, 1, precededByColon = false)
+        hours   = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = parseNumber(_offsetId, 4, precededByColon = true)
         seconds = parseNumber(_offsetId, 7, precededByColon = true)
       case _ =>
@@ -146,7 +155,9 @@ object ZoneOffset {
     }
     val first: Char = _offsetId.charAt(0)
     if (first != '+' && first != '-')
-      throw new DateTimeException(s"Invalid ID for ZoneOffset, plus/minus not found when expected: ${_offsetId}")
+      throw new DateTimeException(
+        s"Invalid ID for ZoneOffset, plus/minus not found when expected: ${_offsetId}"
+      )
     if (first == '-') ofHoursMinutesSeconds(-hours, -minutes, -seconds)
     else ofHoursMinutesSeconds(hours, minutes, seconds)
   }
@@ -160,11 +171,15 @@ object ZoneOffset {
     */
   private def parseNumber(offsetId: CharSequence, pos: Int, precededByColon: Boolean): Int = {
     if (precededByColon && offsetId.charAt(pos - 1) != ':')
-      throw new DateTimeException(s"Invalid ID for ZoneOffset, colon not found when expected: $offsetId")
+      throw new DateTimeException(
+        s"Invalid ID for ZoneOffset, colon not found when expected: $offsetId"
+      )
     val ch1: Char = offsetId.charAt(pos)
     val ch2: Char = offsetId.charAt(pos + 1)
     if (ch1 < '0' || ch1 > '9' || ch2 < '0' || ch2 > '9')
-      throw new DateTimeException(s"Invalid ID for ZoneOffset, non numeric characters found: $offsetId")
+      throw new DateTimeException(
+        s"Invalid ID for ZoneOffset, non numeric characters found: $offsetId"
+      )
     (ch1 - 48) * 10 + (ch2 - 48)
   }
 
@@ -188,7 +203,8 @@ object ZoneOffset {
     * @return the zone-offset, not null
     * @throws DateTimeException if the offset is not in the required range
     */
-  def ofHoursMinutes(hours: Int, minutes: Int): ZoneOffset = ofHoursMinutesSeconds(hours, minutes, 0)
+  def ofHoursMinutes(hours: Int, minutes: Int): ZoneOffset =
+    ofHoursMinutesSeconds(hours, minutes, 0)
 
   /** Obtains an instance of {@code ZoneOffset} using an offset in
     * hours, minutes and seconds.
@@ -226,7 +242,9 @@ object ZoneOffset {
   def from(temporal: TemporalAccessor): ZoneOffset = {
     val offset: ZoneOffset = temporal.query(TemporalQueries.offset)
     if (offset == null)
-      throw new DateTimeException(s"Unable to obtain ZoneOffset from TemporalAccessor: $temporal, type ${temporal.getClass.getName}")
+      throw new DateTimeException(
+        s"Unable to obtain ZoneOffset from TemporalAccessor: $temporal, type ${temporal.getClass.getName}"
+      )
     offset
   }
 
@@ -239,21 +257,29 @@ object ZoneOffset {
     */
   private def validate(hours: Int, minutes: Int, seconds: Int): Unit = {
     if (hours < -18 || hours > 18)
-      throw new DateTimeException(s"Zone offset hours not in valid range: value $hours is not in the range -18 to 18")
+      throw new DateTimeException(
+        s"Zone offset hours not in valid range: value $hours is not in the range -18 to 18"
+      )
     if (hours > 0) {
       if (minutes < 0 || seconds < 0)
-        throw new DateTimeException("Zone offset minutes and seconds must be positive because hours is positive")
-    }
-    else if (hours < 0) {
+        throw new DateTimeException(
+          "Zone offset minutes and seconds must be positive because hours is positive"
+        )
+    } else if (hours < 0) {
       if (minutes > 0 || seconds > 0)
-        throw new DateTimeException("Zone offset minutes and seconds must be negative because hours is negative")
-    }
-    else if ((minutes > 0 && seconds < 0) || (minutes < 0 && seconds > 0))
+        throw new DateTimeException(
+          "Zone offset minutes and seconds must be negative because hours is negative"
+        )
+    } else if ((minutes > 0 && seconds < 0) || (minutes < 0 && seconds > 0))
       throw new DateTimeException("Zone offset minutes and seconds must have the same sign")
     if (Math.abs(minutes) > 59)
-      throw new DateTimeException(s"Zone offset minutes not in valid range: abs(value) ${Math.abs(minutes)} is not in the range 0 to 59")
+      throw new DateTimeException(
+        s"Zone offset minutes not in valid range: abs(value) ${Math.abs(minutes)} is not in the range 0 to 59"
+      )
     if (Math.abs(seconds) > 59)
-      throw new DateTimeException(s"Zone offset seconds not in valid range: abs(value) ${Math.abs(seconds)} is not in the range 0 to 59")
+      throw new DateTimeException(
+        s"Zone offset seconds not in valid range: abs(value) ${Math.abs(seconds)} is not in the range 0 to 59"
+      )
     if (Math.abs(hours) == 18 && (Math.abs(minutes) > 0 || Math.abs(seconds) > 0))
       throw new DateTimeException("Zone offset not in valid range: -18:00 to +18:00")
   }
@@ -292,27 +318,32 @@ object ZoneOffset {
     } else
       new ZoneOffset(totalSeconds)
 
-  private def buildId(totalSeconds: Int): String = {
+  private def buildId(totalSeconds: Int): String =
     if (totalSeconds == 0)
       "Z"
     else {
       val absTotalSeconds: Int = Math.abs(totalSeconds)
-      val buf: StringBuilder = new StringBuilder
-      val absHours: Int = absTotalSeconds / SECONDS_PER_HOUR
-      val absMinutes: Int = (absTotalSeconds / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR
-      buf.append(if (totalSeconds < 0) "-" else "+").append(if (absHours < 10) "0" else "").append(absHours).append(if (absMinutes < 10) ":0" else ":").append(absMinutes)
+      val buf: StringBuilder   = new StringBuilder
+      val absHours: Int        = absTotalSeconds / SECONDS_PER_HOUR
+      val absMinutes: Int      = (absTotalSeconds / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR
+      buf
+        .append(if (totalSeconds < 0) "-" else "+")
+        .append(if (absHours < 10) "0" else "")
+        .append(absHours)
+        .append(if (absMinutes < 10) ":0" else ":")
+        .append(absMinutes)
       val absSeconds: Int = absTotalSeconds % SECONDS_PER_MINUTE
       if (absSeconds != 0) {
         buf.append(if (absSeconds < 10) ":0" else ":").append(absSeconds)
       }
       buf.toString
     }
-  }
 
   @throws[IOException]
   private[bp] def readExternal(in: DataInput): ZoneOffset = {
-    val offsetByte: Int = in.readByte
-    if (offsetByte == 127) ZoneOffset.ofTotalSeconds(in.readInt) else ZoneOffset.ofTotalSeconds(offsetByte * 900)
+    val offsetByte: Int = in.readByte.toInt
+    if (offsetByte == 127) ZoneOffset.ofTotalSeconds(in.readInt)
+    else ZoneOffset.ofTotalSeconds(offsetByte * 900)
   }
 }
 
@@ -350,7 +381,12 @@ object ZoneOffset {
   * @param totalSeconds  the total time-zone offset in seconds, from -64800 to +64800
   */
 @SerialVersionUID(2357656521762053153L)
-final class ZoneOffset private(private val totalSeconds: Int) extends ZoneId with TemporalAccessor with TemporalAdjuster with Ordered[ZoneOffset] with Serializable {
+final class ZoneOffset private (private val totalSeconds: Int)
+    extends ZoneId
+    with TemporalAccessor
+    with TemporalAdjuster
+    with Ordered[ZoneOffset]
+    with Serializable {
 
   /** The string form of the time-zone offset. */
   @transient
@@ -491,7 +527,7 @@ final class ZoneOffset private(private val totalSeconds: Int) extends ZoneId wit
     */
   def getLong(field: TemporalField): Long =
     if (field eq OFFSET_SECONDS)
-      totalSeconds
+      totalSeconds.toLong
     else if (field.isInstanceOf[ChronoField])
       throw new DateTimeException(s"Unsupported field: $field")
     else
@@ -545,7 +581,8 @@ final class ZoneOffset private(private val totalSeconds: Int) extends ZoneId wit
     * @throws DateTimeException if unable to make the adjustment
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def adjustInto(temporal: Temporal): Temporal = temporal.`with`(OFFSET_SECONDS, totalSeconds)
+  def adjustInto(temporal: Temporal): Temporal =
+    temporal.`with`(OFFSET_SECONDS, totalSeconds.toLong)
 
   /** Compares this offset to another offset in descending order.
     *
@@ -574,7 +611,7 @@ final class ZoneOffset private(private val totalSeconds: Int) extends ZoneId wit
   override def equals(obj: Any): Boolean =
     obj match {
       case that: ZoneOffset => (this eq that) || (totalSeconds == that.totalSeconds)
-      case _ => false
+      case _                => false
     }
 
   /** A hash code for this offset.
@@ -596,11 +633,12 @@ final class ZoneOffset private(private val totalSeconds: Int) extends ZoneId wit
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[bp] def write(out: DataOutput): Unit = {
-    out.writeByte(Ser.ZONE_OFFSET_TYPE)
+    out.writeByte(Ser.ZONE_OFFSET_TYPE.toInt)
     writeExternal(out)
   }
 

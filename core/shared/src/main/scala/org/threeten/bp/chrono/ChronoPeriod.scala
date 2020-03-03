@@ -33,13 +33,12 @@ package org.threeten.bp.chrono
 
 import java.util.Objects
 
-import org.threeten.bp.DateTimeException
 import org.threeten.bp.temporal.Temporal
 import org.threeten.bp.temporal.TemporalAmount
 import org.threeten.bp.temporal.TemporalUnit
-import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 
 object ChronoPeriod {
+
   /** Obtains a {@code ChronoPeriod} consisting of amount of time between two dates.
     *
     * The start date is included, but the end date is not.
@@ -58,7 +57,10 @@ object ChronoPeriod {
     * @return the period between this date and the end date, not null
     * @see ChronoLocalDate#until(ChronoLocalDate)
     */
-  def between(startDateInclusive: ChronoLocalDate, endDateExclusive: ChronoLocalDate): ChronoPeriod = {
+  def between(
+    startDateInclusive: ChronoLocalDate,
+    endDateExclusive:   ChronoLocalDate
+  ): ChronoPeriod = {
     Objects.requireNonNull(startDateInclusive, "startDateInclusive")
     Objects.requireNonNull(endDateExclusive, "endDateExclusive")
     startDateInclusive.until(endDateExclusive)
@@ -84,6 +86,7 @@ object ChronoPeriod {
   * Subclasses should be Serializable wherever possible.
   */
 trait ChronoPeriod extends TemporalAmount {
+
   /** Gets the value of the requested unit.
     *
     * The supported units are chronology specific.
@@ -128,7 +131,7 @@ trait ChronoPeriod extends TemporalAmount {
     */
   def isZero: Boolean = {
     val units = getUnits.iterator
-    while(units.hasNext) {
+    while (units.hasNext) {
       val unit = units.next()
       if (get(unit) != 0)
         return false
@@ -142,7 +145,7 @@ trait ChronoPeriod extends TemporalAmount {
     */
   def isNegative: Boolean = {
     val units = getUnits.iterator
-    while(units.hasNext) {
+    while (units.hasNext) {
       val unit = units.next()
       if (get(unit) < 0)
         return true

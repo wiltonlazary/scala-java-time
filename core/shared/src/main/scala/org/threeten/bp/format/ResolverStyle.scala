@@ -42,6 +42,7 @@ package org.threeten.bp.format
   * This is an immutable and thread-safe enum.
   */
 object ResolverStyle {
+
   /** Style to resolve dates and times strictly.
     *
     * Using strict resolution will ensure that all parsed values are within
@@ -52,7 +53,8 @@ object ResolverStyle {
     * system using strict mode will ensure that the day-of-month is valid
     * for the year-month, rejecting invalid values.
     */
-  val STRICT  = new ResolverStyle("STRICT", 0)
+  val STRICT = new ResolverStyle("STRICT", 0)
+
   /** Style to resolve dates and times in a smart, or intelligent, manner.
     *
     * Using smart resolution will perform the sensible default for each
@@ -64,7 +66,8 @@ object ResolverStyle {
     * 1 to 31, converting any value beyond the last valid day-of-month to be
     * the last valid day-of-month.
     */
-  val SMART   = new ResolverStyle("SMART", 1)
+  val SMART = new ResolverStyle("SMART", 1)
+
   /** Style to resolve dates and times leniently.
     *
     * Using lenient resolution will resolve the values in an appropriate

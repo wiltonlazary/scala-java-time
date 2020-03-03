@@ -34,7 +34,8 @@ package org.threeten.bp.temporal
 import org.threeten.bp.DateTimeException
 
 /** Mock simple date-time with one field-value. */
-final class MockFieldValue(private val field: TemporalField, private val value: Long) extends TemporalAccessor {
+final class MockFieldValue(private val field: TemporalField, private val value: Long)
+    extends TemporalAccessor {
 
   def isSupported(field: TemporalField): Boolean = field != null && (field == this.field)
 
@@ -53,7 +54,8 @@ final class MockFieldValue(private val field: TemporalField, private val value: 
     else
       throw new DateTimeException("Unsupported field: " + field)
 
-  override def get(field: TemporalField): Int = range(field).checkValidIntValue(getLong(field), field)
+  override def get(field: TemporalField): Int =
+    range(field).checkValidIntValue(getLong(field), field)
 
   override def query[R](query: TemporalQuery[R]) =
     query.queryFrom(this)

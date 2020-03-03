@@ -31,74 +31,118 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 
 /** Test PadPrinterDecorator. */
-class TestPadPrinterDecorator extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestPadPrinterDecorator extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_print_emptyCalendrical") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'), 3, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'),
+        3,
+        '-'
+      )
     pp.print(printEmptyContext, buf)
     assertEquals(buf.toString, "--Z")
   }
 
   test("test_print_fullDateTime") {
     printContext.setDateTime(LocalDate.of(2008, 12, 3))
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'), 3, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'),
+        3,
+        '-'
+      )
     pp.print(printContext, buf)
     assertEquals(buf.toString, "--Z")
   }
 
   test("test_print_append") {
     buf.append("EXISTING")
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'), 3, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'),
+        3,
+        '-'
+      )
     pp.print(printEmptyContext, buf)
     assertEquals(buf.toString, "EXISTING--Z")
   }
 
   test("test_print_noPadRequiredSingle") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'), 1, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'),
+        1,
+        '-'
+      )
     pp.print(printEmptyContext, buf)
     assertEquals(buf.toString, "Z")
   }
 
   test("test_print_padRequiredSingle") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'), 5, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Z'),
+        5,
+        '-'
+      )
     pp.print(printEmptyContext, buf)
     assertEquals(buf.toString, "----Z")
   }
 
   test("test_print_noPadRequiredMultiple") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("WXYZ"), 4, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("WXYZ"),
+        4,
+        '-'
+      )
     pp.print(printEmptyContext, buf)
     assertEquals(buf.toString, "WXYZ")
   }
 
   test("test_print_padRequiredMultiple") {
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("WXYZ"), 5, '-')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+        new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("WXYZ"),
+        5,
+        '-'
+      )
     pp.print(printEmptyContext, buf)
     assertEquals(buf.toString, "-WXYZ")
   }
 
   test("test_print_overPad") {
     assertThrows[DateTimeException] {
-      val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("WXYZ"), 3, '-')
+      val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+        new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(
+          new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("WXYZ"),
+          3,
+          '-'
+        )
       pp.print(printEmptyContext, buf)
     }
   }
 
   test("test_toString1") {
-    val wrapped: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Y')
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(wrapped, 5, ' ')
+    val wrapped: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Y')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(wrapped, 5, ' ')
     assertEquals(pp.toString, "Pad('Y',5)")
   }
 
   test("test_toString2") {
-    val wrapped: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Y')
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(wrapped, 5, '-')
+    val wrapped: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Y')
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+      new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(wrapped, 5, '-')
     assertEquals(pp.toString, "Pad('Y',5,'-')")
   }
 }

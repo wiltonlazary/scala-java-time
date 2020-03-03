@@ -31,27 +31,36 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 import org.threeten.bp.temporal.TemporalQueries
 
 /** Test CharLiteralPrinterParser. */
-class TestCharLiteralParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestCharLiteralParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_success: List[List[Any]] = {
     List(
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "a", 0, 1),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "aOTHER", 0, 1),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERaOTHER", 5, 6),
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+           true,
+           "OTHERaOTHER",
+           5,
+           6),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERa", 5, 6),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "", 0, ~0),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "a", 1, ~1),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "A", 0, ~0),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "b", 0, ~0),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERbOTHER", 5, ~5),
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+           true,
+           "OTHERbOTHER",
+           5,
+           ~5),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERb", 5, ~5),
       List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), false, "a", 0, 1),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), false, "A", 0, 1))
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), false, "A", 0, 1)
+    )
   }
 
   test("parse_success") {
@@ -69,17 +78,25 @@ class TestCharLiteralParser extends FunSuite with GenTestPrinterParser with Asse
 
   val data_error: List[List[Any]] = {
     List[List[Any]](
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), "a", -1, classOf[IndexOutOfBoundsException]),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), "a", 2, classOf[IndexOutOfBoundsException]))
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+           "a",
+           -1,
+           classOf[IndexOutOfBoundsException]),
+      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+           "a",
+           2,
+           classOf[IndexOutOfBoundsException])
+    )
   }
 
   test("parse_error") {
     data_error.foreach {
-      case (pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser) :: (text: String) :: (pos: Int) :: (expected: Class[_]) :: Nil =>
+      case (pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser) :: (text: String) :: (pos: Int) :: (expected: Class[
+            _
+          ]) :: Nil =>
         try {
           pp.parse(parseContext, text, pos)
-        }
-        catch {
+        } catch {
           case ex: RuntimeException =>
             assertTrue(expected.isInstance(ex))
             assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)

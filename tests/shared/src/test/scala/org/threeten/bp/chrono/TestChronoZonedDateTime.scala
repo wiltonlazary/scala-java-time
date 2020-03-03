@@ -31,17 +31,14 @@
  */
 package org.threeten.bp.chrono
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import java.util.Locale
 import org.threeten.bp.AssertionsHelper
-import org.threeten.bp.Platform
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
-import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
-import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.ResolverStyle
 import org.threeten.bp.temporal.ChronoUnit
 import org.threeten.bp.temporal.Temporal
@@ -58,144 +55,130 @@ object TestChronoZonedDateTime {
   /** FixedAdjusted returns a fixed DateTime in all adjustments.
     * Construct an adjuster with the DateTime that should be returned from adjustIntoAdjustment.
     */
-  private[chrono] class FixedAdjuster private[chrono](private var datetime: Temporal) extends TemporalAdjuster with TemporalAmount {
+  private[chrono] class FixedAdjuster private[chrono] (private var datetime: Temporal)
+      extends TemporalAdjuster
+      with TemporalAmount {
 
-    def adjustInto(ignore: Temporal): Temporal = {
+    def adjustInto(ignore: Temporal): Temporal =
       datetime
-    }
 
-    def addTo(ignore: Temporal): Temporal = {
+    def addTo(ignore: Temporal): Temporal =
       datetime
-    }
 
-    def subtractFrom(ignore: Temporal): Temporal = {
+    def subtractFrom(ignore: Temporal): Temporal =
       datetime
-    }
 
-    def getUnits: java.util.List[TemporalUnit] = {
+    def getUnits: java.util.List[TemporalUnit] =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def get(unit: TemporalUnit): Long = {
+    def get(unit: TemporalUnit): Long =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
   }
 
   /** FixedPeriodUnit returns a fixed DateTime in all adjustments.
     * Construct an FixedPeriodUnit with the DateTime that should be returned from doPlus.
     */
-  private[chrono] class FixedPeriodUnit private[chrono](private var dateTime: Temporal) extends TemporalUnit {
+  private[chrono] class FixedPeriodUnit private[chrono] (private var dateTime: Temporal)
+      extends TemporalUnit {
 
-    override def toString: String = {
+    override def toString: String =
       "FixedPeriodUnit"
-    }
 
-    def getDuration: Duration = {
+    def getDuration: Duration =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def isDurationEstimated: Boolean = {
+    def isDurationEstimated: Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def isDateBased: Boolean = {
+    def isDateBased: Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def isTimeBased: Boolean = {
+    def isTimeBased: Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    override def isSupportedBy(dateTime: Temporal): Boolean = {
+    override def isSupportedBy(dateTime: Temporal): Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def addTo[R <: Temporal](dateTime: R, periodToAdd: Long): R = {
+    def addTo[R <: Temporal](dateTime: R, periodToAdd: Long): R =
       this.dateTime.asInstanceOf[R]
-    }
 
-    def between(temporal1: Temporal, temporal2: Temporal): Long = {
+    def between(temporal1: Temporal, temporal2: Temporal): Long =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
   }
 
   /** FixedDateTimeField returns a fixed DateTime in all adjustments.
     * Construct an FixedDateTimeField with the DateTime that should be returned from adjustInto.
     */
-  private[chrono] class FixedDateTimeField private[chrono](private var dateTime: Temporal) extends TemporalField {
+  private[chrono] class FixedDateTimeField private[chrono] (private var dateTime: Temporal)
+      extends TemporalField {
 
-    override def toString: String = {
+    override def toString: String =
       "FixedDateTimeField"
-    }
 
-    def getBaseUnit: TemporalUnit = {
+    def getBaseUnit: TemporalUnit =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def getRangeUnit: TemporalUnit = {
+    def getRangeUnit: TemporalUnit =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def range: ValueRange = {
+    def range: ValueRange =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def isDateBased: Boolean = {
+    def isDateBased: Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def isTimeBased: Boolean = {
+    def isTimeBased: Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def isSupportedBy(dateTime: TemporalAccessor): Boolean = {
+    def isSupportedBy(dateTime: TemporalAccessor): Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def rangeRefinedBy(dateTime: TemporalAccessor): ValueRange = {
+    def rangeRefinedBy(dateTime: TemporalAccessor): ValueRange =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def getFrom(dateTime: TemporalAccessor): Long = {
+    def getFrom(dateTime: TemporalAccessor): Long =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    def adjustInto[R <: Temporal](dateTime: R, newValue: Long): R = {
+    def adjustInto[R <: Temporal](dateTime: R, newValue: Long): R =
       this.dateTime.asInstanceOf[R]
-    }
 
-    override def getDisplayName(locale: Locale): String = {
+    override def getDisplayName(locale: Locale): String =
       throw new UnsupportedOperationException("Not supported yet.")
-    }
 
-    override def resolve(fieldValues: java.util.Map[TemporalField, java.lang.Long], partialTemporal: TemporalAccessor, resolverStyle: ResolverStyle): TemporalAccessor = {
+    override def resolve(
+      fieldValues:     java.util.Map[TemporalField, java.lang.Long],
+      partialTemporal: TemporalAccessor,
+      resolverStyle:   ResolverStyle
+    ): TemporalAccessor =
       null
-    }
   }
 
 }
 
-class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
+class TestChronoZonedDateTime extends AnyFunSuite with AssertionsHelper {
   val data_of_calendars: List[Chronology] = {
-    List(
-      (HijrahChronology.INSTANCE),
-      (IsoChronology.INSTANCE),
-      (JapaneseChronology.INSTANCE),
-      (MinguoChronology.INSTANCE),
-      (ThaiBuddhistChronology.INSTANCE))
+    List((HijrahChronology.INSTANCE),
+         (IsoChronology.INSTANCE),
+         (JapaneseChronology.INSTANCE),
+         (MinguoChronology.INSTANCE),
+         (ThaiBuddhistChronology.INSTANCE))
   }
 
   test("test_badWithAdjusterChrono") {
     data_of_calendars.foreach { chrono =>
       val refDate: LocalDate = LocalDate.of(1900, 1, 1)
-      val czdt: ChronoZonedDateTime[_] = chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+      val czdt: ChronoZonedDateTime[_] =
+        chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
       for (chrono2 <- data_of_calendars) {
-        val czdt2: ChronoZonedDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+        val czdt2: ChronoZonedDateTime[_] =
+          chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
         val adjuster: TemporalAdjuster = new TestChronoZonedDateTime.FixedAdjuster(czdt2)
         if (chrono ne chrono2) {
           try {
             czdt.`with`(adjuster)
-            fail("WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2)
+            fail(
+              "WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2
+            )
           } catch {
             case _: Throwable =>
           }
@@ -210,14 +193,18 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
   test("test_badPlusAdjusterChrono") {
     data_of_calendars.foreach { chrono =>
       val refDate: LocalDate = LocalDate.of(1900, 1, 1)
-      val czdt: ChronoZonedDateTime[_] = chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+      val czdt: ChronoZonedDateTime[_] =
+        chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
       for (chrono2 <- data_of_calendars) {
-        val czdt2: ChronoZonedDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+        val czdt2: ChronoZonedDateTime[_] =
+          chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
         val adjuster: TemporalAmount = new TestChronoZonedDateTime.FixedAdjuster(czdt2)
         if (chrono ne chrono2) {
           try {
             czdt.plus(adjuster)
-            fail("WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2)
+            fail(
+              "WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2
+            )
           } catch {
             case _: Throwable =>
           }
@@ -232,14 +219,18 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
   test("test_badMinusAdjusterChrono") {
     data_of_calendars.foreach { chrono =>
       val refDate: LocalDate = LocalDate.of(1900, 1, 1)
-      val czdt: ChronoZonedDateTime[_] = chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+      val czdt: ChronoZonedDateTime[_] =
+        chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
       for (chrono2 <- data_of_calendars) {
-        val czdt2: ChronoZonedDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+        val czdt2: ChronoZonedDateTime[_] =
+          chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
         val adjuster: TemporalAmount = new TestChronoZonedDateTime.FixedAdjuster(czdt2)
         if (chrono ne chrono2) {
           try {
             czdt.minus(adjuster)
-            fail("WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2)
+            fail(
+              "WithAdjuster should have thrown a ClassCastException, " + "required: " + czdt + ", supplied: " + czdt2
+            )
           } catch {
             case _: Throwable =>
           }
@@ -254,14 +245,18 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
   test("test_badPlusPeriodUnitChrono") {
     data_of_calendars.foreach { chrono =>
       val refDate: LocalDate = LocalDate.of(1900, 1, 1)
-      val czdt: ChronoZonedDateTime[_] = chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+      val czdt: ChronoZonedDateTime[_] =
+        chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
       for (chrono2 <- data_of_calendars) {
-        val czdt2: ChronoZonedDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+        val czdt2: ChronoZonedDateTime[_] =
+          chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
         val adjuster: TemporalUnit = new TestChronoZonedDateTime.FixedPeriodUnit(czdt2)
         if (chrono ne chrono2) {
           try {
             czdt.plus(1, adjuster)
-            fail("PeriodUnit.doPlus plus should have thrown a ClassCastException, " + czdt + " can not be cast to " + czdt2)
+            fail(
+              "PeriodUnit.doPlus plus should have thrown a ClassCastException, " + czdt + " can not be cast to " + czdt2
+            )
           } catch {
             case _: Throwable =>
           }
@@ -276,14 +271,18 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
   test("test_badMinusPeriodUnitChrono") {
     data_of_calendars.foreach { chrono =>
       val refDate: LocalDate = LocalDate.of(1900, 1, 1)
-      val czdt: ChronoZonedDateTime[_] = chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+      val czdt: ChronoZonedDateTime[_] =
+        chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
       for (chrono2 <- data_of_calendars) {
-        val czdt2: ChronoZonedDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+        val czdt2: ChronoZonedDateTime[_] =
+          chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
         val adjuster: TemporalUnit = new TestChronoZonedDateTime.FixedPeriodUnit(czdt2)
         if (chrono ne chrono2) {
           try {
             czdt.minus(1, adjuster)
-            fail("PeriodUnit.doPlus minus should have thrown a ClassCastException, " + czdt.getClass + " can not be cast to " + czdt2.getClass)
+            fail(
+              "PeriodUnit.doPlus minus should have thrown a ClassCastException, " + czdt.getClass + " can not be cast to " + czdt2.getClass
+            )
           } catch {
             case _: Throwable =>
           }
@@ -298,14 +297,18 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
   test("test_badDateTimeFieldChrono") {
     data_of_calendars.foreach { chrono =>
       val refDate: LocalDate = LocalDate.of(1900, 1, 1)
-      val czdt: ChronoZonedDateTime[_] = chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+      val czdt: ChronoZonedDateTime[_] =
+        chrono.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
       for (chrono2 <- data_of_calendars) {
-        val czdt2: ChronoZonedDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
+        val czdt2: ChronoZonedDateTime[_] =
+          chrono2.date(refDate).atTime(LocalTime.NOON).atZone(ZoneOffset.UTC)
         val adjuster: TemporalField = new TestChronoZonedDateTime.FixedDateTimeField(czdt2)
         if (chrono ne chrono2) {
           try {
             czdt.`with`(adjuster, 1)
-            fail("DateTimeField adjustInto() should have thrown a ClassCastException, " + czdt.getClass + " can not be cast to " + czdt2.getClass)
+            fail(
+              "DateTimeField adjustInto() should have thrown a ClassCastException, " + czdt.getClass + " can not be cast to " + czdt2.getClass
+            )
           } catch {
             case _: Throwable =>
           }
@@ -319,8 +322,13 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
 
   test("test_zonedDateTime_comparisons") {
     data_of_calendars.foreach { chrono =>
-      val dates: java.util.List[ChronoZonedDateTime[_ <: ChronoLocalDate]] = new java.util.ArrayList[ChronoZonedDateTime[_ <: ChronoLocalDate]]
-      val date: ChronoZonedDateTime[_ <: ChronoLocalDate] = chrono.date(LocalDate.of(1900, 1, 1)).atTime(LocalTime.MIN).atZone(ZoneOffset.UTC).asInstanceOf[ChronoZonedDateTime[_ <: ChronoLocalDate]]
+      val dates: java.util.List[ChronoZonedDateTime[_ <: ChronoLocalDate]] =
+        new java.util.ArrayList[ChronoZonedDateTime[_ <: ChronoLocalDate]]
+      val date: ChronoZonedDateTime[_ <: ChronoLocalDate] = chrono
+        .date(LocalDate.of(1900, 1, 1))
+        .atTime(LocalTime.MIN)
+        .atZone(ZoneOffset.UTC)
+        .asInstanceOf[ChronoZonedDateTime[_ <: ChronoLocalDate]]
       if (chrono ne JapaneseChronology.INSTANCE)
         dates.add(date.minus(100, ChronoUnit.YEARS))
       dates.add(date.minus(1, ChronoUnit.YEARS))
@@ -341,33 +349,38 @@ class TestChronoZonedDateTime extends FunSuite with AssertionsHelper {
       dates.add(date.plus(1, ChronoUnit.MONTHS))
       dates.add(date.plus(1, ChronoUnit.YEARS))
       dates.add(date.plus(100, ChronoUnit.YEARS))
-      for (clist <- data_of_calendars) {
-        val otherDates: java.util.List[ChronoZonedDateTime[_ <: ChronoLocalDate]] = new java.util.ArrayList[ChronoZonedDateTime[_ <: ChronoLocalDate]]
+      for (_ <- data_of_calendars) {
+        val otherDates: java.util.List[ChronoZonedDateTime[_ <: ChronoLocalDate]] =
+          new java.util.ArrayList[ChronoZonedDateTime[_ <: ChronoLocalDate]]
         val chrono2: Chronology = IsoChronology.INSTANCE
         import scala.collection.JavaConverters._
         for (d <- dates.asScala) {
-          otherDates.add(chrono2.date(d).atTime(d.toLocalTime).atZone(d.getZone).asInstanceOf[ChronoZonedDateTime[_ <: ChronoLocalDate]])
+          otherDates.add(
+            chrono2
+              .date(d)
+              .atTime(d.toLocalTime)
+              .atZone(d.getZone)
+              .asInstanceOf[ChronoZonedDateTime[_ <: ChronoLocalDate]]
+          )
         }
         var i: Int = 0
         while (i < dates.size) {
           val a: ChronoZonedDateTime[_ <: ChronoLocalDate] = dates.get(i)
-          var j: Int = 0
+          var j: Int                                       = 0
           while (j < otherDates.size) {
             val b: ChronoZonedDateTime[_ <: ChronoLocalDate] = otherDates.get(j)
-            val cmp: Int = ChronoZonedDateTime.timeLineOrder.compare(a, b)
+            val cmp: Int                                     = ChronoZonedDateTime.timeLineOrder.compare(a, b)
             if (i < j) {
               assertTrue(cmp < 0)
               assertEquals(a.isBefore(b), true, a + " isBefore " + b)
               assertEquals(a.isAfter(b), false, a + " ifAfter " + b)
               assertEquals(a.isEqual(b), false, a + " isEqual " + b)
-            }
-            else if (i > j) {
+            } else if (i > j) {
               assertTrue(cmp > 0)
               assertEquals(a.isBefore(b), false, a + " isBefore " + b)
               assertEquals(a.isAfter(b), true, a + " ifAfter " + b)
               assertEquals(a.isEqual(b), false, a + " isEqual " + b)
-            }
-            else {
+            } else {
               assertTrue(cmp == 0)
               assertEquals(a.isBefore(b), false, a + " isBefore " + b)
               assertEquals(a.isAfter(b), false, a + " ifAfter " + b)

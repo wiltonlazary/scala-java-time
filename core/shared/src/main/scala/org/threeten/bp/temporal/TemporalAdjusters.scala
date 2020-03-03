@@ -78,7 +78,8 @@ object TemporalAdjusters {
   def ofDateAdjuster(localDateAdjuster: LocalDate => LocalDate): TemporalAdjuster = {
     Objects.requireNonNull(localDateAdjuster, "localDateAdjuster")
     new TemporalAdjuster {
-      def adjustInto(temporal: Temporal): Temporal = temporal.`with`(localDateAdjuster(LocalDate.from(temporal)))
+      def adjustInto(temporal: Temporal): Temporal =
+        temporal.`with`(localDateAdjuster(LocalDate.from(temporal)))
     }
   }
 
@@ -189,18 +190,24 @@ object TemporalAdjusters {
 
   /** Enum implementing the adjusters. */
   private[TemporalAdjusters] object Impl {
+
     /** First day of month adjuster. */
-    val FIRST_DAY_OF_MONTH: TemporalAdjusters.Impl      = new TemporalAdjusters.Impl(0)
+    val FIRST_DAY_OF_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(0)
+
     /** Last day of month adjuster. */
-    val LAST_DAY_OF_MONTH: TemporalAdjusters.Impl       = new TemporalAdjusters.Impl(1)
+    val LAST_DAY_OF_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(1)
+
     /** First day of next month adjuster. */
     val FIRST_DAY_OF_NEXT_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(2)
+
     /** First day of year adjuster. */
-    val FIRST_DAY_OF_YEAR: TemporalAdjusters.Impl       = new TemporalAdjusters.Impl(3)
+    val FIRST_DAY_OF_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(3)
+
     /** Last day of year adjuster. */
-    val LAST_DAY_OF_YEAR: TemporalAdjusters.Impl        = new TemporalAdjusters.Impl(4)
+    val LAST_DAY_OF_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(4)
+
     /** First day of next month adjuster. */
-    val FIRST_DAY_OF_NEXT_YEAR: TemporalAdjusters.Impl  = new TemporalAdjusters.Impl(5)
+    val FIRST_DAY_OF_NEXT_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(5)
   }
 
   private class Impl(private val ordinal: Int) extends TemporalAdjuster {
@@ -294,27 +301,29 @@ object TemporalAdjusters {
   }
 
   /** Class implementing day-of-week in month adjuster. */
-  private[temporal] final class DayOfWeekInMonth private[temporal](private val ordinal: Int, dow: DayOfWeek) extends TemporalAdjuster {
+  private[temporal] final class DayOfWeekInMonth private[temporal] (
+    private val ordinal: Int,
+    dow:                 DayOfWeek
+  ) extends TemporalAdjuster {
+
     /** The day-of-week value, from 1 to 7. */
     private val dowValue: Int = dow.getValue
 
-    def adjustInto(temporal: Temporal): Temporal = {
+    def adjustInto(temporal: Temporal): Temporal =
       if (ordinal >= 0) {
         val temp: Temporal = temporal.`with`(DAY_OF_MONTH, 1)
-        val curDow: Int = temp.get(DAY_OF_WEEK)
-        var dowDiff: Int = (dowValue - curDow + 7) % 7
+        val curDow: Int    = temp.get(DAY_OF_WEEK)
+        var dowDiff: Int   = (dowValue - curDow + 7) % 7
         dowDiff += ((ordinal - 1L) * 7L).toInt
-        temp.plus(dowDiff, DAYS)
-      }
-      else {
+        temp.plus(dowDiff.toLong, DAYS)
+      } else {
         val temp: Temporal = temporal.`with`(DAY_OF_MONTH, temporal.range(DAY_OF_MONTH).getMaximum)
-        val curDow: Int = temp.get(DAY_OF_WEEK)
-        var daysDiff: Int = dowValue - curDow
+        val curDow: Int    = temp.get(DAY_OF_WEEK)
+        var daysDiff: Int  = dowValue - curDow
         daysDiff = if (daysDiff == 0) 0 else (if (daysDiff > 0) daysDiff - 7 else daysDiff)
         daysDiff -= ((-ordinal - 1L) * 7L).toInt
-        temp.plus(daysDiff, DAYS)
+        temp.plus(daysDiff.toLong, DAYS)
       }
-    }
   }
 
   /** Returns the next day-of-week adjuster, which adjusts the date to the
@@ -332,7 +341,8 @@ object TemporalAdjusters {
     * @param dayOfWeek  the day-of-week to move the date to, not null
     * @return the next day-of-week adjuster, not null
     */
-  def next(dayOfWeek: DayOfWeek): TemporalAdjuster = new TemporalAdjusters.RelativeDayOfWeek(2, dayOfWeek)
+  def next(dayOfWeek: DayOfWeek): TemporalAdjuster =
+    new TemporalAdjusters.RelativeDayOfWeek(2, dayOfWeek)
 
   /** Returns the next-or-same day-of-week adjuster, which adjusts the date to the
     * first occurrence of the specified day-of-week after the date being adjusted
@@ -350,7 +360,8 @@ object TemporalAdjusters {
     * @param dayOfWeek  the day-of-week to check for or move the date to, not null
     * @return the next-or-same day-of-week adjuster, not null
     */
-  def nextOrSame(dayOfWeek: DayOfWeek): TemporalAdjuster = new TemporalAdjusters.RelativeDayOfWeek(0, dayOfWeek)
+  def nextOrSame(dayOfWeek: DayOfWeek): TemporalAdjuster =
+    new TemporalAdjusters.RelativeDayOfWeek(0, dayOfWeek)
 
   /** Returns the previous day-of-week adjuster, which adjusts the date to the
     * first occurrence of the specified day-of-week before the date being adjusted.
@@ -367,7 +378,8 @@ object TemporalAdjusters {
     * @param dayOfWeek  the day-of-week to move the date to, not null
     * @return the previous day-of-week adjuster, not null
     */
-  def previous(dayOfWeek: DayOfWeek): TemporalAdjuster = new TemporalAdjusters.RelativeDayOfWeek(3, dayOfWeek)
+  def previous(dayOfWeek: DayOfWeek): TemporalAdjuster =
+    new TemporalAdjusters.RelativeDayOfWeek(3, dayOfWeek)
 
   /** Returns the previous-or-same day-of-week adjuster, which adjusts the date to the
     * first occurrence of the specified day-of-week before the date being adjusted
@@ -385,10 +397,14 @@ object TemporalAdjusters {
     * @param dayOfWeek  the day-of-week to check for or move the date to, not null
     * @return the previous-or-same day-of-week adjuster, not null
     */
-  def previousOrSame(dayOfWeek: DayOfWeek): TemporalAdjuster = new TemporalAdjusters.RelativeDayOfWeek(1, dayOfWeek)
+  def previousOrSame(dayOfWeek: DayOfWeek): TemporalAdjuster =
+    new TemporalAdjusters.RelativeDayOfWeek(1, dayOfWeek)
 
   /** Implementation of next, previous or current day-of-week. */
-  private[temporal] final class RelativeDayOfWeek private[temporal](private val relative: Int, dayOfWeek: DayOfWeek) extends TemporalAdjuster {
+  private[temporal] final class RelativeDayOfWeek private[temporal] (
+    private val relative: Int,
+    dayOfWeek:            DayOfWeek
+  ) extends TemporalAdjuster {
     Objects.requireNonNull(dayOfWeek, "dayOfWeek")
 
     /** The day-of-week value, from 1 to 7. */
@@ -400,10 +416,10 @@ object TemporalAdjusters {
         temporal
       } else if ((relative & 1) == 0) {
         val daysDiff: Int = calDow - dowValue
-        temporal.plus(if (daysDiff >= 0) 7 - daysDiff else -daysDiff, DAYS)
+        temporal.plus(if (daysDiff >= 0) 7L - daysDiff.toLong else -daysDiff.toLong, DAYS)
       } else {
         val daysDiff: Int = dowValue - calDow
-        temporal.minus(if (daysDiff >= 0) 7 - daysDiff else -daysDiff, DAYS)
+        temporal.minus(if (daysDiff >= 0) 7L - daysDiff.toLong else -daysDiff.toLong, DAYS)
       }
     }
   }

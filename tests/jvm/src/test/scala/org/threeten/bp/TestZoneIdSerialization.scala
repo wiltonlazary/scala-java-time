@@ -31,12 +31,12 @@
  */
 package org.threeten.bp
 
-import java.lang.reflect.{Field, Modifier}
+import java.lang.reflect.{ Field, Modifier }
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test ZoneId. */
-class TestZoneIdSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestZoneIdSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("immutable") {
     val cls: Class[ZoneId] = classOf[ZoneId]
     assertTrue(Modifier.isPublic(cls.getModifiers))
@@ -44,7 +44,10 @@ class TestZoneIdSerialization extends FunSuite with AssertionsHelper with Abstra
     for (field <- fields) {
       if (!Modifier.isStatic(field.getModifiers)) {
         assertTrue(Modifier.isPrivate(field.getModifiers))
-        assertTrue(Modifier.isFinal(field.getModifiers) || (Modifier.isVolatile(field.getModifiers) && Modifier.isTransient(field.getModifiers)))
+        assertTrue(
+          Modifier.isFinal(field.getModifiers) || (Modifier
+            .isVolatile(field.getModifiers) && Modifier.isTransient(field.getModifiers))
+        )
       }
     }
   }

@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.chrono
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -43,26 +43,30 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 
-class TestChronoZonedDateTimeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestChronoZonedDateTimeSerialization
+    extends AnyFunSuite
+    with AssertionsHelper
+    with AbstractTest {
   val data_of_calendars: List[Chronology] = {
-    List(
-      HijrahChronology.INSTANCE,
-      IsoChronology.INSTANCE,
-      JapaneseChronology.INSTANCE,
-      MinguoChronology.INSTANCE,
-      ThaiBuddhistChronology.INSTANCE)
+    List(HijrahChronology.INSTANCE,
+         IsoChronology.INSTANCE,
+         JapaneseChronology.INSTANCE,
+         MinguoChronology.INSTANCE,
+         ThaiBuddhistChronology.INSTANCE)
   }
 
   test("test_ChronoZonedDateTimeSerialization") {
     data_of_calendars.foreach { chrono =>
-      val ref: ZonedDateTime = LocalDate.of(2000, 1, 5).atTime(12, 1, 2, 3).atZone(ZoneId.of("GMT+01:23"))
-      val orginal: ChronoZonedDateTime[_] = chrono.date(ref).atTime(ref.toLocalTime).atZone(ref.getZone)
+      val ref: ZonedDateTime =
+        LocalDate.of(2000, 1, 5).atTime(12, 1, 2, 3).atZone(ZoneId.of("GMT+01:23"))
+      val orginal: ChronoZonedDateTime[_] =
+        chrono.date(ref).atTime(ref.toLocalTime).atZone(ref.getZone)
       val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-      val out: ObjectOutputStream = new ObjectOutputStream(baos)
+      val out: ObjectOutputStream     = new ObjectOutputStream(baos)
       out.writeObject(orginal)
       out.close()
-      val bais: ByteArrayInputStream = new ByteArrayInputStream(baos.toByteArray)
-      val in: ObjectInputStream = new ObjectInputStream(bais)
+      val bais: ByteArrayInputStream  = new ByteArrayInputStream(baos.toByteArray)
+      val in: ObjectInputStream       = new ObjectInputStream(bais)
       val ser: ChronoZonedDateTime[_] = in.readObject.asInstanceOf[ChronoZonedDateTime[_]]
       assertTrue(ser == orginal)
     }

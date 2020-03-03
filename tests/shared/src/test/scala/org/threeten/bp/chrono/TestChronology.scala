@@ -35,10 +35,11 @@ import java.util.Locale
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.AssertionsHelper
 
-import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfterEach
 
 /** Test Chrono class. */
-class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHelper {
+class TestChronology extends AnyFunSuite with BeforeAndAfterEach with AssertionsHelper {
   override def beforeEach(): Unit = {
     var c: Chronology = null
     c = HijrahChronology.INSTANCE
@@ -46,7 +47,6 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
     c = JapaneseChronology.INSTANCE
     c = MinguoChronology.INSTANCE
     c = ThaiBuddhistChronology.INSTANCE
-    c.toString
   }
 
   val data_of_calendars: List[(String, String, String)] = {
@@ -55,12 +55,13 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
       ("ISO", "iso8601", "ISO calendar"),
       ("Japanese", "japanese", "Japanese calendar"),
       ("Minguo", "roc", "Minguo Calendar"),
-      ("ThaiBuddhist", "buddhist", "ThaiBuddhist calendar"))
+      ("ThaiBuddhist", "buddhist", "ThaiBuddhist calendar")
+    )
   }
 
   test("test_getters") {
     data_of_calendars.foreach {
-      case (chronoId, calendarSystemType, description) =>
+      case (chronoId, calendarSystemType, _) =>
         val chrono: Chronology = Chronology.of(chronoId)
         assertNotNull(chrono)
         assertEquals(chrono.getId, chronoId)
@@ -72,7 +73,7 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
 
   test("test_required_calendars") {
     data_of_calendars.foreach {
-      case (chronoId, calendarSystemType, description) =>
+      case (chronoId, calendarSystemType, _) =>
         var chrono: Chronology = Chronology.of(chronoId)
         assertNotNull(chrono)
         chrono = Chronology.of(calendarSystemType)
@@ -90,7 +91,7 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
     import scala.collection.JavaConverters._
     for (chrono <- chronos.asScala) {
       val lookup: Chronology = Chronology.of(chrono.getId)
-      assertNotNull(lookup, "Required calendar not found: " + chrono)
+      assertNotNull(lookup, s"Required calendar not found: $chrono")
     }
     assertTrue(chronos.size >= data_of_calendars.length)
   }
@@ -98,12 +99,14 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
   /** Compute the number of days from the Epoch and compute the date from the number of days. */
   test("test_epoch") {
     data_of_calendars.foreach {
-      case (name, alias, description) =>
-        val chrono: Chronology = Chronology.of(name)
+      case (name, _, _) =>
+        val chrono: Chronology     = Chronology.of(name)
         val date1: ChronoLocalDate = chrono.dateNow
-        val epoch1: Long = date1.getLong(ChronoField.EPOCH_DAY)
+        val epoch1: Long           = date1.getLong(ChronoField.EPOCH_DAY)
         val date2: ChronoLocalDate = date1.`with`(ChronoField.EPOCH_DAY, epoch1)
-        assertEquals(date1, date2, "Date from epoch day is not same date: " + date1 + " != " + date2)
+        assertEquals(date1,
+                     date2,
+                     "Date from epoch day is not same date: " + date1 + " != " + date2)
         val epoch2: Long = date1.getLong(ChronoField.EPOCH_DAY)
         assertEquals(epoch1, epoch2, "Epoch day not the same: " + epoch1 + " != " + epoch2)
     }
@@ -115,7 +118,8 @@ class TestChronology extends FunSuite with BeforeAndAfterEach with AssertionsHel
       (IsoChronology.INSTANCE, "iso8601"),
       (JapaneseChronology.INSTANCE, "japanese"),
       (MinguoChronology.INSTANCE, "roc"),
-      (ThaiBuddhistChronology.INSTANCE, "buddhist"))
+      (ThaiBuddhistChronology.INSTANCE, "buddhist")
+    )
   }
 
   test("test_getCalendarType") {

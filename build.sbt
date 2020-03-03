@@ -15,12 +15,29 @@ Global / resolvers += Resolver.sonatypeRepo("public")
 lazy val downloadFromZip: TaskKey[Unit] =
   taskKey[Unit]("Download the tzdb tarball and extract it")
 
+inThisBuild(
+  List(
+    organization := "io.github.cquiroz",
+    homepage := Some(url("https://github.com/cquiroz/scala-java-time")),
+    licenses := Seq("BSD 3-Clause License" -> url("https://opensource.org/licenses/BSD-3-Clause")),
+    developers := List(
+      Developer("cquiroz",
+                "Carlos Quiroz",
+                "carlos.m.quiroz@gmail.com",
+                url("https://github.com/cquiroz"))
+    ),
+    scmInfo := Some(
+      ScmInfo(
+        url("https://github.com/cquiroz/scala-java-time"),
+        "scm:git:git@github.com:cquiroz/scala-java-time.git"
+      )
+    )
+  )
+)
+
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
   version := scalaJavaTimeVersion,
-  organization := "io.github.cquiroz",
-  homepage := Some(url("https://github.com/cquiroz/scala-java-time")),
-  licenses := Seq("BSD 3-Clause License" -> url("https://opensource.org/licenses/BSD-3-Clause")),
   scalaVersion := scalaVer,
   crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1"),
   // Don't include threeten on the binaries
@@ -37,18 +54,7 @@ lazy val commonSettings = Seq(
   },
   scalacOptions ++= Seq("-target:jvm-1.8", "-deprecation:false"),
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
-  autoAPIMappings := true,
-  publishArtifact in Test := false,
-  publishMavenStyle := true,
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots".at(nexus + "content/repositories/snapshots"))
-    else
-      Some("releases".at(nexus + "service/local/staging/deploy/maven2"))
-  },
-  pomExtra := pomData,
-  pomIncludeRepository := { _ => false }
+  autoAPIMappings := true
 )
 
 lazy val root = project
@@ -226,83 +232,3 @@ lazy val docs = project
     micrositeHighlightTheme := "color-brewer"
   )
 
-lazy val pomData =
-  <developers>
-    <developer>
-      <id>cquiroz</id>
-      <name>Carlos Quiroz</name>
-      <url>https://github.com/cquiroz</url>
-      <roles>
-        <role>Project Lead (current Scala version)</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>soc</id>
-      <name>Simon Ochsenreither</name>
-      <url>https://github.com/soc</url>
-      <roles>
-        <role>Project Lead (original Scala version)</role>
-      </roles>
-    </developer>
-    <developer>
-      <id>jodastephen</id>
-      <name>Stephen Colebourne</name>
-      <url>https://github.com/jodastephen</url>
-      <roles>
-        <role>Project Lead (original Java implementation)</role>
-      </roles>
-   </developer>
-  </developers>
-  <contributors>
-    <contributor>
-      <name>Javier Fernandez-Ivern</name>
-      <url>https://github.com/ivern</url>
-    </contributor>
-    <contributor>
-      <name>Martin Baker</name>
-      <url>https://github.com/kemokid</url>
-    </contributor>
-    <contributor>
-      <name>Keith Harris</name>
-      <url>https://github.com/keithharris</url>
-    </contributor>
-    <contributor>
-      <name>Ludovic Hochet</name>
-      <url>https://github.com/lhochet</url>
-    </contributor>
-    <contributor>
-      <name>Matias Irland</name>
-      <url>https://github.com/matir91</url>
-    </contributor>
-    <contributor>
-      <name>Pap Lorinc</name>
-      <url>https://github.com/paplorinc</url>
-    </contributor>
-    <contributor>
-      <name>Philippe Marschall</name>
-      <url>https://github.com/marschall</url>
-    </contributor>
-    <contributor>
-      <name>Michael Nascimento Santos</name>
-      <url>https://github.com/sjmisterm</url>
-    </contributor>
-    <contributor>
-      <name>Roger Riggs</name>
-      <url>https://github.com/RogerRiggs</url>
-    </contributor>
-    <contributor>
-      <name>Siebe Schaap</name>
-      <url>https://github.com/sschaap</url>
-    </contributor>
-    <contributor>
-      <name>Sherman Shen</name>
-    </contributor>
-    <contributor>
-      <name>Pavel Malyshev</name>
-      <url>https://github.com/pamalyshev</url>
-    </contributor>
-    <contributor>
-      <name>Philipp Thuerwaechter</name>
-      <url>https://github.com/pithu</url>
-    </contributor>
-  </contributors>

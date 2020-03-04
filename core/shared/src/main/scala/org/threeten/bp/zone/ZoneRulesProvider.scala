@@ -32,19 +32,19 @@
 package org.threeten.bp.zone
 
 import java.util.{ Collections, Objects }
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
-import java.util.concurrent.CopyOnWriteArrayList
+import java.util.HashMap
+import java.util.Map
+import java.util.ArrayList
 
 object ZoneRulesProvider {
 
   /** The set of loaded providers. */
-  private val PROVIDERS: CopyOnWriteArrayList[ZoneRulesProvider] =
-    new CopyOnWriteArrayList[ZoneRulesProvider]
+  private val PROVIDERS: ArrayList[ZoneRulesProvider] =
+    new ArrayList[ZoneRulesProvider]
 
   /** The lookup from zone region ID to provider. */
-  private val ZONES: ConcurrentMap[String, ZoneRulesProvider] =
-    new ConcurrentHashMap[String, ZoneRulesProvider](512, 0.75f, 2)
+  private val ZONES: Map[String, ZoneRulesProvider] =
+    new HashMap[String, ZoneRulesProvider]()
 
   /** Gets the set of available zone IDs.
     *
@@ -157,7 +157,7 @@ object ZoneRulesProvider {
     while (zoneIds.hasNext) {
       val zoneId = zoneIds.next()
       Objects.requireNonNull(zoneId, "zoneId")
-      val old: ZoneRulesProvider = ZONES.putIfAbsent(zoneId, provider)
+      val old: ZoneRulesProvider = ZONES.put(zoneId, provider)
       if (old != null)
         throw new ZoneRulesException(
           s"Unable to register zone as one already registered with that ID: $zoneId, currently loading from provider: $provider"

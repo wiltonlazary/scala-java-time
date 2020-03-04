@@ -34,15 +34,15 @@ package org.threeten.bp.format
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
+import java.util.HashMap
+import java.util.Map
 import org.threeten.bp.chrono.Chronology
 
 private object SimpleDateTimeFormatStyleProvider {
 
   /** Cache of formatters. */
-  private val FORMATTER_CACHE: ConcurrentMap[String, AnyRef] =
-    new ConcurrentHashMap[String, AnyRef](16, 0.75f, 2)
+  private val FORMATTER_CACHE: Map[String, AnyRef] =
+    new HashMap[String, AnyRef]()
 }
 
 /** The Service Provider Implementation to obtain date-time formatters for a style.
@@ -83,10 +83,10 @@ final class SimpleDateTimeFormatStyleProvider extends DateTimeFormatStyleProvide
           val pattern: String = format.toPattern
           val formatter: DateTimeFormatter =
             new DateTimeFormatterBuilder().appendPattern(pattern).toFormatter(locale)
-          SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.putIfAbsent(key, formatter)
+          SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.put(key, formatter)
           formatter
         case _ =>
-          SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.putIfAbsent(key, "")
+          SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.put(key, "")
           throw new IllegalArgumentException("Unable to convert DateFormat to DateTimeFormatter")
       }
     }

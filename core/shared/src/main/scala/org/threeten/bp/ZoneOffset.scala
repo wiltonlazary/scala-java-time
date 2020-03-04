@@ -39,8 +39,8 @@ import java.io.IOException
 import java.io.InvalidObjectException
 import java.io.ObjectStreamException
 import java.io.Serializable
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
+import java.util.HashMap
+import java.util.Map
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.Temporal
 import org.threeten.bp.temporal.TemporalAccessor
@@ -56,12 +56,12 @@ import org.threeten.bp.zone.ZoneRules
 object ZoneOffset {
 
   /** Cache of time-zone offset by offset in seconds. */
-  private val SECONDS_CACHE: ConcurrentMap[Integer, ZoneOffset] =
-    new ConcurrentHashMap[Integer, ZoneOffset](16, 0.75f, 4)
+  private val SECONDS_CACHE: Map[Integer, ZoneOffset] =
+    new HashMap[Integer, ZoneOffset]()
 
   /** Cache of time-zone offset by ID. */
-  private val ID_CACHE: ConcurrentMap[String, ZoneOffset] =
-    new ConcurrentHashMap[String, ZoneOffset](16, 0.75f, 4)
+  private val ID_CACHE: Map[String, ZoneOffset] =
+    new HashMap[String, ZoneOffset]()
 
   /** The number of seconds per hour. */
   private val SECONDS_PER_HOUR: Int = 60 * 60
@@ -310,9 +310,9 @@ object ZoneOffset {
       var result: ZoneOffset = SECONDS_CACHE.get(totalSecs)
       if (result == null) {
         result = new ZoneOffset(totalSeconds)
-        SECONDS_CACHE.putIfAbsent(totalSecs, result)
+        SECONDS_CACHE.put(totalSecs, result)
         result = SECONDS_CACHE.get(totalSecs)
-        ID_CACHE.putIfAbsent(result.getId, result)
+        ID_CACHE.put(result.getId, result)
       }
       result
     } else

@@ -43,8 +43,8 @@ import org.threeten.bp.temporal.ChronoUnit.YEARS
 import java.io.InvalidObjectException
 import java.io.Serializable
 import java.util.{ GregorianCalendar, Locale, Objects }
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
+import java.util.HashMap
+import java.util.Map
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.Year
@@ -58,8 +58,8 @@ object WeekFields {
   /** The cache of rules by firstDayOfWeek plus minimalDays.
     * Initialized first to be available for definition of ISO, etc.
     */
-  private val CACHE: ConcurrentMap[String, WeekFields] =
-    new ConcurrentHashMap[String, WeekFields](4, 0.75f, 2)
+  private val CACHE: Map[String, WeekFields] =
+    new HashMap[String, WeekFields]()
 
   /** The ISO-8601 definition, where a week starts on Monday and the first week
     * has a minimum of 4 days.
@@ -123,7 +123,7 @@ object WeekFields {
     var rules: WeekFields = CACHE.get(key)
     if (rules == null) {
       rules = new WeekFields(firstDayOfWeek, minimalDaysInFirstWeek)
-      CACHE.putIfAbsent(key, rules)
+      CACHE.put(key, rules)
       rules = CACHE.get(key)
     }
     rules

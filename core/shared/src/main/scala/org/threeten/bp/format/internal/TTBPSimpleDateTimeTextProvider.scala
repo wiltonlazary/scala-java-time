@@ -39,8 +39,8 @@ import java.text.DateFormatSymbols
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
+import java.util.HashMap
+import java.util.{ Map => JMap }
 
 import org.threeten.bp.temporal.IsoFields
 import org.threeten.bp.temporal.TemporalField
@@ -133,8 +133,8 @@ object TTBPSimpleDateTimeTextProvider {
 final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
 
   /** Cache. */
-  private val cache: ConcurrentMap[(TemporalField, Locale), AnyRef] =
-    new ConcurrentHashMap[(TemporalField, Locale), AnyRef](16, 0.75f, 2)
+  private val cache: JMap[(TemporalField, Locale), AnyRef] =
+    new HashMap[(TemporalField, Locale), AnyRef]()
 
   override def getText(
     field:  TemporalField,
@@ -162,7 +162,7 @@ final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
     var store: AnyRef = cache.get(key)
     if (store == null) {
       store = createStore(field, locale)
-      cache.putIfAbsent(key, store)
+      cache.put(key, store)
       store = cache.get(key)
     }
     store

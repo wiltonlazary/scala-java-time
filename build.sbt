@@ -2,11 +2,10 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer             = "2.12.10"
+val scalaVer             = "2.13.1"
 val tzdbVersion          = "2019c"
-val scalaJavaTimeVer     = "2.0.0-RC4-SNAPSHOT"
-val scalaJavaTimeVersion = s"$scalaJavaTimeVer"
-val scalaTZDBVersion     = s"${scalaJavaTimeVer}_$tzdbVersion"
+val scalaJavaTimeVersion = "2.0.0-RC4-SNAPSHOT"
+val scalaTZDBVersion     = s"${scalaJavaTimeVersion}_$tzdbVersion"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -74,7 +73,8 @@ lazy val root = project
              scalajavatimeTZDBJVM,
              scalajavatimeTZDBJS,
              scalajavatimeTestsJVM,
-             scalajavatimeTestsJVM)
+             scalajavatimeTestsJVM,
+             demo)
 
 /**
   * Copy source files and translate them to the java.time package
@@ -214,6 +214,26 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
 
 lazy val scalajavatimeTestsJVM = scalajavatimeTests.jvm
 lazy val scalajavatimeTestsJS  = scalajavatimeTests.js
+
+val zonesFilterFn = (x: String) => {
+  x == "Europe/Helsinki" || x == "America/Santiago"
+}
+
+lazy val demo = project
+  .in(file("demo"))
+  .dependsOn(scalajavatime.js)
+  .enablePlugins(ScalaJSPlugin)
+  .enablePlugins(TzdbPlugin)
+  .settings(
+    scalaVersion := scalaVer,
+    name := "demo",
+    publish := {},
+    publishLocal := {},
+    publishArtifact := false,
+    Keys.`package` := file(""),
+    scalaJSUseMainModuleInitializer := true,
+    zonesFilter := zonesFilterFn
+  )
 
 lazy val docs = project
   .in(file("docs"))

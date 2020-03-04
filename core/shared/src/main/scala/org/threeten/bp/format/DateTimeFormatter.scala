@@ -82,7 +82,7 @@ object DateTimeFormatter {
     * This is pre-padded by zero to ensure two digits.
     * </ul><p>
     */
-  val ISO_LOCAL_DATE: DateTimeFormatter = new DateTimeFormatterBuilder()
+  lazy val ISO_LOCAL_DATE: DateTimeFormatter = new DateTimeFormatterBuilder()
     .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
     .appendLiteral('-')
     .appendValue(MONTH_OF_YEAR, 2)
@@ -104,7 +104,7 @@ object DateTimeFormatter {
     * Parsing is case insensitive.
     * </ul><p>
     */
-  val ISO_OFFSET_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val ISO_OFFSET_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .append(ISO_LOCAL_DATE)
     .appendOffsetId
     .toFormatter(ResolverStyle.STRICT)
@@ -126,7 +126,7 @@ object DateTimeFormatter {
     * As this formatter has an optional element, it may be necessary to parse using
     * {@link DateTimeFormatter#parseBest}.
     */
-  val ISO_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val ISO_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .append(ISO_LOCAL_DATE)
     .optionalStart()
     .appendOffsetId
@@ -155,7 +155,7 @@ object DateTimeFormatter {
     * As many digits will be printed as required.
     * </ul><p>
     */
-  val ISO_LOCAL_TIME: DateTimeFormatter = new DateTimeFormatterBuilder()
+  lazy val ISO_LOCAL_TIME: DateTimeFormatter = new DateTimeFormatterBuilder()
     .appendValue(HOUR_OF_DAY, 2)
     .appendLiteral(':')
     .appendValue(MINUTE_OF_HOUR, 2)
@@ -179,7 +179,7 @@ object DateTimeFormatter {
     * Parsing is case insensitive.
     * </ul><p>
     */
-  val ISO_OFFSET_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val ISO_OFFSET_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .append(ISO_LOCAL_TIME)
     .appendOffsetId
     .toFormatter(ResolverStyle.STRICT)
@@ -200,7 +200,7 @@ object DateTimeFormatter {
     * As this formatter has an optional element, it may be necessary to parse using
     * {@link DateTimeFormatter#parseBest}.
     */
-  val ISO_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val ISO_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .append(ISO_LOCAL_TIME)
     .optionalStart()
     .appendOffsetId
@@ -218,7 +218,7 @@ object DateTimeFormatter {
     * <li>The {@link #ISO_LOCAL_TIME}
     * </ul><p>
     */
-  val ISO_LOCAL_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val ISO_LOCAL_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .append(ISO_LOCAL_DATE)
     .appendLiteral('T')
     .append(ISO_LOCAL_TIME)
@@ -238,7 +238,7 @@ object DateTimeFormatter {
     * Parsing is case insensitive.
     * </ul><p>
     */
-  val ISO_OFFSET_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val ISO_OFFSET_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .append(ISO_LOCAL_DATE_TIME)
     .appendOffsetId
     .toFormatter(ResolverStyle.STRICT)
@@ -260,7 +260,7 @@ object DateTimeFormatter {
     * <li>A close square bracket ']'.
     * </ul><p>
     */
-  val ISO_ZONED_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder()
+  lazy val ISO_ZONED_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder()
     .append(ISO_OFFSET_DATE_TIME)
     .optionalStart()
     .appendLiteral('[')
@@ -291,7 +291,7 @@ object DateTimeFormatter {
     * As this formatter has an optional element, it may be necessary to parse using
     * {@link DateTimeFormatter#parseBest}.
     */
-  val ISO_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder()
+  lazy val ISO_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder()
     .append(ISO_LOCAL_DATE_TIME)
     .optionalStart()
     .appendOffsetId
@@ -324,7 +324,7 @@ object DateTimeFormatter {
     * As this formatter has an optional element, it may be necessary to parse using
     * {@link DateTimeFormatter#parseBest}.
     */
-  val ISO_ORDINAL_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val ISO_ORDINAL_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
     .appendLiteral('-')
     .appendValue(DAY_OF_YEAR, 3)
@@ -358,7 +358,7 @@ object DateTimeFormatter {
     * As this formatter has an optional element, it may be necessary to parse using
     * {@link DateTimeFormatter#parseBest}.
     */
-  val ISO_WEEK_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val ISO_WEEK_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .appendValue(IsoFields.WEEK_BASED_YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
     .appendLiteral("-W")
     .appendValue(IsoFields.WEEK_OF_WEEK_BASED_YEAR, 2)
@@ -399,7 +399,7 @@ object DateTimeFormatter {
     * The returned formatter has no override chronology or zone.
     * It uses the {@link ResolverStyle#STRICT STRICT} resolver style.
     */
-  val ISO_INSTANT: DateTimeFormatter =
+  lazy val ISO_INSTANT: DateTimeFormatter =
     new DateTimeFormatterBuilder().parseCaseInsensitive.appendInstant
       .toFormatter(ResolverStyle.STRICT)
 
@@ -424,7 +424,7 @@ object DateTimeFormatter {
     * As this formatter has an optional element, it may be necessary to parse using
     * {@link DateTimeFormatter#parseBest}.
     */
-  val BASIC_ISO_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+  lazy val BASIC_ISO_DATE: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
     .appendValue(YEAR, 4)
     .appendValue(MONTH_OF_YEAR, 2)
     .appendValue(DAY_OF_MONTH, 2)
@@ -470,7 +470,7 @@ object DateTimeFormatter {
     * </ul><p>
     * Parsing is case insensitive.
     */
-  val RFC_1123_DATE_TIME: DateTimeFormatter = {
+  lazy val RFC_1123_DATE_TIME: DateTimeFormatter = {
     // Size checked
     val dow: java.util.Map[Long, String] = new java.util.HashMap[Long, String]
     dow.put(1L, "Mon")

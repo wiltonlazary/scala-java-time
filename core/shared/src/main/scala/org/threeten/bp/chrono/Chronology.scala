@@ -37,7 +37,8 @@ import java.io.IOException
 import java.io.InvalidObjectException
 import java.io.ObjectStreamException
 import java.util.{ Locale, Objects }
-import java.util.concurrent.ConcurrentHashMap
+import java.util.HashMap
+import java.util.Map
 
 import org.threeten.bp.Clock
 import org.threeten.bp.DateTimeException
@@ -60,12 +61,12 @@ import org.threeten.bp.temporal.ValueRange
 object Chronology {
 
   /** Map of available calendars by ID. */
-  private val CHRONOS_BY_ID: ConcurrentHashMap[String, Chronology] =
-    new ConcurrentHashMap[String, Chronology]
+  private val CHRONOS_BY_ID: Map[String, Chronology] =
+    new HashMap[String, Chronology]()
 
   /** Map of available calendars by calendar type. */
-  private val CHRONOS_BY_TYPE: ConcurrentHashMap[String, Chronology] =
-    new ConcurrentHashMap[String, Chronology]
+  private val CHRONOS_BY_TYPE: Map[String, Chronology] =
+    new HashMap[String, Chronology]()
 
   /** Obtains an instance of {@code Chronology} from a temporal object.
     *
@@ -189,24 +190,24 @@ object Chronology {
       register(MinguoChronology.INSTANCE)
       register(JapaneseChronology.INSTANCE)
       register(HijrahChronology.INSTANCE)
-      CHRONOS_BY_ID.putIfAbsent("Hijrah", HijrahChronology.INSTANCE)
-      CHRONOS_BY_TYPE.putIfAbsent("islamic", HijrahChronology.INSTANCE)
+      CHRONOS_BY_ID.put("Hijrah", HijrahChronology.INSTANCE)
+      CHRONOS_BY_TYPE.put("islamic", HijrahChronology.INSTANCE)
       val chronologies: java.util.Iterator[Chronology] =
         ChronologyPlatformHelper.loadAdditionalChronologies
       while (chronologies.hasNext) {
         val chrono = chronologies.next()
-        CHRONOS_BY_ID.putIfAbsent(chrono.getId, chrono)
+        CHRONOS_BY_ID.put(chrono.getId, chrono)
         val `type`: String = chrono.getCalendarType
         if (`type` != null)
-          CHRONOS_BY_TYPE.putIfAbsent(`type`, chrono)
+          CHRONOS_BY_TYPE.put(`type`, chrono)
       }
     }
 
   private def register(chrono: Chronology): Unit = {
-    CHRONOS_BY_ID.putIfAbsent(chrono.getId, chrono)
+    CHRONOS_BY_ID.put(chrono.getId, chrono)
     val `type`: String = chrono.getCalendarType
     if (`type` != null)
-      CHRONOS_BY_TYPE.putIfAbsent(`type`, chrono)
+      CHRONOS_BY_TYPE.put(`type`, chrono)
     ()
   }
 

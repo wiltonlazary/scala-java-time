@@ -33,8 +33,8 @@ package org.threeten.bp.format
 
 import java.text.DecimalFormatSymbols
 import java.util.{ Locale, Objects }
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
+import java.util.HashMap
+import java.util.Map
 import scala.collection.JavaConverters._
 
 /** Localized symbols used in date and time formatting.
@@ -54,8 +54,8 @@ object DecimalStyle {
   val STANDARD: DecimalStyle = new DecimalStyle('0', '+', '-', '.')
 
   /** The cache of symbols instances. */
-  private val CACHE: ConcurrentMap[Locale, DecimalStyle] =
-    new ConcurrentHashMap[Locale, DecimalStyle](16, 0.75f, 2)
+  private val CACHE: Map[Locale, DecimalStyle] =
+    new HashMap[Locale, DecimalStyle]()
 
   /** Lists all the locales that are supported.
     *
@@ -85,7 +85,7 @@ object DecimalStyle {
     Objects.requireNonNull(locale, "locale")
     // Size reduced
     if (CACHE.get(locale) == null) {
-      CACHE.putIfAbsent(locale, create(locale))
+      CACHE.put(locale, create(locale))
     }
     CACHE.get(locale)
   }

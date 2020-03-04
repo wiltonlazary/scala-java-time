@@ -37,8 +37,8 @@ import java.io.IOException
 import java.io.Serializable
 import java.util.Arrays
 import java.util.Collections
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
+import java.util.HashMap
+import java.util.Map
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
@@ -211,8 +211,8 @@ final class StandardZoneRules private (
     with Serializable {
 
   /** The map of recent transitions. */
-  private val lastRulesCache: ConcurrentMap[Integer, Array[ZoneOffsetTransition]] =
-    new ConcurrentHashMap[Integer, Array[ZoneOffsetTransition]]
+  private val lastRulesCache: Map[Integer, Array[ZoneOffsetTransition]] =
+    new HashMap[Integer, Array[ZoneOffsetTransition]]()
 
   /** Creates an instance. */
   /* // Can't be implemented with Scala's constructor rules. Replaced with apply factory method.
@@ -422,7 +422,7 @@ final class StandardZoneRules private (
     }
 
     if (year < StandardZoneRules.LAST_CACHED_YEAR)
-      lastRulesCache.putIfAbsent(yearObj, transArray)
+      lastRulesCache.put(yearObj, transArray)
     transArray
   }
 

@@ -82,7 +82,7 @@ object DateTimeFormatter {
     * This is pre-padded by zero to ensure two digits.
     * </ul><p>
     */
-  lazy val ISO_LOCAL_DATE: DateTimeFormatter = new DateTimeFormatterBuilder()
+  val lazy ISO_LOCAL_DATE: DateTimeFormatter = new DateTimeFormatterBuilder()
     .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
     .appendLiteral('-')
     .appendValue(MONTH_OF_YEAR, 2)
@@ -218,13 +218,12 @@ object DateTimeFormatter {
     * <li>The {@link #ISO_LOCAL_TIME}
     * </ul><p>
     */
-  lazy val ISO_LOCAL_DATE_TIME: DateTimeFormatter =
-    new DateTimeFormatterBuilder().parseCaseInsensitive
-      .append(ISO_LOCAL_DATE)
-      .appendLiteral('T')
-      .append(ISO_LOCAL_TIME)
-      .toFormatter(ResolverStyle.STRICT)
-      .withChronology(IsoChronology.INSTANCE)
+  lazy val ISO_LOCAL_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+    .append(ISO_LOCAL_DATE)
+    .appendLiteral('T')
+    .append(ISO_LOCAL_TIME)
+    .toFormatter(ResolverStyle.STRICT)
+    .withChronology(IsoChronology.INSTANCE)
 
   /** Returns the ISO date formatter that prints/parses a date-time
     * with an offset, such as '2011-12-03T10:15:30+01:00'.
@@ -239,12 +238,11 @@ object DateTimeFormatter {
     * Parsing is case insensitive.
     * </ul><p>
     */
-  lazy val ISO_OFFSET_DATE_TIME: DateTimeFormatter =
-    new DateTimeFormatterBuilder().parseCaseInsensitive
-      .append(ISO_LOCAL_DATE_TIME)
-      .appendOffsetId
-      .toFormatter(ResolverStyle.STRICT)
-      .withChronology(IsoChronology.INSTANCE)
+  lazy val ISO_OFFSET_DATE_TIME: DateTimeFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive
+    .append(ISO_LOCAL_DATE_TIME)
+    .appendOffsetId
+    .toFormatter(ResolverStyle.STRICT)
+    .withChronology(IsoChronology.INSTANCE)
 
   /** Returns the ISO date formatter that prints/parses a date-time with
     * offset and zone, such as '2011-12-03T10:15:30+01:00[Europe/Paris]'.

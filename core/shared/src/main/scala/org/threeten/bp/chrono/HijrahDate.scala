@@ -79,8 +79,7 @@ object HijrahDate {
   /** 0-based, for number of day-of-year in the beginning of month in normal
     * year.
     */
-  private lazy val NUM_DAYS: Array[Int] =
-    Array(0, 30, 59, 89, 118, 148, 177, 207, 236, 266, 295, 325)
+  private lazy val NUM_DAYS: Array[Int] = Array(0, 30, 59, 89, 118, 148, 177, 207, 236, 266, 295, 325)
 
   /** 0-based, for number of day-of-year in the beginning of month in leap year. */
   private lazy val LEAP_NUM_DAYS: Array[Int] =
@@ -90,8 +89,7 @@ object HijrahDate {
   private lazy val MONTH_LENGTH: Array[Int] = Array(30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29)
 
   /** 0-based, for day-of-month in leap year. */
-  private lazy val LEAP_MONTH_LENGTH: Array[Int] =
-    Array(30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 30)
+  private lazy val LEAP_MONTH_LENGTH: Array[Int] = Array(30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 30)
 
   /** <pre>
     * Greatest       Least

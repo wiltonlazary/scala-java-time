@@ -125,7 +125,7 @@ object Month {
   /** The singleton instance for the month of November with 30 days.
     * This has the numeric value of {@code 11}.
     */
-  lazy val NOVEMBER = new Month("NOVEMBER", 10)
+  val NOVEMBER = new Month("NOVEMBER", 10)
 
   /** The singleton instance for the month of December with 31 days.
     * This has the numeric value of {@code 12}.

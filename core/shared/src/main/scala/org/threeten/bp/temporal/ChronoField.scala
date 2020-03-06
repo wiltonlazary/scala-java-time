@@ -137,8 +137,7 @@ object ChronoField {
     * When this field is used for setting a value, it should behave in the same way as
     * setting {@link #NANO_OF_SECOND} with the value multiplied by 1,000,000.
     */
-  lazy val MILLI_OF_SECOND =
-    new ChronoField("MilliOfSecond", 4, MILLIS, SECONDS, ValueRange.of(0, 999))
+  lazy val MILLI_OF_SECOND = new ChronoField("MilliOfSecond", 4, MILLIS, SECONDS, ValueRange.of(0, 999))
 
   /** The milli-of-day.
     *
@@ -168,8 +167,7 @@ object ChronoField {
     * This counts the second within the day, from 0 to (24 * 60 * 60) - 1.
     * This field has the same meaning for all calendar systems.
     */
-  lazy val SECOND_OF_DAY =
-    new ChronoField("SecondOfDay", 7, SECONDS, DAYS, ValueRange.of(0, 86400L - 1))
+  lazy val SECOND_OF_DAY = new ChronoField("SecondOfDay", 7, SECONDS, DAYS, ValueRange.of(0, 86400L - 1))
 
   /** The minute-of-hour.
     *
@@ -217,8 +215,7 @@ object ChronoField {
     * This is the hour that would be observed on a 24-hour analog wall clock.
     * This field has the same meaning for all calendar systems.
     */
-  lazy val CLOCK_HOUR_OF_DAY =
-    new ChronoField("ClockHourOfDay", 13, HOURS, DAYS, ValueRange.of(1, 24))
+  lazy val CLOCK_HOUR_OF_DAY = new ChronoField("ClockHourOfDay", 13, HOURS, DAYS, ValueRange.of(1, 24))
 
   /** The am-pm-of-day.
     *

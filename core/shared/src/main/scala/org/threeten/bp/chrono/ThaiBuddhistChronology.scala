@@ -256,7 +256,7 @@ final class ThaiBuddhistChronology private () extends Chronology with Serializab
     if (prolepticMonth != null) {
       if (resolverStyle ne ResolverStyle.LENIENT)
         PROLEPTIC_MONTH.checkValidValue(prolepticMonth)
-      updateResolveMap(fieldValues, MONTH_OF_YEAR, Math.floorMod(prolepticMonth, 12) + 1)
+      updateResolveMap(fieldValues, MONTH_OF_YEAR, Math.floorMod(prolepticMonth, 12) + 1L)
       updateResolveMap(fieldValues, YEAR, Math.floorDiv(prolepticMonth, 12))
     }
     val yoeLong: java.lang.Long = fieldValues.remove(YEAR_OF_ERA)

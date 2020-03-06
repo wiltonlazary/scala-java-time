@@ -342,7 +342,7 @@ final class JapaneseChronology private () extends Chronology with Serializable {
     if (prolepticMonth != null) {
       if (resolverStyle ne ResolverStyle.LENIENT)
         PROLEPTIC_MONTH.checkValidValue(prolepticMonth)
-      updateResolveMap(fieldValues, MONTH_OF_YEAR, Math.floorMod(prolepticMonth, 12) + 1)
+      updateResolveMap(fieldValues, MONTH_OF_YEAR, Math.floorMod(prolepticMonth, 12) + 1L)
       updateResolveMap(fieldValues, YEAR, Math.floorDiv(prolepticMonth, 12))
     }
     val eraLong: java.lang.Long = fieldValues.get(ERA)

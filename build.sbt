@@ -187,7 +187,9 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     Keys.`package` := file(""),
     libraryDependencies +=
       "org.scalatest" %%% "scalatest" % "3.1.1" % "test",
-    scalacOptions ~= (_.filterNot(Set("-Wnumeric-widen", "-Ywarn-numeric-widen", "-Ywarn-value-discard", "-Wvalue-discard")))
+    scalacOptions ~= (_.filterNot(
+      Set("-Wnumeric-widen", "-Ywarn-numeric-widen", "-Ywarn-value-discard", "-Wvalue-discard")
+    ))
   )
   .jvmSettings(
     // Fork the JVM test to ensure that the custom flags are set
@@ -249,6 +251,6 @@ lazy val docs = project
     micrositeBaseUrl := "/scala-java-time",
     micrositePushSiteWith := GitHub4s,
     //micrositeDocumentationUrl := "/scala-java-time/docs/",
-    micrositeHighlightTheme := "color-brewer"
+    micrositeHighlightTheme := "color-brewer",
+    micrositeGithubToken := Option(System.getProperty("GITHUB_TOKEN"))
   )
-

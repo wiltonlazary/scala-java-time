@@ -1,6 +1,6 @@
 name: build
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -22,7 +22,12 @@ jobs:
         with:
           path: ~/.sbt
           key: sbt-${{ hashFiles('**/build.sbt') }}
-      - name: Checking your code format
-        run: csbt scalafmtCheckAll
-      - name: Run test
-        run: csbt clean +scalajavatimeTestsJVM/test +scalajavatimeTestsJS/test
+      - name: Publish docs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir docs/docs
+          export GEM_HOME="$HOME/gems"
+          export PATH="$HOME/gems/bin:$PATH"
+          gem install jekyll bundler
+          csbt docs/publishMicrosite

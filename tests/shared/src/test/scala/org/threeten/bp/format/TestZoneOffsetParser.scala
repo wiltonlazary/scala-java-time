@@ -62,7 +62,7 @@ class TestZoneOffsetParser extends AnyFunSuite with GenTestPrinterParser with As
           pp.parse(parseContext, text, pos)
         } catch {
           case ex: Throwable =>
-            assertTrue(expected.isInstance(ex))
+            assertTrue(expected.isAssignableFrom(ex.getClass))
             assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
             assertEquals(parseContext.toParsed.query(TemporalQueries.zoneId), null)
         }

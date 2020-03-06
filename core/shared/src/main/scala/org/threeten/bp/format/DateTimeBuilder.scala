@@ -438,7 +438,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
           }
         } else {
           val excessDays: Int = Math.toIntExact(Math.floorDiv(hodVal, 24L))
-          hodVal = Math.floorMod(hodVal, 24)
+          hodVal = Math.floorMod(hodVal, 24L)
           addObject(LocalTime.of(hodVal.toInt, 0))
           this.excessDays = Period.ofDays(excessDays)
         }

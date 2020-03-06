@@ -66,7 +66,7 @@ import org.threeten.bp.temporal.ValueRange
 object Instant {
 
   /** Constant for the 1970-01-01T00:00:00Z epoch instant. */
-  val EPOCH: Instant = new Instant(0, 0)
+  lazy val EPOCH: Instant = new Instant(0, 0)
 
   /** The minimum supported epoch second. */
   private val MIN_SECOND: Long = -31557014167219200L
@@ -92,7 +92,7 @@ object Instant {
     * The value is also chosen such that the value of the year fits in
     * an {@code int}.
     */
-  val MIN: Instant = Instant.ofEpochSecond(MIN_SECOND, 0)
+  lazy val MIN: Instant = Instant.ofEpochSecond(MIN_SECOND, 0)
 
   /** The maximum supported {@code Instant}, '1000000000-12-31T23:59:59.999999999Z'.
     * This could be used by an application as a "far future" instant.
@@ -103,7 +103,7 @@ object Instant {
     * The value is also chosen such that the value of the year fits in
     * an {@code int}.
     */
-  val MAX: Instant = Instant.ofEpochSecond(MAX_SECOND, 999999999)
+  lazy val MAX: Instant = Instant.ofEpochSecond(MAX_SECOND, 999999999)
 
   /** Obtains the current instant from the system clock.
     *

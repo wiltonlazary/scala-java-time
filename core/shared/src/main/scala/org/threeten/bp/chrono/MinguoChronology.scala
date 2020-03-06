@@ -66,7 +66,7 @@ import org.threeten.bp.temporal.ValueRange
 object MinguoChronology {
 
   /** Singleton instance for the Minguo chronology. */
-  val INSTANCE: MinguoChronology = new MinguoChronology
+  lazy val INSTANCE: MinguoChronology = new MinguoChronology
 
   /** The difference in years between ISO and Minguo. */
   private[chrono] val YEARS_DIFFERENCE: Int = 1911

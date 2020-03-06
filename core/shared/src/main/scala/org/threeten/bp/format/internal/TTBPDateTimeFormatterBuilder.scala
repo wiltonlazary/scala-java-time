@@ -218,10 +218,10 @@ object TTBPDateTimeFormatterBuilder {
 
   /** Enumeration to apply simple parse settings. */
   private[format] object SettingsParser {
-    val SENSITIVE   = new SettingsParser("SENSITIVE", 0)
-    val INSENSITIVE = new SettingsParser("INSENSITIVE", 1)
-    val STRICT      = new SettingsParser("STRICT", 2)
-    val LENIENT     = new SettingsParser("LENIENT", 3)
+    lazy val SENSITIVE   = new SettingsParser("SENSITIVE", 0)
+    lazy val INSENSITIVE = new SettingsParser("INSENSITIVE", 1)
+    lazy val STRICT      = new SettingsParser("STRICT", 2)
+    lazy val LENIENT     = new SettingsParser("LENIENT", 3)
   }
 
   private[format] final class SettingsParser private (name: String, ordinal: Int)
@@ -1361,7 +1361,7 @@ object TTBPDateTimeFormatterBuilder {
   private[format] object ZoneTextPrinterParser {
 
     /** The text style to output. */
-    private val LENGTH_COMPARATOR: Ordering[Map.Entry[String, String]] =
+    private lazy val LENGTH_COMPARATOR: Ordering[Map.Entry[String, String]] =
       new Ordering[Map.Entry[String, String]] {
         override def compare(
           str1: Map.Entry[String, String],

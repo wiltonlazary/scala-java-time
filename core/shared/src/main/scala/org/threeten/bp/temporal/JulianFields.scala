@@ -88,7 +88,7 @@ object JulianFields {
     * implementation always uses the Julian Day number for the local date,
     * regardless of the offset or time-zone.
     */
-  val JULIAN_DAY: TemporalField = Field.JULIAN_DAY
+  lazy val JULIAN_DAY: TemporalField = Field.JULIAN_DAY
 
   /** Modified Julian Day field.
     *
@@ -123,7 +123,7 @@ object JulianFields {
     * implementation always uses the Modified Julian Day for the local date,
     * regardless of the offset or time-zone.
     */
-  val MODIFIED_JULIAN_DAY: TemporalField = Field.MODIFIED_JULIAN_DAY
+  lazy val MODIFIED_JULIAN_DAY: TemporalField = Field.MODIFIED_JULIAN_DAY
 
   /** Rata Die field.
     *
@@ -137,21 +137,21 @@ object JulianFields {
     * that can be converted into {@link ChronoField#EPOCH_DAY}.
     * A {@link DateTimeException} is thrown for any other type of object.
     */
-  val RATA_DIE: TemporalField = Field.RATA_DIE
+  lazy val RATA_DIE: TemporalField = Field.RATA_DIE
 
   /** Hidden implementation. */
   private object Field {
 
     /** Julian Day field. */
     // 719163L + 1721425L = 2440588L
-    val JULIAN_DAY = new Field("JulianDay", 0, DAYS, FOREVER, 2440588L)
+    lazy val JULIAN_DAY = new Field("JulianDay", 0, DAYS, FOREVER, 2440588L)
 
     /** Modified Julian Day field. */
     // 719163L - 678576L = 40587L
-    val MODIFIED_JULIAN_DAY = new Field("ModifiedJulianDay", 1, DAYS, FOREVER, 40587L)
+    lazy val MODIFIED_JULIAN_DAY = new Field("ModifiedJulianDay", 1, DAYS, FOREVER, 40587L)
 
     /** Rata Die field. */
-    val RATA_DIE = new Field("RataDie", 2, DAYS, FOREVER, 719163L)
+    lazy val RATA_DIE = new Field("RataDie", 2, DAYS, FOREVER, 719163L)
   }
 
   /// !!! FIXME: Passing of name to the Enum constructor is not quite right.

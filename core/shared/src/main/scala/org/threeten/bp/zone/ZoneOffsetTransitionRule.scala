@@ -165,15 +165,15 @@ object ZoneOffsetTransitionRule {
   object TimeDefinition {
 
     /** The local date-time is expressed in terms of the UTC offset. */
-    val UTC = new TimeDefinition("UTC", 0)
+    lazy val UTC = new TimeDefinition("UTC", 0)
 
     /** The local date-time is expressed in terms of the wall offset. */
-    val WALL = new TimeDefinition("WALL", 1)
+    lazy val WALL = new TimeDefinition("WALL", 1)
 
     /** The local date-time is expressed in terms of the standard offset. */
-    val STANDARD = new TimeDefinition("STANDARD", 2)
+    lazy val STANDARD = new TimeDefinition("STANDARD", 2)
 
-    val values: Array[TimeDefinition] = Array(UTC, WALL, STANDARD)
+    lazy val values: Array[TimeDefinition] = Array(UTC, WALL, STANDARD)
   }
 
   final class TimeDefinition(name: String, ordinal: Int)

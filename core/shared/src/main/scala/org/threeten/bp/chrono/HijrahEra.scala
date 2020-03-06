@@ -47,12 +47,12 @@ object HijrahEra {
   /** The singleton instance for the era before the current one, 'Before Anno Hegirae',
     * which has the value 0.
     */
-  val BEFORE_AH = new HijrahEra("BEFORE_AH", 0)
+  lazy val BEFORE_AH = new HijrahEra("BEFORE_AH", 0)
 
   /** The singleton instance for the current era, 'Anno Hegirae', which has the value 1. */
-  val AH = new HijrahEra("AH", 1)
+  lazy val AH = new HijrahEra("AH", 1)
 
-  val values: Array[HijrahEra] = Array(BEFORE_AH, AH)
+  lazy val values: Array[HijrahEra] = Array(BEFORE_AH, AH)
 
   /** Obtains an instance of {@code HijrahEra} from a value.
     *

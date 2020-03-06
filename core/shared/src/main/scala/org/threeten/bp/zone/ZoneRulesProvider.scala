@@ -39,11 +39,11 @@ import java.util.ArrayList
 object ZoneRulesProvider {
 
   /** The set of loaded providers. */
-  private val PROVIDERS: ArrayList[ZoneRulesProvider] =
+  private lazy val PROVIDERS: ArrayList[ZoneRulesProvider] =
     new ArrayList[ZoneRulesProvider]
 
   /** The lookup from zone region ID to provider. */
-  private val ZONES: Map[String, ZoneRulesProvider] =
+  private lazy val ZONES: Map[String, ZoneRulesProvider] =
     new HashMap[String, ZoneRulesProvider]()
 
   /** Gets the set of available zone IDs.

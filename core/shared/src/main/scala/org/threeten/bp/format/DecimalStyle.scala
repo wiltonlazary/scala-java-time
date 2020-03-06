@@ -51,10 +51,10 @@ object DecimalStyle {
     *
     * This uses standard ASCII characters for zero, positive, negative and a dot for the decimal point.
     */
-  val STANDARD: DecimalStyle = new DecimalStyle('0', '+', '-', '.')
+  lazy val STANDARD: DecimalStyle = new DecimalStyle('0', '+', '-', '.')
 
   /** The cache of symbols instances. */
-  private val CACHE: Map[Locale, DecimalStyle] =
+  private lazy val CACHE: Map[Locale, DecimalStyle] =
     new HashMap[Locale, DecimalStyle]()
 
   /** Lists all the locales that are supported.

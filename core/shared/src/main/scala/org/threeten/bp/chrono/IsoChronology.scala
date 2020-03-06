@@ -67,7 +67,7 @@ import org.threeten.bp.temporal.ValueRange
 object IsoChronology {
 
   /** Singleton instance of the ISO chronology. */
-  val INSTANCE: IsoChronology = new IsoChronology
+  lazy val INSTANCE: IsoChronology = new IsoChronology
 }
 
 /** The ISO calendar system.

@@ -57,29 +57,29 @@ object JapaneseEra {
   /** The singleton instance for the 'Meiji' era (1868-09-08 - 1912-07-29)
     * which has the value -1.
     */
-  val MEIJI: JapaneseEra = new JapaneseEra(-1, LocalDate.of(1868, 9, 8), "Meiji")
+  lazy val MEIJI: JapaneseEra = new JapaneseEra(-1, LocalDate.of(1868, 9, 8), "Meiji")
 
   /** The singleton instance for the 'Taisho' era (1912-07-30 - 1926-12-24)
     * which has the value 0.
     */
-  val TAISHO: JapaneseEra = new JapaneseEra(0, LocalDate.of(1912, 7, 30), "Taisho")
+  lazy val TAISHO: JapaneseEra = new JapaneseEra(0, LocalDate.of(1912, 7, 30), "Taisho")
 
   /** The singleton instance for the 'Showa' era (1926-12-25 - 1989-01-07)
     * which has the value 1.
     */
-  val SHOWA: JapaneseEra = new JapaneseEra(1, LocalDate.of(1926, 12, 25), "Showa")
+  lazy val SHOWA: JapaneseEra = new JapaneseEra(1, LocalDate.of(1926, 12, 25), "Showa")
 
   /** The singleton instance for the 'Heisei' era (1989-01-08 - current)
     * which has the value 2.
     */
-  val HEISEI: JapaneseEra = new JapaneseEra(2, LocalDate.of(1989, 1, 8), "Heisei")
+  lazy val HEISEI: JapaneseEra = new JapaneseEra(2, LocalDate.of(1989, 1, 8), "Heisei")
 
   /**
     * The value of the additional era.
     */
   private[chrono] val ADDITIONAL_VALUE: Int = 3
 
-  private[chrono] val KNOWN_ERAS: AtomicReference[Array[JapaneseEra]] = new AtomicReference(
+  private[chrono] lazy val KNOWN_ERAS: AtomicReference[Array[JapaneseEra]] = new AtomicReference(
     Array(MEIJI, TAISHO, SHOWA, HEISEI)
   )
 

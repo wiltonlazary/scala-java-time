@@ -73,14 +73,14 @@ object LocalDateTime {
     * This combines {@link LocalDate#MIN} and {@link LocalTime#MIN}.
     * This could be used by an application as a "far past" date-time.
     */
-  val MIN: LocalDateTime = LocalDateTime.of(LocalDate.MIN, LocalTime.MIN)
+  lazy val MIN: LocalDateTime = LocalDateTime.of(LocalDate.MIN, LocalTime.MIN)
 
   /** The maximum supported {@code LocalDateTime}, '+999999999-12-31T23:59:59.999999999'.
     * This is the local date-time just before midnight at the end of the maximum date.
     * This combines {@link LocalDate#MAX} and {@link LocalTime#MAX}.
     * This could be used by an application as a "far future" date-time.
     */
-  val MAX: LocalDateTime = LocalDateTime.of(LocalDate.MAX, LocalTime.MAX)
+  lazy val MAX: LocalDateTime = LocalDateTime.of(LocalDate.MAX, LocalTime.MAX)
 
   /** Obtains the current date-time from the system clock in the default time-zone.
     *

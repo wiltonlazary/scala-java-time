@@ -59,7 +59,7 @@ import org.threeten.bp.temporal.ValueRange
 object MonthDay {
 
   /** Parser. */
-  private val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder()
+  private lazy val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder()
     .appendLiteral("--")
     .appendValue(MONTH_OF_YEAR, 2)
     .appendLiteral('-')

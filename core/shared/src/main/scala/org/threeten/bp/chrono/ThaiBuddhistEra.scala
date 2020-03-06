@@ -42,12 +42,12 @@ object ThaiBuddhistEra {
   /** The singleton instance for the era before the current one, 'Before Buddhist Era',
     * which has the value 0.
     */
-  val BEFORE_BE = new ThaiBuddhistEra("BEFORE_BE", 0)
+  lazy val BEFORE_BE = new ThaiBuddhistEra("BEFORE_BE", 0)
 
   /** The singleton instance for the current era, 'Buddhist Era', which has the value 1. */
-  val BE = new ThaiBuddhistEra("BE", 1)
+  lazy val BE = new ThaiBuddhistEra("BE", 1)
 
-  val values: Array[ThaiBuddhistEra] = Array(BEFORE_BE, BE)
+  lazy val values: Array[ThaiBuddhistEra] = Array(BEFORE_BE, BE)
 
   /** Obtains an instance of {@code ThaiBuddhistEra} from a value.
     *

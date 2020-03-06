@@ -69,10 +69,10 @@ import org.threeten.bp.temporal.ValueRange
 object Year {
 
   /** The minimum supported year, '-999,999,999'. */
-  val MIN_VALUE: Int = -999999999
+  lazy val MIN_VALUE: Int = -999999999
 
   /** The maximum supported year, '+999,999,999'. */
-  val MAX_VALUE: Int = 999999999
+  lazy val MAX_VALUE: Int = 999999999
 
   /** Parser. */
   private lazy val PARSER: DateTimeFormatter =

@@ -41,7 +41,7 @@ import org.threeten.bp.chrono.Chronology
 private object SimpleDateTimeFormatStyleProvider {
 
   /** Cache of formatters. */
-  private val FORMATTER_CACHE: Map[String, AnyRef] =
+  private lazy val FORMATTER_CACHE: Map[String, AnyRef] =
     new HashMap[String, AnyRef]()
 }
 

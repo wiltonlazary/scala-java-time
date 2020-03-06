@@ -58,7 +58,7 @@ object WeekFields {
   /** The cache of rules by firstDayOfWeek plus minimalDays.
     * Initialized first to be available for definition of ISO, etc.
     */
-  private val CACHE: Map[String, WeekFields] =
+  private lazy val CACHE: Map[String, WeekFields] =
     new HashMap[String, WeekFields]()
 
   /** The ISO-8601 definition, where a week starts on Monday and the first week
@@ -72,7 +72,7 @@ object WeekFields {
     * Note also that the first few days of a calendar year may be in the
     * week-based-year corresponding to the previous calendar year.
     */
-  val ISO: WeekFields = new WeekFields(DayOfWeek.MONDAY, 4)
+  lazy val ISO: WeekFields = new WeekFields(DayOfWeek.MONDAY, 4)
 
   /** The common definition of a week that starts on Sunday.
     *
@@ -80,7 +80,7 @@ object WeekFields {
     * This week definition is in use in the US and other European countries.
     *
     */
-  val SUNDAY_START: WeekFields = WeekFields.of(DayOfWeek.SUNDAY, 1)
+  lazy val SUNDAY_START: WeekFields = WeekFields.of(DayOfWeek.SUNDAY, 1)
 
   /** Obtains an instance of {@code WeekFields} appropriate for a locale.
     *
@@ -197,11 +197,11 @@ object WeekFields {
                                         ChronoUnit.FOREVER,
                                         WEEK_BASED_YEAR_RANGE)
 
-    private val DAY_OF_WEEK_RANGE: ValueRange             = ValueRange.of(1, 7)
-    private val WEEK_OF_MONTH_RANGE: ValueRange           = ValueRange.of(0, 1, 4, 6)
-    private val WEEK_OF_YEAR_RANGE: ValueRange            = ValueRange.of(0, 1, 52, 54)
-    private val WEEK_OF_WEEK_BASED_YEAR_RANGE: ValueRange = ValueRange.of(1, 52, 53)
-    private val WEEK_BASED_YEAR_RANGE: ValueRange         = YEAR.range
+    private lazy val DAY_OF_WEEK_RANGE: ValueRange             = ValueRange.of(1, 7)
+    private lazy val WEEK_OF_MONTH_RANGE: ValueRange           = ValueRange.of(0, 1, 4, 6)
+    private lazy val WEEK_OF_YEAR_RANGE: ValueRange            = ValueRange.of(0, 1, 52, 54)
+    private lazy val WEEK_OF_WEEK_BASED_YEAR_RANGE: ValueRange = ValueRange.of(1, 52, 53)
+    private lazy val WEEK_BASED_YEAR_RANGE: ValueRange         = YEAR.range
   }
 
   private[temporal] class ComputedDayOfField(

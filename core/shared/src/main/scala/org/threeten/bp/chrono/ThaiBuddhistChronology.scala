@@ -54,7 +54,7 @@ import org.threeten.bp.temporal.ValueRange
 object ThaiBuddhistChronology {
 
   /** Singleton instance of the Buddhist chronology. */
-  val INSTANCE: ThaiBuddhistChronology = new ThaiBuddhistChronology
+  lazy val INSTANCE: ThaiBuddhistChronology = new ThaiBuddhistChronology
 
   /** Containing the offset to add to the ISO year. */
   private[chrono] val YEARS_DIFFERENCE: Int = 543

@@ -66,7 +66,7 @@ import org.threeten.bp.temporal.ValueRange
 object HijrahChronology {
 
   /** Singleton instance of the Hijrah chronology. */
-  val INSTANCE: HijrahChronology = new HijrahChronology
+  lazy val INSTANCE: HijrahChronology = new HijrahChronology
 
   /** Fallback language for the era names. */
   // private val FALLBACK_LANGUAGE: String = "en"

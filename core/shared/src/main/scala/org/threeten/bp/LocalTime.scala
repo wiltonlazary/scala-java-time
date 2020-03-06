@@ -64,7 +64,7 @@ import org.threeten.bp.temporal.ValueRange
 object LocalTime {
 
   /** Constants for the local time of each hour. */
-  private val HOURS: Array[LocalTime] = {
+  private lazy val HOURS: Array[LocalTime] = {
     val hours  = new Array[LocalTime](24)
     var i: Int = 0
     while (i < hours.length) {
@@ -77,18 +77,18 @@ object LocalTime {
   /** The minimum supported {@code LocalTime}, '00:00'.
     * This is the time of midnight at the start of the day.
     */
-  val MIN: LocalTime = HOURS(0)
+  lazy val MIN: LocalTime = HOURS(0)
 
   /** The maximum supported {@code LocalTime}, '23:59:59.999999999'.
     * This is the time just before midnight at the end of the day.
     */
-  val MAX: LocalTime = new LocalTime(23, 59, 59, 999999999)
+  lazy val MAX: LocalTime = new LocalTime(23, 59, 59, 999999999)
 
   /** The time of midnight at the start of the day, '00:00'. */
-  val MIDNIGHT: LocalTime = HOURS(0)
+  lazy val MIDNIGHT: LocalTime = HOURS(0)
 
   /** The time of noon in the middle of the day, '12:00'. */
-  val NOON: LocalTime = HOURS(12)
+  lazy val NOON: LocalTime = HOURS(12)
 
   /** Hours per day. */
   private[bp] val HOURS_PER_DAY: Int = 24

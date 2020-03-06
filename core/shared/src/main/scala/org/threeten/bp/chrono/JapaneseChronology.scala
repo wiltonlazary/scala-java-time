@@ -67,7 +67,7 @@ object JapaneseChronology {
   private[chrono] val LOCALE: Locale = new Locale("ja", "JP", "JP")
 
   /** Singleton instance for Japanese chronology. */
-  val INSTANCE: JapaneseChronology = new JapaneseChronology
+  lazy val INSTANCE: JapaneseChronology = new JapaneseChronology
 
   /** Fallback language for the era names. */
   // private val FALLBACK_LANGUAGE: String = "en"

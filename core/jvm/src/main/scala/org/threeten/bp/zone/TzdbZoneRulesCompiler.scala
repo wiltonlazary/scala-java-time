@@ -55,7 +55,7 @@ import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 object TzdbZoneRulesCompiler {
 
   /** Time parser. */
-  private val TIME_PARSER: DateTimeFormatter = new DateTimeFormatterBuilder()
+  private lazy val TIME_PARSER: DateTimeFormatter = new DateTimeFormatterBuilder()
     .appendValue(HOUR_OF_DAY)
     .optionalStart()
     .appendLiteral(':')

@@ -93,7 +93,7 @@ object ZoneId {
     * </ul><p>
     * The map is unmodifiable.
     */
-  val SHORT_IDS: java.util.Map[String, String] = {
+  lazy val SHORT_IDS: java.util.Map[String, String] = {
     val base = Map[String, String](
       "ACT" -> "Australia/Darwin",
       "AET" -> "Australia/Sydney",

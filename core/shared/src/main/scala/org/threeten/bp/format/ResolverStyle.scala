@@ -53,7 +53,7 @@ object ResolverStyle {
     * system using strict mode will ensure that the day-of-month is valid
     * for the year-month, rejecting invalid values.
     */
-  val STRICT = new ResolverStyle("STRICT", 0)
+  lazy val STRICT = new ResolverStyle("STRICT", 0)
 
   /** Style to resolve dates and times in a smart, or intelligent, manner.
     *
@@ -66,7 +66,7 @@ object ResolverStyle {
     * 1 to 31, converting any value beyond the last valid day-of-month to be
     * the last valid day-of-month.
     */
-  val SMART = new ResolverStyle("SMART", 1)
+  lazy val SMART = new ResolverStyle("SMART", 1)
 
   /** Style to resolve dates and times leniently.
     *
@@ -77,7 +77,7 @@ object ResolverStyle {
     * to be outside the range 1 to 12.
     * For example, month 15 is treated as being 3 months after month 12.
     */
-  val LENIENT = new ResolverStyle("LENIENT", 2)
+  lazy val LENIENT = new ResolverStyle("LENIENT", 2)
 }
 
 final class ResolverStyle(name: String, ordinal: Int) extends Enum[ResolverStyle](name, ordinal)

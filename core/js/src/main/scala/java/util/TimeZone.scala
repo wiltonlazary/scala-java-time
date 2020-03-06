@@ -2,7 +2,7 @@ package java.util
 
 import java.text.DateFormatSymbols
 
-import java.time.{Instant, ZoneId}
+import java.time.{ Instant, ZoneId }
 import java.time.zone.ZoneRulesProvider
 
 import scala.collection.JavaConverters._
@@ -33,20 +33,20 @@ object TimeZone {
     }
 
     def timeZone: String = {
-      def browserTZ: Try[String] = {
+      def browserTZ: Try[String] =
         Try {
           val browserDate = new scalajs.js.Date()
           browserDate.toTimeString().split(' ')(1).takeWhile(e => e != ' ')
         }
-      }
 
       Try {
         // First try with the intl API
         new DateTimeFormat().resolvedOptions().timeZone.getOrElse(browserTZ.getOrElse("UTC"))
       }.orElse {
-        // If it fails try to parse it from the date string
-        browserTZ
-      }.getOrElse("UTC") // Fallback to UTC
+          // If it fails try to parse it from the date string
+          browserTZ
+        }
+        .getOrElse("UTC") // Fallback to UTC
     }
 
     new SimpleTimeZone(offsetInMillis, timeZone)
@@ -56,8 +56,8 @@ object TimeZone {
   def setDefault(timeZone: TimeZone): Unit = default = timeZone
 
   def getTimeZone(timeZone: String): TimeZone = getTimeZone(ZoneId.of(timeZone))
-  def getTimeZone(zoneId: ZoneId): TimeZone   = {
-    val rules = zoneId.getRules
+  def getTimeZone(zoneId:   ZoneId): TimeZone = {
+    val rules          = zoneId.getRules
     val offsetInMillis = rules.getStandardOffset(Instant.now).getTotalSeconds * 1000
     new SimpleTimeZone(offsetInMillis, zoneId.getId)
   }
@@ -89,10 +89,9 @@ abstract class TimeZone extends Serializable with Cloneable {
       throw new IllegalArgumentException(s"Illegal timezone style: $style")
 
     // Safely looks up given index in the array
-    def atIndex(strs: Array[String], idx: Int): Option[String] = {
+    def atIndex(strs: Array[String], idx: Int): Option[String] =
       if (idx >= 0 && idx < strs.length) Option(strs(idx))
       else None
-    }
 
     val id = getID
     def currentIdStrings(strs: Array[String]): Boolean =
@@ -103,8 +102,8 @@ abstract class TimeZone extends Serializable with Cloneable {
       (daylight, style) match {
         case (false, TimeZone.LONG)  => atIndex(strs, 1)
         case (false, TimeZone.SHORT) => atIndex(strs, 2)
-        case (true,  TimeZone.LONG)  => atIndex(strs, 3)
-        case (true,  TimeZone.SHORT) => atIndex(strs, 4)
+        case (true, TimeZone.LONG)   => atIndex(strs, 3)
+        case (true, TimeZone.SHORT)  => atIndex(strs, 4)
         case _                       => None
       }
     }
@@ -118,7 +117,7 @@ abstract class TimeZone extends Serializable with Cloneable {
   def getDisplayName(daylight: Boolean, style: Int): String =
     getDisplayName(daylight, style, Locale.getDefault(Locale.Category.DISPLAY))
 
-  def	getDisplayName(locale: Locale): String =
+  def getDisplayName(locale: Locale): String =
     getDisplayName(daylight = false, TimeZone.LONG, locale)
 
   def getDisplayName: String =

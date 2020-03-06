@@ -31,10 +31,10 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test ZoneOffset. */
-class TestZoneOffsetSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestZoneOffsetSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("serialization") {
     assertSerializable(ZoneOffset.of("+01:30"))
     assertSerializable(ZoneOffset.of("-02:30"))

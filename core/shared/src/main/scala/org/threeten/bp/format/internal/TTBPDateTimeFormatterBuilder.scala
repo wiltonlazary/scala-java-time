@@ -1,12 +1,12 @@
 package org.threeten.bp.format.internal
 
-import java.math.{BigDecimal, BigInteger, RoundingMode}
+import java.math.{ BigDecimal, BigInteger, RoundingMode }
 import java.util._
 import java.lang.StringBuilder
 import java.lang.Long
 
 import org.threeten.bp._
-import org.threeten.bp.chrono.{ChronoLocalDate, Chronology}
+import org.threeten.bp.chrono.{ ChronoLocalDate, Chronology }
 import org.threeten.bp.format.DateTimeFormatterBuilder.LENGTH_SORT
 import org.threeten.bp.format._
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder.ZoneIdPrinterParser.SubstringTree
@@ -16,6 +16,7 @@ import org.threeten.bp.zone.ZoneRulesProvider
 import scala.annotation.tailrec
 
 object TTBPDateTimeFormatterBuilder {
+
   /** Strategy for printing/parsing date-time information.
     *
     * The printer may print any part, or the whole, of the input date-time object.
@@ -43,6 +44,7 @@ object TTBPDateTimeFormatterBuilder {
     * variable or shared with any other threads.
     */
   private[format] trait DateTimePrinterParser {
+
     /** Prints the date-time object to the buffer.
       *
       * The context holds information to use during the print.
@@ -74,12 +76,14 @@ object TTBPDateTimeFormatterBuilder {
   }
 
   /** Composite printer and parser. */
-  private[format] final class CompositePrinterParser private[format](private val printerParsers: Array[DateTimePrinterParser], private val optional: Boolean) extends DateTimePrinterParser {
+  private[format] final class CompositePrinterParser private[format] (
+    private val printerParsers: Array[DateTimePrinterParser],
+    private val optional:       Boolean
+  ) extends DateTimePrinterParser {
 
     private[format] def this(printerParsers: List[DateTimePrinterParser], optional: Boolean) {
       this(printerParsers.toArray(new Array[DateTimePrinterParser](printerParsers.size)), optional)
     }
-
 
     /** Returns a copy of this printer-parser with the optional flag changed.
       *
@@ -112,7 +116,7 @@ object TTBPDateTimeFormatterBuilder {
     }
 
     def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int = {
-      var _position = position
+      val _position = position
 
       if (optional) {
         context.startOptional()
@@ -126,8 +130,7 @@ object TTBPDateTimeFormatterBuilder {
         }
         context.endOptional(true)
         pos
-      }
-      else {
+      } else {
         printerParsers.foldLeft(_position) {
           case (pos, _) if pos < 0 =>
             pos
@@ -160,7 +163,11 @@ object TTBPDateTimeFormatterBuilder {
     * @param padWidth  the width to pad to, 1 or greater
     * @param padChar  the pad character
     */
-  private[format] final class PadPrinterParserDecorator private[format](private val printerParser: DateTimePrinterParser, private val padWidth: Int, private val padChar: Char) extends DateTimePrinterParser {
+  private[format] final class PadPrinterParserDecorator private[format] (
+    private val printerParser: DateTimePrinterParser,
+    private val padWidth:      Int,
+    private val padChar:       Char
+  ) extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val preLen: Int = buf.length
@@ -168,7 +175,9 @@ object TTBPDateTimeFormatterBuilder {
         return false
       val len: Int = buf.length - preLen
       if (len > padWidth)
-        throw new DateTimeException(s"Cannot print as output of $len characters exceeds pad width of $padWidth")
+        throw new DateTimeException(
+          s"Cannot print as output of $len characters exceeds pad width of $padWidth"
+        )
       var i: Int = 0
       while (i < padWidth - len) {
         buf.insert(preLen, padChar)
@@ -178,8 +187,8 @@ object TTBPDateTimeFormatterBuilder {
     }
 
     def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int = {
-      var _text = text
-      val strict: Boolean = context.isStrict
+      var _text                  = text
+      val strict: Boolean        = context.isStrict
       val caseSensitive: Boolean = context.isCaseSensitive
       if (position > _text.length)
         throw new IndexOutOfBoundsException
@@ -192,7 +201,8 @@ object TTBPDateTimeFormatterBuilder {
         endPos = _text.length
       }
       var pos: Int = position
-      while (pos < endPos && (if (caseSensitive) _text.charAt(pos) == padChar else context.charEquals(_text.charAt(pos), padChar))) {
+      while (pos < endPos && (if (caseSensitive) _text.charAt(pos) == padChar
+                              else context.charEquals(_text.charAt(pos), padChar))) {
         pos += 1
       }
       _text = _text.subSequence(0, endPos)
@@ -202,7 +212,8 @@ object TTBPDateTimeFormatterBuilder {
       resultPos
     }
 
-    override def toString: String = s"Pad($printerParser,$padWidth${if (padChar == ' ') ")" else ",'" + padChar + "')"}"
+    override def toString: String =
+      s"Pad($printerParser,$padWidth${if (padChar == ' ') ")" else ",'" + padChar + "')"}"
   }
 
   /** Enumeration to apply simple parse settings. */
@@ -213,7 +224,9 @@ object TTBPDateTimeFormatterBuilder {
     lazy val LENIENT     = new SettingsParser("LENIENT", 3)
   }
 
-  private[format] final class SettingsParser private(name: String, ordinal: Int) extends Enum[SettingsParser](name, ordinal) with DateTimePrinterParser {
+  private[format] final class SettingsParser private (name: String, ordinal: Int)
+      extends Enum[SettingsParser](name, ordinal)
+      with DateTimePrinterParser {
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = true
 
     def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int = {
@@ -237,7 +250,10 @@ object TTBPDateTimeFormatterBuilder {
   }
 
   /** Used by parseDefaulting(). */
-  private[format] class DefaultingParser private[format](private val field: TemporalField, private val value: Long) extends DateTimePrinterParser {
+  private[format] class DefaultingParser private[format] (
+    private val field: TemporalField,
+    private val value: Long
+  ) extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = true
 
@@ -249,7 +265,8 @@ object TTBPDateTimeFormatterBuilder {
   }
 
   /** Prints or parses a character literal. */
-  final class CharLiteralPrinterParser private[format](private val literal: Char) extends DateTimePrinterParser {
+  final class CharLiteralPrinterParser private[format] (private val literal: Char)
+      extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       buf.append(literal)
@@ -275,8 +292,11 @@ object TTBPDateTimeFormatterBuilder {
       if (literal == '\'') "''"
       else s"'$literal'"
   }
+
   /** Prints or parses a string literal. */
-  private[format] final class StringLiteralPrinterParser private[format](private val literal: String) extends DateTimePrinterParser {
+  private[format] final class StringLiteralPrinterParser private[format] (
+    private val literal: String
+  ) extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       buf.append(literal)
@@ -301,24 +321,28 @@ object TTBPDateTimeFormatterBuilder {
 
   /** Prints and parses a numeric date-time field with optional padding. */
   private[format] object NumberPrinterParser {
+
     /** Array of 10 to the power of n. */
-    private[format] val EXCEED_POINTS: Array[Int] = Array[Int](0, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000)
+    private[format] val EXCEED_POINTS: Array[Int] =
+      Array[Int](0, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000)
   }
 
-    /** @constructor
-      *
-      * @param field  the field to print, not null
-      * @param minWidth  the minimum field width, from 1 to 19
-      * @param maxWidth  the maximum field width, from minWidth to 19
-      * @param signStyle  the positive/negative sign style, not null
-      * @param subsequentWidth  the width of subsequent non-negative numbers, 0 or greater,
-      *                         -1 if fixed width due to active adjacent parsing
-      */
-  private[format] class NumberPrinterParser private[format](private[format] val field: TemporalField,
-                                                            private[format] val minWidth: Int,
-                                                            private[format] val maxWidth: Int,
-                                                            private[format] val signStyle: SignStyle,
-                                                            private[format] val subsequentWidth: Int) extends DateTimePrinterParser {
+  /** @constructor
+    *
+    * @param field  the field to print, not null
+    * @param minWidth  the minimum field width, from 1 to 19
+    * @param maxWidth  the maximum field width, from minWidth to 19
+    * @param signStyle  the positive/negative sign style, not null
+    * @param subsequentWidth  the width of subsequent non-negative numbers, 0 or greater,
+    *                         -1 if fixed width due to active adjacent parsing
+    */
+  private[format] class NumberPrinterParser private[format] (
+    private[format] val field:           TemporalField,
+    private[format] val minWidth:        Int,
+    private[format] val maxWidth:        Int,
+    private[format] val signStyle:       SignStyle,
+    private[format] val subsequentWidth: Int
+  ) extends DateTimePrinterParser {
 
     /** @constructor
       *
@@ -327,7 +351,12 @@ object TTBPDateTimeFormatterBuilder {
       * @param maxWidth  the maximum field width, from minWidth to 19
       * @param signStyle  the positive/negative sign style, not null
       */
-    private[format] def this(field: TemporalField, minWidth: Int, maxWidth: Int, signStyle: SignStyle) {
+    private[format] def this(
+      field:     TemporalField,
+      minWidth:  Int,
+      maxWidth:  Int,
+      signStyle: SignStyle
+    ) {
       this(field, minWidth, maxWidth, signStyle, 0)
     }
 
@@ -347,17 +376,24 @@ object TTBPDateTimeFormatterBuilder {
       * @return a new updated printer-parser, not null
       */
     private[format] def withSubsequentWidth(subsequentWidth: Int): NumberPrinterParser =
-      new NumberPrinterParser(field, minWidth, maxWidth, signStyle, this.subsequentWidth + subsequentWidth)
+      new NumberPrinterParser(field,
+                              minWidth,
+                              maxWidth,
+                              signStyle,
+                              this.subsequentWidth + subsequentWidth)
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val valueLong: java.lang.Long = context.getValue(field)
       if (valueLong == null)
         return false
-      val value: Long = getValue(context, valueLong)
+      val value: Long           = getValue(context, valueLong)
       val symbols: DecimalStyle = context.getSymbols
-      var str: String = if (value == scala.Long.MinValue) "9223372036854775808" else Math.abs(value).toString
+      var str: String =
+        if (value == scala.Long.MinValue) "9223372036854775808" else Math.abs(value).toString
       if (str.length > maxWidth)
-        throw new DateTimeException(s"Field $field cannot be printed as the value $value exceeds the maximum print width of $maxWidth")
+        throw new DateTimeException(
+          s"Field $field cannot be printed as the value $value exceeds the maximum print width of $maxWidth"
+        )
       str = symbols.convertNumberToI18N(str)
 
       import SignStyle._
@@ -366,26 +402,27 @@ object TTBPDateTimeFormatterBuilder {
           case EXCEEDS_PAD =>
             if (minWidth < 19 && value >= NumberPrinterParser.EXCEED_POINTS(minWidth))
               buf.append(symbols.getPositiveSign)
-          case ALWAYS      =>
+          case ALWAYS =>
             buf.append(symbols.getPositiveSign)
-          case _           =>
+          case _ =>
         }
-      }
-      else {
+      } else {
         signStyle match {
           case NORMAL | EXCEEDS_PAD | ALWAYS =>
             buf.append(symbols.getNegativeSign)
-          case NOT_NEGATIVE                  =>
-            throw new DateTimeException(s"Field $field cannot be printed as the value $value cannot be negative according to the SignStyle")
-          case _                             =>
+          case NOT_NEGATIVE =>
+            throw new DateTimeException(
+              s"Field $field cannot be printed as the value $value cannot be negative according to the SignStyle"
+            )
+          case _ =>
         }
       }
 
-       var i: Int = 0
-       while (i < minWidth - str.length) {
-         buf.append(symbols.getZeroDigit)
-         i += 1
-       }
+      var i: Int = 0
+      while (i < minWidth - str.length) {
+        buf.append(symbols.getZeroDigit)
+        i += 1
+      }
 
       buf.append(str)
       true
@@ -397,10 +434,14 @@ object TTBPDateTimeFormatterBuilder {
       * @param value  the value of the field, not null
       * @return the value
       */
-    private[format] def getValue(context: TTBPDateTimePrintContext, value: Long): Long = value
+    protected[format] def getValue(context: TTBPDateTimePrintContext, value: Long): Long =
+      if (context != null) value else value
 
-    private[format] def isFixedWidth(context: TTBPDateTimeParseContext): Boolean =
-      subsequentWidth == -1 || (subsequentWidth > 0 && minWidth == maxWidth && (signStyle eq SignStyle.NOT_NEGATIVE))
+    protected[format] def isFixedWidth(context: TTBPDateTimeParseContext): Boolean =
+      if (context != null)
+        subsequentWidth == -1 || (subsequentWidth > 0 && minWidth == maxWidth && (signStyle eq SignStyle.NOT_NEGATIVE))
+      else
+        subsequentWidth == -1 || (subsequentWidth > 0 && minWidth == maxWidth && (signStyle eq SignStyle.NOT_NEGATIVE))
 
     def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int = {
       var _position = position
@@ -411,7 +452,7 @@ object TTBPDateTimeFormatterBuilder {
       if (_position < 0 || position > length) {
         throw new StringIndexOutOfBoundsException
       }
-      val sign: Char = text.charAt(_position)
+      val sign: Char        = text.charAt(_position)
       var negative: Boolean = false
       var positive: Boolean = false
       if (sign == context.getSymbols.getPositiveSign) {
@@ -419,31 +460,31 @@ object TTBPDateTimeFormatterBuilder {
           return ~_position
         positive = true
         _position += 1
-      }
-      else if (sign == context.getSymbols.getNegativeSign) {
+      } else if (sign == context.getSymbols.getNegativeSign) {
         if (!signStyle.parse(false, context.isStrict, minWidth == maxWidth))
           return ~_position
         negative = true
         _position += 1
-      }
-      else {
+      } else {
         if ((signStyle eq SignStyle.ALWAYS) && context.isStrict)
           return ~_position
       }
       val effMinWidth: Int = if (context.isStrict || isFixedWidth(context)) minWidth else 1
-      val minEndPos: Int = _position + effMinWidth
+      val minEndPos: Int   = _position + effMinWidth
       if (minEndPos > length)
         return ~_position
-      var effMaxWidth: Int = (if (context.isStrict || isFixedWidth(context)) maxWidth else 9) + Math.max(subsequentWidth, 0)
-      var total: Long = 0
+      var effMaxWidth: Int =
+        (if (context.isStrict || isFixedWidth(context)) maxWidth else 9) + Math.max(subsequentWidth,
+                                                                                    0)
+      var total: Long          = 0
       var totalBig: BigInteger = null
-      var pos: Int = _position
+      var pos: Int             = _position
 
-      var pass: Int = 0
+      var pass: Int  = 0
       var outerBreak = false
       while (!outerBreak && pass < 2) {
         val maxEndPos: Int = Math.min(pos + effMaxWidth, length)
-        var break = false
+        var break          = false
         while (!break && pos < maxEndPos) {
           val ch: Char = text.charAt(pos)
           pos += 1
@@ -460,7 +501,7 @@ object TTBPDateTimeFormatterBuilder {
               if (totalBig == null) {
                 totalBig = BigInteger.valueOf(total)
               }
-              totalBig = totalBig.multiply(BigInteger.TEN).add(BigInteger.valueOf(digit))
+              totalBig = totalBig.multiply(BigInteger.TEN).add(BigInteger.valueOf(digit.toLong))
             } else {
               total = total * 10 + digit
             }
@@ -469,9 +510,9 @@ object TTBPDateTimeFormatterBuilder {
         if (subsequentWidth > 0 && pass == 0) {
           val parseLen: Int = pos - _position
           effMaxWidth = Math.max(effMinWidth, parseLen - subsequentWidth)
-          pos = _position
-          total = 0
-          totalBig = null
+          pos         = _position
+          total       = 0
+          totalBig    = null
           pass += 1
         } else {
           outerBreak = true
@@ -483,22 +524,19 @@ object TTBPDateTimeFormatterBuilder {
             return ~(_position - 1)
           }
           totalBig = totalBig.negate
-        }
-        else {
+        } else {
           if (total == 0 && context.isStrict) {
             return ~(_position - 1)
           }
           total = -total
         }
-      }
-      else if ((signStyle eq SignStyle.EXCEEDS_PAD) && context.isStrict) {
+      } else if ((signStyle eq SignStyle.EXCEEDS_PAD) && context.isStrict) {
         val parseLen: Int = pos - _position
         if (positive) {
           if (parseLen <= minWidth) {
             return ~(_position - 1)
           }
-        }
-        else {
+        } else {
           if (parseLen > minWidth) {
             return ~_position
           }
@@ -522,7 +560,12 @@ object TTBPDateTimeFormatterBuilder {
       * @param successPos  the position after the field being parsed
       * @return the new position
       */
-    private[format] def setValue(context: TTBPDateTimeParseContext, value: Long, errorPos: Int, successPos: Int): Int =
+    private[format] def setValue(
+      context:    TTBPDateTimeParseContext,
+      value:      Long,
+      errorPos:   Int,
+      successPos: Int
+    ): Int =
       context.setParsedField(field, value, errorPos, successPos)
 
     override def toString: String =
@@ -539,40 +582,60 @@ object TTBPDateTimeFormatterBuilder {
     private[format] val BASE_DATE: LocalDate = LocalDate.of(2000, 1, 1)
   }
 
-    /** @constructor
-      *
-      * @param field  the field to print, validated not null
-      * @param minWidth  the field width, from 1 to 10
-      * @param maxWidth  the field max width, from 1 to 10
-      * @param baseValue  the base value
-      * @param baseDate  the base date
-      */
-  private[format] final class ReducedPrinterParser private[format](field: TemporalField,
-                                                                   minWidth: Int,
-                                                                   maxWidth: Int,
-                                                                   private val baseValue: Int,
-                                                                   private val baseDate: ChronoLocalDate,
-                                                                   subsequentWidth: Int)
-      extends NumberPrinterParser(field, minWidth, maxWidth, SignStyle.NOT_NEGATIVE, subsequentWidth) {
+  /** @constructor
+    *
+    * @param field  the field to print, validated not null
+    * @param minWidth  the field width, from 1 to 10
+    * @param maxWidth  the field max width, from 1 to 10
+    * @param baseValue  the base value
+    * @param baseDate  the base date
+    */
+  private[format] final class ReducedPrinterParser private[format] (
+    field:                 TemporalField,
+    minWidth:              Int,
+    maxWidth:              Int,
+    private val baseValue: Int,
+    private val baseDate:  ChronoLocalDate,
+    subsequentWidth:       Int
+  ) extends NumberPrinterParser(field,
+                                  minWidth,
+                                  maxWidth,
+                                  SignStyle.NOT_NEGATIVE,
+                                  subsequentWidth) {
 
-      if (minWidth < 1 || minWidth > 10)
-        throw new IllegalArgumentException(s"The width must be from 1 to 10 inclusive but was $minWidth")
-      if (maxWidth < 1 || maxWidth > 10)
-        throw new IllegalArgumentException(s"The maxWidth must be from 1 to 10 inclusive but was $maxWidth")
-      if (maxWidth < minWidth)
-        throw new IllegalArgumentException("The maxWidth must be greater than the width")
-      if (baseDate == null){
-        if (!field.range.isValidValue(baseValue))
-          throw new IllegalArgumentException("The base value must be within the range of the field")
-        if ((baseValue.toLong + NumberPrinterParser.EXCEED_POINTS(minWidth)) > Int.MaxValue)
-          throw new DateTimeException("Unable to add printer-parser as the range exceeds the capacity of an int")
-      }
+    if (minWidth < 1 || minWidth > 10)
+      throw new IllegalArgumentException(
+        s"The width must be from 1 to 10 inclusive but was $minWidth"
+      )
+    if (maxWidth < 1 || maxWidth > 10)
+      throw new IllegalArgumentException(
+        s"The maxWidth must be from 1 to 10 inclusive but was $maxWidth"
+      )
+    if (maxWidth < minWidth)
+      throw new IllegalArgumentException("The maxWidth must be greater than the width")
+    if (baseDate == null) {
+      if (!field.range.isValidValue(baseValue.toLong))
+        throw new IllegalArgumentException("The base value must be within the range of the field")
+      if ((baseValue.toLong + NumberPrinterParser.EXCEED_POINTS(minWidth)) > Int.MaxValue)
+        throw new DateTimeException(
+          "Unable to add printer-parser as the range exceeds the capacity of an int"
+        )
+    }
 
-    private[format] def this(field: TemporalField, minWidth: Int, maxWidth: Int, baseValue: Int, baseDate: ChronoLocalDate) {
+    private[format] def this(
+      field:     TemporalField,
+      minWidth:  Int,
+      maxWidth:  Int,
+      baseValue: Int,
+      baseDate:  ChronoLocalDate
+    ) {
       this(field, minWidth, maxWidth, baseValue, baseDate, 0)
     }
 
-    private[format] override def getValue(context: TTBPDateTimePrintContext, value: Long): Long = {
+    protected[format] override def getValue(
+      context: TTBPDateTimePrintContext,
+      value:   Long
+    ): Long = {
       val absValue: Long = Math.abs(value)
       var baseValue: Int = this.baseValue
       if (baseDate != null) {
@@ -585,7 +648,12 @@ object TTBPDateTimeFormatterBuilder {
       absValue % NumberPrinterParser.EXCEED_POINTS(maxWidth)
     }
 
-    private[format] override def setValue(context: TTBPDateTimeParseContext, value: Long, errorPos: Int, successPos: Int): Int = {
+    private[format] override def setValue(
+      context:    TTBPDateTimeParseContext,
+      value:      Long,
+      errorPos:   Int,
+      successPos: Int
+    ): Int = {
       var _value = value
 
       var baseValue: Int = this.baseValue
@@ -596,13 +664,12 @@ object TTBPDateTimeFormatterBuilder {
       }
       val parseLen: Int = successPos - errorPos
       if (parseLen == minWidth && _value >= 0) {
-        val range: Long = NumberPrinterParser.EXCEED_POINTS(minWidth)
+        val range: Long    = NumberPrinterParser.EXCEED_POINTS(minWidth)
         val lastPart: Long = baseValue % range
         val basePart: Long = baseValue - lastPart
         if (baseValue > 0) {
           _value = basePart + _value
-        }
-        else {
+        } else {
           _value = basePart - _value
         }
         if (_value < baseValue) {
@@ -619,18 +686,21 @@ object TTBPDateTimeFormatterBuilder {
         new ReducedPrinterParser(field, minWidth, maxWidth, baseValue, baseDate, -1)
 
     private[format] override def withSubsequentWidth(subsequentWidth: Int): ReducedPrinterParser =
-      new ReducedPrinterParser(field, minWidth, maxWidth, baseValue, baseDate, this.subsequentWidth + subsequentWidth)
+      new ReducedPrinterParser(field,
+                               minWidth,
+                               maxWidth,
+                               baseValue,
+                               baseDate,
+                               this.subsequentWidth + subsequentWidth)
 
-    private[format] override def isFixedWidth(context: TTBPDateTimeParseContext): Boolean = {
+    protected[format] override def isFixedWidth(context: TTBPDateTimeParseContext): Boolean =
       if (!context.isStrict)
         false
       else
         super.isFixedWidth(context)
-    }
 
-    override def toString: String = {
+    override def toString: String =
       s"ReducedValue($field,$minWidth,$maxWidth,${if (baseDate != null) baseDate else baseValue})"
-    }
   }
 
   /** Prints and parses a numeric date-time field with optional padding.
@@ -642,20 +712,27 @@ object TTBPDateTimeFormatterBuilder {
     * @param maxWidth  the maximum width to output, from 0 to 9
     * @param decimalPoint  whether to output the localized decimal point symbol
     */
-  private[format] final class FractionPrinterParser private[format](private val field: TemporalField,
-                                                                    private val minWidth: Int,
-                                                                    private val maxWidth: Int,
-                                                                    private val decimalPoint: Boolean)
-    extends DateTimePrinterParser {
+  private[format] final class FractionPrinterParser private[format] (
+    private val field:        TemporalField,
+    private val minWidth:     Int,
+    private val maxWidth:     Int,
+    private val decimalPoint: Boolean
+  ) extends DateTimePrinterParser {
     Objects.requireNonNull(field, "field")
     if (!field.range.isFixed)
       throw new IllegalArgumentException(s"Field must have a fixed set of values: $field")
     if (minWidth < 0 || minWidth > 9)
-      throw new IllegalArgumentException(s"Minimum width must be from 0 to 9 inclusive but was $minWidth")
+      throw new IllegalArgumentException(
+        s"Minimum width must be from 0 to 9 inclusive but was $minWidth"
+      )
     if (maxWidth < 1 || maxWidth > 9)
-      throw new IllegalArgumentException(s"Maximum width must be from 1 to 9 inclusive but was $maxWidth")
+      throw new IllegalArgumentException(
+        s"Maximum width must be from 1 to 9 inclusive but was $maxWidth"
+      )
     if (maxWidth < minWidth)
-      throw new IllegalArgumentException(s"Maximum width must exceed or equal the minimum width but $maxWidth < $minWidth")
+      throw new IllegalArgumentException(
+        s"Maximum width must exceed or equal the minimum width but $maxWidth < $minWidth"
+      )
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val value: java.lang.Long = context.getValue(field)
@@ -663,7 +740,7 @@ object TTBPDateTimeFormatterBuilder {
         return false
       }
       val symbols: DecimalStyle = context.getSymbols
-      var fraction: BigDecimal = convertToFraction(value)
+      var fraction: BigDecimal  = convertToFraction(value)
       if (fraction.scale == 0) {
         if (minWidth > 0) {
           if (decimalPoint)
@@ -674,8 +751,7 @@ object TTBPDateTimeFormatterBuilder {
             i += 1
           }
         }
-      }
-      else {
+      } else {
         val outputScale: Int = Math.min(Math.max(fraction.scale, minWidth), maxWidth)
         fraction = fraction.setScale(outputScale, RoundingMode.FLOOR)
         var str: String = fraction.toPlainString.substring(2)
@@ -693,7 +769,7 @@ object TTBPDateTimeFormatterBuilder {
 
       val effectiveMin: Int = if (context.isStrict) minWidth else 0
       val effectiveMax: Int = if (context.isStrict) maxWidth else 9
-      val length: Int = text.length
+      val length: Int       = text.length
       if (_position == length)
         return if (effectiveMin > 0) ~_position else _position
       if (decimalPoint) {
@@ -707,9 +783,9 @@ object TTBPDateTimeFormatterBuilder {
         return ~_position
       }
       val maxEndPos: Int = Math.min(_position + effectiveMax, length)
-      var total: Int = 0
-      var pos: Int = _position
-      var break = false
+      var total: Int     = 0
+      var pos: Int       = _position
+      var break          = false
       while (!break && pos < maxEndPos) {
         val ch: Char = text.charAt(pos)
         pos += 1
@@ -726,7 +802,7 @@ object TTBPDateTimeFormatterBuilder {
         }
       }
       val fraction: BigDecimal = new BigDecimal(total).movePointLeft(pos - _position)
-      val value: Long = convertFromFraction(fraction)
+      val value: Long          = convertFromFraction(fraction)
       context.setParsedField(field, value, _position, pos)
     }
 
@@ -749,8 +825,9 @@ object TTBPDateTimeFormatterBuilder {
       val range: ValueRange = field.range
       range.checkValidValue(value, field)
       val minBD: BigDecimal = BigDecimal.valueOf(range.getMinimum)
-      val rangeBD: BigDecimal = BigDecimal.valueOf(range.getMaximum).subtract(minBD).add(BigDecimal.ONE)
-      val valueBD: BigDecimal = BigDecimal.valueOf(value).subtract(minBD)
+      val rangeBD: BigDecimal =
+        BigDecimal.valueOf(range.getMaximum).subtract(minBD).add(BigDecimal.ONE)
+      val valueBD: BigDecimal  = BigDecimal.valueOf(value).subtract(minBD)
       val fraction: BigDecimal = valueBD.divide(rangeBD, 9, RoundingMode.FLOOR)
       if (fraction.compareTo(BigDecimal.ZERO) == 0) BigDecimal.ZERO else fraction.stripTrailingZeros
     }
@@ -773,7 +850,8 @@ object TTBPDateTimeFormatterBuilder {
     private def convertFromFraction(fraction: BigDecimal): Long = {
       val range: ValueRange = field.range
       val minBD: BigDecimal = BigDecimal.valueOf(range.getMinimum)
-      val rangeBD: BigDecimal = BigDecimal.valueOf(range.getMaximum).subtract(minBD).add(BigDecimal.ONE)
+      val rangeBD: BigDecimal =
+        BigDecimal.valueOf(range.getMaximum).subtract(minBD).add(BigDecimal.ONE)
       fraction.multiply(rangeBD).setScale(0, RoundingMode.FLOOR).add(minBD).longValueExact
     }
 
@@ -791,14 +869,17 @@ object TTBPDateTimeFormatterBuilder {
     * @param textStyle  the text style, not null
     * @param provider  the text provider, not null
     */
-  private[format] final class TextPrinterParser private[format](private val field: TemporalField, private val textStyle: TextStyle, private val provider: TTBPDateTimeTextProvider) extends DateTimePrinterParser {
+  private[format] final class TextPrinterParser private[format] (
+    private val field:     TemporalField,
+    private val textStyle: TextStyle,
+    private val provider:  TTBPDateTimeTextProvider
+  ) extends DateTimePrinterParser {
+
     /** The cached number printer parser.
       * Immutable and volatile, so no synchronization needed.
       */
     @volatile
     private var _numberPrinterParser: NumberPrinterParser = null
-
-
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val value: java.lang.Long = context.getValue(field)
@@ -819,10 +900,10 @@ object TTBPDateTimeFormatterBuilder {
         throw new IndexOutOfBoundsException
       }
       val style: TextStyle = if (context.isStrict) textStyle else null
-      val it = provider.getTextIterator(field, style, context.getLocale)
+      val it               = provider.getTextIterator(field, style, context.getLocale)
       if (it != null) {
         while (it.hasNext) {
-          val entry = it.next
+          val entry          = it.next
           val itText: String = entry._1
           if (context.subSequenceEquals(itText, 0, parseText, position, itText.length)) {
             return context.setParsedField(field, entry._2, position, position + itText.length)
@@ -854,14 +935,16 @@ object TTBPDateTimeFormatterBuilder {
   /** Prints or parses an ISO-8601 instant. */
   private[format] object InstantPrinterParser {
     private val SECONDS_PER_10000_YEARS: Long = 146097L * 25L * 86400L
-    private val SECONDS_0000_TO_1970: Long = ((146097L * 5L) - (30L * 365L + 7L)) * 86400L
+    private val SECONDS_0000_TO_1970: Long    = ((146097L * 5L) - (30L * 365L + 7L)) * 86400L
   }
 
-  private[format] final class InstantPrinterParser private[format](private val fractionalDigits: Int) extends DateTimePrinterParser {
+  private[format] final class InstantPrinterParser private[format] (
+    private val fractionalDigits: Int
+  ) extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val inSecs: java.lang.Long = context.getValue(ChronoField.INSTANT_SECONDS)
-      var inNanos: Long = 0L
+      var inNanos: Long          = 0L
       if (context.getTemporal.isSupported(ChronoField.NANO_OF_SECOND))
         inNanos = context.getTemporal.getLong(ChronoField.NANO_OF_SECOND)
       if (inSecs == null)
@@ -869,21 +952,29 @@ object TTBPDateTimeFormatterBuilder {
       val inSec: Long = inSecs
       var inNano: Int = ChronoField.NANO_OF_SECOND.checkValidIntValue(inNanos)
       if (inSec >= -InstantPrinterParser.SECONDS_0000_TO_1970) {
-        val zeroSecs: Long = inSec - InstantPrinterParser.SECONDS_PER_10000_YEARS + InstantPrinterParser.SECONDS_0000_TO_1970
+        val zeroSecs: Long =
+          inSec - InstantPrinterParser.SECONDS_PER_10000_YEARS + InstantPrinterParser.SECONDS_0000_TO_1970
         val hi: Long = Math.floorDiv(zeroSecs, InstantPrinterParser.SECONDS_PER_10000_YEARS) + 1
         val lo: Long = Math.floorMod(zeroSecs, InstantPrinterParser.SECONDS_PER_10000_YEARS)
-        val ldt: LocalDateTime = LocalDateTime.ofEpochSecond(lo - InstantPrinterParser.SECONDS_0000_TO_1970, 0, ZoneOffset.UTC)
+        val ldt: LocalDateTime = LocalDateTime.ofEpochSecond(
+          lo - InstantPrinterParser.SECONDS_0000_TO_1970,
+          0,
+          ZoneOffset.UTC
+        )
         if (hi > 0)
           buf.append('+').append(hi)
         buf.append(ldt)
         if (ldt.getSecond == 0)
           buf.append(":00")
-      }
-      else {
+      } else {
         val zeroSecs: Long = inSec + InstantPrinterParser.SECONDS_0000_TO_1970
-        val hi: Long = zeroSecs / InstantPrinterParser.SECONDS_PER_10000_YEARS
-        val lo: Long = zeroSecs % InstantPrinterParser.SECONDS_PER_10000_YEARS
-        val ldt: LocalDateTime = LocalDateTime.ofEpochSecond(lo - InstantPrinterParser.SECONDS_0000_TO_1970, 0, ZoneOffset.UTC)
+        val hi: Long       = zeroSecs / InstantPrinterParser.SECONDS_PER_10000_YEARS
+        val lo: Long       = zeroSecs % InstantPrinterParser.SECONDS_PER_10000_YEARS
+        val ldt: LocalDateTime = LocalDateTime.ofEpochSecond(
+          lo - InstantPrinterParser.SECONDS_0000_TO_1970,
+          0,
+          ZoneOffset.UTC
+        )
         val pos: Int = buf.length
         buf.append(ldt)
         if (ldt.getSecond == 0)
@@ -907,18 +998,17 @@ object TTBPDateTimeFormatterBuilder {
           else
             buf.append(Integer.toString(inNano + 1000000000).substring(1))
         }
-      }
-      else if (fractionalDigits > 0 || (fractionalDigits == -1 && inNano > 0)) {
+      } else if (fractionalDigits > 0 || (fractionalDigits == -1 && inNano > 0)) {
         buf.append('.')
         var div: Int = 100000000
-          var i: Int = 0
-          while ((fractionalDigits == -1 && inNano > 0) || i < fractionalDigits) {
-            val digit: Int = inNano / div
-            buf.append((digit + '0').toChar)
-            inNano = inNano - (digit * div)
-            div = div / 10
-            i += 1
-          }
+        var i: Int   = 0
+        while ((fractionalDigits == -1 && inNano > 0) || i < fractionalDigits) {
+          val digit: Int = inNano / div
+          buf.append((digit + '0').toChar)
+          inNano = inNano - (digit * div)
+          div    = div / 10
+          i += 1
+        }
       }
       buf.append('Z')
       true
@@ -926,47 +1016,56 @@ object TTBPDateTimeFormatterBuilder {
 
     def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int = {
       val newContext: TTBPDateTimeParseContext = context.copy
-      val minDigits: Int = if (fractionalDigits < 0) 0 else fractionalDigits
-      val maxDigits: Int = if (fractionalDigits < 0) 9 else fractionalDigits
+      val minDigits: Int                       = if (fractionalDigits < 0) 0 else fractionalDigits
+      val maxDigits: Int                       = if (fractionalDigits < 0) 9 else fractionalDigits
       val parser: CompositePrinterParser =
         new DateTimeFormatterBuilder()
-          .append(DateTimeFormatter.ISO_LOCAL_DATE).appendLiteral('T')
-          .appendValue(ChronoField.HOUR_OF_DAY, 2).appendLiteral(':').appendValue(ChronoField.MINUTE_OF_HOUR, 2).appendLiteral(':').appendValue(ChronoField.SECOND_OF_MINUTE, 2)
-          .appendFraction(ChronoField.NANO_OF_SECOND, minDigits, maxDigits, true).appendLiteral('Z').toFormatter.toPrinterParser(false)
+          .append(DateTimeFormatter.ISO_LOCAL_DATE)
+          .appendLiteral('T')
+          .appendValue(ChronoField.HOUR_OF_DAY, 2)
+          .appendLiteral(':')
+          .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
+          .appendLiteral(':')
+          .appendValue(ChronoField.SECOND_OF_MINUTE, 2)
+          .appendFraction(ChronoField.NANO_OF_SECOND, minDigits, maxDigits, true)
+          .appendLiteral('Z')
+          .toFormatter
+          .toPrinterParser(false)
       val pos: Int = parser.parse(newContext, text, position)
       if (pos < 0)
         return pos
-      val yearParsed: Long = newContext.getParsed(ChronoField.YEAR)
-      val month: Int = newContext.getParsed(ChronoField.MONTH_OF_YEAR).intValue
-      val day: Int = newContext.getParsed(ChronoField.DAY_OF_MONTH).intValue
-      var hour: Int = newContext.getParsed(ChronoField.HOUR_OF_DAY).intValue
-      val min: Int = newContext.getParsed(ChronoField.MINUTE_OF_HOUR).intValue
-      val secVal: java.lang.Long = newContext.getParsed(ChronoField.SECOND_OF_MINUTE)
+      val yearParsed: Long        = newContext.getParsed(ChronoField.YEAR)
+      val month: Int              = newContext.getParsed(ChronoField.MONTH_OF_YEAR).intValue
+      val day: Int                = newContext.getParsed(ChronoField.DAY_OF_MONTH).intValue
+      var hour: Int               = newContext.getParsed(ChronoField.HOUR_OF_DAY).intValue
+      val min: Int                = newContext.getParsed(ChronoField.MINUTE_OF_HOUR).intValue
+      val secVal: java.lang.Long  = newContext.getParsed(ChronoField.SECOND_OF_MINUTE)
       val nanoVal: java.lang.Long = newContext.getParsed(ChronoField.NANO_OF_SECOND)
-      var sec: Int = if (secVal != null) secVal.intValue else 0
-      val nano: Int = if (nanoVal != null) nanoVal.intValue else 0
-      val year: Int = yearParsed.toInt % 10000
-      var days: Int = 0
+      var sec: Int                = if (secVal != null) secVal.intValue else 0
+      val nano: Int               = if (nanoVal != null) nanoVal.intValue else 0
+      val year: Int               = yearParsed.toInt % 10000
+      var days: Int               = 0
       if (hour == 24 && min == 0 && sec == 0 && nano == 0) {
         hour = 0
         days = 1
-      }
-      else if (hour == 23 && min == 59 && sec == 60) {
+      } else if (hour == 23 && min == 59 && sec == 60) {
         context.setParsedLeapSecond()
         sec = 59
       }
       var instantSecs: Long = 0L
       try {
-        val ldt: LocalDateTime = LocalDateTime.of(year, month, day, hour, min, sec, 0).plusDays(days)
+        val ldt: LocalDateTime =
+          LocalDateTime.of(year, month, day, hour, min, sec, 0).plusDays(days.toLong)
         instantSecs = ldt.toEpochSecond(ZoneOffset.UTC)
-        instantSecs += Math.multiplyExact(yearParsed / 10000L, InstantPrinterParser.SECONDS_PER_10000_YEARS)
-      }
-      catch {
-        case ex: RuntimeException => return ~position
+        instantSecs += Math.multiplyExact(yearParsed / 10000L,
+                                          InstantPrinterParser.SECONDS_PER_10000_YEARS)
+      } catch {
+        case _: RuntimeException => return ~position
       }
       var successPos: Int = pos
-      successPos = context.setParsedField(ChronoField.INSTANT_SECONDS, instantSecs, position, successPos)
-      context.setParsedField(ChronoField.NANO_OF_SECOND, nano, position, successPos)
+      successPos =
+        context.setParsedField(ChronoField.INSTANT_SECONDS, instantSecs, position, successPos)
+      context.setParsedField(ChronoField.NANO_OF_SECOND, nano.toLong, position, successPos)
     }
 
     override def toString: String = "Instant()"
@@ -974,16 +1073,28 @@ object TTBPDateTimeFormatterBuilder {
 
   /** Prints or parses an offset ID. */
   private[format] object OffsetIdPrinterParser {
-    private[format] val PATTERNS: Array[String] = Array[String]("+HH", "+HHmm", "+HH:mm", "+HHMM", "+HH:MM", "+HHMMss", "+HH:MM:ss", "+HHMMSS", "+HH:MM:SS")
-    private[format] val INSTANCE_ID: OffsetIdPrinterParser = new OffsetIdPrinterParser("Z", "+HH:MM:ss")
+    private[format] val PATTERNS: Array[String] = Array[String]("+HH",
+                                                                "+HHmm",
+                                                                "+HH:mm",
+                                                                "+HHMM",
+                                                                "+HH:MM",
+                                                                "+HHMMss",
+                                                                "+HH:MM:ss",
+                                                                "+HHMMSS",
+                                                                "+HH:MM:SS")
+    private[format] val INSTANCE_ID: OffsetIdPrinterParser =
+      new OffsetIdPrinterParser("Z", "+HH:MM:ss")
   }
 
-    /** @constructor
-      *
-      * @param noOffsetText  the text to use for UTC, not null
-      * @param pattern  the pattern
-      */
-  private[format] final class OffsetIdPrinterParser private[format](private val noOffsetText: String, pattern: String) extends DateTimePrinterParser {
+  /** @constructor
+    *
+    * @param noOffsetText  the text to use for UTC, not null
+    * @param pattern  the pattern
+    */
+  private[format] final class OffsetIdPrinterParser private[format] (
+    private val noOffsetText: String,
+    pattern:                  String
+  ) extends DateTimePrinterParser {
     Objects.requireNonNull(noOffsetText, "noOffsetText")
     Objects.requireNonNull(pattern, "pattern")
 
@@ -1007,19 +1118,27 @@ object TTBPDateTimeFormatterBuilder {
       val totalSecs: Int = Math.toIntExact(offsetSecs)
       if (totalSecs == 0) {
         buf.append(noOffsetText)
-      }
-      else {
-        val absHours: Int = Math.abs((totalSecs / 3600) % 100)
+      } else {
+        val absHours: Int   = Math.abs((totalSecs / 3600) % 100)
         val absMinutes: Int = Math.abs((totalSecs / 60) % 60)
         val absSeconds: Int = Math.abs(totalSecs % 60)
-        val bufPos: Int = buf.length
-        var output: Int = absHours
-        buf.append(if (totalSecs < 0) "-" else "+").append((absHours / 10 + '0').toChar).append((absHours % 10 + '0').toChar)
+        val bufPos: Int     = buf.length
+        var output: Int     = absHours
+        buf
+          .append(if (totalSecs < 0) "-" else "+")
+          .append((absHours / 10 + '0').toChar)
+          .append((absHours % 10 + '0').toChar)
         if (`type` >= 3 || (`type` >= 1 && absMinutes > 0)) {
-          buf.append(if ((`type` % 2) == 0) ":" else "").append((absMinutes / 10 + '0').toChar).append((absMinutes % 10 + '0').toChar)
+          buf
+            .append(if ((`type` % 2) == 0) ":" else "")
+            .append((absMinutes / 10 + '0').toChar)
+            .append((absMinutes % 10 + '0').toChar)
           output += absMinutes
           if (`type` >= 7 || (`type` >= 5 && absSeconds > 0)) {
-            buf.append(if ((`type` % 2) == 0) ":" else "").append((absSeconds / 10 + '0').toChar).append((absSeconds % 10 + '0').toChar)
+            buf
+              .append(if ((`type` % 2) == 0) ":" else "")
+              .append((absSeconds / 10 + '0').toChar)
+              .append((absSeconds % 10 + '0').toChar)
             output += absSeconds
           }
         }
@@ -1032,33 +1151,43 @@ object TTBPDateTimeFormatterBuilder {
     }
 
     def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int = {
-      val length: Int = text.length
+      val length: Int      = text.length
       val noOffsetLen: Int = noOffsetText.length
       if (noOffsetLen == 0) {
         if (position == length) {
           return context.setParsedField(ChronoField.OFFSET_SECONDS, 0, position, position)
         }
-      }
-      else {
+      } else {
         if (position == length) {
           return ~position
         }
         if (context.subSequenceEquals(text, position, noOffsetText, 0, noOffsetLen)) {
-          return context.setParsedField(ChronoField.OFFSET_SECONDS, 0, position, position + noOffsetLen)
+          return context.setParsedField(ChronoField.OFFSET_SECONDS,
+                                        0,
+                                        position,
+                                        position + noOffsetLen)
         }
       }
       val sign: Char = text.charAt(position)
       if (sign == '+' || sign == '-') {
-        val negative: Int = if (sign == '-') -1 else 1
+        val negative: Int     = if (sign == '-') -1 else 1
         val array: Array[Int] = new Array[Int](4)
         array(0) = position + 1
-        if (!(parseNumber(array, 1, text, true) || parseNumber(array, 2, text, `type` >= 3) || parseNumber(array, 3, text, false))) {
+        if (!(parseNumber(array, 1, text, true) || parseNumber(array, 2, text, `type` >= 3) || parseNumber(
+              array,
+              3,
+              text,
+              false
+            ))) {
           val offsetSecs: Long = negative * (array(1) * 3600L + array(2) * 60L + array(3))
           return context.setParsedField(ChronoField.OFFSET_SECONDS, offsetSecs, position, array(0))
         }
       }
       if (noOffsetLen == 0) {
-        return context.setParsedField(ChronoField.OFFSET_SECONDS, 0, position, position + noOffsetLen)
+        return context.setParsedField(ChronoField.OFFSET_SECONDS,
+                                      0,
+                                      position,
+                                      position + noOffsetLen)
       }
       ~position
     }
@@ -1071,7 +1200,12 @@ object TTBPDateTimeFormatterBuilder {
       * @param required  whether this number is required
       * @return true if an error occurred
       */
-    private def parseNumber(array: Array[Int], arrayIndex: Int, parseText: CharSequence, required: Boolean): Boolean = {
+    private def parseNumber(
+      array:      Array[Int],
+      arrayIndex: Int,
+      parseText:  CharSequence,
+      required:   Boolean
+    ): Boolean = {
       if ((`type` + 3) / 2 < arrayIndex) {
         return false
       }
@@ -1097,7 +1231,7 @@ object TTBPDateTimeFormatterBuilder {
         return required
       }
       array(arrayIndex) = value
-      array(0) = pos
+      array(0)          = pos
       false
     }
 
@@ -1108,7 +1242,8 @@ object TTBPDateTimeFormatterBuilder {
   }
 
   /** Prints or parses a localized offset. */
-  private[format] final class LocalizedOffsetPrinterParser(private val style: TextStyle) extends DateTimePrinterParser {
+  private[format] final class LocalizedOffsetPrinterParser(private val style: TextStyle)
+      extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val offsetSecs: java.lang.Long = context.getValue(ChronoField.OFFSET_SECONDS)
@@ -1121,14 +1256,20 @@ object TTBPDateTimeFormatterBuilder {
       }
       val totalSecs: Int = Math.toIntExact(offsetSecs)
       if (totalSecs != 0) {
-        val absHours: Int = Math.abs((totalSecs / 3600) % 100)
+        val absHours: Int   = Math.abs((totalSecs / 3600) % 100)
         val absMinutes: Int = Math.abs((totalSecs / 60) % 60)
         val absSeconds: Int = Math.abs(totalSecs % 60)
         buf.append(if (totalSecs < 0) "-" else "+").append(absHours)
         if (absMinutes > 0 || absSeconds > 0) {
-          buf.append(":").append((absMinutes / 10 + '0').toChar).append((absMinutes % 10 + '0').toChar)
+          buf
+            .append(":")
+            .append((absMinutes / 10 + '0').toChar)
+            .append((absMinutes % 10 + '0').toChar)
           if (absSeconds > 0) {
-            buf.append(":").append((absSeconds / 10 + '0').toChar).append((absSeconds % 10 + '0').toChar)
+            buf
+              .append(":")
+              .append((absSeconds / 10 + '0').toChar)
+              .append((absSeconds % 10 + '0').toChar)
           }
         }
       }
@@ -1169,7 +1310,10 @@ object TTBPDateTimeFormatterBuilder {
       }
       if (_position == end || text.charAt(_position) != ':') {
         val offset: Int = negative * 3600 * hour
-        return context.setParsedField(ChronoField.OFFSET_SECONDS, offset, _position, _position)
+        return context.setParsedField(ChronoField.OFFSET_SECONDS,
+                                      offset.toLong,
+                                      _position,
+                                      _position)
       }
       _position += 1
       if (_position > end - 2)
@@ -1188,7 +1332,10 @@ object TTBPDateTimeFormatterBuilder {
         return ~_position
       if (_position == end || text.charAt(_position) != ':') {
         val offset: Int = negative * (3600 * hour + 60 * min)
-        return context.setParsedField(ChronoField.OFFSET_SECONDS, offset, _position, _position)
+        return context.setParsedField(ChronoField.OFFSET_SECONDS,
+                                      offset.toLong,
+                                      _position,
+                                      _position)
       }
       _position += 1
       if (_position > end - 2)
@@ -1206,25 +1353,31 @@ object TTBPDateTimeFormatterBuilder {
       if (sec > 59)
         return ~_position
       val offset: Int = negative * (3600 * hour + 60 * min + sec)
-      context.setParsedField(ChronoField.OFFSET_SECONDS, offset, _position, _position)
+      context.setParsedField(ChronoField.OFFSET_SECONDS, offset.toLong, _position, _position)
     }
   }
 
   /** Prints or parses a zone ID. */
   private[format] object ZoneTextPrinterParser {
+
     /** The text style to output. */
     private lazy val LENGTH_COMPARATOR: Ordering[Map.Entry[String, String]] =
-    new Ordering[Map.Entry[String, String]] {
-      override def compare(str1: Map.Entry[String, String], str2: Map.Entry[String, String]): Int = {
-        var cmp: Int = str2.getKey.length - str1.getKey.length
-        if (cmp == 0)
-          cmp = str1.getKey.compareTo(str2.getKey)
-        cmp
+      new Ordering[Map.Entry[String, String]] {
+        override def compare(
+          str1: Map.Entry[String, String],
+          str2: Map.Entry[String, String]
+        ): Int = {
+          var cmp: Int = str2.getKey.length - str1.getKey.length
+          if (cmp == 0)
+            cmp = str1.getKey.compareTo(str2.getKey)
+          cmp
+        }
       }
-    }
   }
 
-  private[format] final class ZoneTextPrinterParser private[format](private val textStyle: TextStyle) extends DateTimePrinterParser {
+  private[format] final class ZoneTextPrinterParser private[format] (
+    private val textStyle: TextStyle
+  ) extends DateTimePrinterParser {
     Objects.requireNonNull(textStyle, "textStyle")
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
@@ -1235,7 +1388,7 @@ object TTBPDateTimeFormatterBuilder {
         buf.append(zone.getId)
         return true
       }
-      val temporal = context.getTemporal
+      val temporal          = context.getTemporal
       var daylight: Boolean = false
       if (temporal.isSupported(ChronoField.INSTANT_SECONDS)) {
         val instant: Instant = Instant.ofEpochSecond(temporal.getLong(ChronoField.INSTANT_SECONDS))
@@ -1253,23 +1406,26 @@ object TTBPDateTimeFormatterBuilder {
       //    1. Consider whether we should keep the Java-based implementation on the JVM
       //       and provide this alternative implementation only on other platforms?
       //    2. We need to write tests for this. I flipped LENGTH_COMPARATOR and no test broke.
-      val ids = new java.util.HashMap[String, String]()
+      val ids        = new java.util.HashMap[String, String]()
       val idIterator = ZoneId.getAvailableZoneIds.iterator()
       while (idIterator.hasNext) {
         val id = idIterator.next()
         ids.put(id, id)
         val tz: TimeZone = TimeZone.getTimeZone(id)
-        val tzstyle: Int = if (textStyle.asNormal eq TextStyle.FULL) TimeZone.LONG else TimeZone.SHORT
+        val tzstyle: Int =
+          if (textStyle.asNormal eq TextStyle.FULL) TimeZone.LONG else TimeZone.SHORT
         val textWinter = tz.getDisplayName(false, tzstyle, context.getLocale)
         // The null checks are needed as scalajs-locales doesn't include time zone strings
-        if (textWinter != null && id.startsWith("Etc/") || (!textWinter.startsWith("GMT+") && !textWinter.startsWith("GMT+"))) {
-            ids.put(textWinter, id)
+        if (textWinter != null && id.startsWith("Etc/") || (!textWinter.startsWith("GMT+") && !textWinter
+              .startsWith("GMT+"))) {
+          ids.put(textWinter, id)
         } else if (textWinter == null) {
           ids.put(tz.getDisplayName(false, tzstyle, context.getLocale), id)
         }
         val textSummer = tz.getDisplayName(true, tzstyle, context.getLocale)
-        if (textSummer != null && id.startsWith("Etc/") || (!textSummer.startsWith("GMT+") && !textSummer.startsWith("GMT+"))) {
-            ids.put(textSummer, id)
+        if (textSummer != null && id.startsWith("Etc/") || (!textSummer.startsWith("GMT+") && !textSummer
+              .startsWith("GMT+"))) {
+          ids.put(textSummer, id)
         } else if (textSummer == null) {
           ids.put(tz.getDisplayName(true, tzstyle, context.getLocale), id)
         }
@@ -1278,7 +1434,7 @@ object TTBPDateTimeFormatterBuilder {
       Collections.sort[Map.Entry[String, String]](tmpIds, ZoneTextPrinterParser.LENGTH_COMPARATOR)
       val i = tmpIds.iterator
       while (i.hasNext()) {
-        val v = i.next()
+        val v            = i.next()
         val name: String = v.getKey
         if (context.subSequenceEquals(text, position, name, 0, name.length)) {
           context.setParsed(ZoneId.of(v.getValue))
@@ -1293,6 +1449,7 @@ object TTBPDateTimeFormatterBuilder {
 
   /** Prints or parses a zone ID. */
   private[format] object ZoneIdPrinterParser {
+
     /** The cached tree to speed up parsing. */
     @volatile
     private var cachedSubstringTree: java.util.Map.Entry[Integer, SubstringTree] = null
@@ -1323,15 +1480,19 @@ object TTBPDateTimeFormatterBuilder {
       *                Subtrees will have a longer length.
       */
     private final class SubstringTree(val length: Int) {
-      /** Map of a substring to a set of substrings that contain the key. */
-      private val substringMap: java.util.Map[CharSequence, SubstringTree] = new java.util.HashMap[CharSequence, SubstringTree]
-      /** Map of a substring to a set of substrings that contain the key. */
-      private val substringMapCI: java.util.Map[String, SubstringTree] = new java.util.HashMap[String, SubstringTree]
 
+      /** Map of a substring to a set of substrings that contain the key. */
+      private val substringMap: java.util.Map[CharSequence, SubstringTree] =
+        new java.util.HashMap[CharSequence, SubstringTree]
+
+      /** Map of a substring to a set of substrings that contain the key. */
+      private val substringMapCI: java.util.Map[String, SubstringTree] =
+        new java.util.HashMap[String, SubstringTree]
 
       private[format] def get(substring2: CharSequence, caseSensitive: Boolean): SubstringTree =
         if (caseSensitive) substringMap.get(substring2)
-        else substringMapCI.get(CasePlatformHelper.toLocaleIndependentLowerCase(substring2.toString))
+        else
+          substringMapCI.get(CasePlatformHelper.toLocaleIndependentLowerCase(substring2.toString))
 
       /** Values must be added from shortest to longest.
         *
@@ -1343,14 +1504,15 @@ object TTBPDateTimeFormatterBuilder {
         if (idLen == length) {
           substringMap.put(newSubstring, null)
           substringMapCI.put(CasePlatformHelper.toLocaleIndependentLowerCase(newSubstring), null)
-        }
-        else if (idLen > length) {
-          val substring: String = newSubstring.substring(0, length)
+          ()
+        } else if (idLen > length) {
+          val substring: String         = newSubstring.substring(0, length)
           var parserTree: SubstringTree = substringMap.get(substring)
           if (parserTree == null) {
             parserTree = new SubstringTree(idLen)
             substringMap.put(substring, parserTree)
-            substringMapCI.put(CasePlatformHelper.toLocaleIndependentLowerCase(substring), parserTree)
+            substringMapCI.put(CasePlatformHelper.toLocaleIndependentLowerCase(substring),
+                               parserTree)
           }
           parserTree.add(newSubstring)
         }
@@ -1366,7 +1528,7 @@ object TTBPDateTimeFormatterBuilder {
       val ids: java.util.List[String] = new java.util.ArrayList[String](availableIDs)
       Collections.sort(ids, LENGTH_SORT)
       val tree: SubstringTree = new SubstringTree(ids.get(0).length)
-      val idsIterator = ids.iterator
+      val idsIterator         = ids.iterator
       while (idsIterator.hasNext) {
         val id = idsIterator.next()
         tree.add(id)
@@ -1375,7 +1537,10 @@ object TTBPDateTimeFormatterBuilder {
     }
   }
 
-  private[format] final class ZoneIdPrinterParser private[format](private val query: TemporalQuery[ZoneId], private val description: String) extends DateTimePrinterParser {
+  private[format] final class ZoneIdPrinterParser private[format] (
+    private val query:       TemporalQuery[ZoneId],
+    private val description: String
+  ) extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val zone: ZoneId = context.getValue(query)
@@ -1405,49 +1570,53 @@ object TTBPDateTimeFormatterBuilder {
       val nextChar: Char = text.charAt(position)
       if (nextChar == '+' || nextChar == '-') {
         val newContext: TTBPDateTimeParseContext = context.copy
-        val endPos: Int = OffsetIdPrinterParser.INSTANCE_ID.parse(newContext, text, position)
+        val endPos: Int                          = OffsetIdPrinterParser.INSTANCE_ID.parse(newContext, text, position)
         if (endPos < 0)
           return endPos
         val offset: Int = newContext.getParsed(ChronoField.OFFSET_SECONDS).longValue.toInt
         context.setParsed(ZoneOffset.ofTotalSeconds(offset))
         return endPos
-      }
-      else if (length >= position + 2) {
+      } else if (length >= position + 2) {
         val nextNextChar: Char = text.charAt(position + 1)
         if (context.charEquals(nextChar, 'U') && context.charEquals(nextNextChar, 'T')) {
           if (length >= position + 3 && context.charEquals(text.charAt(position + 2), 'C'))
             return parsePrefixedOffset(context, text, position, position + 3)
           return parsePrefixedOffset(context, text, position, position + 2)
-        }
-        else if (context.charEquals(nextChar, 'G') && length >= position + 3 && context.charEquals(nextNextChar, 'M') && context.charEquals(text.charAt(position + 2), 'T'))
+        } else if (context.charEquals(nextChar, 'G') && length >= position + 3 && context
+                     .charEquals(nextNextChar, 'M') && context.charEquals(text.charAt(position + 2),
+                                                                          'T'))
           return parsePrefixedOffset(context, text, position, position + 3)
       }
       val regionIds: java.util.Set[String] = ZoneRulesProvider.getAvailableZoneIds
-      val regionIdsSize: Int = regionIds.size
-      var cached: java.util.Map.Entry[Integer, SubstringTree] = ZoneIdPrinterParser.cachedSubstringTree
+      val regionIdsSize: Int               = regionIds.size
+      var cached: java.util.Map.Entry[Integer, SubstringTree] =
+        ZoneIdPrinterParser.cachedSubstringTree
       if (cached == null || (cached.getKey != regionIdsSize)) {
         this synchronized {
           cached = ZoneIdPrinterParser.cachedSubstringTree
           if (cached == null || (cached.getKey != regionIdsSize)) {
             ZoneIdPrinterParser.cachedSubstringTree = {
-              cached = new java.util.AbstractMap.SimpleImmutableEntry[Integer, SubstringTree](regionIdsSize, ZoneIdPrinterParser.prepareParser(regionIds))
+              cached = new java.util.AbstractMap.SimpleImmutableEntry[Integer, SubstringTree](
+                regionIdsSize,
+                ZoneIdPrinterParser.prepareParser(regionIds)
+              )
               cached
             }
           }
         }
       }
-      var tree: SubstringTree = cached.getValue
+      var tree: SubstringTree  = cached.getValue
       var parsedZoneId: String = null
-      var lastZoneId: String = null
-      var break = false
+      var lastZoneId: String   = null
+      var break                = false
       while (!break && tree != null) {
         val nodeLength: Int = tree.length
         if (position + nodeLength > length) {
           break = true
         } else {
-          lastZoneId = parsedZoneId
+          lastZoneId   = parsedZoneId
           parsedZoneId = text.subSequence(position, position + nodeLength).toString
-          tree = tree.get(parsedZoneId, context.isCaseSensitive)
+          tree         = tree.get(parsedZoneId, context.isCaseSensitive)
         }
       }
       var zone: ZoneId = convertToZone(regionIds, parsedZoneId, context.isCaseSensitive)
@@ -1466,7 +1635,11 @@ object TTBPDateTimeFormatterBuilder {
       position + parsedZoneId.length
     }
 
-    private def convertToZone(regionIds: java.util.Set[String], parsedZoneId: String, caseSensitive: Boolean): ZoneId =
+    private def convertToZone(
+      regionIds:     java.util.Set[String],
+      parsedZoneId:  String,
+      caseSensitive: Boolean
+    ): ZoneId =
       if (parsedZoneId == null)
         null
       else if (caseSensitive)
@@ -1481,8 +1654,13 @@ object TTBPDateTimeFormatterBuilder {
         null
       }
 
-    private def parsePrefixedOffset(context: TTBPDateTimeParseContext, text: CharSequence, prefixPos: Int, position: Int): Int = {
-      val prefix: String = text.subSequence(prefixPos, position).toString.toUpperCase
+    private def parsePrefixedOffset(
+      context:   TTBPDateTimeParseContext,
+      text:      CharSequence,
+      prefixPos: Int,
+      position:  Int
+    ): Int = {
+      val prefix: String                       = text.subSequence(prefixPos, position).toString.toUpperCase
       val newContext: TTBPDateTimeParseContext = context.copy
       if (position < text.length && context.charEquals(text.charAt(position), 'Z')) {
         context.setParsed(ZoneId.ofOffset(prefix, ZoneOffset.UTC))
@@ -1493,7 +1671,7 @@ object TTBPDateTimeFormatterBuilder {
         context.setParsed(ZoneId.ofOffset(prefix, ZoneOffset.UTC))
         return position
       }
-      val offsetSecs: Int = newContext.getParsed(ChronoField.OFFSET_SECONDS).longValue.toInt
+      val offsetSecs: Int    = newContext.getParsed(ChronoField.OFFSET_SECONDS).longValue.toInt
       val offset: ZoneOffset = ZoneOffset.ofTotalSeconds(offsetSecs)
       context.setParsed(ZoneId.ofOffset(prefix, offset))
       endPos
@@ -1506,7 +1684,8 @@ object TTBPDateTimeFormatterBuilder {
     *
     * @param textStyle The text style to output, null means the ID.
     */
-  private[format] final class ChronoPrinterParser private[format](private val textStyle: TextStyle) extends DateTimePrinterParser {
+  private[format] final class ChronoPrinterParser private[format] (private val textStyle: TextStyle)
+      extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val chrono: Chronology = context.getValue(TemporalQueries.chronology)
@@ -1515,13 +1694,16 @@ object TTBPDateTimeFormatterBuilder {
       if (textStyle == null)
         buf.append(chrono.getId)
       else {
-        val bundle: ResourceBundle = ResourceBundle.getBundle("org.threeten.bp.format.ChronologyText", context.getLocale, classOf[DateTimeFormatterBuilder].getClassLoader)
+        val bundle: ResourceBundle = ResourceBundle.getBundle(
+          "org.threeten.bp.format.ChronologyText",
+          context.getLocale,
+          classOf[DateTimeFormatterBuilder].getClassLoader
+        )
         try {
           val text: String = bundle.getString(chrono.getId)
           buf.append(text)
-        }
-        catch {
-          case ex: MissingResourceException => buf.append(chrono.getId)
+        } catch {
+          case _: MissingResourceException => buf.append(chrono.getId)
         }
       }
       true
@@ -1531,15 +1713,15 @@ object TTBPDateTimeFormatterBuilder {
       if (position < 0 || position > text.length)
         throw new IndexOutOfBoundsException
       val chronos: java.util.Iterator[Chronology] = Chronology.getAvailableChronologies.iterator
-      var bestMatch: Chronology = null
-      var matchLen: Int = -1
+      var bestMatch: Chronology                   = null
+      var matchLen: Int                           = -1
       while (chronos.hasNext) {
-        val chrono = chronos.next()
+        val chrono     = chronos.next()
         val id: String = chrono.getId
         val idLen: Int = id.length
         if (idLen > matchLen && context.subSequenceEquals(text, position, id, 0, idLen)) {
           bestMatch = chrono
-          matchLen = idLen
+          matchLen  = idLen
         }
       }
       if (bestMatch == null) {
@@ -1558,7 +1740,10 @@ object TTBPDateTimeFormatterBuilder {
     * @param dateStyle  the date style to use, may be null
     * @param timeStyle  the time style to use, may be null
     */
-  private[format] final class LocalizedPrinterParser private[format](private val dateStyle: FormatStyle, private val timeStyle: FormatStyle) extends DateTimePrinterParser {
+  private[format] final class LocalizedPrinterParser private[format] (
+    private val dateStyle: FormatStyle,
+    private val timeStyle: FormatStyle
+  ) extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = {
       val chrono = Chronology.from(context.getTemporal)
@@ -1580,11 +1765,15 @@ object TTBPDateTimeFormatterBuilder {
       DateTimeFormatStyleProvider.getInstance.getFormatter(dateStyle, timeStyle, chrono, locale)
 
     override def toString: String =
-      s"Localized(${if (dateStyle != null) dateStyle else ""},${if (timeStyle != null) timeStyle else ""})"
+      s"Localized(${if (dateStyle != null) dateStyle else ""},${if (timeStyle != null) timeStyle
+      else ""})"
   }
 
   /** Prints or parses a localized pattern. */
-  private[format] final class WeekFieldsPrinterParser(private val letter: Char, private val count: Int) extends DateTimePrinterParser {
+  private[format] final class WeekFieldsPrinterParser(
+    private val letter: Char,
+    private val count:  Int
+  ) extends DateTimePrinterParser {
 
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean =
       evaluate(WeekFields.of(context.getLocale)).print(context, buf)
@@ -1604,9 +1793,17 @@ object TTBPDateTimeFormatterBuilder {
           new NumberPrinterParser(weekFields.weekOfMonth, 1, 2, SignStyle.NOT_NEGATIVE)
         case 'Y' =>
           if (count == 2)
-            new ReducedPrinterParser(weekFields.weekBasedYear, 2, 2, 0, ReducedPrinterParser.BASE_DATE)
+            new ReducedPrinterParser(weekFields.weekBasedYear,
+                                     2,
+                                     2,
+                                     0,
+                                     ReducedPrinterParser.BASE_DATE)
           else
-            new NumberPrinterParser(weekFields.weekBasedYear, count, 19, if (count < 4) SignStyle.NORMAL else SignStyle.EXCEEDS_PAD, -1)
+            new NumberPrinterParser(weekFields.weekBasedYear,
+                                    count,
+                                    19,
+                                    if (count < 4) SignStyle.NORMAL else SignStyle.EXCEEDS_PAD,
+                                    -1)
       }
 
     override def toString: String = {
@@ -1618,9 +1815,13 @@ object TTBPDateTimeFormatterBuilder {
         else if (count == 2)
           sb.append("ReducedValue(WeekBasedYear,2,2,2000-01-01)")
         else
-          sb.append("WeekBasedYear,").append(count).append(",").append(19).append(",").append(if (count < 4) SignStyle.NORMAL else SignStyle.EXCEEDS_PAD)
-      }
-      else {
+          sb.append("WeekBasedYear,")
+            .append(count)
+            .append(",")
+            .append(19)
+            .append(",")
+            .append(if (count < 4) SignStyle.NORMAL else SignStyle.EXCEEDS_PAD)
+      } else {
         if (letter == 'c' || letter == 'e')
           sb.append("DayOfWeek")
         else if (letter == 'w')

@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.DAY_OF_MONTH
 import org.threeten.bp.temporal.ChronoField.DAY_OF_WEEK
@@ -40,7 +40,7 @@ import java.util.Locale
 
 import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.temporal.TemporalQueries
-import org.threeten.bp.format.internal.{TTBPDateTimeFormatterBuilder, TTBPDateTimeParseContext}
+import org.threeten.bp.format.internal.{ TTBPDateTimeFormatterBuilder, TTBPDateTimeParseContext }
 import org.threeten.bp.format.internal.TTBPDateTimeTextProvider
 
 /** Test TextPrinterParser. */
@@ -48,11 +48,22 @@ object TestTextParser {
   private val PROVIDER: TTBPDateTimeTextProvider = TTBPDateTimeTextProvider.getInstance
 }
 
-class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestTextParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_error: List[(TTBPDateTimeFormatterBuilder.TextPrinterParser, String, Int, Class[_])] = {
     List(
-      (new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, TestTextParser.PROVIDER), "Monday", -1, classOf[IndexOutOfBoundsException]),
-      (new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, TestTextParser.PROVIDER), "Monday", 7, classOf[IndexOutOfBoundsException]))
+      (new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                          TextStyle.FULL,
+                                                          TestTextParser.PROVIDER),
+       "Monday",
+       -1,
+       classOf[IndexOutOfBoundsException]),
+      (new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                          TextStyle.FULL,
+                                                          TestTextParser.PROVIDER),
+       "Monday",
+       7,
+       classOf[IndexOutOfBoundsException])
+    )
   }
 
   test("test_parse_error") {
@@ -60,8 +71,7 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
       case (pp, text, pos, expected) =>
         try {
           pp.parse(parseContext, text, pos)
-        }
-        catch {
+        } catch {
           case ex: RuntimeException =>
             assertTrue(expected.isInstance(ex))
             assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -73,21 +83,30 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
   }
 
   test("test_parse_midStr") {
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "XxxMondayXxx", 3)
     assertEquals(newPos, 9)
     assertParsed(parseContext, DAY_OF_WEEK, 1L)
   }
 
   test("test_parse_remainderIgnored") {
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "Wednesday", 0)
     assertEquals(newPos, 3)
     assertParsed(parseContext, DAY_OF_WEEK, 3L)
   }
 
   test("test_parse_noMatch1") {
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "Munday", 0)
     assertEquals(newPos, ~0)
     assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -95,7 +114,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
   }
 
   test("test_parse_noMatch2") {
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "Monday", 3)
     assertEquals(newPos, ~3)
     assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -103,7 +125,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
   }
 
   test("test_parse_noMatch_atEnd") {
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "Monday", 6)
     assertEquals(newPos, ~6)
     assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -129,7 +154,8 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
       (MONTH_OF_YEAR, TextStyle.FULL, 1, "January"),
       (MONTH_OF_YEAR, TextStyle.FULL, 12, "December"),
       (MONTH_OF_YEAR, TextStyle.SHORT, 1, "Jan"),
-      (MONTH_OF_YEAR, TextStyle.SHORT, 12, "Dec"))
+      (MONTH_OF_YEAR, TextStyle.SHORT, 12, "Dec")
+    )
   }
 
   val provider_number: List[(TemporalField, TextStyle, Int, String)] = {
@@ -141,14 +167,16 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
       (DAY_OF_MONTH, TextStyle.SHORT, 1, "1"),
       (DAY_OF_MONTH, TextStyle.SHORT, 2, "2"),
       (DAY_OF_MONTH, TextStyle.SHORT, 30, "30"),
-      (DAY_OF_MONTH, TextStyle.SHORT, 31, "31"))
+      (DAY_OF_MONTH, TextStyle.SHORT, 31, "31")
+    )
   }
 
   test("test_parseText") {
     provider_text.foreach {
       case (field, style, value, input) =>
         super.beforeEach()
-        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
+        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+          new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
         val newPos: Int = pp.parse(parseContext, input, 0)
         assertEquals(newPos, input.length)
         assertParsed(parseContext, field, value.toLong)
@@ -161,7 +189,8 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
     provider_number.foreach {
       case (field, style, value, input) =>
         super.beforeEach()
-        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
+        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+          new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
         val newPos: Int = pp.parse(parseContext, input, 0)
         assertEquals(newPos, input.length)
         assertParsed(parseContext, field, value.toLong)
@@ -172,10 +201,11 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_strict_caseSensitive_parseUpper") {
     provider_text.foreach {
-      case (field, style, value, input) =>
+      case (field, style, _, input) =>
         super.beforeEach()
         parseContext.setCaseSensitive(true)
-        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
+        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+          new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
         val newPos: Int = pp.parse(parseContext, input.toUpperCase, 0)
         assertEquals(newPos, ~0)
         assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -190,7 +220,8 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
       case (field, style, value, input) =>
         super.beforeEach()
         parseContext.setCaseSensitive(false)
-        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
+        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+          new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
         val newPos: Int = pp.parse(parseContext, input.toUpperCase, 0)
         assertEquals(newPos, input.length)
         assertParsed(parseContext, field, value.toLong)
@@ -201,10 +232,11 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_strict_caseSensitive_parseLower") {
     provider_text.foreach {
-      case (field, style, value, input) =>
+      case (field, style, _, input) =>
         super.beforeEach()
         parseContext.setCaseSensitive(true)
-        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
+        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+          new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
         val newPos: Int = pp.parse(parseContext, input.toLowerCase, 0)
         assertEquals(newPos, ~0)
         assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -219,7 +251,8 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
       case (field, style, value, input) =>
         super.beforeEach()
         parseContext.setCaseSensitive(false)
-        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
+        val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+          new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextParser.PROVIDER)
         val newPos: Int = pp.parse(parseContext, input.toLowerCase, 0)
         assertEquals(newPos, input.length)
         assertParsed(parseContext, field, value.toLong)
@@ -230,7 +263,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_full_strict_full_match") {
     parseContext.setStrict(true)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "January", 0)
     assertEquals(newPos, 7)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -238,7 +274,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_full_strict_short_noMatch") {
     parseContext.setStrict(true)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "Janua", 0)
     assertEquals(newPos, ~0)
     assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -247,7 +286,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_full_strict_number_noMatch") {
     parseContext.setStrict(true)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "1", 0)
     assertEquals(newPos, ~0)
     assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -256,7 +298,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_short_strict_full_match") {
     parseContext.setStrict(true)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "January", 0)
     assertEquals(newPos, 3)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -264,7 +309,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_short_strict_short_match") {
     parseContext.setStrict(true)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "Janua", 0)
     assertEquals(newPos, 3)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -272,7 +320,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_short_strict_number_noMatch") {
     parseContext.setStrict(true)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "1", 0)
     assertEquals(newPos, ~0)
     assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -282,7 +333,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
   test("test_parse_french_short_strict_full_noMatch") {
     parseContext.setLocale(Locale.FRENCH)
     parseContext.setStrict(true)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "janvier", 0)
     assertEquals(newPos, ~0)
     assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -292,7 +346,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
   test("test_parse_french_short_strict_short_match") {
     parseContext.setLocale(Locale.FRENCH)
     parseContext.setStrict(true)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "janv.", 0)
     assertEquals(newPos, 5)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -300,7 +357,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_full_lenient_full_match") {
     parseContext.setStrict(false)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "January", 0)
     assertEquals(newPos, 7)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -308,7 +368,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_full_lenient_short_match") {
     parseContext.setStrict(false)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "Janua", 0)
     assertEquals(newPos, 3)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -316,7 +379,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_full_lenient_number_match") {
     parseContext.setStrict(false)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.FULL, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.FULL,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "1", 0)
     assertEquals(newPos, 1)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -324,7 +390,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_short_lenient_full_match") {
     parseContext.setStrict(false)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "January", 0)
     assertEquals(newPos, 7)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -332,7 +401,10 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_short_lenient_short_match") {
     parseContext.setStrict(false)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "Janua", 0)
     assertEquals(newPos, 3)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
@@ -340,18 +412,23 @@ class TestTextParser extends FunSuite with GenTestPrinterParser with AssertionsH
 
   test("test_parse_short_lenient_number_match") {
     parseContext.setStrict(false)
-    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser = new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR, TextStyle.SHORT, TestTextParser.PROVIDER)
+    val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
+      new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
+                                                         TextStyle.SHORT,
+                                                         TestTextParser.PROVIDER)
     val newPos: Int = pp.parse(parseContext, "1", 0)
     assertEquals(newPos, 1)
     assertParsed(parseContext, MONTH_OF_YEAR, 1L)
   }
 
-  private def assertParsed(context: TTBPDateTimeParseContext, field: TemporalField, value: java.lang.Long): Unit = {
+  private def assertParsed(
+    context: TTBPDateTimeParseContext,
+    field:   TemporalField,
+    value:   java.lang.Long
+  ): Unit =
     if (value == null) {
       assertEquals(context.getParsed(field), null)
-    }
-    else {
+    } else {
       assertEquals(context.getParsed(field), value)
     }
-  }
 }

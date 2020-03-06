@@ -46,6 +46,7 @@ import scala.annotation.meta.field
 
 @SerialVersionUID(8386373296231747096L)
 private object ZoneRegion {
+
   /** The regex pattern for region IDs. */
   private lazy val PATTERN: Pattern = Pattern.compile("[A-Za-z][A-Za-z0-9~/._+-]+")
 
@@ -69,7 +70,8 @@ private object ZoneRegion {
       throw new DateTimeException(s"Invalid ID for region-based ZoneId, invalid format: $zoneId")
     if ((zoneId == "UTC") || (zoneId == "GMT") || (zoneId == "UT"))
       return new ZoneRegion(zoneId, ZoneOffset.UTC.getRules)
-    if (zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId.startsWith("GMT-")) {
+    if (zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId
+          .startsWith("GMT-")) {
       val offset: ZoneOffset = ZoneOffset.of(zoneId.substring(3))
       if (offset.getTotalSeconds == 0)
         return new ZoneRegion(zoneId.substring(0, 3), offset.getRules)
@@ -137,11 +139,16 @@ private object ZoneRegion {
   * @param rules  the rules, null for lazy lookup
   */
 @SerialVersionUID(8386373296231747096L)
-final class ZoneRegion private[bp](private val id: String, @(transient @field) private val rules: ZoneRules) extends ZoneId with Serializable {
+final class ZoneRegion private[bp] (
+  private val id:                        String,
+  @(transient @field) private val rules: ZoneRules
+) extends ZoneId
+    with Serializable {
 
   def getId: String = id
 
-  def getRules: ZoneRules = if (rules != null) rules else ZoneRulesProvider.getRules(id, forCaching = false)
+  def getRules: ZoneRules =
+    if (rules != null) rules else ZoneRulesProvider.getRules(id, forCaching = false)
 
   private def writeReplace: AnyRef = new Ser(Ser.ZONE_REGION_TYPE, this)
 
@@ -151,11 +158,12 @@ final class ZoneRegion private[bp](private val id: String, @(transient @field) p
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[bp] def write(out: DataOutput): Unit = {
-    out.writeByte(Ser.ZONE_REGION_TYPE)
+    out.writeByte(Ser.ZONE_REGION_TYPE.toInt)
     writeExternal(out)
   }
 

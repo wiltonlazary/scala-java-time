@@ -32,20 +32,23 @@
 package org.threeten.bp
 
 import java.text.NumberFormat
-import java.util.{TimeZone, Calendar, Date, GregorianCalendar}
+import java.util.{ Calendar, Date, GregorianCalendar, TimeZone }
 import org.threeten.bp.zone.ZoneRules
 
 /** Test Performance.
   */
 object PerformanceZone {
+
   /** The year to test. */
   private val YEAR: Int = 1980
+
   /** Size. */
   private val NF: NumberFormat = {
     val nf = NumberFormat.getIntegerInstance
     nf.setGroupingUsed(true)
     nf
   }
+
   /** Size. */
   private val SIZE: Int = 200000
 
@@ -77,10 +80,10 @@ object PerformanceZone {
   }
 
   private def jsrLocalGetOffset(): Unit = {
-    val dt: LocalDateTime = LocalDateTime.of(YEAR, 6, 1, 12, 0)
-    val tz: ZoneId = ZoneId.of("Europe/London")
+    val dt: LocalDateTime       = LocalDateTime.of(YEAR, 6, 1, 12, 0)
+    val tz: ZoneId              = ZoneId.of("Europe/London")
     val list: Array[ZoneOffset] = new Array[ZoneOffset](SIZE)
-    val start: Long = System.nanoTime
+    val start: Long             = System.nanoTime
 
     {
       var i: Int = 0
@@ -99,10 +102,10 @@ object PerformanceZone {
   }
 
   private def jsrInstantGetOffset(): Unit = {
-    val instant: Instant = LocalDateTime.of(YEAR, 6, 1, 12, 0).toInstant(ZoneOffset.ofHours(1))
-    val tz: ZoneId = ZoneId.of("Europe/London")
+    val instant: Instant        = LocalDateTime.of(YEAR, 6, 1, 12, 0).toInstant(ZoneOffset.ofHours(1))
+    val tz: ZoneId              = ZoneId.of("Europe/London")
     val list: Array[ZoneOffset] = new Array[ZoneOffset](SIZE)
-    val start: Long = System.nanoTime
+    val start: Long             = System.nanoTime
 
     {
       var i: Int = 0
@@ -121,10 +124,10 @@ object PerformanceZone {
   }
 
   private def jsrRulesLocalGetOffset(): Unit = {
-    val dt: LocalDateTime = LocalDateTime.of(YEAR, 6, 1, 12, 0)
-    val tz: ZoneRules = ZoneId.of("Europe/London").getRules
+    val dt: LocalDateTime       = LocalDateTime.of(YEAR, 6, 1, 12, 0)
+    val tz: ZoneRules           = ZoneId.of("Europe/London").getRules
     val list: Array[ZoneOffset] = new Array[ZoneOffset](SIZE)
-    val start: Long = System.nanoTime
+    val start: Long             = System.nanoTime
 
     {
       var i: Int = 0
@@ -143,10 +146,10 @@ object PerformanceZone {
   }
 
   private def jsrRulesInstantGetOffset(): Unit = {
-    val instant: Instant = LocalDateTime.of(YEAR, 6, 1, 12, 0).toInstant(ZoneOffset.ofHours(1))
-    val tz: ZoneRules = ZoneId.of("Europe/London").getRules
+    val instant: Instant        = LocalDateTime.of(YEAR, 6, 1, 12, 0).toInstant(ZoneOffset.ofHours(1))
+    val tz: ZoneRules           = ZoneId.of("Europe/London").getRules
     val list: Array[ZoneOffset] = new Array[ZoneOffset](SIZE)
-    val start: Long = System.nanoTime
+    val start: Long             = System.nanoTime
 
     {
       var i: Int = 0
@@ -165,9 +168,9 @@ object PerformanceZone {
   }
 
   private def jdkLocalGetOffset(): Unit = {
-    val tz: TimeZone = java.util.TimeZone.getTimeZone("Europe/London")
+    val tz: TimeZone     = java.util.TimeZone.getTimeZone("Europe/London")
     val list: Array[Int] = new Array[Int](SIZE)
-    val start: Long = System.nanoTime
+    val start: Long      = System.nanoTime
 
     {
       var i: Int = 0
@@ -186,12 +189,12 @@ object PerformanceZone {
   }
 
   private def jdkInstantGetOffset(): Unit = {
-    val tz: TimeZone = java.util.TimeZone.getTimeZone("Europe/London")
+    val tz: TimeZone          = java.util.TimeZone.getTimeZone("Europe/London")
     val dt: GregorianCalendar = new GregorianCalendar(tz)
     dt.setGregorianChange(new Date(Long.MinValue))
     dt.set(YEAR, 5, 1, 12, 0)
     val list: Array[Int] = new Array[Int](SIZE)
-    val start: Long = System.nanoTime
+    val start: Long      = System.nanoTime
 
     {
       var i: Int = 0

@@ -31,16 +31,17 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test fixed clock. */
 object TestClock_Fixed {
   val MOSCOW: ZoneId = ZoneId.of("Europe/Moscow")
-  val PARIS: ZoneId = ZoneId.of("Europe/Paris")
-  val INSTANT: Instant = LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2)).toInstant
+  val PARIS: ZoneId  = ZoneId.of("Europe/Paris")
+  val INSTANT: Instant =
+    LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2)).toInstant
 }
 
-class TestClock_Fixed extends FunSuite with AssertionsHelper {
+class TestClock_Fixed extends AnyFunSuite with AssertionsHelper {
   test("fixed_InstantZoneId") {
     val test: Clock = Clock.fixed(TestClock_Fixed.INSTANT, TestClock_Fixed.PARIS)
     assertEquals(test.instant, TestClock_Fixed.INSTANT)
@@ -60,14 +61,14 @@ class TestClock_Fixed extends FunSuite with AssertionsHelper {
   }
 
   test("withZone") {
-    val test: Clock = Clock.fixed(TestClock_Fixed.INSTANT, TestClock_Fixed.PARIS)
+    val test: Clock    = Clock.fixed(TestClock_Fixed.INSTANT, TestClock_Fixed.PARIS)
     val changed: Clock = test.withZone(TestClock_Fixed.MOSCOW)
     assertEquals(test.getZone, TestClock_Fixed.PARIS)
     assertEquals(changed.getZone, TestClock_Fixed.MOSCOW)
   }
 
   test("withZone_same") {
-    val test: Clock = Clock.fixed(TestClock_Fixed.INSTANT, TestClock_Fixed.PARIS)
+    val test: Clock    = Clock.fixed(TestClock_Fixed.INSTANT, TestClock_Fixed.PARIS)
     val changed: Clock = test.withZone(TestClock_Fixed.PARIS)
     assertSame(test, changed)
   }

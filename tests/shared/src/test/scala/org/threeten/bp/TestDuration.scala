@@ -31,15 +31,12 @@
  */
 package org.threeten.bp
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
-import java.util.Locale
-
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.temporal.ChronoUnit._
 import org.threeten.bp.temporal.TemporalUnit
 
 /** Test Duration. */
-class TestDuration extends FunSuite with AssertionsHelper {
+class TestDuration extends AnyFunSuite with AssertionsHelper {
 
   test("zero") {
     assertEquals(Duration.ZERO.getSeconds, 0L)
@@ -131,7 +128,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_factory_millis_long: List[List[Int]] = {
+  def provider_factory_millis_long: List[List[Int]] =
     List(
       List(0, 0, 0),
       List(1, 0, 1000000),
@@ -143,8 +140,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(-2, -1, 998000000),
       List(-999, -1, 1000000),
       List(-1000, -1, 0),
-      List(-1001, -2, 999000000))
-  }
+      List(-1001, -2, 999000000)
+    )
 
   test("factory_millis_long") {
     provider_factory_millis_long.foreach {
@@ -277,7 +274,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_factory_of_longTemporalUnit: List[List[Any]] = {
+  def provider_factory_of_longTemporalUnit: List[List[Any]] =
     List(
       List(0L, NANOS, 0L, 0),
       List(0L, MICROS, 0L, 0),
@@ -320,11 +317,23 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(-3L, HALF_DAYS, -3 * 43200L, 0),
       List(-3L, DAYS, -3 * 86400L, 0),
       List(Long.MaxValue, NANOS, Long.MaxValue / 1000000000, (Long.MaxValue % 1000000000).toInt),
-      List(Long.MinValue, NANOS, Long.MinValue / 1000000000 - 1, (Long.MinValue % 1000000000 + 1000000000).toInt),
-      List(Long.MaxValue, MICROS, Long.MaxValue / 1000000, ((Long.MaxValue % 1000000) * 1000).toInt),
-      List(Long.MinValue, MICROS, Long.MinValue / 1000000 - 1, ((Long.MinValue % 1000000 + 1000000) * 1000).toInt),
+      List(Long.MinValue,
+           NANOS,
+           Long.MinValue / 1000000000 - 1,
+           (Long.MinValue % 1000000000 + 1000000000).toInt),
+      List(Long.MaxValue,
+           MICROS,
+           Long.MaxValue / 1000000,
+           ((Long.MaxValue % 1000000) * 1000).toInt),
+      List(Long.MinValue,
+           MICROS,
+           Long.MinValue / 1000000 - 1,
+           ((Long.MinValue % 1000000 + 1000000) * 1000).toInt),
       List(Long.MaxValue, MILLIS, Long.MaxValue / 1000, ((Long.MaxValue % 1000) * 1000000).toInt),
-      List(Long.MinValue, MILLIS, Long.MinValue / 1000 - 1, ((Long.MinValue % 1000 + 1000) * 1000000).toInt),
+      List(Long.MinValue,
+           MILLIS,
+           Long.MinValue / 1000 - 1,
+           ((Long.MinValue % 1000 + 1000) * 1000000).toInt),
       List(Long.MaxValue, SECONDS, Long.MaxValue, 0),
       List(Long.MinValue, SECONDS, Long.MinValue, 0),
       List(Long.MaxValue / 60, MINUTES, (Long.MaxValue / 60) * 60, 0),
@@ -332,8 +341,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(Long.MaxValue / 3600, HOURS, (Long.MaxValue / 3600) * 3600, 0),
       List(Long.MinValue / 3600, HOURS, (Long.MinValue / 3600) * 3600, 0),
       List(Long.MaxValue / 43200, HALF_DAYS, (Long.MaxValue / 43200) * 43200, 0),
-      List(Long.MinValue / 43200, HALF_DAYS, (Long.MinValue / 43200) * 43200, 0))
-  }
+      List(Long.MinValue / 43200, HALF_DAYS, (Long.MinValue / 43200) * 43200, 0)
+    )
 
   test("factory_of_longTemporalUnit") {
     provider_factory_of_longTemporalUnit.foreach {
@@ -346,9 +355,15 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_factory_of_longTemporalUnit_outOfRange: List[List[Any]] = {
-    List(List(Long.MaxValue / 60 + 1, MINUTES), List(Long.MinValue / 60 - 1, MINUTES), List(Long.MaxValue / 3600 + 1, HOURS), List(Long.MinValue / 3600 - 1, HOURS), List(Long.MaxValue / 43200 + 1, HALF_DAYS), List(Long.MinValue / 43200 - 1, HALF_DAYS))
-  }
+  def provider_factory_of_longTemporalUnit_outOfRange: List[List[Any]] =
+    List(
+      List(Long.MaxValue / 60 + 1, MINUTES),
+      List(Long.MinValue / 60 - 1, MINUTES),
+      List(Long.MaxValue / 3600 + 1, HOURS),
+      List(Long.MinValue / 3600 - 1, HOURS),
+      List(Long.MaxValue / 43200 + 1, HALF_DAYS),
+      List(Long.MinValue / 43200 - 1, HALF_DAYS)
+    )
 
   test("factory_of_longTemporalUnit_outOfRange") {
     provider_factory_of_longTemporalUnit_outOfRange.foreach {
@@ -373,21 +388,19 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_factory_between_Instant_Instant: List[List[Int]] = {
-    List(
-      List(0, 0, 0, 0, 0, 0),
-      List(3, 0, 7, 0, 4, 0),
-      List(3, 20, 7, 50, 4, 30),
-      List(3, 80, 7, 50, 3, 999999970),
-      List(7, 0, 3, 0, -4, 0))
-  }
+  def provider_factory_between_Instant_Instant: List[List[Int]] =
+    List(List(0, 0, 0, 0, 0, 0),
+         List(3, 0, 7, 0, 4, 0),
+         List(3, 20, 7, 50, 4, 30),
+         List(3, 80, 7, 50, 3, 999999970),
+         List(7, 0, 3, 0, -4, 0))
 
   test("factory_between_Instant_Instant") {
     provider_factory_between_Instant_Instant.foreach {
       case secs1 :: nanos1 :: secs2 :: nanos2 :: expectedSeconds :: expectedNanoOfSecond :: Nil =>
         val start: Instant = Instant.ofEpochSecond(secs1, nanos1)
-        val end: Instant = Instant.ofEpochSecond(secs2, nanos2)
-        val t: Duration = Duration.between(start, end)
+        val end: Instant   = Instant.ofEpochSecond(secs2, nanos2)
+        val t: Duration    = Duration.between(start, end)
         assertEquals(t.getSeconds, expectedSeconds)
         assertEquals(t.getNano, expectedNanoOfSecond)
       case _ =>
@@ -409,7 +422,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_factory_parse: List[List[Any]] = {
+  def provider_factory_parse: List[List[Any]] =
     List(
       List("PT0S", 0L, 0L),
       List("PT1S", 1L, 0L),
@@ -458,8 +471,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List("P12DT0.35S", 12 * 24 * 3600L, 350000000L),
       List("P12DT1.35S", 12 * 24 * 3600 + 1L, 350000000L),
       List("P12DT-0.35S", 12 * 24 * 3600 - 1L, 1000000000 - 350000000L),
-      List("P12DT-1.35S", 12 * 24 * 3600 - 2L, 1000000000 - 350000000L))
-  }
+      List("P12DT-1.35S", 12 * 24 * 3600 - 2L, 1000000000 - 350000000L)
+    )
 
   test("factory_parse") {
     provider_factory_parse.foreach {
@@ -496,7 +509,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_factory_parseFailures: List[List[String]] = {
+  def provider_factory_parseFailures: List[List[String]] =
     List(
       List(""),
       List("PTS"),
@@ -517,8 +530,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List("PT2.-3"),
       List("PT-2.-3"),
       List("PT2.+3"),
-      List("PT-2.+3"))
-  }
+      List("PT-2.+3")
+    )
 
   test("factory_parseFailures") {
     provider_factory_parseFailures.foreach {
@@ -764,13 +777,15 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(3, 333333333, 2, 0, 5, 333333333),
       List(3, 333333333, 3, 0, 6, 333333333),
       List(3, 333333333, 3, 333333333, 6, 666666666),
-      List(Long.MaxValue, 0, Long.MinValue, 0, -1, 0))
+      List(Long.MaxValue, 0, Long.MinValue, 0, -1, 0)
+    )
   }
 
   test("plus") {
     provider_plus.foreach {
       case (seconds: Long) :: (nanos: Long) :: (otherSeconds: Long) :: (otherNanos: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
-        val t: Duration = Duration.ofSeconds(seconds, nanos).plus(Duration.ofSeconds(otherSeconds, otherNanos))
+        val t: Duration =
+          Duration.ofSeconds(seconds, nanos).plus(Duration.ofSeconds(otherSeconds, otherNanos))
         assertEquals(t.getSeconds, expectedSeconds)
         assertEquals(t.getNano, expectedNanoOfSecond)
       case _ =>
@@ -787,8 +802,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
 
   test("plusOverflowTooSmall") {
     assertThrows[ArithmeticException] {
-      val t: Duration = Duration.ofSeconds (Long.MinValue)
-      t.plus (Duration.ofSeconds (- 1, 999999999) )
+      val t: Duration = Duration.ofSeconds(Long.MinValue)
+      t.plus(Duration.ofSeconds(-1, 999999999))
     }
   }
 
@@ -827,7 +842,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_plusSeconds_long: List[List[Long]] = {
+  def provider_plusSeconds_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, 1, 0),
@@ -848,8 +863,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(-1, 1, 1, 0, 1),
       List(-1, 1, -1, -2, 1),
       List(-1, 1, Long.MaxValue, Long.MaxValue - 1, 1),
-      List(-1, 1, Long.MinValue + 1, Long.MinValue, 1))
-  }
+      List(-1, 1, Long.MinValue + 1, Long.MinValue, 1)
+    )
 
   test("plusSeconds_long") {
     provider_plusSeconds_long.foreach {
@@ -877,7 +892,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_plusMillis_long: List[List[Long]] = {
+  def provider_plusMillis_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, 0, 1000000),
@@ -924,8 +939,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(0, 999999999, 1001, 2, 999999),
       List(0, 999999999, -1, 0, 998999999),
       List(0, 999999999, -1000, -1, 999999999),
-      List(0, 999999999, -1001, -1, 998999999))
-  }
+      List(0, 999999999, -1001, -1, 998999999)
+    )
 
   test("plusMillis_long") {
     provider_plusMillis_long.foreach {
@@ -991,7 +1006,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_plusNanos_long: List[List[Long]] = {
+  def provider_plusNanos_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, 0, 1),
@@ -1056,8 +1071,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(Long.MaxValue, 0, 999999999, Long.MaxValue, 999999999),
       List(Long.MaxValue - 1, 0, 1999999999, Long.MaxValue, 999999999),
       List(Long.MinValue, 1, -1, Long.MinValue, 0),
-      List(Long.MinValue + 1, 1, -1000000001, Long.MinValue, 0))
-  }
+      List(Long.MinValue + 1, 1, -1000000001, Long.MinValue, 0)
+    )
 
   test("plusNanos_long") {
     provider_plusNanos_long.foreach {
@@ -1253,13 +1268,15 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(3, 333333333, 2, 0, 1, 333333333),
       List(3, 333333333, 3, 0, 0, 333333333),
       List(3, 333333333, 3, 333333333, 0, 0),
-      List(Long.MaxValue, 0, Long.MaxValue, 0, 0, 0))
+      List(Long.MaxValue, 0, Long.MaxValue, 0, 0, 0)
+    )
   }
 
   test("minus") {
     provider_minus.foreach {
       case (seconds: Long) :: (nanos: Long) :: (otherSeconds: Long) :: (otherNanos: Long) :: (expectedSeconds: Long) :: (expectedNanoOfSecond: Long) :: Nil =>
-        val t: Duration = Duration.ofSeconds(seconds, nanos).minus(Duration.ofSeconds(otherSeconds, otherNanos))
+        val t: Duration =
+          Duration.ofSeconds(seconds, nanos).minus(Duration.ofSeconds(otherSeconds, otherNanos))
         assertEquals(t.getSeconds, expectedSeconds)
         assertEquals(t.getNano, expectedNanoOfSecond)
       case _ =>
@@ -1309,14 +1326,13 @@ class TestDuration extends FunSuite with AssertionsHelper {
     assertEquals(999999999, t.getNano)
   }
 
-  def minus_longTemporalUnit_null(): Unit = {
+  def minus_longTemporalUnit_null(): Unit =
     assertThrows[NullPointerException] {
       val t: Duration = Duration.ofSeconds(1)
       t.minus(1, null.asInstanceOf[TemporalUnit])
     }
-  }
 
-  def provider_minusSeconds_long: List[List[Long]] = {
+  def provider_minusSeconds_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, -1, 0),
@@ -1337,8 +1353,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(-1, 1, 1, -2, 1),
       List(-1, 1, -1, 0, 1),
       List(-1, 1, Long.MaxValue, Long.MinValue, 1),
-      List(-1, 1, Long.MinValue + 1, Long.MaxValue - 1, 1))
-  }
+      List(-1, 1, Long.MinValue + 1, Long.MaxValue - 1, 1)
+    )
 
   test("minusSeconds_long") {
     provider_minusSeconds_long.foreach {
@@ -1366,7 +1382,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_minusMillis_long: List[List[Long]] = {
+  def provider_minusMillis_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, -1, 999000000),
@@ -1413,8 +1429,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(0, 999999999, 1001, -1, 998999999),
       List(0, 999999999, -1, 1, 999999),
       List(0, 999999999, -1000, 1, 999999999),
-      List(0, 999999999, -1001, 2, 999999))
-  }
+      List(0, 999999999, -1001, 2, 999999)
+    )
 
   test("minusMillis_long") {
     provider_minusMillis_long.foreach {
@@ -1480,7 +1496,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_minusNanos_long: List[List[Long]] = {
+  def provider_minusNanos_long: List[List[Long]] =
     List(
       List(0, 0, 0, 0, 0),
       List(0, 0, 1, -1, 999999999),
@@ -1545,8 +1561,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(Long.MaxValue, 0, -999999999, Long.MaxValue, 999999999),
       List(Long.MaxValue - 1, 0, -1999999999, Long.MaxValue, 999999999),
       List(Long.MinValue, 1, 1, Long.MinValue, 0),
-      List(Long.MinValue + 1, 1, 1000000001, Long.MinValue, 0))
-  }
+      List(Long.MinValue + 1, 1, 1000000001, Long.MinValue, 0)
+    )
 
   test("minusNanos_long") {
     provider_minusNanos_long.foreach {
@@ -1574,7 +1590,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_multipliedBy: List[List[Any]] = {
+  def provider_multipliedBy: List[List[Any]] =
     List(
       List(-4, 666666667, -3, 9, 999999999),
       List(-4, 666666667, -2, 6, 666666666),
@@ -1652,8 +1668,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(3, 333333333, 0, 0, 0),
       List(3, 333333333, 1, 3, 333333333),
       List(3, 333333333, 2, 6, 666666666),
-      List(3, 333333333, 3, 9, 999999999))
-  }
+      List(3, 333333333, 3, 9, 999999999)
+    )
 
   test("multipliedBy") {
     provider_multipliedBy.foreach {
@@ -1691,7 +1707,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def provider_dividedBy: List[List[Any]] = {
+  def provider_dividedBy: List[List[Any]] =
     List(
       List(-4, 666666667, -3, 1, 111111111),
       List(-4, 666666667, -2, 1, 666666666),
@@ -1758,8 +1774,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(3, 333333333, -1, -4, 666666667),
       List(3, 333333333, 1, 3, 333333333),
       List(3, 333333333, 2, 1, 666666666),
-      List(3, 333333333, 3, 1, 111111111))
-  }
+      List(3, 333333333, 3, 1, 111111111)
+    )
 
   test("dividedBy") {
     provider_dividedBy.foreach {
@@ -1775,7 +1791,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
 
   test("dividedByZero") {
     provider_dividedBy.foreach {
-      case (seconds: Int) :: (nanos: Int) :: (divisor: Int) :: (expectedSeconds: Int) :: (expectedNanos: Int) :: Nil =>
+      case (seconds: Int) :: (nanos: Int) :: (_: Int) :: (_: Int) :: (_: Int) :: Nil =>
         assertThrows[ArithmeticException] {
           val t: Duration = Duration.ofSeconds(seconds, nanos)
           t.dividedBy(0)
@@ -1853,7 +1869,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
 
   test("test_toMillis_tooBig") {
     assertThrows[ArithmeticException] {
-      val test: Duration = Duration.ofSeconds(Long.MaxValue / 1000, ((Long.MaxValue % 1000) + 1) * 1000000)
+      val test: Duration =
+        Duration.ofSeconds(Long.MaxValue / 1000, ((Long.MaxValue % 1000) + 1) * 1000000)
       test.toMillis
     }
   }
@@ -1872,14 +1889,15 @@ class TestDuration extends FunSuite with AssertionsHelper {
       Duration.ofSeconds(0L, 2),
       Duration.ofSeconds(0L, 999999999),
       Duration.ofSeconds(1L, 0),
-      Duration.ofSeconds(2L, 0))
+      Duration.ofSeconds(2L, 0)
+    )
   }
 
   private def doTest_comparisons_Duration(durations: Duration*): Unit = {
     var i: Int = 0
     while (i < durations.length) {
       val a: Duration = durations(i)
-      var j: Int = 0
+      var j: Int      = 0
       while (j < durations.length) {
         val b: Duration = durations(j)
         if (i < j) {
@@ -1898,18 +1916,17 @@ class TestDuration extends FunSuite with AssertionsHelper {
     }
   }
 
-  def test_compareTo_ObjectNull(): Unit = {
+  def test_compareTo_ObjectNull(): Unit =
     assertThrows[NullPointerException] {
       val a: Duration = Duration.ofSeconds(0L, 0)
       a.compareTo(null)
     }
-  }
 
   test("test_equals") {
     val test5a: Duration = Duration.ofSeconds(5L, 20)
     val test5b: Duration = Duration.ofSeconds(5L, 20)
     val test5n: Duration = Duration.ofSeconds(5L, 30)
-    val test6: Duration = Duration.ofSeconds(6L, 20)
+    val test6: Duration  = Duration.ofSeconds(6L, 20)
     assertEquals(test5a == test5a, true)
     assertEquals(test5a == test5b, true)
     assertEquals(test5a == test5n, false)
@@ -1942,7 +1959,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     val test5a: Duration = Duration.ofSeconds(5L, 20)
     val test5b: Duration = Duration.ofSeconds(5L, 20)
     val test5n: Duration = Duration.ofSeconds(5L, 30)
-    val test6: Duration = Duration.ofSeconds(6L, 20)
+    val test6: Duration  = Duration.ofSeconds(6L, 20)
     assertEquals(test5a.hashCode == test5a.hashCode, true)
     assertEquals(test5a.hashCode == test5b.hashCode, true)
     assertEquals(test5b.hashCode == test5b.hashCode, true)
@@ -1950,7 +1967,7 @@ class TestDuration extends FunSuite with AssertionsHelper {
     assertEquals(test5a.hashCode == test6.hashCode, false)
   }
 
-  def provider_toString: List[List[Any]] = {
+  def provider_toString: List[List[Any]] =
     List(
       List(0, 0, "PT0S"),
       List(0, 1, "PT0.000000001S"),
@@ -1976,8 +1993,8 @@ class TestDuration extends FunSuite with AssertionsHelper {
       List(-1, 900000000, "PT-0.1S"),
       List(60, 0, "PT1M"),
       List(3600, 0, "PT1H"),
-      List(7261, 0, "PT2H1M1S"))
-  }
+      List(7261, 0, "PT2H1M1S")
+    )
 
   test("test_toString") {
     provider_toString.foreach {

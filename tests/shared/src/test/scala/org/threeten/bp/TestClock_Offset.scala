@@ -31,26 +31,28 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test offset clock. */
 object TestClock_Offset {
   val MOSCOW: ZoneId = ZoneId.of("Europe/Moscow")
-  val PARIS: ZoneId = ZoneId.of("Europe/Paris")
-  val INSTANT: Instant = LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2)).toInstant
+  val PARIS: ZoneId  = ZoneId.of("Europe/Paris")
+  val INSTANT: Instant =
+    LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2)).toInstant
   val OFFSET: Duration = Duration.ofSeconds(2)
 }
 
-class TestClock_Offset extends FunSuite with AssertionsHelper {
+class TestClock_Offset extends AnyFunSuite with AssertionsHelper {
   test("offset_ClockDuration") {
-    val test: Clock = Clock.offset(Clock.fixed(TestClock_Offset.INSTANT, TestClock_Offset.PARIS), TestClock_Offset.OFFSET)
+    val test: Clock = Clock.offset(Clock.fixed(TestClock_Offset.INSTANT, TestClock_Offset.PARIS),
+                                   TestClock_Offset.OFFSET)
     assertEquals(test.instant, TestClock_Offset.INSTANT.plus(TestClock_Offset.OFFSET))
     assertEquals(test.getZone, TestClock_Offset.PARIS)
   }
 
   test("offset_ClockDuration_zeroDuration") {
     val underlying: Clock = Clock.system(TestClock_Offset.PARIS)
-    val test: Clock = Clock.offset(underlying, Duration.ZERO)
+    val test: Clock       = Clock.offset(underlying, Duration.ZERO)
     assertSame(test, underlying)
   }
 
@@ -67,14 +69,14 @@ class TestClock_Offset extends FunSuite with AssertionsHelper {
   }
 
   test("withZone") {
-    val test: Clock = Clock.offset(Clock.system(TestClock_Offset.PARIS), TestClock_Offset.OFFSET)
+    val test: Clock    = Clock.offset(Clock.system(TestClock_Offset.PARIS), TestClock_Offset.OFFSET)
     val changed: Clock = test.withZone(TestClock_Offset.MOSCOW)
     assertEquals(test.getZone, TestClock_Offset.PARIS)
     assertEquals(changed.getZone, TestClock_Offset.MOSCOW)
   }
 
   test("withZone_same") {
-    val test: Clock = Clock.offset(Clock.system(TestClock_Offset.PARIS), TestClock_Offset.OFFSET)
+    val test: Clock    = Clock.offset(Clock.system(TestClock_Offset.PARIS), TestClock_Offset.OFFSET)
     val changed: Clock = test.withZone(TestClock_Offset.PARIS)
     assertSame(test, changed)
   }
@@ -94,7 +96,8 @@ class TestClock_Offset extends FunSuite with AssertionsHelper {
     assertEquals(b == b, true)
     val c: Clock = Clock.offset(Clock.system(TestClock_Offset.MOSCOW), TestClock_Offset.OFFSET)
     assertEquals(a == c, false)
-    val d: Clock = Clock.offset(Clock.system(TestClock_Offset.PARIS), TestClock_Offset.OFFSET.minusNanos(1))
+    val d: Clock =
+      Clock.offset(Clock.system(TestClock_Offset.PARIS), TestClock_Offset.OFFSET.minusNanos(1))
     assertEquals(a == d, false)
     assertEquals(a == null, false)
     assertNotEquals(a, "other type")
@@ -108,7 +111,8 @@ class TestClock_Offset extends FunSuite with AssertionsHelper {
     assertEquals(a.hashCode, b.hashCode)
     val c: Clock = Clock.offset(Clock.system(TestClock_Offset.MOSCOW), TestClock_Offset.OFFSET)
     assertEquals(a.hashCode == c.hashCode, false)
-    val d: Clock = Clock.offset(Clock.system(TestClock_Offset.PARIS), TestClock_Offset.OFFSET.minusNanos(1))
+    val d: Clock =
+      Clock.offset(Clock.system(TestClock_Offset.PARIS), TestClock_Offset.OFFSET.minusNanos(1))
     assertEquals(a.hashCode == d.hashCode, false)
   }
 

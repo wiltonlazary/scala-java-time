@@ -31,17 +31,20 @@
  */
 package org.threeten.bp.zone
 
-import java.util.{Collections, Objects, ServiceConfigurationError}
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
-import java.util.concurrent.CopyOnWriteArrayList
-import org.threeten.bp.DateTimeException
+import java.util.{ Collections, Objects }
+import java.util.HashMap
+import java.util.Map
+import java.util.ArrayList
 
 object ZoneRulesProvider {
+
   /** The set of loaded providers. */
-  private lazy val PROVIDERS: CopyOnWriteArrayList[ZoneRulesProvider] = new CopyOnWriteArrayList[ZoneRulesProvider]
+  private lazy val PROVIDERS: ArrayList[ZoneRulesProvider] =
+    new ArrayList[ZoneRulesProvider]
+
   /** The lookup from zone region ID to provider. */
-  private lazy val ZONES: ConcurrentMap[String, ZoneRulesProvider] = new ConcurrentHashMap[String, ZoneRulesProvider](512, 0.75f, 2)
+  private lazy val ZONES: Map[String, ZoneRulesProvider] =
+    new HashMap[String, ZoneRulesProvider]()
 
   /** Gets the set of available zone IDs.
     *
@@ -141,6 +144,7 @@ object ZoneRulesProvider {
     Objects.requireNonNull(provider, "provider")
     registerProvider0(provider)
     PROVIDERS.add(provider)
+    ()
   }
 
   /** Registers the provider.
@@ -153,9 +157,11 @@ object ZoneRulesProvider {
     while (zoneIds.hasNext) {
       val zoneId = zoneIds.next()
       Objects.requireNonNull(zoneId, "zoneId")
-      val old: ZoneRulesProvider = ZONES.putIfAbsent(zoneId, provider)
+      val old: ZoneRulesProvider = ZONES.put(zoneId, provider)
       if (old != null)
-        throw new ZoneRulesException(s"Unable to register zone as one already registered with that ID: $zoneId, currently loading from provider: $provider")
+        throw new ZoneRulesException(
+          s"Unable to register zone as one already registered with that ID: $zoneId, currently loading from provider: $provider"
+        )
     }
   }
 
@@ -174,7 +180,7 @@ object ZoneRulesProvider {
     */
   def refresh: Boolean = {
     var changed: Boolean = false
-    val providers = PROVIDERS.iterator
+    val providers        = PROVIDERS.iterator
     while (providers.hasNext) {
       val provider = providers.next()
       changed |= provider.provideRefresh
@@ -211,7 +217,7 @@ object ZoneRulesProvider {
   * When examined in detail, this is a complex problem.
   * Providers may choose to handle dynamic updates, however the default provider does not.
   */
-abstract class ZoneRulesProvider protected() {
+abstract class ZoneRulesProvider protected () {
 
   /** SPI method to get the available zone IDs.
     *

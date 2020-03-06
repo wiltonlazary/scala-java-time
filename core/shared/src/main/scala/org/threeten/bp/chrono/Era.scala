@@ -66,6 +66,7 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
   * It is recommended to use an enum whenever possible.
   */
 trait Era extends TemporalAccessor with TemporalAdjuster {
+
   /** Gets the numeric value associated with the era as defined by the chronology.
     * Each chronology defines the predefined Eras and methods to list the Eras
     * of the chronology.
@@ -106,21 +107,19 @@ trait Era extends TemporalAccessor with TemporalAdjuster {
     else range(field).checkValidIntValue(getLong(field), field)
 
   def getLong(field: TemporalField): Long =
-    if (field eq ERA) getValue
-    else if (field.isInstanceOf[ChronoField]) throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+    if (field eq ERA) getValue.toLong
+    else if (field.isInstanceOf[ChronoField])
+      throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
     else field.getFrom(this)
 
-  def adjustInto(temporal: Temporal): Temporal = temporal.`with`(ERA, getValue)
+  def adjustInto(temporal: Temporal): Temporal = temporal.`with`(ERA, getValue.toLong)
 
   override def query[R](query: TemporalQuery[R]): R =
     query match {
-      case TemporalQueries.precision  => ChronoUnit.ERAS.asInstanceOf[R]
-      case TemporalQueries.chronology
-         | TemporalQueries.zone
-         | TemporalQueries.zoneId
-         | TemporalQueries.offset
-         | TemporalQueries.localDate
-         | TemporalQueries.localTime  => null.asInstanceOf[R]
-      case _                          => query.queryFrom(this)
+      case TemporalQueries.precision => ChronoUnit.ERAS.asInstanceOf[R]
+      case TemporalQueries.chronology | TemporalQueries.zone | TemporalQueries.zoneId |
+          TemporalQueries.offset | TemporalQueries.localDate | TemporalQueries.localTime =>
+        null.asInstanceOf[R]
+      case _ => query.queryFrom(this)
     }
 }

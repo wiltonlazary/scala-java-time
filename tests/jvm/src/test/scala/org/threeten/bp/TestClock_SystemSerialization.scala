@@ -31,9 +31,9 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestClock_SystemSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestClock_SystemSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("isSerializable") {
     assertSerializable(Clock.systemUTC)
     assertSerializable(Clock.systemDefaultZone)

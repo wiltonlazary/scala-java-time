@@ -50,10 +50,8 @@ import org.threeten.bp.temporal.ChronoField.SECOND_OF_MINUTE
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.NANOS
 import org.threeten.bp.temporal.ChronoUnit.SECONDS
-import java.lang.reflect.Constructor
-import java.lang.reflect.InvocationTargetException
-
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfter
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoField
@@ -68,23 +66,43 @@ import org.threeten.bp.temporal.TemporalQueries
 object TestOffsetTime {
   val OFFSET_PONE: ZoneOffset = ZoneOffset.ofHours(1)
   val OFFSET_PTWO: ZoneOffset = ZoneOffset.ofHours(2)
-  val DATE: LocalDate = LocalDate.of(2008, 12, 3)
+  val DATE: LocalDate         = LocalDate.of(2008, 12, 3)
 }
 
-class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper with BeforeAndAfter {
+class TestOffsetTime
+    extends AnyFunSuite
+    with GenDateTimeTest
+    with AssertionsHelper
+    with BeforeAndAfter {
   private var TEST_11_30_59_500_PONE: OffsetTime = null
 
   before {
-    TEST_11_30_59_500_PONE = OffsetTime.of(LocalTime.of(11, 30, 59, 500), TestOffsetTime.OFFSET_PONE)
+    TEST_11_30_59_500_PONE =
+      OffsetTime.of(LocalTime.of(11, 30, 59, 500), TestOffsetTime.OFFSET_PONE)
   }
 
-  protected def samples: List[TemporalAccessor] = {
+  protected def samples: List[TemporalAccessor] =
     List(TEST_11_30_59_500_PONE, OffsetTime.MIN, OffsetTime.MAX)
-  }
 
-  protected def validFields: List[TemporalField] = {
-    List(NANO_OF_SECOND, NANO_OF_DAY, MICRO_OF_SECOND, MICRO_OF_DAY, MILLI_OF_SECOND, MILLI_OF_DAY, SECOND_OF_MINUTE, SECOND_OF_DAY, MINUTE_OF_HOUR, MINUTE_OF_DAY, CLOCK_HOUR_OF_AMPM, HOUR_OF_AMPM, CLOCK_HOUR_OF_DAY, HOUR_OF_DAY, AMPM_OF_DAY, OFFSET_SECONDS)
-  }
+  protected def validFields: List[TemporalField] =
+    List(
+      NANO_OF_SECOND,
+      NANO_OF_DAY,
+      MICRO_OF_SECOND,
+      MICRO_OF_DAY,
+      MILLI_OF_SECOND,
+      MILLI_OF_DAY,
+      SECOND_OF_MINUTE,
+      SECOND_OF_DAY,
+      MINUTE_OF_HOUR,
+      MINUTE_OF_DAY,
+      CLOCK_HOUR_OF_AMPM,
+      HOUR_OF_AMPM,
+      CLOCK_HOUR_OF_DAY,
+      HOUR_OF_DAY,
+      AMPM_OF_DAY,
+      OFFSET_SECONDS
+    )
 
   protected def invalidFields: List[TemporalField] =
     List(ChronoField.values: _*).filterNot(validFields.contains)
@@ -100,8 +118,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   test("now") {
     val nowDT: ZonedDateTime = ZonedDateTime.now
     val expected: OffsetTime = OffsetTime.now(Clock.systemDefaultZone)
-    val test: OffsetTime = OffsetTime.now
-    val diff: Long = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
+    val test: OffsetTime     = OffsetTime.now
+    val diff: Long           = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
     assertTrue(diff < 100000000)
     assertEquals(test.getOffset, nowDT.getOffset)
   }
@@ -112,7 +130,7 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
       while (i < (2 * 24 * 60 * 60)) {
         {
           val instant: Instant = Instant.ofEpochSecond(i, 8)
-          val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
+          val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
           val test: OffsetTime = OffsetTime.now(clock)
           assertEquals(test.getHour, (i / (60 * 60)) % 24)
           assertEquals(test.getMinute, (i / 60) % 60)
@@ -134,7 +152,7 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
       while (i >= -(24 * 60 * 60)) {
         {
           val instant: Instant = Instant.ofEpochSecond(i, 8)
-          val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
+          val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
           val test: OffsetTime = OffsetTime.now(clock)
           assertEquals(test.getHour, ((i + 24 * 60 * 60) / (60 * 60)) % 24)
           assertEquals(test.getMinute, ((i + 24 * 60 * 60) / 60) % 60)
@@ -158,8 +176,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
       while (i < 15) {
         {
           val offset: ZoneOffset = ZoneOffset.ofHours(i)
-          val clock: Clock = Clock.fixed(base, offset)
-          val test: OffsetTime = OffsetTime.now(clock)
+          val clock: Clock       = Clock.fixed(base, offset)
+          val test: OffsetTime   = OffsetTime.now(clock)
           assertEquals(test.getHour, (12 + i) % 24)
           assertEquals(test.getMinute, 0)
           assertEquals(test.getSecond, 0)
@@ -215,7 +233,7 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
 
   test("factory_LocalTimeZoneOffset") {
     val localTime: LocalTime = LocalTime.of(11, 30, 10, 500)
-    val test: OffsetTime = OffsetTime.of(localTime, TestOffsetTime.OFFSET_PONE)
+    val test: OffsetTime     = OffsetTime.of(localTime, TestOffsetTime.OFFSET_PONE)
     check(test, 11, 30, 10, 500, TestOffsetTime.OFFSET_PONE)
   }
 
@@ -302,11 +320,13 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("factory_from_TemporalAccessor_OT") {
-    assertEquals(OffsetTime.from(OffsetTime.of(LocalTime.of(17, 30), TestOffsetTime.OFFSET_PONE)), OffsetTime.of(LocalTime.of(17, 30), TestOffsetTime.OFFSET_PONE))
+    assertEquals(OffsetTime.from(OffsetTime.of(LocalTime.of(17, 30), TestOffsetTime.OFFSET_PONE)),
+                 OffsetTime.of(LocalTime.of(17, 30), TestOffsetTime.OFFSET_PONE))
   }
 
   test("test_from_TemporalAccessor_ZDT") {
-    val base: ZonedDateTime = LocalDateTime.of(2007, 7, 15, 11, 30, 59, 500).atZone(TestOffsetTime.OFFSET_PONE)
+    val base: ZonedDateTime =
+      LocalDateTime.of(2007, 7, 15, 11, 30, 59, 500).atZone(TestOffsetTime.OFFSET_PONE)
     assertEquals(OffsetTime.from(base), TEST_11_30_59_500_PONE)
   }
 
@@ -334,16 +354,15 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   val provider_sampleBadParse: List[String] = {
-    List(
-      "00;00",
-      "12-00",
-      "-01:00",
-      "00:00:00-09",
-      "00:00:00,09",
-      "00:00:abs",
-      "11",
-      "11:30",
-      "11:30+01:00[Europe/Paris]")
+    List("00;00",
+         "12-00",
+         "-01:00",
+         "00:00:00-09",
+         "00:00:00,09",
+         "00:00:abs",
+         "11",
+         "11:30",
+         "11:30+01:00[Europe/Paris]")
   }
 
   test("factory_parse_invalidText") {
@@ -374,7 +393,7 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
 
   test("factory_parse_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("H m s XXX")
-    val test: OffsetTime = OffsetTime.parse("11 30 0 +01:00", f)
+    val test: OffsetTime     = OffsetTime.parse("11 30 0 +01:00", f)
     assertEquals(test, OffsetTime.of(LocalTime.of(11, 30), ZoneOffset.ofHours(1)))
   }
 
@@ -392,17 +411,16 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   val provider_sampleTimes: List[List[Any]] = {
-    List(
-      List(11, 30, 20, 500, TestOffsetTime.OFFSET_PONE),
-      List(11, 0, 0, 0, TestOffsetTime.OFFSET_PONE),
-      List(23, 59, 59, 999999999, TestOffsetTime.OFFSET_PONE))
+    List(List(11, 30, 20, 500, TestOffsetTime.OFFSET_PONE),
+         List(11, 0, 0, 0, TestOffsetTime.OFFSET_PONE),
+         List(23, 59, 59, 999999999, TestOffsetTime.OFFSET_PONE))
   }
 
   test("test_get") {
     provider_sampleTimes.foreach {
       case (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offset: ZoneOffset) :: Nil =>
         val localTime: LocalTime = LocalTime.of(h, m, s, n)
-        val a: OffsetTime = OffsetTime.of(localTime, offset)
+        val a: OffsetTime        = OffsetTime.of(localTime, offset)
         assertEquals(a.toLocalTime, localTime)
         assertEquals(a.getOffset, offset)
         assertEquals(a.toString, localTime.toString + offset.toString)
@@ -416,7 +434,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("test_get_TemporalField") {
-    val test: OffsetTime = OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
+    val test: OffsetTime =
+      OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
     assertEquals(test.get(ChronoField.HOUR_OF_DAY), 12)
     assertEquals(test.get(ChronoField.MINUTE_OF_HOUR), 30)
     assertEquals(test.get(ChronoField.SECOND_OF_MINUTE), 40)
@@ -427,7 +446,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("test_getLong_TemporalField") {
-    val test: OffsetTime = OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
+    val test: OffsetTime =
+      OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
     assertEquals(test.getLong(ChronoField.HOUR_OF_DAY), 12)
     assertEquals(test.getLong(ChronoField.MINUTE_OF_HOUR), 30)
     assertEquals(test.getLong(ChronoField.SECOND_OF_MINUTE), 40)
@@ -440,10 +460,13 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   test("test_query") {
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.chronology), null)
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.localDate), null)
-    assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.localTime), TEST_11_30_59_500_PONE.toLocalTime)
-    assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.offset), TEST_11_30_59_500_PONE.getOffset)
+    assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.localTime),
+                 TEST_11_30_59_500_PONE.toLocalTime)
+    assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.offset),
+                 TEST_11_30_59_500_PONE.getOffset)
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.precision), ChronoUnit.NANOS)
-    assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.zone), TEST_11_30_59_500_PONE.getOffset)
+    assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.zone),
+                 TEST_11_30_59_500_PONE.getOffset)
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.zoneId), null)
   }
 
@@ -474,8 +497,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("test_withOffsetSameInstant") {
-    val base: OffsetTime = OffsetTime.of(LocalTime.of(11, 30, 59), TestOffsetTime.OFFSET_PONE)
-    val test: OffsetTime = base.withOffsetSameInstant(TestOffsetTime.OFFSET_PTWO)
+    val base: OffsetTime     = OffsetTime.of(LocalTime.of(11, 30, 59), TestOffsetTime.OFFSET_PONE)
+    val test: OffsetTime     = base.withOffsetSameInstant(TestOffsetTime.OFFSET_PTWO)
     val expected: OffsetTime = OffsetTime.of(LocalTime.of(12, 30, 59), TestOffsetTime.OFFSET_PTWO)
     assertEquals(test, expected)
   }
@@ -507,7 +530,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("test_with_adjustment_OffsetTime") {
-    val test: OffsetTime = TEST_11_30_59_500_PONE.`with`(OffsetTime.of(LocalTime.of(13, 35), TestOffsetTime.OFFSET_PTWO))
+    val test: OffsetTime =
+      TEST_11_30_59_500_PONE.`with`(OffsetTime.of(LocalTime.of(13, 35), TestOffsetTime.OFFSET_PTWO))
     assertEquals(test, OffsetTime.of(LocalTime.of(13, 35), TestOffsetTime.OFFSET_PTWO))
   }
 
@@ -531,14 +555,24 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("test_with_TemporalField") {
-    val test: OffsetTime = OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
-    assertEquals(test.`with`(ChronoField.HOUR_OF_DAY, 15), OffsetTime.of(LocalTime.of(15, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
-    assertEquals(test.`with`(ChronoField.MINUTE_OF_HOUR, 50), OffsetTime.of(LocalTime.of(12, 50, 40, 987654321), TestOffsetTime.OFFSET_PONE))
-    assertEquals(test.`with`(ChronoField.SECOND_OF_MINUTE, 50), OffsetTime.of(LocalTime.of(12, 30, 50, 987654321), TestOffsetTime.OFFSET_PONE))
-    assertEquals(test.`with`(ChronoField.NANO_OF_SECOND, 12345), OffsetTime.of(LocalTime.of(12, 30, 40, 12345), TestOffsetTime.OFFSET_PONE))
-    assertEquals(test.`with`(ChronoField.HOUR_OF_AMPM, 6), OffsetTime.of(LocalTime.of(18, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
-    assertEquals(test.`with`(ChronoField.AMPM_OF_DAY, 0), OffsetTime.of(LocalTime.of(0, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
-    assertEquals(test.`with`(ChronoField.OFFSET_SECONDS, 7205), OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), ZoneOffset.ofHoursMinutesSeconds(2, 0, 5)))
+    val test: OffsetTime =
+      OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
+    assertEquals(test.`with`(ChronoField.HOUR_OF_DAY, 15),
+                 OffsetTime.of(LocalTime.of(15, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
+    assertEquals(test.`with`(ChronoField.MINUTE_OF_HOUR, 50),
+                 OffsetTime.of(LocalTime.of(12, 50, 40, 987654321), TestOffsetTime.OFFSET_PONE))
+    assertEquals(test.`with`(ChronoField.SECOND_OF_MINUTE, 50),
+                 OffsetTime.of(LocalTime.of(12, 30, 50, 987654321), TestOffsetTime.OFFSET_PONE))
+    assertEquals(test.`with`(ChronoField.NANO_OF_SECOND, 12345),
+                 OffsetTime.of(LocalTime.of(12, 30, 40, 12345), TestOffsetTime.OFFSET_PONE))
+    assertEquals(test.`with`(ChronoField.HOUR_OF_AMPM, 6),
+                 OffsetTime.of(LocalTime.of(18, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
+    assertEquals(test.`with`(ChronoField.AMPM_OF_DAY, 0),
+                 OffsetTime.of(LocalTime.of(0, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
+    assertEquals(
+      test.`with`(ChronoField.OFFSET_SECONDS, 7205),
+      OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), ZoneOffset.ofHoursMinutesSeconds(2, 0, 5))
+    )
   }
 
   test("test_with_TemporalField_null") {
@@ -604,7 +638,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   test("test_truncatedTo_normal") {
     assertEquals(TEST_11_30_59_500_PONE.truncatedTo(NANOS), TEST_11_30_59_500_PONE)
     assertEquals(TEST_11_30_59_500_PONE.truncatedTo(SECONDS), TEST_11_30_59_500_PONE.withNano(0))
-    assertEquals(TEST_11_30_59_500_PONE.truncatedTo(DAYS), TEST_11_30_59_500_PONE.`with`(LocalTime.MIDNIGHT))
+    assertEquals(TEST_11_30_59_500_PONE.truncatedTo(DAYS),
+                 TEST_11_30_59_500_PONE.`with`(LocalTime.MIDNIGHT))
   }
 
   test("test_truncatedTo_null") {
@@ -615,7 +650,7 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
 
   test("test_plus_PlusAdjuster") {
     val period: MockSimplePeriod = MockSimplePeriod.of(7, ChronoUnit.MINUTES)
-    val t: OffsetTime = TEST_11_30_59_500_PONE.plus(period)
+    val t: OffsetTime            = TEST_11_30_59_500_PONE.plus(period)
     assertEquals(t, OffsetTime.of(LocalTime.of(11, 37, 59, 500), TestOffsetTime.OFFSET_PONE))
   }
 
@@ -685,7 +720,7 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
 
   test("test_minus_MinusAdjuster") {
     val period: MockSimplePeriod = MockSimplePeriod.of(7, ChronoUnit.MINUTES)
-    val t: OffsetTime = TEST_11_30_59_500_PONE.minus(period)
+    val t: OffsetTime            = TEST_11_30_59_500_PONE.minus(period)
     assertEquals(t, OffsetTime.of(LocalTime.of(11, 23, 59, 500), TestOffsetTime.OFFSET_PONE))
   }
 
@@ -744,7 +779,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   test("test_minusNanos") {
     val base: OffsetTime = OffsetTime.of(LocalTime.of(11, 30, 59, 0), TestOffsetTime.OFFSET_PONE)
     val test: OffsetTime = base.minusNanos(1)
-    assertEquals(test, OffsetTime.of(LocalTime.of(11, 30, 58, 999999999), TestOffsetTime.OFFSET_PONE))
+    assertEquals(test,
+                 OffsetTime.of(LocalTime.of(11, 30, 58, 999999999), TestOffsetTime.OFFSET_PONE))
   }
 
   test("test_minusNanos_zero") {
@@ -810,9 +846,8 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
     }
   }
 
-  private def convertInstant(ot: OffsetTime): Instant = {
+  private def convertInstant(ot: OffsetTime): Instant =
     TestOffsetTime.DATE.atTime(ot.toLocalTime).toInstant(ot.getOffset)
-  }
 
   test("test_isBeforeIsAfterIsEqual1") {
     val a: OffsetTime = OffsetTime.of(LocalTime.of(11, 30, 58), TestOffsetTime.OFFSET_PONE)
@@ -866,7 +901,9 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
   }
 
   test("test_isBeforeIsAfterIsEqual2nanos") {
-    val a: OffsetTime = OffsetTime.of(LocalTime.of(11, 30, 59, 4), ZoneOffset.ofTotalSeconds(TestOffsetTime.OFFSET_PONE.getTotalSeconds + 1))
+    val a: OffsetTime =
+      OffsetTime.of(LocalTime.of(11, 30, 59, 4),
+                    ZoneOffset.ofTotalSeconds(TestOffsetTime.OFFSET_PONE.getTotalSeconds + 1))
     val b: OffsetTime = OffsetTime.of(LocalTime.of(11, 30, 59, 3), TestOffsetTime.OFFSET_PONE)
     assertEquals(a.isBefore(b), true)
     assertEquals(a.isEqual(b), false)
@@ -1016,23 +1053,24 @@ class TestOffsetTime extends FunSuite with GenDateTimeTest with AssertionsHelper
       List(11, 30, 59, 999000, "Z", "11:30:59.000999Z"),
       List(11, 30, 59, 999000, "+01:00", "11:30:59.000999+01:00"),
       List(11, 30, 59, 999, "Z", "11:30:59.000000999Z"),
-      List(11, 30, 59, 999, "+01:00", "11:30:59.000000999+01:00"))
+      List(11, 30, 59, 999, "+01:00", "11:30:59.000000999+01:00")
+    )
   }
 
   test("test_toString") {
     provider_sampleToString.foreach {
       case (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (offsetId: String) :: (expected: String) :: Nil =>
         val t: OffsetTime = OffsetTime.of(LocalTime.of(h, m, s, n), ZoneOffset.of(offsetId))
-        val str: String = t.toString
+        val str: String   = t.toString
         assertEquals(str, expected)
       case _ =>
-      fail()
+        fail()
     }
   }
 
   test("test_format_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("H m s")
-    val t: String = OffsetTime.of(LocalTime.of(11, 30), TestOffsetTime.OFFSET_PONE).format(f)
+    val t: String            = OffsetTime.of(LocalTime.of(11, 30), TestOffsetTime.OFFSET_PONE).format(f)
     assertEquals(t, "11 30 0")
   }
 

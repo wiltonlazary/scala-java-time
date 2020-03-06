@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format.internal
 
-import java.util.{Objects, Locale}
+import java.util.{ Locale, Objects }
 
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.Instant
@@ -52,12 +52,12 @@ import org.threeten.bp.format.DecimalStyle
 object TTBPDateTimePrintContext {
   def adjust(temporal: TemporalAccessor, formatter: DateTimeFormatter): TemporalAccessor = {
     var overrideChrono: Chronology = formatter.getChronology
-    var overrideZone: ZoneId = formatter.getZone
+    var overrideZone: ZoneId       = formatter.getZone
     if (overrideChrono == null && overrideZone == null) {
       temporal
     } else {
       val temporalChrono: Chronology = temporal.query(TemporalQueries.chronology)
-      val temporalZone: ZoneId = temporal.query(TemporalQueries.zoneId)
+      val temporalZone: ZoneId       = temporal.query(TemporalQueries.zoneId)
       if (Objects.equals(temporalChrono, overrideChrono)) {
         overrideChrono = null
       }
@@ -67,17 +67,22 @@ object TTBPDateTimePrintContext {
       if (overrideChrono == null && overrideZone == null) {
         return temporal
       }
-      val effectiveChrono: Chronology = if (overrideChrono != null) overrideChrono else temporalChrono
+      val effectiveChrono: Chronology =
+        if (overrideChrono != null) overrideChrono else temporalChrono
       val effectiveZone: ZoneId = if (overrideZone != null) overrideZone else temporalZone
       if (overrideZone != null) {
         if (temporal.isSupported(ChronoField.INSTANT_SECONDS)) {
-          val chrono: Chronology = if (effectiveChrono != null) effectiveChrono else IsoChronology.INSTANCE
+          val chrono: Chronology =
+            if (effectiveChrono != null) effectiveChrono else IsoChronology.INSTANCE
           return chrono.zonedDateTime(Instant.from(temporal), overrideZone)
         }
-        val normalizedOffset: ZoneId = overrideZone.normalized
+        val normalizedOffset: ZoneId   = overrideZone.normalized
         val temporalOffset: ZoneOffset = temporal.query(TemporalQueries.offset)
-        if (normalizedOffset.isInstanceOf[ZoneOffset] && temporalOffset != null && !(normalizedOffset == temporalOffset))
-          throw new DateTimeException(s"Invalid override zone for temporal: $overrideZone $temporal")
+        if (normalizedOffset
+              .isInstanceOf[ZoneOffset] && temporalOffset != null && !(normalizedOffset == temporalOffset))
+          throw new DateTimeException(
+            s"Invalid override zone for temporal: $overrideZone $temporal"
+          )
       }
       val effectiveDate: ChronoLocalDate = if (overrideChrono != null) {
         if (temporal.isSupported(ChronoField.EPOCH_DAY)) {
@@ -86,7 +91,9 @@ object TTBPDateTimePrintContext {
           if (!((overrideChrono eq IsoChronology.INSTANCE) && temporalChrono == null)) {
             for (f <- ChronoField.values) {
               if (f.isDateBased && temporal.isSupported(f))
-                throw new DateTimeException(s"Invalid override chronology for temporal: $overrideChrono $temporal")
+                throw new DateTimeException(
+                  s"Invalid override chronology for temporal: $overrideChrono $temporal"
+                )
             }
           }
           null
@@ -136,7 +143,12 @@ object TTBPDateTimePrintContext {
   * Usage of the class is thread-safe within standard printing as the framework creates
   * a new instance of the class for each print and printing is single-threaded.
   */
-final class TTBPDateTimePrintContext(private var temporal: TemporalAccessor, private var locale: Locale, private var symbols: DecimalStyle) {
+final class TTBPDateTimePrintContext(
+  private var temporal: TemporalAccessor,
+  private var locale:   Locale,
+  private var symbols:  DecimalStyle
+) {
+
   /** Whether the current formatter is optional. */
   private var optional: Int = 0
 
@@ -146,14 +158,16 @@ final class TTBPDateTimePrintContext(private var temporal: TemporalAccessor, pri
     * @param formatter  the formatter controlling the print, not null
     */
   def this(temporal: TemporalAccessor, formatter: DateTimeFormatter) {
-    this(TTBPDateTimePrintContext.adjust(temporal, formatter), formatter.getLocale, formatter.getDecimalStyle)
+    this(TTBPDateTimePrintContext.adjust(temporal, formatter),
+         formatter.getLocale,
+         formatter.getDecimalStyle)
   }
 
   /** Gets the temporal object being output.
     *
     * @return the temporal object, not null
     */
-   def getTemporal: TemporalAccessor = temporal
+  def getTemporal: TemporalAccessor = temporal
 
   /** Gets the locale.
     *
@@ -162,7 +176,7 @@ final class TTBPDateTimePrintContext(private var temporal: TemporalAccessor, pri
     *
     * @return the locale, not null
     */
-   def getLocale: Locale = locale
+  def getLocale: Locale = locale
 
   /** Gets the formatting symbols.
     *
@@ -170,13 +184,13 @@ final class TTBPDateTimePrintContext(private var temporal: TemporalAccessor, pri
     *
     * @return the formatting symbols, not null
     */
-   def getSymbols: DecimalStyle = symbols
+  def getSymbols: DecimalStyle = symbols
 
   /** Starts the printing of an optional segment of the input. */
-   def startOptional(): Unit = this.optional += 1
+  def startOptional(): Unit = this.optional += 1
 
   /** Ends the printing of an optional segment of the input. */
-   def endOptional(): Unit = this.optional -= 1
+  def endOptional(): Unit = this.optional -= 1
 
   /** Gets a value using a query.
     *
@@ -184,7 +198,7 @@ final class TTBPDateTimePrintContext(private var temporal: TemporalAccessor, pri
     * @return the result, null if not found and optional is true
     * @throws DateTimeException if the type is not available and the section is not optional
     */
-   def getValue[R >: Null](query: TemporalQuery[R]): R = {
+  def getValue[R >: Null](query: TemporalQuery[R]): R = {
     val result: R = temporal.query(query)
     if (result == null && optional == 0)
       throw new DateTimeException(s"Unable to extract value: ${temporal.getClass}")
@@ -200,12 +214,11 @@ final class TTBPDateTimePrintContext(private var temporal: TemporalAccessor, pri
     * @return the value, null if not found and optional is true
     * @throws DateTimeException if the field is not available and the section is not optional
     */
-   def getValue(field: TemporalField): java.lang.Long = {
+  def getValue(field: TemporalField): java.lang.Long =
     try temporal.getLong(field)
     catch {
       case ex: DateTimeException => if (optional > 0) null else throw ex
     }
-  }
 
   /** Returns a string version of the context for debugging.
     *
@@ -217,7 +230,7 @@ final class TTBPDateTimePrintContext(private var temporal: TemporalAccessor, pri
     *
     * @param temporal  the date-time object, not null
     */
-   def setDateTime(temporal: TemporalAccessor): Unit = {
+  def setDateTime(temporal: TemporalAccessor): Unit = {
     Objects.requireNonNull(temporal, "temporal")
     this.temporal = temporal
   }
@@ -229,7 +242,7 @@ final class TTBPDateTimePrintContext(private var temporal: TemporalAccessor, pri
     *
     * @param locale  the locale, not null
     */
-   def setLocale(locale: Locale): Unit = {
+  def setLocale(locale: Locale): Unit = {
     Objects.requireNonNull(locale, "locale")
     this.locale = locale
   }

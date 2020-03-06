@@ -54,6 +54,7 @@ import org.threeten.bp.zone.ZoneRules
 
 @SerialVersionUID(-5261813987200935591L)
 private[chrono] object ChronoZonedDateTimeImpl {
+
   /** Obtains an instance from a local date-time using the preferred offset if possible.
     *
     * @param localDateTime  the local date-time, not null
@@ -61,25 +62,28 @@ private[chrono] object ChronoZonedDateTimeImpl {
     * @param preferredOffset  the zone offset, null if no preference
     * @return the zoned date-time, not null
     */
-  private[chrono] def ofBest[R <: ChronoLocalDate](localDateTime: ChronoLocalDateTimeImpl[R], zone: ZoneId, preferredOffset: ZoneOffset): ChronoZonedDateTime[R] = {
+  private[chrono] def ofBest[R <: ChronoLocalDate](
+    localDateTime:   ChronoLocalDateTimeImpl[R],
+    zone:            ZoneId,
+    preferredOffset: ZoneOffset
+  ): ChronoZonedDateTime[R] = {
     var _localDateTime = localDateTime
     Objects.requireNonNull(_localDateTime, "localDateTime")
     Objects.requireNonNull(zone, "zone")
     zone match {
       case offset: ZoneOffset => new ChronoZonedDateTimeImpl[R](_localDateTime, offset, zone)
       case _ =>
-        val rules: ZoneRules = zone.getRules
-        val isoLDT: LocalDateTime = LocalDateTime.from(_localDateTime)
+        val rules: ZoneRules                         = zone.getRules
+        val isoLDT: LocalDateTime                    = LocalDateTime.from(_localDateTime)
         val validOffsets: java.util.List[ZoneOffset] = rules.getValidOffsets(isoLDT)
-        var offset: ZoneOffset = null
+        var offset: ZoneOffset                       = null
         if (validOffsets.size == 1)
           offset = validOffsets.get(0)
         else if (validOffsets.size == 0) {
           val trans: ZoneOffsetTransition = rules.getTransition(isoLDT)
           _localDateTime = _localDateTime.plusSeconds(trans.getDuration.getSeconds)
-          offset = trans.getOffsetAfter
-        }
-        else {
+          offset         = trans.getOffsetAfter
+        } else {
           if (preferredOffset != null && validOffsets.contains(preferredOffset))
             offset = preferredOffset
           else
@@ -97,12 +101,18 @@ private[chrono] object ChronoZonedDateTimeImpl {
     * @param zone  the zone identifier, not null
     * @return the zoned date-time, not null
     */
-  private[chrono] def ofInstant[R <: ChronoLocalDate](chrono: Chronology, instant: Instant, zone: ZoneId): ChronoZonedDateTimeImpl[R] = {
-    val rules: ZoneRules = zone.getRules
+  private[chrono] def ofInstant[R <: ChronoLocalDate](
+    chrono:  Chronology,
+    instant: Instant,
+    zone:    ZoneId
+  ): ChronoZonedDateTimeImpl[R] = {
+    val rules: ZoneRules   = zone.getRules
     val offset: ZoneOffset = rules.getOffset(instant)
     Objects.requireNonNull(offset, "offset")
-    val ldt: LocalDateTime = LocalDateTime.ofEpochSecond(instant.getEpochSecond, instant.getNano, offset)
-    @SuppressWarnings(Array("unchecked")) val cldt: ChronoLocalDateTimeImpl[R] = chrono.localDateTime(ldt).asInstanceOf[ChronoLocalDateTimeImpl[R]]
+    val ldt: LocalDateTime =
+      LocalDateTime.ofEpochSecond(instant.getEpochSecond, instant.getNano, offset)
+    @SuppressWarnings(Array("unchecked")) val cldt: ChronoLocalDateTimeImpl[R] =
+      chrono.localDateTime(ldt).asInstanceOf[ChronoLocalDateTimeImpl[R]]
     new ChronoZonedDateTimeImpl[R](cldt, offset, zone)
   }
 
@@ -110,8 +120,8 @@ private[chrono] object ChronoZonedDateTimeImpl {
   @throws(classOf[ClassNotFoundException])
   private[chrono] def readExternal(in: ObjectInput): ChronoZonedDateTime[_] = {
     val dateTime: ChronoLocalDateTime[_] = in.readObject.asInstanceOf[ChronoLocalDateTime[_]]
-    val offset: ZoneOffset = in.readObject.asInstanceOf[ZoneOffset]
-    val zone: ZoneId = in.readObject.asInstanceOf[ZoneId]
+    val offset: ZoneOffset               = in.readObject.asInstanceOf[ZoneOffset]
+    val zone: ZoneId                     = in.readObject.asInstanceOf[ZoneId]
     dateTime.atZone(offset).withZoneSameLocal(zone)
   }
 }
@@ -136,7 +146,12 @@ private[chrono] object ChronoZonedDateTimeImpl {
   * @param zone  the zone ID, not null
   */
 @SerialVersionUID(-5261813987200935591L)
-final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private(private val dateTime: ChronoLocalDateTimeImpl[D], private val offset: ZoneOffset, private val zone: ZoneId) extends ChronoZonedDateTime[D] with Serializable {
+final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private (
+  private val dateTime: ChronoLocalDateTimeImpl[D],
+  private val offset:   ZoneOffset,
+  private val zone:     ZoneId
+) extends ChronoZonedDateTime[D]
+    with Serializable {
   Objects.requireNonNull(dateTime, "dateTime")
   Objects.requireNonNull(offset, "offset")
   Objects.requireNonNull(zone, "zone")
@@ -180,7 +195,8 @@ final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private(private val da
 
   def getZone: ZoneId = zone
 
-  def withZoneSameLocal(zone: ZoneId): ChronoZonedDateTime[D] = ChronoZonedDateTimeImpl.ofBest(dateTime, zone, offset)
+  def withZoneSameLocal(zone: ZoneId): ChronoZonedDateTime[D] =
+    ChronoZonedDateTimeImpl.ofBest(dateTime, zone, offset)
 
   def withZoneSameInstant(zone: ZoneId): ChronoZonedDateTime[D] = {
     Objects.requireNonNull(zone, "zone")
@@ -191,27 +207,28 @@ final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private(private val da
   def isSupported(field: TemporalField): Boolean =
     field.isInstanceOf[ChronoField] || (field != null && field.isSupportedBy(this))
 
-  def `with`(field: TemporalField, newValue: Long): ChronoZonedDateTime[D] = {
+  def `with`(field: TemporalField, newValue: Long): ChronoZonedDateTime[D] =
     field match {
       case f: ChronoField =>
         import ChronoField._
         f match {
           case INSTANT_SECONDS => plus(newValue - toEpochSecond, SECONDS)
-          case OFFSET_SECONDS => val offset: ZoneOffset = ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue))
+          case OFFSET_SECONDS =>
+            val offset: ZoneOffset = ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue))
             create(dateTime.toInstant(offset), zone)
           case _ => ChronoZonedDateTimeImpl.ofBest(dateTime.`with`(field, newValue), zone, offset)
         }
       case _ =>
         toLocalDate.getChronology.ensureChronoZonedDateTime(field.adjustInto(this, newValue))
     }
-  }
 
   def plus(amountToAdd: Long, unit: TemporalUnit): ChronoZonedDateTime[D] =
     if (unit.isInstanceOf[ChronoUnit]) `with`(dateTime.plus(amountToAdd, unit))
     else toLocalDate.getChronology.ensureChronoZonedDateTime(unit.addTo(this, amountToAdd))
 
   def until(endExclusive: Temporal, unit: TemporalUnit): Long = {
-    var end: ChronoZonedDateTime[D] = toLocalDate.getChronology.zonedDateTime(endExclusive).asInstanceOf[ChronoZonedDateTime[D]]
+    var end: ChronoZonedDateTime[D] =
+      toLocalDate.getChronology.zonedDateTime(endExclusive).asInstanceOf[ChronoZonedDateTime[D]]
     if (unit.isInstanceOf[ChronoUnit]) {
       end = end.withZoneSameInstant(offset)
       dateTime.until(end.toLocalDateTime, unit)
@@ -227,7 +244,8 @@ final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private(private val da
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[chrono] def writeExternal(out: ObjectOutput): Unit = {
@@ -242,7 +260,8 @@ final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private(private val da
       case _                             => false
     }
 
-  override def hashCode: Int = toLocalDateTime.hashCode ^ getOffset.hashCode ^ Integer.rotateLeft(getZone.hashCode, 3)
+  override def hashCode: Int =
+    toLocalDateTime.hashCode ^ getOffset.hashCode ^ Integer.rotateLeft(getZone.hashCode, 3)
 
   override def toString: String = {
     var str: String = toLocalDateTime.toString + getOffset.toString

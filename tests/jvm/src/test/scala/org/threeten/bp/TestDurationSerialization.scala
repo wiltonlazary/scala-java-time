@@ -32,10 +32,10 @@
 package org.threeten.bp
 
 import java.io._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 /** Test Duration. */
-class TestDurationSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestDurationSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("serialization") {
     assertSerializable(Duration.ofHours(5))
     assertSerializable(Duration.ofHours(-5))
@@ -47,14 +47,14 @@ class TestDurationSerialization extends FunSuite with AssertionsHelper with Abst
   }
 
   test("deserialization") {
-    val orginal: Duration = Duration.ofSeconds(2)
+    val orginal: Duration           = Duration.ofSeconds(2)
     val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-    val out: ObjectOutputStream = new ObjectOutputStream(baos)
+    val out: ObjectOutputStream     = new ObjectOutputStream(baos)
     out.writeObject(orginal)
     out.close()
     val bais: ByteArrayInputStream = new ByteArrayInputStream(baos.toByteArray)
-    val in: ObjectInputStream = new ObjectInputStream(bais)
-    val ser: Duration = in.readObject.asInstanceOf[Duration]
+    val in: ObjectInputStream      = new ObjectInputStream(bais)
+    val ser: Duration              = in.readObject.asInstanceOf[Duration]
     assertEquals(Duration.ofSeconds(2), ser)
   }
 }

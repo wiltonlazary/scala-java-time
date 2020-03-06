@@ -35,29 +35,29 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
 /**
- * Controls how the time-zone rules are initialized.
- * <p>
- * The default behavior is to use {@link ServiceLoader} to find instances of {@link ZoneRulesProvider}.
- * Use the {@link #setInitializer(ZoneRulesInitializer)} method to replace this behavior.
- * The initializer instance must perform the work of creating the {@code ZoneRulesProvider} within
- * the {@link #initializeProviders()} method to ensure that the provider is not initialized too early.
- * <p>
- * <b>The initializer must be set before class loading of any other ThreeTen-Backport class to have any effect!</b>
- * <p>
- * This class has been added primarily for the benefit of Android.
- */
+  * Controls how the time-zone rules are initialized.
+  * <p>
+  * The default behavior is to use {@link ServiceLoader} to find instances of {@link ZoneRulesProvider}.
+  * Use the {@link #setInitializer(ZoneRulesInitializer)} method to replace this behavior.
+  * The initializer instance must perform the work of creating the {@code ZoneRulesProvider} within
+  * the {@link #initializeProviders()} method to ensure that the provider is not initialized too early.
+  * <p>
+  * <b>The initializer must be set before class loading of any other ThreeTen-Backport class to have any effect!</b>
+  * <p>
+  * This class has been added primarily for the benefit of Android.
+  */
 abstract class ZoneRulesInitializer {
 
   /**
-   * Initialize the providers.
-   * <p>
-   * The implementation should perform whatever work is necessary to initialize the providers.
-   * This will result in one or more calls to {@link ZoneRulesProvider#registerProvider(ZoneRulesProvider)}.
-   * <p>
-   * It is vital that the instance of {@link ZoneRulesProvider} is not created until this method is invoked.
-   * <p>
-   * It is guaranteed that this method will be invoked once and only once.
-   */
+    * Initialize the providers.
+    * <p>
+    * The implementation should perform whatever work is necessary to initialize the providers.
+    * This will result in one or more calls to {@link ZoneRulesProvider#registerProvider(ZoneRulesProvider)}.
+    * <p>
+    * It is vital that the instance of {@link ZoneRulesProvider} is not created until this method is invoked.
+    * <p>
+    * It is guaranteed that this method will be invoked once and only once.
+    */
   protected def initializeProviders(): Unit
 
 }
@@ -65,20 +65,21 @@ abstract class ZoneRulesInitializer {
 object ZoneRulesInitializer {
 
   /**
-   * An instance that does nothing.
-   * Call {@link #setInitializer(ZoneRulesInitializer)} with this instance to
-   * block the service loader search. This will leave the system with no providers.
-   */
+    * An instance that does nothing.
+    * Call {@link #setInitializer(ZoneRulesInitializer)} with this instance to
+    * block the service loader search. This will leave the system with no providers.
+    */
   lazy val DO_NOTHING: ZoneRulesInitializer = new DoNothingZoneRulesInitializer()
 
   private lazy val INITIALIZED: AtomicBoolean = new AtomicBoolean(false)
-  private lazy val INITIALIZER: AtomicReference[ZoneRulesInitializer] = new AtomicReference[ZoneRulesInitializer]()
+  private lazy val INITIALIZER: AtomicReference[ZoneRulesInitializer] =
+    new AtomicReference[ZoneRulesInitializer]()
 
   //-----------------------------------------------------------------------
   // initialize the providers
   def initialize(): Unit = {
     if (INITIALIZED.getAndSet(true)) {
-        throw new IllegalStateException("Already initialized")
+      throw new IllegalStateException("Already initialized")
     }
     // Set the default initializer if none has been provided yet.
     INITIALIZER.compareAndSet(null, new ServiceLoaderZoneRulesInitializer())
@@ -86,30 +87,32 @@ object ZoneRulesInitializer {
   }
 
   /**
-   * Sets the initializer to use.
-   * <p>
-   * This can only be invoked before the {@link ZoneRulesProvider} class is loaded.
-   * Invoking this method at a later point will throw an exception.
-   *
-   * @param initializer  the initializer to use
-   * @throws IllegalStateException if initialization has already occurred or another initializer has been set
-   */
+    * Sets the initializer to use.
+    * <p>
+    * This can only be invoked before the {@link ZoneRulesProvider} class is loaded.
+    * Invoking this method at a later point will throw an exception.
+    *
+    * @param initializer  the initializer to use
+    * @throws IllegalStateException if initialization has already occurred or another initializer has been set
+    */
   def setInitializer(initializer: ZoneRulesInitializer): Unit = {
-      if (INITIALIZED.get()) {
-          throw new IllegalStateException("Already initialized")
-      }
-      if (!INITIALIZER.compareAndSet(null, initializer)) {
-          throw new IllegalStateException("Initializer was already set, possibly with a default during initialization")
-      }
+    if (INITIALIZED.get()) {
+      throw new IllegalStateException("Already initialized")
+    }
+    if (!INITIALIZER.compareAndSet(null, initializer)) {
+      throw new IllegalStateException(
+        "Initializer was already set, possibly with a default during initialization"
+      )
+    }
   }
 
   //-----------------------------------------------------------------------
   /**
-   * Implementation that does nothing.
-   */
+    * Implementation that does nothing.
+    */
   class DoNothingZoneRulesInitializer extends ZoneRulesInitializer {
 
-      override def initializeProviders(): Unit = {}
+    override def initializeProviders(): Unit = {}
   }
 
 }

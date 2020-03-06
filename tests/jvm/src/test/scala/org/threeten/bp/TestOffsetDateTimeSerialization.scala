@@ -31,27 +31,32 @@
  */
 package org.threeten.bp
 
-import java.lang.reflect.{Constructor, InvocationTargetException}
+import java.lang.reflect.{ Constructor, InvocationTargetException }
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestOffsetDateTimeSerialization extends FunSuite with AssertionsHelper with AbstractTest {
+class TestOffsetDateTimeSerialization extends AnyFunSuite with AssertionsHelper with AbstractTest {
   test("test_serialization") {
-    assertSerializable(OffsetDateTime.of(LocalDate.of(2008, 6, 30), LocalTime.of(11, 30, 59, 500), TestOffsetDateTime.OFFSET_PONE))
+    assertSerializable(
+      OffsetDateTime.of(LocalDate.of(2008, 6, 30),
+                        LocalTime.of(11, 30, 59, 500),
+                        TestOffsetDateTime.OFFSET_PONE)
+    )
     assertSerializable(OffsetDateTime.MIN)
     assertSerializable(OffsetDateTime.MAX)
   }
 
   test("test_serialization_format") {
-    val date: LocalDate = LocalDate.of(2012, 9, 16)
-    val time: LocalTime = LocalTime.of(22, 17, 59, 464 * 1000000)
+    val date: LocalDate    = LocalDate.of(2012, 9, 16)
+    val time: LocalTime    = LocalTime.of(22, 17, 59, 464 * 1000000)
     val offset: ZoneOffset = ZoneOffset.of("+01:00")
     assertEqualsSerialisedForm(OffsetDateTime.of(date, time, offset))
   }
 
   test("constructor_nullTime") {
     assertThrows[NullPointerException] {
-      val con: Constructor[OffsetDateTime] = classOf[OffsetDateTime].getDeclaredConstructor(classOf[LocalDateTime], classOf[ZoneOffset])
+      val con: Constructor[OffsetDateTime] =
+        classOf[OffsetDateTime].getDeclaredConstructor(classOf[LocalDateTime], classOf[ZoneOffset])
       con.setAccessible(true)
       try con.newInstance(null, TestOffsetDateTime.OFFSET_PONE)
       catch {
@@ -63,7 +68,8 @@ class TestOffsetDateTimeSerialization extends FunSuite with AssertionsHelper wit
 
   test("constructor_nullOffset") {
     assertThrows[NullPointerException] {
-      val con: Constructor[OffsetDateTime] = classOf[OffsetDateTime].getDeclaredConstructor(classOf[LocalDateTime], classOf[ZoneOffset])
+      val con: Constructor[OffsetDateTime] =
+        classOf[OffsetDateTime].getDeclaredConstructor(classOf[LocalDateTime], classOf[ZoneOffset])
       con.setAccessible(true)
       try con.newInstance(LocalDateTime.of(LocalDate.of(2008, 6, 30), LocalTime.of(11, 30)), null)
       catch {

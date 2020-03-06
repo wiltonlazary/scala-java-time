@@ -53,7 +53,6 @@ import org.threeten.bp.chrono.Chronology
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatterBuilder
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.format.SignStyle
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoUnit
@@ -91,7 +90,11 @@ import org.threeten.bp.temporal.ValueRange
 object YearMonth {
 
   /** Parser. */
-  private lazy val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder().appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD).appendLiteral('-').appendValue(MONTH_OF_YEAR, 2).toFormatter
+  private lazy val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder()
+    .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
+    .appendLiteral('-')
+    .appendValue(MONTH_OF_YEAR, 2)
+    .toFormatter
 
   /** Obtains the current year-month from the system clock in the default time-zone.
     *
@@ -153,8 +156,8 @@ object YearMonth {
     * @throws DateTimeException if either field value is invalid
     */
   def of(year: Int, month: Int): YearMonth = {
-    YEAR.checkValidValue(year)
-    MONTH_OF_YEAR.checkValidValue(month)
+    YEAR.checkValidValue(year.toLong)
+    MONTH_OF_YEAR.checkValidValue(month.toLong)
     new YearMonth(year, month)
   }
 
@@ -183,10 +186,11 @@ object YearMonth {
       if (IsoChronology.INSTANCE != Chronology.from(_temporal))
         _temporal = LocalDate.from(_temporal)
       of(_temporal.get(YEAR), _temporal.get(MONTH_OF_YEAR))
-    }
-    catch {
-      case ex: DateTimeException =>
-        throw new DateTimeException(s"Unable to obtain YearMonth from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}")
+    } catch {
+      case _: DateTimeException =>
+        throw new DateTimeException(
+          s"Unable to obtain YearMonth from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}"
+        )
     }
   }
 
@@ -220,9 +224,9 @@ object YearMonth {
 
   @throws[IOException]
   private[bp] def readExternal(in: DataInput): YearMonth = {
-    val year: Int = in.readInt
+    val year: Int   = in.readInt
     val month: Byte = in.readByte
-    YearMonth.of(year, month)
+    YearMonth.of(year, month.toInt)
   }
 }
 
@@ -231,7 +235,12 @@ object YearMonth {
   * @param month  the month-of-year to represent, validated from 1 (January) to 12 (December)
   */
 @SerialVersionUID(4183400860270640070L)
-final class YearMonth private(private val year: Int, private val month: Int) extends TemporalAccessor with Temporal with TemporalAdjuster with Ordered[YearMonth] with Serializable {
+final class YearMonth private (private val year: Int, private val month: Int)
+    extends TemporalAccessor
+    with Temporal
+    with TemporalAdjuster
+    with Ordered[YearMonth]
+    with Serializable {
 
   /** Returns a copy of this year-month with the new year and month, checking
     * to see if a new object is in fact required.
@@ -308,8 +317,8 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     */
   override def range(field: TemporalField): ValueRange =
     if (field eq YEAR_OF_ERA)
-      if (getYear <= 0) ValueRange.of(1, Year.MAX_VALUE + 1)
-      else ValueRange.of(1, Year.MAX_VALUE)
+      if (getYear <= 0) ValueRange.of(1, Year.MAX_VALUE.toLong + 1L)
+      else ValueRange.of(1, Year.MAX_VALUE.toLong)
     else if (field.isInstanceOf[ChronoField])
       if (isSupported(field)) field.range
       else throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
@@ -339,7 +348,8 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     * @throws DateTimeException if a value for the field cannot be obtained
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def get(field: TemporalField): Int = range(field).checkValidIntValue(getLong(field), field)
+  override def get(field: TemporalField): Int =
+    range(field).checkValidIntValue(getLong(field), field)
 
   /** Gets the value of the specified field from this year-month as a {@code long}.
     *
@@ -364,13 +374,14 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     */
   def getLong(field: TemporalField): Long =
     field match {
-      case MONTH_OF_YEAR         => month
-        case PROLEPTIC_MONTH     => getProlepticMonth
-        case YEAR_OF_ERA         => if (year < 1) 1 - year else year
-        case YEAR                => year
-        case ERA                 => if (year < 1) 0 else 1
-        case chrono: ChronoField => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-        case _                   => field.getFrom(this)
+      case MONTH_OF_YEAR   => month.toLong
+      case PROLEPTIC_MONTH => getProlepticMonth
+      case YEAR_OF_ERA     => if (year < 1) 1L - year.toLong else year.toLong
+      case YEAR            => year.toLong
+      case ERA             => if (year < 1) 0 else 1
+      case _: ChronoField =>
+        throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+      case _ => field.getFrom(this)
     }
 
   private def getProlepticMonth: Long = (year * 12L) + (month - 1)
@@ -424,7 +435,7 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     *
     * @return true if the year is leap, false otherwise
     */
-  def isLeapYear: Boolean = IsoChronology.INSTANCE.isLeapYear(year)
+  def isLeapYear: Boolean = IsoChronology.INSTANCE.isLeapYear(year.toLong)
 
   /** Checks if the day-of-month is valid for this year-month.
     *
@@ -474,7 +485,8 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     * @throws DateTimeException if the adjustment cannot be made
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def `with`(adjuster: TemporalAdjuster): YearMonth = adjuster.adjustInto(this).asInstanceOf[YearMonth]
+  override def `with`(adjuster: TemporalAdjuster): YearMonth =
+    adjuster.adjustInto(this).asInstanceOf[YearMonth]
 
   /** Returns a copy of this year-month with the specified field set to a new value.
     *
@@ -553,7 +565,7 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     * @throws DateTimeException if the year value is invalid
     */
   def withYear(year: Int): YearMonth = {
-    YEAR.checkValidValue(year)
+    YEAR.checkValidValue(year.toLong)
     `with`(year, month)
   }
 
@@ -566,7 +578,7 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     * @throws DateTimeException if the month-of-year value is invalid
     */
   def withMonth(month: Int): YearMonth = {
-    MONTH_OF_YEAR.checkValidValue(month)
+    MONTH_OF_YEAR.checkValidValue(month.toLong)
     `with`(year, month)
   }
 
@@ -636,8 +648,8 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
       return this
     val monthCount: Long = year * 12L + (month - 1)
     val calcMonths: Long = monthCount + monthsToAdd
-    val newYear: Int = YEAR.checkValidIntValue(Math.floorDiv(calcMonths, 12))
-    val newMonth: Int = Math.floorMod(calcMonths, 12).toInt + 1
+    val newYear: Int     = YEAR.checkValidIntValue(Math.floorDiv(calcMonths, 12))
+    val newMonth: Int    = Math.floorMod(calcMonths, 12).toInt + 1
     `with`(newYear, newMonth)
   }
 
@@ -656,7 +668,8 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     * @throws DateTimeException if the subtraction cannot be made
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def minus(amount: TemporalAmount): YearMonth = amount.subtractFrom(this).asInstanceOf[YearMonth]
+  override def minus(amount: TemporalAmount): YearMonth =
+    amount.subtractFrom(this).asInstanceOf[YearMonth]
 
   /** {@inheritDoc}
     *
@@ -717,7 +730,6 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
       null.asInstanceOf[R]
     else
       query.queryFrom(this)
-
 
   /** Adjusts the specified temporal object to have this year-month.
     *
@@ -882,12 +894,11 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     * @param obj  the object to check, null returns false
     * @return true if this is equal to the other year-month
     */
-  override def equals(obj: Any): Boolean = {
+  override def equals(obj: Any): Boolean =
     obj match {
       case other: YearMonth => (this eq other) || (year == other.year && month == other.month)
       case _                => false
     }
-  }
 
   /** A hash code for this year-month.
     *
@@ -902,7 +913,7 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     * @return a string representation of this year-month, not null
     */
   override def toString: String = {
-    val absYear: Int = Math.abs(year)
+    val absYear: Int       = Math.abs(year)
     val buf: StringBuilder = new StringBuilder(9)
     if (absYear < 1000)
       if (year < 0)
@@ -936,7 +947,8 @@ final class YearMonth private(private val year: Int, private val month: Int) ext
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[bp] def writeExternal(out: DataOutput): Unit = {

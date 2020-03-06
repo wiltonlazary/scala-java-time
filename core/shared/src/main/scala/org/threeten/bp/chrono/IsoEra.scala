@@ -34,18 +34,20 @@ package org.threeten.bp.chrono
 import org.threeten.bp.DateTimeException
 
 object IsoEra {
+
   /** The singleton instance for the era BCE, 'Before Current Era'.
     * The 'ISO' part of the name emphasizes that this differs from the BCE
     * era in the Gregorian calendar system.
     * This has the numeric value of {@code 0}.
     */
   lazy val BCE = new IsoEra("BCE", 0)
+
   /** The singleton instance for the era CE, 'Current Era'.
     * The 'ISO' part of the name emphasizes that this differs from the CE
     * era in the Gregorian calendar system.
     * This has the numeric value of {@code 1}.
     */
-  lazy val CE  = new IsoEra("CE", 1)
+  lazy val CE = new IsoEra("CE", 1)
 
   lazy val values: Array[IsoEra] = Array(BCE, CE)
 
@@ -79,6 +81,7 @@ object IsoEra {
   * This is an immutable and thread-safe enum.
   */
 final class IsoEra(name: String, ordinal: Int) extends Enum[IsoEra](name, ordinal) with Era {
+
   /** Gets the numeric era {@code int} value.
     *
     * The era BCE has the value 0, while the era CE has the value 1.

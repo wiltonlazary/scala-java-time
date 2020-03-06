@@ -31,7 +31,7 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.DateTimeException
@@ -40,17 +40,19 @@ import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 import org.threeten.bp.temporal.MockFieldValue
 
 /** Test ReducedPrinterParser. */
-class TestReducedPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestReducedPrinter extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_print_emptyCalendrical") {
     assertThrows[DateTimeException] {
-      val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser = new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null)
+      val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser =
+        new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null)
       pp.print(printEmptyContext, buf)
     }
   }
 
   test("test_print_append") {
     printContext.setDateTime(LocalDate.of(2012, 1, 1))
-    val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser = new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null)
+    val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser =
+      new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null)
     buf.append("EXISTING")
     pp.print(printContext, buf)
     assertEquals(buf.toString, "EXISTING12")
@@ -105,7 +107,8 @@ class TestReducedPrinter extends FunSuite with GenTestPrinterParser with Asserti
       List(2, -2005, -1999, "99"),
       List(2, -2005, -1904, "04"),
       List(2, -2005, -2006, "06"),
-      List(2, -2005, -1905, "05"))
+      List(2, -2005, -1905, "05")
+    )
   }
 
   test("test_pivot") {
@@ -113,14 +116,14 @@ class TestReducedPrinter extends FunSuite with GenTestPrinterParser with Asserti
       case (width: Int) :: (baseValue: Int) :: (value: Int) :: (result: String) :: Nil =>
         super.beforeEach()
         printContext.setDateTime(new MockFieldValue(YEAR, value))
-        val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser = new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, width, width, baseValue, null)
+        val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser =
+          new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, width, width, baseValue, null)
         try {
           pp.print(printContext, buf)
           if (result == null)
             fail("Expected exception")
           assertEquals(buf.toString, result)
-        }
-        catch {
+        } catch {
           case ex: DateTimeException =>
             if (result == null || value < 0)
               assertEquals(ex.getMessage.contains(YEAR.toString), true)
@@ -133,7 +136,8 @@ class TestReducedPrinter extends FunSuite with GenTestPrinterParser with Asserti
   }
 
   test("test_toString") {
-    val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser = new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2005, null)
+    val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser =
+      new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2005, null)
     assertEquals(pp.toString, "ReducedValue(Year,2,2,2005)")
   }
 }

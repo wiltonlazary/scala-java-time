@@ -46,7 +46,7 @@ import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR_OF_ERA
 import org.threeten.bp.temporal.TemporalAdjusters.nextOrSame
 import java.io.Serializable
-import java.util.{Objects, Arrays}
+import java.util.{ Arrays, Objects }
 import org.threeten.bp.Clock
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.DayOfWeek
@@ -65,6 +65,7 @@ import org.threeten.bp.temporal.ValueRange
 
 @SerialVersionUID(-1440403870442975015L)
 object IsoChronology {
+
   /** Singleton instance of the ISO chronology. */
   lazy val INSTANCE: IsoChronology = new IsoChronology
 }
@@ -97,7 +98,7 @@ object IsoChronology {
   * @constructor Restricted constructor.
   */
 @SerialVersionUID(-1440403870442975015L)
-final class IsoChronology private() extends Chronology with Serializable {
+final class IsoChronology private () extends Chronology with Serializable {
 
   /** Resolve singleton.
     *
@@ -152,7 +153,8 @@ final class IsoChronology private() extends Chronology with Serializable {
     * @return the ISO local date, not null
     * @throws DateTimeException if unable to create the date
     */
-  def date(prolepticYear: Int, month: Int, dayOfMonth: Int): LocalDate = LocalDate.of(prolepticYear, month, dayOfMonth)
+  def date(prolepticYear: Int, month: Int, dayOfMonth: Int): LocalDate =
+    LocalDate.of(prolepticYear, month, dayOfMonth)
 
   /** Obtains an ISO local date from the era, year-of-era and day-of-year fields.
     *
@@ -174,7 +176,8 @@ final class IsoChronology private() extends Chronology with Serializable {
     * @return the ISO local date, not null
     * @throws DateTimeException if unable to create the date
     */
-  def dateYearDay(prolepticYear: Int, dayOfYear: Int): LocalDate = LocalDate.ofYearDay(prolepticYear, dayOfYear)
+  def dateYearDay(prolepticYear: Int, dayOfYear: Int): LocalDate =
+    LocalDate.ofYearDay(prolepticYear, dayOfYear)
 
   def dateEpochDay(epochDay: Long): LocalDate = LocalDate.ofEpochDay(epochDay)
 
@@ -196,7 +199,8 @@ final class IsoChronology private() extends Chronology with Serializable {
     * @return the ISO local date-time, not null
     * @throws DateTimeException if unable to create the date-time
     */
-  override def localDateTime(temporal: TemporalAccessor): LocalDateTime = LocalDateTime.from(temporal)
+  override def localDateTime(temporal: TemporalAccessor): LocalDateTime =
+    LocalDateTime.from(temporal)
 
   /** Obtains an ISO zoned date-time from another date-time object.
     *
@@ -206,7 +210,8 @@ final class IsoChronology private() extends Chronology with Serializable {
     * @return the ISO zoned date-time, not null
     * @throws DateTimeException if unable to create the date-time
     */
-  override def zonedDateTime(temporal: TemporalAccessor): ZonedDateTime = ZonedDateTime.from(temporal)
+  override def zonedDateTime(temporal: TemporalAccessor): ZonedDateTime =
+    ZonedDateTime.from(temporal)
 
   /** Obtains an ISO zoned date-time from an instant.
     *
@@ -217,7 +222,8 @@ final class IsoChronology private() extends Chronology with Serializable {
     * @return the ISO zoned date-time, not null
     * @throws DateTimeException if unable to create the date-time
     */
-  override def zonedDateTime(instant: Instant, zone: ZoneId): ZonedDateTime = ZonedDateTime.ofInstant(instant, zone)
+  override def zonedDateTime(instant: Instant, zone: ZoneId): ZonedDateTime =
+    ZonedDateTime.ofInstant(instant, zone)
 
   /** Obtains the current ISO local date from the system clock in the default time-zone.
     *
@@ -283,9 +289,8 @@ final class IsoChronology private() extends Chronology with Serializable {
 
   def prolepticYear(era: Era, yearOfEra: Int): Int =
     if (!era.isInstanceOf[IsoEra]) throw new ClassCastException("Era must be IsoEra")
-    else
-      if (era eq IsoEra.CE) yearOfEra
-      else 1 - yearOfEra
+    else if (era eq IsoEra.CE) yearOfEra
+    else 1 - yearOfEra
 
   def eraOf(eraValue: Int): IsoEra = IsoEra.of(eraValue)
 
@@ -293,7 +298,10 @@ final class IsoChronology private() extends Chronology with Serializable {
 
   def range(field: ChronoField): ValueRange = field.range
 
-  override def resolveDate(fieldValues: java.util.Map[TemporalField, java.lang.Long], resolverStyle: ResolverStyle): LocalDate = {
+  override def resolveDate(
+    fieldValues:   java.util.Map[TemporalField, java.lang.Long],
+    resolverStyle: ResolverStyle
+  ): LocalDate = {
     if (fieldValues.containsKey(EPOCH_DAY))
       return LocalDate.ofEpochDay(fieldValues.remove(EPOCH_DAY))
     val prolepticMonth: java.lang.Long = fieldValues.remove(PROLEPTIC_MONTH)
@@ -311,48 +319,47 @@ final class IsoChronology private() extends Chronology with Serializable {
       if (era == null) {
         val year: java.lang.Long = fieldValues.get(YEAR)
         if (resolverStyle eq ResolverStyle.STRICT) {
-          if (year != null) updateResolveMap(fieldValues, YEAR, (if (year > 0) yoeLong else Math.subtractExact(1, yoeLong)))
+          if (year != null)
+            updateResolveMap(fieldValues,
+                             YEAR,
+                             (if (year > 0) yoeLong else Math.subtractExact(1, yoeLong)))
           else fieldValues.put(YEAR_OF_ERA, yoeLong)
+        } else {
+          updateResolveMap(
+            fieldValues,
+            YEAR,
+            (if (year == null || year > 0) yoeLong else Math.subtractExact(1, yoeLong))
+          )
         }
-        else {
-          updateResolveMap(fieldValues, YEAR, (if (year == null || year > 0) yoeLong else Math.subtractExact(1, yoeLong)))
-        }
-      }
-      else if (era.longValue == 1L) {
+      } else if (era.longValue == 1L) {
         updateResolveMap(fieldValues, YEAR, yoeLong)
-      }
-      else if (era.longValue == 0L) {
+      } else if (era.longValue == 0L) {
         updateResolveMap(fieldValues, YEAR, Math.subtractExact(1, yoeLong))
-      }
-      else {
+      } else {
         throw new DateTimeException(s"Invalid value for era: $era")
       }
-    }
-    else if (fieldValues.containsKey(ERA)) {
+    } else if (fieldValues.containsKey(ERA)) {
       ERA.checkValidValue(fieldValues.get(ERA))
     }
     if (fieldValues.containsKey(YEAR)) {
       if (fieldValues.containsKey(MONTH_OF_YEAR)) {
         if (fieldValues.containsKey(DAY_OF_MONTH)) {
-          val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
+          val y: Int   = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           val moy: Int = Math.toIntExact(fieldValues.remove(MONTH_OF_YEAR))
           var dom: Int = Math.toIntExact(fieldValues.remove(DAY_OF_MONTH))
           if (resolverStyle eq ResolverStyle.LENIENT) {
-            val months: Long = Math.subtractExact(moy, 1)
-            val days: Long = Math.subtractExact(dom, 1)
+            val months: Long = Math.subtractExact(moy.toLong, 1)
+            val days: Long   = Math.subtractExact(dom.toLong, 1)
             return LocalDate.of(y, 1, 1).plusMonths(months).plusDays(days)
-          }
-          else if (resolverStyle eq ResolverStyle.SMART) {
-            DAY_OF_MONTH.checkValidValue(dom)
+          } else if (resolverStyle eq ResolverStyle.SMART) {
+            DAY_OF_MONTH.checkValidValue(dom.toLong)
             if (moy == 4 || moy == 6 || moy == 9 || moy == 11) {
               dom = Math.min(dom, 30)
-            }
-            else if (moy == 2) {
-              dom = Math.min(dom, Month.FEBRUARY.length(Year.isLeap(y)))
+            } else if (moy == 2) {
+              dom = Math.min(dom, Month.FEBRUARY.length(Year.isLeap(y.toLong)))
             }
             return LocalDate.of(y, moy, dom)
-          }
-          else {
+          } else {
             return LocalDate.of(y, moy, dom)
           }
         }
@@ -361,14 +368,19 @@ final class IsoChronology private() extends Chronology with Serializable {
             val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
             if (resolverStyle eq ResolverStyle.LENIENT) {
               val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-              val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
-              val days: Long = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1)
+              val weeks: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
+              val days: Long =
+                Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1)
               return LocalDate.of(y, 1, 1).plusMonths(months).plusWeeks(weeks).plusDays(days)
             }
             val moy: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
-            val aw: Int = ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
-            val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH))
-            val date: LocalDate = LocalDate.of(y, moy, 1).plusDays((aw - 1) * 7 + (ad - 1))
+            val aw: Int =
+              ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
+            val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(
+              fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH)
+            )
+            val date: LocalDate =
+              LocalDate.of(y, moy, 1).plusDays((aw.toLong - 1) * 7 + (ad.toLong - 1))
             if ((resolverStyle eq ResolverStyle.STRICT) && (date.get(MONTH_OF_YEAR) != moy)) {
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             }
@@ -378,14 +390,16 @@ final class IsoChronology private() extends Chronology with Serializable {
             val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
             if (resolverStyle eq ResolverStyle.LENIENT) {
               val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-              val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
-              val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
+              val weeks: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
+              val days: Long   = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
               return LocalDate.of(y, 1, 1).plusMonths(months).plusWeeks(weeks).plusDays(days)
             }
             val moy: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
-            val aw: Int = ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
+            val aw: Int =
+              ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
             val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
-            val date: LocalDate = LocalDate.of(y, moy, 1).plusWeeks(aw - 1).`with`(nextOrSame(DayOfWeek.of(dow)))
+            val date: LocalDate =
+              LocalDate.of(y, moy, 1).plusWeeks(aw.toLong - 1).`with`(nextOrSame(DayOfWeek.of(dow)))
             if ((resolverStyle eq ResolverStyle.STRICT) && (date.get(MONTH_OF_YEAR) != moy)) {
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             }
@@ -407,12 +421,15 @@ final class IsoChronology private() extends Chronology with Serializable {
           val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1)
-            val days: Long = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1)
+            val days: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1)
             return LocalDate.of(y, 1, 1).plusWeeks(weeks).plusDays(days)
           }
-          val aw: Int = ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
-          val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR))
-          val date: LocalDate = LocalDate.of(y, 1, 1).plusDays((aw - 1) * 7 + (ad - 1))
+          val aw: Int =
+            ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
+          val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(
+            fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR)
+          )
+          val date: LocalDate = LocalDate.of(y, 1, 1).plusDays((aw.toLong - 1) * 7 + (ad - 1))
           if ((resolverStyle eq ResolverStyle.STRICT) && (date.get(YEAR) != y)) {
             throw new DateTimeException("Strict mode rejected date parsed to a different year")
           }
@@ -422,12 +439,14 @@ final class IsoChronology private() extends Chronology with Serializable {
           val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1)
-            val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
+            val days: Long  = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
             return LocalDate.of(y, 1, 1).plusWeeks(weeks).plusDays(days)
           }
-          val aw: Int = ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
+          val aw: Int =
+            ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
           val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
-          val date: LocalDate = LocalDate.of(y, 1, 1).plusWeeks(aw - 1).`with`(nextOrSame(DayOfWeek.of(dow)))
+          val date: LocalDate =
+            LocalDate.of(y, 1, 1).plusWeeks(aw.toLong - 1).`with`(nextOrSame(DayOfWeek.of(dow)))
           if ((resolverStyle eq ResolverStyle.STRICT) && (date.get(YEAR) != y)) {
             throw new DateTimeException("Strict mode rejected date parsed to a different month")
           }

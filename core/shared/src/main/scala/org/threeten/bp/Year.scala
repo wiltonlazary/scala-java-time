@@ -43,7 +43,6 @@ import org.threeten.bp.chrono.Chronology
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatterBuilder
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.format.SignStyle
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoField.ERA
@@ -68,13 +67,16 @@ import org.threeten.bp.temporal.ValueRange
 
 @SerialVersionUID(-23038383694477807L)
 object Year {
+
   /** The minimum supported year, '-999,999,999'. */
   lazy val MIN_VALUE: Int = -999999999
+
   /** The maximum supported year, '+999,999,999'. */
   lazy val MAX_VALUE: Int = 999999999
 
   /** Parser. */
-  private lazy val PARSER: DateTimeFormatter = new DateTimeFormatterBuilder().appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD).toFormatter
+  private lazy val PARSER: DateTimeFormatter =
+    new DateTimeFormatterBuilder().appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD).toFormatter
 
   /** Obtains the current year from the system clock in the default time-zone.
     *
@@ -129,7 +131,7 @@ object Year {
     * @throws DateTimeException if the field is invalid
     */
   def of(isoYear: Int): Year = {
-    YEAR.checkValidValue(isoYear)
+    YEAR.checkValidValue(isoYear.toLong)
     new Year(isoYear)
   }
 
@@ -160,10 +162,11 @@ object Year {
             _temporal = LocalDate.from(_temporal)
           }
           of(_temporal.get(YEAR))
-        }
-        catch {
-          case ex: DateTimeException =>
-            throw new DateTimeException(s"Unable to obtain Year from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}")
+        } catch {
+          case _: DateTimeException =>
+            throw new DateTimeException(
+              s"Unable to obtain Year from TemporalAccessor: ${_temporal}, type ${_temporal.getClass.getName}"
+            )
         }
     }
   }
@@ -249,7 +252,12 @@ object Year {
   * @param year  the year to represent
   */
 @SerialVersionUID(-23038383694477807L)
-final class Year private(private val year: Int) extends TemporalAccessor with Temporal with TemporalAdjuster with Ordered[Year] with Serializable {
+final class Year private (private val year: Int)
+    extends TemporalAccessor
+    with Temporal
+    with TemporalAdjuster
+    with Ordered[Year]
+    with Serializable {
 
   /** Gets the year value.
     *
@@ -319,8 +327,8 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     */
   override def range(field: TemporalField): ValueRange =
     if (field eq YEAR_OF_ERA)
-      if (year <= 0) ValueRange.of(1, Year.MAX_VALUE + 1)
-      else ValueRange.of(1, Year.MAX_VALUE)
+      if (year <= 0) ValueRange.of(1, Year.MAX_VALUE.toLong + 1L)
+      else ValueRange.of(1, Year.MAX_VALUE.toLong)
     else
       super.range(field)
 
@@ -346,7 +354,8 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     * @throws DateTimeException if a value for the field cannot be obtained
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def get(field: TemporalField): Int = range(field).checkValidIntValue(getLong(field), field)
+  override def get(field: TemporalField): Int =
+    range(field).checkValidIntValue(getLong(field), field)
 
   /** Gets the value of the specified field from this year as a {@code long}.
     *
@@ -371,12 +380,13 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     */
   def getLong(field: TemporalField): Long =
     field match {
-      case f: ChronoField => f match {
-        case YEAR_OF_ERA => if (year < 1) 1 - year else year
-        case YEAR => year
-        case ERA => if (year < 1) 0 else 1
-        case _ => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-      }
+      case f: ChronoField =>
+        f match {
+          case YEAR_OF_ERA => if (year < 1) 1L - year.toLong else year.toLong
+          case YEAR        => year.toLong
+          case ERA         => if (year < 1) 0 else 1
+          case _           => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+        }
       case _ => field.getFrom(this)
     }
 
@@ -397,7 +407,7 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     *
     * @return true if the year is leap, false otherwise
     */
-  def isLeap: Boolean = Year.isLeap(year)
+  def isLeap: Boolean = Year.isLeap(year.toLong)
 
   /** Checks if the month-day is valid for this year.
     *
@@ -432,7 +442,8 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     * @throws DateTimeException if the adjustment cannot be made
     * @throws ArithmeticException if numeric overflow occurs
     */
-  override def `with`(adjuster: TemporalAdjuster): Year = adjuster.adjustInto(this).asInstanceOf[Year]
+  override def `with`(adjuster: TemporalAdjuster): Year =
+    adjuster.adjustInto(this).asInstanceOf[Year]
 
   /** Returns a copy of this year with the specified field set to a new value.
     *
@@ -479,9 +490,9 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
         f.checkValidValue(newValue)
         f match {
           case YEAR_OF_ERA => Year.of((if (year < 1) 1 - newValue else newValue).toInt)
-          case YEAR => Year.of(newValue.toInt)
-          case ERA => if (getLong(ERA) == newValue) this else Year.of(1 - year)
-          case _ => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+          case YEAR        => Year.of(newValue.toInt)
+          case ERA         => if (getLong(ERA) == newValue) this else Year.of(1 - year)
+          case _           => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
       case _ =>
         field.adjustInto(this, newValue)
@@ -513,12 +524,12 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     unit match {
       case u: ChronoUnit =>
         u match {
-          case YEARS => plusYears(amountToAdd)
-          case DECADES => plusYears(Math.multiplyExact(amountToAdd, 10))
+          case YEARS     => plusYears(amountToAdd)
+          case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10))
           case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100))
           case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000))
-          case ERAS => `with`(ERA, Math.addExact(getLong(ERA), amountToAdd))
-          case _ => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
+          case ERAS      => `with`(ERA, Math.addExact(getLong(ERA), amountToAdd))
+          case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
       case _ =>
         unit.addTo(this, amountToAdd)
@@ -561,7 +572,8 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     * @throws ArithmeticException { @inheritDoc}
     */
   override def minus(amountToSubtract: Long, unit: TemporalUnit): Year =
-    if (amountToSubtract == Long.MinValue) plus(Long.MaxValue, unit).plus(1, unit) else plus(-amountToSubtract, unit)
+    if (amountToSubtract == Long.MinValue) plus(Long.MaxValue, unit).plus(1, unit)
+    else plus(-amountToSubtract, unit)
 
   /** Returns a copy of this year with the specified number of years subtracted.
     *
@@ -572,7 +584,8 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     * @throws DateTimeException if the result exceeds the supported year range
     */
   def minusYears(yearsToSubtract: Long): Year =
-    if (yearsToSubtract == Long.MinValue) plusYears(Long.MaxValue).plusYears(1) else plusYears(-yearsToSubtract)
+    if (yearsToSubtract == Long.MinValue) plusYears(Long.MaxValue).plusYears(1)
+    else plusYears(-yearsToSubtract)
 
   /** Queries this year using the specified query.
     *
@@ -630,7 +643,7 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     if (!(Chronology.from(temporal) == IsoChronology.INSTANCE))
       throw new DateTimeException("Adjustment only supported on ISO date-time")
     else
-      temporal.`with`(YEAR, year)
+      temporal.`with`(YEAR, year.toLong)
 
   /** Calculates the period between this year and another year in
     * terms of the specified unit.
@@ -680,12 +693,12 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
       case u: ChronoUnit =>
         val yearsUntil: Long = end.year.toLong - year
         u match {
-          case YEARS => yearsUntil
-          case DECADES => yearsUntil / 10
+          case YEARS     => yearsUntil
+          case DECADES   => yearsUntil / 10
           case CENTURIES => yearsUntil / 100
           case MILLENNIA => yearsUntil / 1000
-          case ERAS => end.getLong(ERA) - getLong(ERA)
-          case _ => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
+          case ERAS      => end.getLong(ERA) - getLong(ERA)
+          case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
       case _ =>
         unit.between(this, end)
@@ -784,7 +797,7 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
   override def equals(obj: Any): Boolean =
     obj match {
       case thatYear: Year => (this eq thatYear) || (year == thatYear.year)
-      case _          => false
+      case _              => false
     }
 
   /** A hash code for this year.
@@ -821,7 +834,8 @@ final class Year private(private val year: Int) extends TemporalAccessor with Te
     * @throws InvalidObjectException always
     */
   @throws[ObjectStreamException]
-  private def readResolve: AnyRef = throw new InvalidObjectException("Deserialization via serialization delegate")
+  private def readResolve: AnyRef =
+    throw new InvalidObjectException("Deserialization via serialization delegate")
 
   @throws[IOException]
   private[bp] def writeExternal(out: DataOutput): Unit = out.writeInt(year)

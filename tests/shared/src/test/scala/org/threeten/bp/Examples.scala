@@ -45,11 +45,12 @@ import org.threeten.bp.format.SignStyle
 /** Examples for this project.
   */
 object Examples {
+
   /** Main method.
     * @param args  no arguments needed
     */
   def main(args: Array[String]): Unit = {
-    val clock: Clock = Clock.systemDefaultZone
+    val clock: Clock       = Clock.systemDefaultZone
     val zdt: ZonedDateTime = ZonedDateTime.now(clock)
     println("Current date-time: " + zdt)
     val zdtNewYork: ZonedDateTime = ZonedDateTime.now(Clock.system(ZoneId.of("America/New_York")))
@@ -77,7 +78,16 @@ object Examples {
     println("...resolved to valid date-time in Europe/London: " + resolved)
     val formattedRFC: String = DateTimeFormatter.RFC_1123_DATE_TIME.format(resolved)
     println("...printed as RFC1123: " + formattedRFC)
-    val f: DateTimeFormatter = new DateTimeFormatterBuilder().appendValue(YEAR, 4, 10, SignStyle.ALWAYS).appendLiteral(' ').appendText(MONTH_OF_YEAR).appendLiteral('(').appendValue(MONTH_OF_YEAR).appendLiteral(')').appendLiteral(' ').appendValue(DAY_OF_MONTH, 2).toFormatter(Locale.ENGLISH)
+    val f: DateTimeFormatter = new DateTimeFormatterBuilder()
+      .appendValue(YEAR, 4, 10, SignStyle.ALWAYS)
+      .appendLiteral(' ')
+      .appendText(MONTH_OF_YEAR)
+      .appendLiteral('(')
+      .appendValue(MONTH_OF_YEAR)
+      .appendLiteral(')')
+      .appendLiteral(' ')
+      .appendValue(DAY_OF_MONTH, 2)
+      .toFormatter(Locale.ENGLISH)
     val formatted: String = f.format(resolved)
     println("...printed using complex format: " + formatted)
     val bday: MonthDay = MonthDay.of(DECEMBER, 3)

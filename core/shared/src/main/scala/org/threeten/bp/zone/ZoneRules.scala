@@ -32,7 +32,7 @@
 package org.threeten.bp.zone
 
 import java.io.Serializable
-import java.util.{Objects, Collections}
+import java.util.{ Collections, Objects }
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
@@ -61,6 +61,7 @@ import org.threeten.bp.ZoneOffset
   * The supplied implementations of this class are immutable and thread-safe.
   */
 object ZoneRules {
+
   /** Obtains an instance of {@code ZoneRules} with full transition rules.
     *
     * @param baseStandardOffset  the standard offset to use before legal rules were set, not null
@@ -70,13 +71,23 @@ object ZoneRules {
     * @param lastRules  the recurring last rules, size 16 or less, not null
     * @return the zone rules, not null
     */
-  def of(baseStandardOffset: ZoneOffset, baseWallOffset: ZoneOffset, standardOffsetTransitionList: java.util.List[ZoneOffsetTransition], transitionList: java.util.List[ZoneOffsetTransition], lastRules: java.util.List[ZoneOffsetTransitionRule]): ZoneRules = {
+  def of(
+    baseStandardOffset:           ZoneOffset,
+    baseWallOffset:               ZoneOffset,
+    standardOffsetTransitionList: java.util.List[ZoneOffsetTransition],
+    transitionList:               java.util.List[ZoneOffsetTransition],
+    lastRules:                    java.util.List[ZoneOffsetTransitionRule]
+  ): ZoneRules = {
     Objects.requireNonNull(baseStandardOffset, "baseStandardOffset")
     Objects.requireNonNull(baseWallOffset, "baseWallOffset")
     Objects.requireNonNull(standardOffsetTransitionList, "standardOffsetTransitionList")
     Objects.requireNonNull(transitionList, "transitionList")
     Objects.requireNonNull(lastRules, "lastRules")
-    StandardZoneRules(baseStandardOffset, baseWallOffset, standardOffsetTransitionList, transitionList, lastRules)
+    StandardZoneRules(baseStandardOffset,
+                      baseWallOffset,
+                      standardOffsetTransitionList,
+                      transitionList,
+                      lastRules)
   }
 
   /** Obtains an instance of {@code ZoneRules} that always uses the same offset.
@@ -98,7 +109,9 @@ object ZoneRules {
     * @param offset  the offset, not null
     */
   @SerialVersionUID(-8733721350312276297L)
-  private[zone] final class Fixed private[zone](private val offset: ZoneOffset) extends ZoneRules with Serializable {
+  private[zone] final class Fixed private[zone] (private val offset: ZoneOffset)
+      extends ZoneRules
+      with Serializable {
 
     def isFixedOffset: Boolean = true
 
@@ -106,7 +119,8 @@ object ZoneRules {
 
     def getOffset(localDateTime: LocalDateTime): ZoneOffset = offset
 
-    def getValidOffsets(localDateTime: LocalDateTime): java.util.List[ZoneOffset] = Collections.singletonList(offset)
+    def getValidOffsets(localDateTime: LocalDateTime): java.util.List[ZoneOffset] =
+      Collections.singletonList(offset)
 
     def getTransition(localDateTime: LocalDateTime): ZoneOffsetTransition = null
 
@@ -122,15 +136,18 @@ object ZoneRules {
 
     def previousTransition(instant: Instant): ZoneOffsetTransition = null
 
-    def getTransitions: java.util.List[ZoneOffsetTransition] = Collections.emptyList[ZoneOffsetTransition]
+    def getTransitions: java.util.List[ZoneOffsetTransition] =
+      Collections.emptyList[ZoneOffsetTransition]
 
-    def getTransitionRules: java.util.List[ZoneOffsetTransitionRule] = Collections.emptyList[ZoneOffsetTransitionRule]
+    def getTransitionRules: java.util.List[ZoneOffsetTransitionRule] =
+      Collections.emptyList[ZoneOffsetTransitionRule]
 
     override def equals(obj: Any): Boolean =
       obj match {
-        case fixed: Fixed             => (this eq fixed) || offset == fixed.offset
-        case rules: StandardZoneRules => rules.isFixedOffset && (offset == rules.getOffset(Instant.EPOCH))
-        case _                        => false
+        case fixed: Fixed => (this eq fixed) || offset == fixed.offset
+        case rules: StandardZoneRules =>
+          rules.isFixedOffset && (offset == rules.getOffset(Instant.EPOCH))
+        case _ => false
       }
 
     override def hashCode: Int = 1 ^ (31 + offset.hashCode) ^ 1 ^ (31 + offset.hashCode) ^ 1
@@ -141,7 +158,7 @@ object ZoneRules {
 }
 
 /** @constructor Restricted constructor. */
-abstract class ZoneRules private[zone]() {
+abstract class ZoneRules private[zone] () {
 
   /** Checks of the zone rules are fixed, such that the offset never varies.
     *

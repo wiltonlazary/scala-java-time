@@ -34,7 +34,7 @@ package org.threeten.bp
 import java.io.DataOutput
 import java.io.IOException
 import java.io.Serializable
-import java.util.{Objects, Collections, Locale, TimeZone}
+import java.util.{ Locale, Objects, TimeZone }
 import org.threeten.bp.format.DateTimeFormatterBuilder
 import org.threeten.bp.format.TextStyle
 import org.threeten.bp.temporal.TemporalAccessor
@@ -122,7 +122,8 @@ object ZoneId {
       "VST" -> "Asia/Ho_Chi_Minh",
       "EST" -> "-05:00",
       "MST" -> "-07:00",
-      "HST" -> "-10:00")
+      "HST" -> "-10:00"
+    )
     base.asJava
   }
 
@@ -149,7 +150,8 @@ object ZoneId {
     *
     * @return a modifiable copy of the set of zone IDs, not null
     */
-  def getAvailableZoneIds: java.util.Set[String] = new java.util.HashSet(ZoneRulesProvider.getAvailableZoneIds)
+  def getAvailableZoneIds: java.util.Set[String] =
+    new java.util.HashSet(ZoneRulesProvider.getAvailableZoneIds)
 
   /** Obtains an instance of {@code ZoneId} using its ID using a map
     * of aliases to supplement the standard zone IDs.
@@ -218,12 +220,13 @@ object ZoneId {
     if (zoneId == "Z") {
       ZoneOffset.UTC
     } else if (zoneId.length == 1) {
-      throw new DateTimeException(s"Invalid zone: $zoneId")
+      throw new DateTimeException(s"Invalid ID for ZoneOffset, invalid format: $zoneId")
     } else if (zoneId.startsWith("+") || zoneId.startsWith("-")) {
       ZoneOffset.of(zoneId)
     } else if ((zoneId == "UTC") || (zoneId == "GMT") || (zoneId == "UT")) {
       new ZoneRegion(zoneId, ZoneOffset.UTC.getRules)
-    } else if (zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId.startsWith("GMT-")) {
+    } else if (zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId
+                 .startsWith("GMT-")) {
       val offset: ZoneOffset = ZoneOffset.of(zoneId.substring(3))
       if (offset.getTotalSeconds == 0) {
         new ZoneRegion(zoneId.substring(0, 3), offset.getRules)
@@ -285,7 +288,9 @@ object ZoneId {
   def from(temporal: TemporalAccessor): ZoneId = {
     val obj: ZoneId = temporal.query(TemporalQueries.zone)
     if (obj == null)
-      throw new DateTimeException(s"Unable to obtain ZoneId from TemporalAccessor: $temporal, type ${temporal.getClass.getName}")
+      throw new DateTimeException(
+        s"Unable to obtain ZoneId from TemporalAccessor: $temporal, type ${temporal.getClass.getName}"
+      )
     else obj
   }
 }
@@ -373,7 +378,7 @@ object ZoneId {
   * @constructor Constructor only accessible within the package.
   */
 @SerialVersionUID(8352817235686L)
-abstract class ZoneId private[bp]() extends Serializable {
+abstract class ZoneId private[bp] () extends Serializable {
   if ((getClass ne classOf[ZoneOffset]) && (getClass ne classOf[ZoneRegion]))
     throw new AssertionError("Invalid subclass")
 
@@ -420,17 +425,20 @@ abstract class ZoneId private[bp]() extends Serializable {
     * @param locale  the locale to use, not null
     * @return the text value of the zone, not null
     */
-  def getDisplayName(style: TextStyle, locale: Locale): String = {
-    new DateTimeFormatterBuilder().appendZoneText(style).toFormatter(locale).format(new TemporalAccessor() {
-      def isSupported(field: TemporalField): Boolean = false
-      def getLong(field: TemporalField): Long = throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-      override def query[R](query: TemporalQuery[R]): R =
-        if (query eq TemporalQueries.zoneId)
-          ZoneId.this.asInstanceOf[R]
-        else
-          super.query(query)
-    })
-  }
+  def getDisplayName(style: TextStyle, locale: Locale): String =
+    new DateTimeFormatterBuilder()
+      .appendZoneText(style)
+      .toFormatter(locale)
+      .format(new TemporalAccessor() {
+        def isSupported(field: TemporalField): Boolean = false
+        def getLong(field:     TemporalField): Long =
+          throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+        override def query[R](query: TemporalQuery[R]): R =
+          if (query eq TemporalQueries.zoneId)
+            ZoneId.this.asInstanceOf[R]
+          else
+            super.query(query)
+      })
 
   /** Normalizes the time-zone ID, returning a {@code ZoneOffset} where possible.
     *
@@ -450,7 +458,7 @@ abstract class ZoneId private[bp]() extends Serializable {
       if (rules.isFixedOffset)
         return rules.getOffset(Instant.EPOCH)
     } catch {
-      case ex: ZoneRulesException =>
+      case _: ZoneRulesException =>
     }
     this
   }

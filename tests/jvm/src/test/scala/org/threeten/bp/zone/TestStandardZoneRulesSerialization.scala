@@ -31,12 +31,20 @@
  */
 package org.threeten.bp.zone
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
+import java.io.{
+  ByteArrayInputStream,
+  ByteArrayOutputStream,
+  ObjectInputStream,
+  ObjectOutputStream
+}
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp._
 
-class TestStandardZoneRulesSerialization  extends FunSuite with AssertionsHelper with AbstractTest {
+class TestStandardZoneRulesSerialization
+    extends AnyFunSuite
+    with AssertionsHelper
+    with AbstractTest {
   test("serialization_loaded") {
     assertSerialization(europeLondon)
     assertSerialization(europeParis)
@@ -45,25 +53,22 @@ class TestStandardZoneRulesSerialization  extends FunSuite with AssertionsHelper
 
   private def assertSerialization(test: ZoneRules): Unit = {
     val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-    val out: ObjectOutputStream = new ObjectOutputStream(baos)
+    val out: ObjectOutputStream     = new ObjectOutputStream(baos)
     out.writeObject(test)
     baos.close()
-    val bytes: Array[Byte] = baos.toByteArray
+    val bytes: Array[Byte]         = baos.toByteArray
     val bais: ByteArrayInputStream = new ByteArrayInputStream(bytes)
-    val in: ObjectInputStream = new ObjectInputStream(bais)
-    val result: ZoneRules = in.readObject.asInstanceOf[ZoneRules]
+    val in: ObjectInputStream      = new ObjectInputStream(bais)
+    val result: ZoneRules          = in.readObject.asInstanceOf[ZoneRules]
     assertEquals(result, test)
   }
 
-  private def europeLondon: ZoneRules = {
+  private def europeLondon: ZoneRules =
     ZoneId.of("Europe/London").getRules
-  }
 
-  private def europeParis: ZoneRules = {
+  private def europeParis: ZoneRules =
     ZoneId.of("Europe/Paris").getRules
-  }
 
-  private def americaNewYork: ZoneRules = {
+  private def americaNewYork: ZoneRules =
     ZoneId.of("America/New_York").getRules
-  }
 }

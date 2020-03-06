@@ -36,31 +36,35 @@ import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import org.threeten.bp.AssertionsHelper
-
-import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfterEach
 
 /** Test Chrono class. */
-class TestChronologySerialization extends FunSuite with BeforeAndAfterEach with AssertionsHelper {
+class TestChronologySerialization
+    extends AnyFunSuite
+    with BeforeAndAfterEach
+    with AssertionsHelper {
   val data_CalendarType: List[(Chronology, String)] = {
     List(
       (HijrahChronology.INSTANCE, "islamic-umalqura"),
       (IsoChronology.INSTANCE, "iso8601"),
       (JapaneseChronology.INSTANCE, "japanese"),
       (MinguoChronology.INSTANCE, "roc"),
-      (ThaiBuddhistChronology.INSTANCE, "buddhist"))
+      (ThaiBuddhistChronology.INSTANCE, "buddhist")
+    )
   }
 
   test("test_chronoSerializationSingleton") {
     data_CalendarType.foreach {
       case (chrono, _) =>
-        val orginal: Chronology = chrono
+        val orginal: Chronology         = chrono
         val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-        val out: ObjectOutputStream = new ObjectOutputStream(baos)
+        val out: ObjectOutputStream     = new ObjectOutputStream(baos)
         out.writeObject(orginal)
         out.close()
         val bais: ByteArrayInputStream = new ByteArrayInputStream(baos.toByteArray)
-        val in: ObjectInputStream = new ObjectInputStream(bais)
-        val ser: Chronology = in.readObject.asInstanceOf[Chronology]
+        val in: ObjectInputStream      = new ObjectInputStream(bais)
+        val ser: Chronology            = in.readObject.asInstanceOf[Chronology]
         assertSame(ser, chrono)
     }
   }

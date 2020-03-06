@@ -36,6 +36,7 @@ import org.threeten.bp.DateTimeException
 
 @SerialVersionUID(-7317881728594519368L)
 object ValueRange {
+
   /** Obtains a fixed value range.
     *
     * This factory obtains a range where the minimum and maximum values are fixed.
@@ -47,7 +48,8 @@ object ValueRange {
     * @throws IllegalArgumentException if the minimum is greater than the maximum
     */
   def of(min: Long, max: Long): ValueRange =
-    if (min > max) throw new IllegalArgumentException("Minimum value must be less than maximum value")
+    if (min > max)
+      throw new IllegalArgumentException("Minimum value must be less than maximum value")
     else new ValueRange(min, min, max, max)
 
   /** Obtains a variable value range.
@@ -63,7 +65,8 @@ object ValueRange {
     *                                  the minimum is greater than the smallest maximum,
     *                                  or the smallest maximum is greater than the largest maximum
     */
-  def of(min: Long, maxSmallest: Long, maxLargest: Long): ValueRange = of(min, min, maxSmallest, maxLargest)
+  def of(min: Long, maxSmallest: Long, maxLargest: Long): ValueRange =
+    of(min, min, maxSmallest, maxLargest)
 
   /** Obtains a fully variable value range.
     *
@@ -81,9 +84,13 @@ object ValueRange {
     */
   def of(minSmallest: Long, minLargest: Long, maxSmallest: Long, maxLargest: Long): ValueRange = {
     if (minSmallest > minLargest)
-      throw new IllegalArgumentException("Smallest minimum value must be less than largest minimum value")
+      throw new IllegalArgumentException(
+        "Smallest minimum value must be less than largest minimum value"
+      )
     if (maxSmallest > maxLargest)
-      throw new IllegalArgumentException("Smallest maximum value must be less than largest maximum value")
+      throw new IllegalArgumentException(
+        "Smallest maximum value must be less than largest maximum value"
+      )
     if (minLargest > maxLargest)
       throw new IllegalArgumentException("Minimum value must be less than maximum value")
     new ValueRange(minSmallest, minLargest, maxSmallest, maxLargest)
@@ -115,7 +122,12 @@ object ValueRange {
   * @param maxLargest  the largest minimum value
   */
 @SerialVersionUID(-7317881728594519368L)
-final class ValueRange private(private val minSmallest: Long, private val minLargest: Long, private val maxSmallest: Long, private val maxLargest: Long) extends Serializable {
+final class ValueRange private (
+  private val minSmallest: Long,
+  private val minLargest:  Long,
+  private val maxSmallest: Long,
+  private val maxLargest:  Long
+) extends Serializable {
 
   /** Is the value range fixed and fully known.
     *
@@ -207,7 +219,8 @@ final class ValueRange private(private val minSmallest: Long, private val minLar
     */
   def checkValidValue(value: Long, field: TemporalField): Long =
     if (!isValidValue(value))
-      if (field != null) throw new DateTimeException(s"Invalid value for $field (valid values $this): $value")
+      if (field != null)
+        throw new DateTimeException(s"Invalid value for $field (valid values $this): $value")
       else throw new DateTimeException(s"Invalid value (valid values $this): $value")
     else
       value
@@ -224,7 +237,8 @@ final class ValueRange private(private val minSmallest: Long, private val minLar
     * @see #isValidIntValue(long)
     */
   def checkValidIntValue(value: Long, field: TemporalField): Int =
-    if (!isValidIntValue(value)) throw new DateTimeException(s"Invalid int value for $field: $value")
+    if (!isValidIntValue(value))
+      throw new DateTimeException(s"Invalid int value for $field: $value")
     else value.toInt
 
   /** Checks if this range is equal to another range.
@@ -249,7 +263,8 @@ final class ValueRange private(private val minSmallest: Long, private val minLar
     * @return a suitable hash code
     */
   override def hashCode: Int = {
-    val hash: Long = minSmallest + minLargest << 16 + minLargest >> 48 + maxSmallest << 32 + maxSmallest >> 32 + maxLargest << 48 + maxLargest >> 16
+    val hash: Long =
+      minSmallest + minLargest << 16 + minLargest >> 48 + maxSmallest << 32 + maxSmallest >> 32 + maxLargest << 48 + maxLargest >> 16
     (hash ^ (hash >>> 32)).toInt
   }
 

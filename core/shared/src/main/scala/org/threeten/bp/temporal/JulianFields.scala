@@ -34,7 +34,7 @@ package org.threeten.bp.temporal
 import org.threeten.bp.temporal.ChronoField.EPOCH_DAY
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.FOREVER
-import java.util.{Objects, Locale}
+import java.util.{ Locale, Objects }
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.chrono.Chronology
 import org.threeten.bp.format.ResolverStyle
@@ -49,6 +49,7 @@ import org.threeten.bp.format.ResolverStyle
   * This is an immutable and thread-safe class.
   */
 object JulianFields {
+
   /** Julian Day field.
     *
     * This is an integer-based version of the Julian Day Number.
@@ -88,6 +89,7 @@ object JulianFields {
     * regardless of the offset or time-zone.
     */
   lazy val JULIAN_DAY: TemporalField = Field.JULIAN_DAY
+
   /** Modified Julian Day field.
     *
     * This is an integer-based version of the Modified Julian Day Number.
@@ -122,6 +124,7 @@ object JulianFields {
     * regardless of the offset or time-zone.
     */
   lazy val MODIFIED_JULIAN_DAY: TemporalField = Field.MODIFIED_JULIAN_DAY
+
   /** Rata Die field.
     *
     * Rata Die counts whole days continuously starting day 1 at midnight at the beginning of 0001-01-01 (ISO).
@@ -138,19 +141,29 @@ object JulianFields {
 
   /** Hidden implementation. */
   private object Field {
+
     /** Julian Day field. */
     // 719163L + 1721425L = 2440588L
-    lazy val JULIAN_DAY          = new Field("JulianDay", 0, DAYS, FOREVER, 2440588L)
+    lazy val JULIAN_DAY = new Field("JulianDay", 0, DAYS, FOREVER, 2440588L)
+
     /** Modified Julian Day field. */
     // 719163L - 678576L = 40587L
     lazy val MODIFIED_JULIAN_DAY = new Field("ModifiedJulianDay", 1, DAYS, FOREVER, 40587L)
+
     /** Rata Die field. */
-    lazy val RATA_DIE            = new Field("RataDie", 2, DAYS, FOREVER, 719163L)
+    lazy val RATA_DIE = new Field("RataDie", 2, DAYS, FOREVER, 719163L)
   }
 
   /// !!! FIXME: Passing of name to the Enum constructor is not quite right.
   //             We should have a look at the compiled code to figure out what's happening exactly in the Java version.
-  private final class Field private(name: String, ordinal: Int, private val baseUnit: TemporalUnit, private val rangeUnit: TemporalUnit, private val offset: Long) extends Enum[Field](name, ordinal) with TemporalField {
+  private final class Field private (
+    name:                  String,
+    ordinal:               Int,
+    private val baseUnit:  TemporalUnit,
+    private val rangeUnit: TemporalUnit,
+    private val offset:    Long
+  ) extends Enum[Field](name, ordinal)
+      with TemporalField {
     val range: ValueRange = ValueRange.of(-365243219162L + offset, 365241780471L + offset)
 
     def getBaseUnit: TemporalUnit = baseUnit
@@ -164,13 +177,15 @@ object JulianFields {
     def isSupportedBy(temporal: TemporalAccessor): Boolean = temporal.isSupported(EPOCH_DAY)
 
     def rangeRefinedBy(temporal: TemporalAccessor): ValueRange =
-      if (!isSupportedBy(temporal)) throw new UnsupportedTemporalTypeException(s"Unsupported field: $this")
+      if (!isSupportedBy(temporal))
+        throw new UnsupportedTemporalTypeException(s"Unsupported field: $this")
       else range
 
     def getFrom(temporal: TemporalAccessor): Long = temporal.getLong(EPOCH_DAY) + offset
 
     def adjustInto[R <: Temporal](dateTime: R, newValue: Long): R =
-      if (!range.isValidValue(newValue)) throw new DateTimeException(s"Invalid value: $name $newValue")
+      if (!range.isValidValue(newValue))
+        throw new DateTimeException(s"Invalid value: $name $newValue")
       else dateTime.`with`(EPOCH_DAY, Math.subtractExact(newValue, offset)).asInstanceOf[R]
 
     def getDisplayName(locale: Locale): String = {
@@ -178,9 +193,13 @@ object JulianFields {
       toString
     }
 
-    def resolve(fieldValues: java.util.Map[TemporalField, java.lang.Long], partialTemporal: TemporalAccessor, resolverStyle: ResolverStyle): TemporalAccessor = {
+    def resolve(
+      fieldValues:     java.util.Map[TemporalField, java.lang.Long],
+      partialTemporal: TemporalAccessor,
+      resolverStyle:   ResolverStyle
+    ): TemporalAccessor = {
       val value: java.lang.Long = fieldValues.remove(this)
-      val chrono: Chronology = Chronology.from(partialTemporal)
+      val chrono: Chronology    = Chronology.from(partialTemporal)
       chrono.dateEpochDay(Math.subtractExact(value, offset))
     }
 

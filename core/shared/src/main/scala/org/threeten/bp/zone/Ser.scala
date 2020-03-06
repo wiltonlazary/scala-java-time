@@ -48,10 +48,13 @@ import org.threeten.bp.ZoneOffset
   */
 @SerialVersionUID(-8885321777449118786L)
 private[zone] object Ser {
+
   /** Type for StandardZoneRules. */
   private[zone] val SZR: Byte = 1
+
   /** Type for ZoneOffsetTransition. */
   private[zone] val ZOT: Byte = 2
+
   /** Type for ZoneOffsetTransition. */
   private[zone] val ZOTRULE: Byte = 3
 
@@ -61,7 +64,7 @@ private[zone] object Ser {
 
   @throws[IOException]
   private def writeInternal(`type`: Byte, `object`: AnyRef, out: DataOutput): Unit = {
-    out.writeByte(`type`)
+    out.writeByte(`type`.toInt)
     `type` match {
       case SZR     => `object`.asInstanceOf[StandardZoneRules].writeExternal(out)
       case ZOT     => `object`.asInstanceOf[ZoneOffsetTransition].writeExternal(out)
@@ -79,14 +82,13 @@ private[zone] object Ser {
 
   @throws[IOException]
   @throws[ClassNotFoundException]
-  private def readInternal(`type`: Byte, in: DataInput): AnyRef = {
+  private def readInternal(`type`: Byte, in: DataInput): AnyRef =
     `type` match {
       case SZR     => StandardZoneRules.readExternal(in)
       case ZOT     => ZoneOffsetTransition.readExternal(in)
       case ZOTRULE => ZoneOffsetTransitionRule.readExternal(in)
       case _       => throw new StreamCorruptedException("Unknown serialized type")
     }
-  }
 
   /** Writes the state to the stream.
     *
@@ -111,8 +113,9 @@ private[zone] object Ser {
     */
   @throws[IOException]
   private[zone] def readOffset(in: DataInput): ZoneOffset = {
-    val offsetByte: Int = in.readByte
-    if (offsetByte == 127) ZoneOffset.ofTotalSeconds(in.readInt) else ZoneOffset.ofTotalSeconds(offsetByte * 900)
+    val offsetByte: Int = in.readByte.toInt
+    if (offsetByte == 127) ZoneOffset.ofTotalSeconds(in.readInt)
+    else ZoneOffset.ofTotalSeconds(offsetByte * 900)
   }
 
   /** Writes the state to the stream.
@@ -122,18 +125,16 @@ private[zone] object Ser {
     * @throws IOException if an error occurs
     */
   @throws[IOException]
-  private[zone] def writeEpochSec(epochSec: Long, out: DataOutput): Unit = {
+  private[zone] def writeEpochSec(epochSec: Long, out: DataOutput): Unit =
     if (epochSec >= -4575744000L && epochSec < 10413792000L && epochSec % 900 == 0) {
       val store: Int = ((epochSec + 4575744000L) / 900).toInt
       out.writeByte((store >>> 16) & 255)
       out.writeByte((store >>> 8) & 255)
       out.writeByte(store & 255)
-    }
-    else {
+    } else {
       out.writeByte(255)
       out.writeLong(epochSec)
     }
-  }
 
   /** Reads the state from the stream.
     *
@@ -148,8 +149,8 @@ private[zone] object Ser {
       in.readLong
     else {
       val midByte: Int = in.readByte & 255
-      val loByte: Int = in.readByte & 255
-      val tot: Long = (hiByte << 16) + (midByte << 8) + loByte
+      val loByte: Int  = in.readByte & 255
+      val tot: Long    = (hiByte.toLong << 16) + (midByte.toLong << 8) + loByte
       (tot * 900) - 4575744000L
     }
   }
@@ -161,7 +162,8 @@ private[zone] object Ser {
   * @param object  the object being serialized
   */
 @SerialVersionUID(-8885321777449118786L)
-final class Ser private[zone](private var `type`: Byte, private var `object`: AnyRef) extends Externalizable {
+final class Ser private[zone] (private var `type`: Byte, private var `object`: AnyRef)
+    extends Externalizable {
 
   /** @constructor Constructor for deserialization. */
   def this() {
@@ -182,7 +184,7 @@ final class Ser private[zone](private var `type`: Byte, private var `object`: An
   @throws[IOException]
   @throws[ClassNotFoundException]
   def readExternal(in: ObjectInput): Unit = {
-    `type` = in.readByte
+    `type`   = in.readByte
     `object` = Ser.readInternal(`type`, in)
   }
 

@@ -37,16 +37,17 @@ import java.io.IOException
 
 import org.threeten.bp.DateTimeException
 
-
 object MinguoEra {
+
   /** The singleton instance for the era BEFORE_ROC, 'Before Republic of China'.
     * This has the numeric value of {@code 0}.
     */
   lazy val BEFORE_ROC = new MinguoEra("BEFORE_ROC", 0)
+
   /** The singleton instance for the era ROC, 'Republic of China'.
     * This has the numeric value of {@code 1}.
     */
-  lazy val ROC        = new MinguoEra("ROC", 1)
+  lazy val ROC = new MinguoEra("ROC", 1)
 
   lazy val values: Array[MinguoEra] = Array(BEFORE_ROC, ROC)
 
@@ -69,7 +70,7 @@ object MinguoEra {
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): MinguoEra = {
     val eraValue: Byte = in.readByte
-    MinguoEra.of(eraValue)
+    MinguoEra.of(eraValue.toInt)
   }
 }
 
@@ -85,6 +86,7 @@ object MinguoEra {
   * This is an immutable and thread-safe enum.
   */
 final class MinguoEra(name: String, ordinal: Int) extends Enum[MinguoEra](name, ordinal) with Era {
+
   /** Gets the numeric era {@code int} value.
     *
     * The era BEFORE_ROC has the value 0, while the era ROC has the value 1.

@@ -32,9 +32,9 @@
 package org.threeten.bp.format
 
 import java.text.DecimalFormatSymbols
-import java.util.{Objects, Locale}
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
+import java.util.{ Locale, Objects }
+import java.util.HashMap
+import java.util.Map
 import scala.collection.JavaConverters._
 
 /** Localized symbols used in date and time formatting.
@@ -46,13 +46,16 @@ import scala.collection.JavaConverters._
   * This class is immutable and thread-safe.
   */
 object DecimalStyle {
+
   /** The standard set of non-localized symbols.
     *
     * This uses standard ASCII characters for zero, positive, negative and a dot for the decimal point.
     */
   lazy val STANDARD: DecimalStyle = new DecimalStyle('0', '+', '-', '.')
+
   /** The cache of symbols instances. */
-  private lazy  val CACHE: ConcurrentMap[Locale, DecimalStyle] = new ConcurrentHashMap[Locale, DecimalStyle](16, 0.75f, 2)
+  private lazy val CACHE: Map[Locale, DecimalStyle] =
+    new HashMap[Locale, DecimalStyle]()
 
   /** Lists all the locales that are supported.
     *
@@ -82,17 +85,17 @@ object DecimalStyle {
     Objects.requireNonNull(locale, "locale")
     // Size reduced
     if (CACHE.get(locale) == null) {
-      CACHE.putIfAbsent(locale, create(locale))
+      CACHE.put(locale, create(locale))
     }
     CACHE.get(locale)
   }
 
   private def create(locale: Locale): DecimalStyle = {
     val oldSymbols: DecimalFormatSymbols = DecimalFormatSymbols.getInstance(locale)
-    val zeroDigit: Char = oldSymbols.getZeroDigit
-    val positiveSign: Char = '+'
-    val negativeSign: Char = oldSymbols.getMinusSign
-    val decimalSeparator: Char = oldSymbols.getDecimalSeparator
+    val zeroDigit: Char                  = oldSymbols.getZeroDigit
+    val positiveSign: Char               = '+'
+    val negativeSign: Char               = oldSymbols.getMinusSign
+    val decimalSeparator: Char           = oldSymbols.getDecimalSeparator
     if (zeroDigit == '0' && negativeSign == '-' && decimalSeparator == '.') STANDARD
     else new DecimalStyle(zeroDigit, positiveSign, negativeSign, decimalSeparator)
   }
@@ -105,7 +108,12 @@ object DecimalStyle {
   * @param negativeSign  the character to use for the negative sign
   * @param decimalSeparator  the character to use for the decimal point
   */
-final class DecimalStyle private(val zeroDigit: Char, val positiveSign: Char, val negativeSign: Char, val decimalSeparator: Char) {
+final class DecimalStyle private (
+  val zeroDigit:        Char,
+  val positiveSign:     Char,
+  val negativeSign:     Char,
+  val decimalSeparator: Char
+) {
 
   /** Gets the character that represents zero.
     *
@@ -216,7 +224,7 @@ final class DecimalStyle private(val zeroDigit: Char, val positiveSign: Char, va
     // Size verified
     if (zeroDigit == '0')
       return numericText
-    val diff: Int = zeroDigit - '0'
+    val diff: Int          = zeroDigit - '0'
     val array: Array[Char] = numericText.toCharArray
 
     var i: Int = 0
@@ -251,5 +259,6 @@ final class DecimalStyle private(val zeroDigit: Char, val positiveSign: Char, va
     *
     * @return a string description, not null
     */
-  override def toString: String = s"DecimalStyle[$zeroDigit$positiveSign$negativeSign$decimalSeparator]"
+  override def toString: String =
+    s"DecimalStyle[$zeroDigit$positiveSign$negativeSign$decimalSeparator]"
 }

@@ -31,12 +31,11 @@
  */
 package org.threeten.bp
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.FileInputStream
-import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.ObjectStreamConstants
@@ -45,7 +44,7 @@ import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
 /** Base test class. */
-trait AbstractTest extends FunSuite with AssertionsHelper {
+trait AbstractTest extends AnyFunSuite with AssertionsHelper {
   private val SERIALISATION_DATA_FOLDER: String = "jvm/src/test/resources/"
 
   def assertSerializable(o: AnyRef): Unit = {
@@ -60,7 +59,7 @@ trait AbstractTest extends FunSuite with AssertionsHelper {
 
   def writeThenRead(o: AnyRef): AnyRef = {
     val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-    var oos: ObjectOutputStream = null
+    var oos: ObjectOutputStream     = null
     try {
       oos = new ObjectOutputStream(baos)
       oos.writeObject(o)
@@ -80,15 +79,16 @@ trait AbstractTest extends FunSuite with AssertionsHelper {
     }
   }
 
-  def assertEqualsSerialisedForm(objectSerialised: AnyRef): Unit = {
+  def assertEqualsSerialisedForm(objectSerialised: AnyRef): Unit =
     assertEqualsSerialisedForm(objectSerialised, objectSerialised.getClass)
-  }
 
   def assertEqualsSerialisedForm(objectSerialised: AnyRef, cls: Class[_]): Unit = {
-    val className: String = cls.getSimpleName
+    val className: String     = cls.getSimpleName
     var in: ObjectInputStream = null
     try {
-      in = new ObjectInputStream(new FileInputStream(SERIALISATION_DATA_FOLDER + className + ".bin"))
+      in = new ObjectInputStream(
+        new FileInputStream(SERIALISATION_DATA_FOLDER + className + ".bin")
+      )
       val objectFromFile: AnyRef = in.readObject
       assertEquals(objectFromFile, objectSerialised)
     } finally {
@@ -106,8 +106,7 @@ trait AbstractTest extends FunSuite with AssertionsHelper {
       if (!field.getName.contains("$")) {
         if (Modifier.isStatic(field.getModifiers)) {
           assertTrue(Modifier.isFinal(field.getModifiers))
-        }
-        else {
+        } else {
           assertTrue(Modifier.isPrivate(field.getModifiers))
           assertTrue(Modifier.isFinal(field.getModifiers))
         }
@@ -119,14 +118,18 @@ trait AbstractTest extends FunSuite with AssertionsHelper {
     }
   }
 
-  def assertSerializedBySer(`object`: AnyRef, expectedBytes: Array[Byte], matches: Array[Byte]*): Unit = {
+  def assertSerializedBySer(
+    `object`:      AnyRef,
+    expectedBytes: Array[Byte],
+    matches:       Array[Byte]*
+  ): Unit = {
     val serClass: String = `object`.getClass.getPackage.getName + ".Ser"
     val serCls: Class[_] = Class.forName(serClass)
-    val field: Field = serCls.getDeclaredField("serialVersionUID")
+    val field: Field     = serCls.getDeclaredField("serialVersionUID")
     field.setAccessible(true)
-    val serVer: Long = field.get(null).asInstanceOf[Long]
+    val serVer: Long                = field.get(null).asInstanceOf[Long]
     val baos: ByteArrayOutputStream = new ByteArrayOutputStream
-    var oos: ObjectOutputStream = null
+    var oos: ObjectOutputStream     = null
     try {
       oos = new ObjectOutputStream(baos)
       oos.writeObject(`object`)
@@ -135,9 +138,9 @@ trait AbstractTest extends FunSuite with AssertionsHelper {
         oos.close()
       }
     }
-    val bytes: Array[Byte] = baos.toByteArray
+    val bytes: Array[Byte]         = baos.toByteArray
     val bais: ByteArrayInputStream = new ByteArrayInputStream(bytes)
-    var dis: DataInputStream = null
+    var dis: DataInputStream       = null
     try {
       dis = new DataInputStream(bais)
       assertEquals(dis.readShort, ObjectStreamConstants.STREAM_MAGIC)
@@ -146,15 +149,15 @@ trait AbstractTest extends FunSuite with AssertionsHelper {
       assertEquals(dis.readByte, ObjectStreamConstants.TC_CLASSDESC)
       assertEquals(dis.readUTF, serClass)
       assertEquals(dis.readLong, serVer)
-      assertEquals(dis.readByte, ObjectStreamConstants.SC_EXTERNALIZABLE | ObjectStreamConstants.SC_BLOCK_DATA)
+      assertEquals(dis.readByte,
+                   ObjectStreamConstants.SC_EXTERNALIZABLE | ObjectStreamConstants.SC_BLOCK_DATA)
       assertEquals(dis.readShort, 0)
       assertEquals(dis.readByte, ObjectStreamConstants.TC_ENDBLOCKDATA)
       assertEquals(dis.readByte, ObjectStreamConstants.TC_NULL)
       if (expectedBytes.length < 256) {
         assertEquals(dis.readByte, ObjectStreamConstants.TC_BLOCKDATA)
         assertEquals(dis.readUnsignedByte, expectedBytes.length)
-      }
-      else {
+      } else {
         assertEquals(dis.readByte, ObjectStreamConstants.TC_BLOCKDATALONG)
         assertEquals(dis.readInt, expectedBytes.length)
       }
@@ -171,16 +174,14 @@ trait AbstractTest extends FunSuite with AssertionsHelper {
               dis.readFully(possible)
               assertEquals(possible, mtch)
               matched = true
-            }
-            catch {
-              case ex: AssertionError =>
+            } catch {
+              case _: AssertionError =>
                 dis.reset()
                 dis.readByte()
             }
           }
         }
-      }
-      else {
+      } else {
         assertEquals(dis.readByte(), ObjectStreamConstants.TC_ENDBLOCKDATA)
         assertEquals(dis.read(), -1)
       }

@@ -31,14 +31,10 @@
  */
 package org.threeten.bp.temporal
 
-import org.scalatest.FunSuite
-import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.Platform
 import org.threeten.bp.temporal.ChronoField.ERA
 import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR_OF_ERA
-import java.io.IOException
-import java.util.Arrays
 import org.threeten.bp._
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.format.DateTimeFormatter
@@ -58,7 +54,8 @@ class TestYear extends GenDateTimeTest {
 
   protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
-    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE).filterNot(validFields.contains)
+    (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
+      .filterNot(validFields.contains)
   }
 
   ignore("test_immutable") {
@@ -77,11 +74,11 @@ class TestYear extends GenDateTimeTest {
 
   test("now") {
     var expected: Year = Year.now(Clock.systemDefaultZone)
-    var test: Year = Year.now
-    var i: Int = 0
+    var test: Year     = Year.now
+    var i: Int         = 0
     while (i < 100 && (expected != test)) {
       expected = Year.now(Clock.systemDefaultZone)
-      test = Year.now
+      test     = Year.now
       i += 1
     }
     assertEquals(test, expected)
@@ -94,13 +91,13 @@ class TestYear extends GenDateTimeTest {
   }
 
   test("now_ZoneId") {
-    val zone: ZoneId = ZoneId.of("UTC+01:02:03")
+    val zone: ZoneId   = ZoneId.of("UTC+01:02:03")
     var expected: Year = Year.now(Clock.system(zone))
-    var test: Year = Year.now(zone)
-    var i: Int = 0
+    var test: Year     = Year.now(zone)
+    var i: Int         = 0
     while (i < 100 && (expected == test)) {
       expected = Year.now(Clock.system(zone))
-      test = Year.now(zone)
+      test     = Year.now(zone)
       i += 1
     }
     assertEquals(test, expected)
@@ -108,8 +105,8 @@ class TestYear extends GenDateTimeTest {
 
   test("now_Clock") {
     val instant: Instant = LocalDateTime.of(2010, 12, 31, 0, 0).toInstant(ZoneOffset.UTC)
-    val clock: Clock = Clock.fixed(instant, ZoneOffset.UTC)
-    val test: Year = Year.now(clock)
+    val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
+    val test: Year       = Year.now(clock)
     assertEquals(test.getValue, 2010)
   }
 
@@ -167,7 +164,8 @@ class TestYear extends GenDateTimeTest {
       ("-1234", Year.of(-1234)),
       ("-12345678", Year.of(-12345678)),
       ("+" + Year.MAX_VALUE, Year.of(Year.MAX_VALUE)),
-      ("" + Year.MIN_VALUE, Year.of(Year.MIN_VALUE)))
+      ("" + Year.MIN_VALUE, Year.of(Year.MIN_VALUE))
+    )
   }
 
   test("factory_parse_success") {
@@ -193,7 +191,8 @@ class TestYear extends GenDateTimeTest {
       ("+123-10", 1),
       ("+1234-10", 0),
       ("12345-10", 0),
-      ("+12345678901-10", 11))
+      ("+12345678901-10", 11)
+    )
   }
 
   test("factory_parse_fail") {
@@ -202,8 +201,7 @@ class TestYear extends GenDateTimeTest {
         try {
           Year.parse(text)
           fail(f"Parse should have failed for $text%s at position $pos%d")
-        }
-        catch {
+        } catch {
           case ex: DateTimeParseException =>
             assertEquals(ex.getParsedString, text)
             assertEquals(ex.getErrorIndex, pos)
@@ -219,7 +217,7 @@ class TestYear extends GenDateTimeTest {
 
   test("factory_parse_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("u")
-    val test: Year = Year.parse("2010", f)
+    val test: Year           = Year.parse("2010", f)
     assertEquals(test, Year.of(2010))
   }
 
@@ -386,7 +384,7 @@ class TestYear extends GenDateTimeTest {
 
   test("test_adjustDate") {
     val base: LocalDate = LocalDate.of(2007, 2, 12)
-    var i: Int = -4
+    var i: Int          = -4
     while (i <= 2104) {
       val result: Temporal = Year.of(i).adjustInto(base)
       assertEquals(result, LocalDate.of(i, 2, 12))
@@ -441,19 +439,19 @@ class TestYear extends GenDateTimeTest {
   }
 
   test("test_isValidMonthDay_june") {
-    val test: Year = Year.of(2007)
+    val test: Year         = Year.of(2007)
     val monthDay: MonthDay = MonthDay.of(6, 30)
     assertEquals(test.isValidMonthDay(monthDay), true)
   }
 
   test("test_isValidMonthDay_febNonLeap") {
-    val test: Year = Year.of(2007)
+    val test: Year         = Year.of(2007)
     val monthDay: MonthDay = MonthDay.of(2, 29)
     assertEquals(test.isValidMonthDay(monthDay), false)
   }
 
   test("test_isValidMonthDay_febLeap") {
-    val test: Year = Year.of(2008)
+    val test: Year         = Year.of(2008)
     val monthDay: MonthDay = MonthDay.of(2, 29)
     assertEquals(test.isValidMonthDay(monthDay), true)
   }
@@ -491,8 +489,8 @@ class TestYear extends GenDateTimeTest {
     List(
       (Year.of(2008), MonthDay.of(6, 30), LocalDate.of(2008, 6, 30)),
       (Year.of(2008), MonthDay.of(2, 29), LocalDate.of(2008, 2, 29)),
-      (Year.of(2009), MonthDay.of(2, 29), LocalDate.of(2009, 2, 28)))
-
+      (Year.of(2009), MonthDay.of(2, 29), LocalDate.of(2009, 2, 28))
+    )
 
   test("test_atMonthDay") {
     data_atMonthDay.foreach {
@@ -509,9 +507,9 @@ class TestYear extends GenDateTimeTest {
   }
 
   test("test_atDay_notLeapYear") {
-    val test: Year = Year.of(2007)
+    val test: Year          = Year.of(2007)
     var expected: LocalDate = LocalDate.of(2007, 1, 1)
-    var i: Int = 1
+    var i: Int              = 1
     while (i <= 365) {
       assertEquals(test.atDay(i), expected)
       expected = expected.plusDays(1)
@@ -527,9 +525,9 @@ class TestYear extends GenDateTimeTest {
   }
 
   test("test_atDay_leapYear") {
-    val test: Year = Year.of(2008)
+    val test: Year          = Year.of(2008)
     var expected: LocalDate = LocalDate.of(2008, 1, 1)
-    var i: Int = 1
+    var i: Int              = 1
     while (i <= 366) {
       assertEquals(test.atDay(i), expected)
       expected = expected.plusDays(1)
@@ -571,7 +569,7 @@ class TestYear extends GenDateTimeTest {
     var i: Int = -4
     while (i <= 2104) {
       val a: Year = Year.of(i)
-      var j: Int = -4
+      var j: Int  = -4
       while (j <= 2104) {
         val b: Year = Year.of(j)
         if (i < j) {
@@ -581,16 +579,14 @@ class TestYear extends GenDateTimeTest {
           assertEquals(a.isBefore(b), true)
           assertEquals(b.isAfter(a), true)
           assertEquals(b.isBefore(a), false)
-        }
-        else if (i > j) {
+        } else if (i > j) {
           assertEquals(a.compareTo(b) > 0, true)
           assertEquals(b.compareTo(a) < 0, true)
           assertEquals(a.isAfter(b), true)
           assertEquals(a.isBefore(b), false)
           assertEquals(b.isAfter(a), false)
           assertEquals(b.isBefore(a), true)
-        }
-        else {
+        } else {
           assertEquals(a.compareTo(b), 0)
           assertEquals(b.compareTo(a), 0)
           assertEquals(a.isAfter(b), false)
@@ -606,7 +602,7 @@ class TestYear extends GenDateTimeTest {
 
   test("test_compareTo_nullYear") {
     assertThrows[Platform.NPE] {
-      val doy: Year = null
+      val doy: Year  = null
       val test: Year = Year.of(1)
       test.compareTo(doy)
     }
@@ -616,7 +612,7 @@ class TestYear extends GenDateTimeTest {
     var i: Int = -4
     while (i <= 2104) {
       val a: Year = Year.of(i)
-      var j: Int = -4
+      var j: Int  = -4
       while (j <= 2104) {
         val b: Year = Year.of(j)
         assertEquals(a == b, i == j)
@@ -633,7 +629,7 @@ class TestYear extends GenDateTimeTest {
   }
 
   test("test_equals_nullYear") {
-    val doy: Year = null
+    val doy: Year  = null
     val test: Year = Year.of(1)
     assertEquals(test == doy, false)
   }
@@ -654,7 +650,7 @@ class TestYear extends GenDateTimeTest {
 
   test("test_format_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("y")
-    val t: String = Year.of(2010).format(f)
+    val t: String            = Year.of(2010).format(f)
     assertEquals(t, "2010")
   }
 

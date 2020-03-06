@@ -31,7 +31,8 @@
  */
 package org.threeten.bp.chrono
 
-import org.scalatest.{BeforeAndAfterEach, FunSuite}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.BeforeAndAfterEach
 
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.DateTimeException
@@ -43,9 +44,9 @@ import org.threeten.bp.temporal.ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH
 import org.threeten.bp.temporal.ChronoField.ALIGNED_WEEK_OF_MONTH
 
 /** Test. */
-class TestHijrahChronology extends FunSuite with BeforeAndAfterEach with AssertionsHelper {
+class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with AssertionsHelper {
   test("test_chrono_byName") {
-    val c: Chronology = HijrahChronology.INSTANCE
+    val c: Chronology    = HijrahChronology.INSTANCE
     val test: Chronology = Chronology.of("Hijrah")
     assertNotNull(test, "The Hijrah calendar could not be found byName")
     assertEquals(test.getId, "Hijrah-umalqura", "ID mismatch")
@@ -67,7 +68,8 @@ class TestHijrahChronology extends FunSuite with BeforeAndAfterEach with Asserti
       (HijrahChronology.INSTANCE.date(5, 1, 1), LocalDate.of(626, 6, 5)),
       (HijrahChronology.INSTANCE.date(1662, 3, 3), LocalDate.of(2234, 4, 3)),
       (HijrahChronology.INSTANCE.date(1728, 10, 28), LocalDate.of(2298, 12, 3)),
-      (HijrahChronology.INSTANCE.date(1728, 10, 29), LocalDate.of(2298, 12, 4)))
+      (HijrahChronology.INSTANCE.date(1728, 10, 29), LocalDate.of(2298, 12, 4))
+    )
   }
 
   test("test_toLocalDate") {
@@ -85,18 +87,17 @@ class TestHijrahChronology extends FunSuite with BeforeAndAfterEach with Asserti
   }
 
   val data_badDates: List[(Int, Int, Int)] = {
-    List(
-      (1728, 0, 0),
-      (1728, -1, 1),
-      (1728, 0, 1),
-      (1728, 14, 1),
-      (1728, 15, 1),
-      (1728, 1, -1),
-      (1728, 1, 0),
-      (1728, 1, 32),
-      (1728, 12, -1),
-      (1728, 12, 0),
-      (1728, 12, 32))
+    List((1728, 0, 0),
+         (1728, -1, 1),
+         (1728, 0, 1),
+         (1728, 14, 1),
+         (1728, 15, 1),
+         (1728, 1, -1),
+         (1728, 1, 0),
+         (1728, 1, 32),
+         (1728, 12, -1),
+         (1728, 12, 0),
+         (1728, 12, 32))
   }
 
   test("test_badDates") {
@@ -133,7 +134,7 @@ class TestHijrahChronology extends FunSuite with BeforeAndAfterEach with Asserti
 
   test("test_adjust_toLocalDate") {
     val hijrahDate: ChronoLocalDate = HijrahChronology.INSTANCE.date(1726, 1, 4)
-    val test: ChronoLocalDate = hijrahDate.`with`(LocalDate.of(2012, 7, 6))
+    val test: ChronoLocalDate       = hijrahDate.`with`(LocalDate.of(2012, 7, 6))
     assertEquals(test, HijrahChronology.INSTANCE.date(1433, 8, 16))
   }
 
@@ -146,13 +147,13 @@ class TestHijrahChronology extends FunSuite with BeforeAndAfterEach with Asserti
 
   test("test_LocalDate_adjustToHijrahDate") {
     val hijrahDate: ChronoLocalDate = HijrahChronology.INSTANCE.date(1728, 10, 29)
-    val test: LocalDate = LocalDate.MIN.`with`(hijrahDate)
+    val test: LocalDate             = LocalDate.MIN.`with`(hijrahDate)
     assertEquals(test, LocalDate.of(2298, 12, 4))
   }
 
   test("test_LocalDateTime_adjustToHijrahDate") {
     val hijrahDate: ChronoLocalDate = HijrahChronology.INSTANCE.date(1728, 10, 29)
-    val test: LocalDateTime = LocalDateTime.MIN.`with`(hijrahDate)
+    val test: LocalDateTime         = LocalDateTime.MIN.`with`(hijrahDate)
     assertEquals(test, LocalDateTime.of(2298, 12, 4, 0, 0))
   }
 
@@ -162,7 +163,8 @@ class TestHijrahChronology extends FunSuite with BeforeAndAfterEach with Asserti
       (HijrahChronology.INSTANCE.date(1728, 10, 28), "Hijrah-umalqura AH 1728-10-28"),
       (HijrahChronology.INSTANCE.date(1728, 10, 29), "Hijrah-umalqura AH 1728-10-29"),
       (HijrahChronology.INSTANCE.date(1727, 12, 5), "Hijrah-umalqura AH 1727-12-05"),
-      (HijrahChronology.INSTANCE.date(1727, 12, 6), "Hijrah-umalqura AH 1727-12-06"))
+      (HijrahChronology.INSTANCE.date(1727, 12, 6), "Hijrah-umalqura AH 1727-12-06")
+    )
   }
 
   test("test_toString") {

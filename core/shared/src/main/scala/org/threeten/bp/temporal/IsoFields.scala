@@ -43,7 +43,7 @@ import org.threeten.bp.temporal.ChronoUnit.FOREVER
 import org.threeten.bp.temporal.ChronoUnit.MONTHS
 import org.threeten.bp.temporal.ChronoUnit.WEEKS
 import org.threeten.bp.temporal.ChronoUnit.YEARS
-import java.util.{Objects, Locale}
+import java.util.{ Locale, Objects }
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalDate
 import org.threeten.bp.chrono.Chronology
@@ -117,6 +117,7 @@ import org.threeten.bp.format.ResolverStyle
   * This class is immutable and thread-safe.
   */
 object IsoFields {
+
   /** The field that represents the day-of-quarter.
     *
     * This field allows the day-of-quarter value to be queried and set.
@@ -133,6 +134,7 @@ object IsoFields {
     * This unit is an immutable and thread-safe singleton.
     */
   lazy val DAY_OF_QUARTER: TemporalField = Field.DAY_OF_QUARTER
+
   /** The field that represents the quarter-of-year.
     *
     * This field allows the quarter-of-year value to be queried and set.
@@ -143,6 +145,7 @@ object IsoFields {
     * This unit is an immutable and thread-safe singleton.
     */
   lazy val QUARTER_OF_YEAR: TemporalField = Field.QUARTER_OF_YEAR
+
   /** The field that represents the week-of-week-based-year.
     *
     * This field allows the week of the week-based-year value to be queried and set.
@@ -150,6 +153,7 @@ object IsoFields {
     * This unit is an immutable and thread-safe singleton.
     */
   lazy val WEEK_OF_WEEK_BASED_YEAR: TemporalField = Field.WEEK_OF_WEEK_BASED_YEAR
+
   /** The field that represents the week-based-year.
     *
     * This field allows the week-based-year value to be queried and set.
@@ -157,6 +161,7 @@ object IsoFields {
     * This unit is an immutable and thread-safe singleton.
     */
   lazy val WEEK_BASED_YEAR: TemporalField = Field.WEEK_BASED_YEAR
+
   /** The unit that represents week-based-years for the purpose of addition and subtraction.
     *
     * This allows a number of week-based-years to be added to, or subtracted from, a date.
@@ -171,6 +176,7 @@ object IsoFields {
     * This unit is an immutable and thread-safe singleton.
     */
   lazy val WEEK_BASED_YEARS: TemporalUnit = Unit.WEEK_BASED_YEARS
+
   /** Unit that represents the concept of a quarter-year.
     * For the ISO calendar system, it is equal to 3 months.
     * The estimated duration of a quarter-year is one quarter of {@code 365.2425 Days}.
@@ -181,25 +187,25 @@ object IsoFields {
 
   /** Implementation of the field. */
   private object Field {
-      lazy val DAY_OF_QUARTER: Field = new Field("DAY_OF_QUARTER", 0) {
-      override def toString: String = "DayOfQuarter"
-      def getBaseUnit: TemporalUnit = DAYS
+    lazy val DAY_OF_QUARTER: Field = new Field("DAY_OF_QUARTER", 0) {
+      override def toString: String  = "DayOfQuarter"
+      def getBaseUnit: TemporalUnit  = DAYS
       def getRangeUnit: TemporalUnit = QUARTER_YEARS
-      def range: ValueRange = ValueRange.of(1, 90, 92)
+      def range: ValueRange          = ValueRange.of(1, 90, 92)
       def isSupportedBy(temporal: TemporalAccessor): Boolean =
-        temporal.isSupported(DAY_OF_YEAR) && temporal.isSupported(MONTH_OF_YEAR) && temporal.isSupported(YEAR) && isIso(temporal)
+        temporal.isSupported(DAY_OF_YEAR) && temporal.isSupported(MONTH_OF_YEAR) && temporal
+          .isSupported(YEAR) && isIso(temporal)
       def rangeRefinedBy(temporal: TemporalAccessor): ValueRange = {
         if (!temporal.isSupported(this))
           throw new UnsupportedTemporalTypeException("Unsupported field: DayOfQuarter")
         val qoy: Long = temporal.getLong(QUARTER_OF_YEAR)
         if (qoy == 1) {
           val year: Long = temporal.getLong(YEAR)
-          return if (IsoChronology.INSTANCE.isLeapYear(year)) ValueRange.of(1, 91) else ValueRange.of(1, 90)
-        }
-        else if (qoy == 2) {
+          return if (IsoChronology.INSTANCE.isLeapYear(year)) ValueRange.of(1, 91)
+          else ValueRange.of(1, 90)
+        } else if (qoy == 2) {
           return ValueRange.of(1, 91)
-        }
-        else if (qoy == 3 || qoy == 4) {
+        } else if (qoy == 3 || qoy == 4) {
           return ValueRange.of(1, 92)
         }
         range
@@ -207,43 +213,48 @@ object IsoFields {
       def getFrom(temporal: TemporalAccessor): Long = {
         if (!temporal.isSupported(this))
           throw new UnsupportedTemporalTypeException("Unsupported field: DayOfQuarter")
-        val doy: Int = temporal.get(DAY_OF_YEAR)
-        val moy: Int = temporal.get(MONTH_OF_YEAR)
+        val doy: Int   = temporal.get(DAY_OF_YEAR)
+        val moy: Int   = temporal.get(MONTH_OF_YEAR)
         val year: Long = temporal.getLong(YEAR)
-        doy - QUARTER_DAYS(((moy - 1) / 3) + (if (IsoChronology.INSTANCE.isLeapYear(year)) 4 else 0))
+        doy.toLong - QUARTER_DAYS(
+          ((moy - 1) / 3) + (if (IsoChronology.INSTANCE.isLeapYear(year)) 4 else 0)
+        ).toInt
       }
       def adjustInto[R <: Temporal](temporal: R, newValue: Long): R = {
         val curValue: Long = getFrom(temporal)
         range.checkValidValue(newValue, this)
-        temporal.`with`(DAY_OF_YEAR, temporal.getLong(DAY_OF_YEAR) + (newValue - curValue)).asInstanceOf[R]
+        temporal
+          .`with`(DAY_OF_YEAR, temporal.getLong(DAY_OF_YEAR) + (newValue - curValue))
+          .asInstanceOf[R]
       }
-      override def resolve(fieldValues: java.util.Map[TemporalField, java.lang.Long], partialTemporal: TemporalAccessor, resolverStyle: ResolverStyle): TemporalAccessor = {
+      override def resolve(
+        fieldValues:     java.util.Map[TemporalField, java.lang.Long],
+        partialTemporal: TemporalAccessor,
+        resolverStyle:   ResolverStyle
+      ): TemporalAccessor = {
         val yearLong: java.lang.Long = fieldValues.get(YEAR)
-        val qoyLong: java.lang.Long = fieldValues.get(QUARTER_OF_YEAR)
+        val qoyLong: java.lang.Long  = fieldValues.get(QUARTER_OF_YEAR)
         if (yearLong == null || qoyLong == null)
           return null
-        val y: Int = YEAR.checkValidIntValue(yearLong)
-        val doq: Long = fieldValues.get(DAY_OF_QUARTER)
+        val y: Int          = YEAR.checkValidIntValue(yearLong)
+        val doq: Long       = fieldValues.get(DAY_OF_QUARTER)
         var date: LocalDate = null
         if (resolverStyle eq ResolverStyle.LENIENT) {
           val qoy: Long = qoyLong
           date = LocalDate.of(y, 1, 1)
           date = date.plusMonths(Math.multiplyExact(Math.subtractExact(qoy, 1), 3))
           date = date.plusDays(Math.subtractExact(doq, 1))
-        }
-        else {
+        } else {
           val qoy: Int = QUARTER_OF_YEAR.range.checkValidIntValue(qoyLong, QUARTER_OF_YEAR)
           if (resolverStyle eq ResolverStyle.STRICT) {
             var max: Int = 92
             if (qoy == 1) {
-              max = if (IsoChronology.INSTANCE.isLeapYear(y)) 91 else 90
-            }
-            else if (qoy == 2) {
+              max = if (IsoChronology.INSTANCE.isLeapYear(y.toLong)) 91 else 90
+            } else if (qoy == 2) {
               max = 91
             }
-            ValueRange.of(1, max).checkValidValue(doq, this)
-          }
-          else {
+            ValueRange.of(1, max.toLong).checkValidValue(doq, this)
+          } else {
             range.checkValidValue(doq, this)
           }
           date = LocalDate.of(y, ((qoy - 1) * 3) + 1, 1).plusDays(doq - 1)
@@ -256,13 +267,14 @@ object IsoFields {
     }
 
     lazy val QUARTER_OF_YEAR: Field = new Field("QUARTER_OF_YEAR", 1) {
-      override def toString: String = "QuarterOfYear"
-      def getBaseUnit: TemporalUnit = QUARTER_YEARS
+      override def toString: String  = "QuarterOfYear"
+      def getBaseUnit: TemporalUnit  = QUARTER_YEARS
       def getRangeUnit: TemporalUnit = YEARS
-      def range: ValueRange = ValueRange.of(1, 4)
-      def isSupportedBy(temporal: TemporalAccessor): Boolean = temporal.isSupported(MONTH_OF_YEAR) && isIso(temporal)
+      def range: ValueRange          = ValueRange.of(1, 4)
+      def isSupportedBy(temporal: TemporalAccessor): Boolean =
+        temporal.isSupported(MONTH_OF_YEAR) && isIso(temporal)
       def rangeRefinedBy(temporal: TemporalAccessor): ValueRange = range
-      def getFrom(temporal: TemporalAccessor): Long = {
+      def getFrom(temporal:        TemporalAccessor): Long = {
         if (!temporal.isSupported(this))
           throw new UnsupportedTemporalTypeException("Unsupported field: QuarterOfYear")
         val moy: Long = temporal.getLong(MONTH_OF_YEAR)
@@ -271,20 +283,23 @@ object IsoFields {
       def adjustInto[R <: Temporal](temporal: R, newValue: Long): R = {
         val curValue: Long = getFrom(temporal)
         range.checkValidValue(newValue, this)
-        temporal.`with`(MONTH_OF_YEAR, temporal.getLong(MONTH_OF_YEAR) + (newValue - curValue) * 3).asInstanceOf[R]
+        temporal
+          .`with`(MONTH_OF_YEAR, temporal.getLong(MONTH_OF_YEAR) + (newValue - curValue) * 3)
+          .asInstanceOf[R]
       }
     }
 
     lazy val WEEK_OF_WEEK_BASED_YEAR: Field = new Field("WEEK_OF_WEEK_BASED_YEAR", 2) {
-      override def toString: String = "WeekOfWeekBasedYear"
-      def getBaseUnit: TemporalUnit = WEEKS
+      override def toString: String  = "WeekOfWeekBasedYear"
+      def getBaseUnit: TemporalUnit  = WEEKS
       def getRangeUnit: TemporalUnit = WEEK_BASED_YEARS
       override def getDisplayName(locale: Locale): String = {
         Objects.requireNonNull(locale, "locale")
         "Week"
       }
       def range: ValueRange = ValueRange.of(1, 52, 53)
-      def isSupportedBy(temporal: TemporalAccessor): Boolean = temporal.isSupported(EPOCH_DAY) && isIso(temporal)
+      def isSupportedBy(temporal: TemporalAccessor): Boolean =
+        temporal.isSupported(EPOCH_DAY) && isIso(temporal)
       def rangeRefinedBy(temporal: TemporalAccessor): ValueRange =
         if (!temporal.isSupported(this))
           throw new UnsupportedTemporalTypeException("Unsupported field: WeekOfWeekBasedYear")
@@ -294,43 +309,45 @@ object IsoFields {
         if (!temporal.isSupported(this))
           throw new UnsupportedTemporalTypeException("Unsupported field: WeekOfWeekBasedYear")
         else
-          getWeek(LocalDate.from(temporal))
+          getWeek(LocalDate.from(temporal)).toLong
       def adjustInto[R <: Temporal](temporal: R, newValue: Long): R = {
         range.checkValidValue(newValue, this)
         temporal.plus(Math.subtractExact(newValue, getFrom(temporal)), WEEKS).asInstanceOf[R]
       }
-      override def resolve(fieldValues: java.util.Map[TemporalField, java.lang.Long], partialTemporal: TemporalAccessor, resolverStyle: ResolverStyle): TemporalAccessor = {
+      override def resolve(
+        fieldValues:     java.util.Map[TemporalField, java.lang.Long],
+        partialTemporal: TemporalAccessor,
+        resolverStyle:   ResolverStyle
+      ): TemporalAccessor = {
         val wbyLong: java.lang.Long = fieldValues.get(WEEK_BASED_YEAR)
         val dowLong: java.lang.Long = fieldValues.get(DAY_OF_WEEK)
         if (wbyLong == null || dowLong == null)
           return null
-        val wby: Int = WEEK_BASED_YEAR.range.checkValidIntValue(wbyLong, WEEK_BASED_YEAR)
-        val wowby: Long = fieldValues.get(WEEK_OF_WEEK_BASED_YEAR)
+        val wby: Int        = WEEK_BASED_YEAR.range.checkValidIntValue(wbyLong, WEEK_BASED_YEAR)
+        val wowby: Long     = fieldValues.get(WEEK_OF_WEEK_BASED_YEAR)
         var date: LocalDate = null
         if (resolverStyle eq ResolverStyle.LENIENT) {
-          var dow: Long = dowLong
+          var dow: Long   = dowLong
           var weeks: Long = 0
           if (dow > 7) {
             weeks = (dow - 1) / 7
-            dow = ((dow - 1) % 7) + 1
-          }
-          else if (dow < 1) {
+            dow   = ((dow - 1) % 7) + 1
+          } else if (dow < 1) {
             weeks = (dow / 7) - 1
-            dow = (dow % 7) + 7
+            dow   = (dow % 7) + 7
           }
-          date = LocalDate.of(wby, 1, 4).plusWeeks(wowby - 1).plusWeeks(weeks).`with`(DAY_OF_WEEK, dow)
-        }
-        else {
+          date =
+            LocalDate.of(wby, 1, 4).plusWeeks(wowby - 1).plusWeeks(weeks).`with`(DAY_OF_WEEK, dow)
+        } else {
           val dow: Int = DAY_OF_WEEK.checkValidIntValue(dowLong)
           if (resolverStyle eq ResolverStyle.STRICT) {
-            val temp: LocalDate = LocalDate.of(wby, 1, 4)
+            val temp: LocalDate   = LocalDate.of(wby, 1, 4)
             val range: ValueRange = getWeekRange(temp)
             range.checkValidValue(wowby, this)
-          }
-          else {
+          } else {
             range.checkValidValue(wowby, this)
           }
-          date = LocalDate.of(wby, 1, 4).plusWeeks(wowby - 1).`with`(DAY_OF_WEEK, dow)
+          date = LocalDate.of(wby, 1, 4).plusWeeks(wowby - 1).`with`(DAY_OF_WEEK, dow.toLong)
         }
         fieldValues.remove(this)
         fieldValues.remove(WEEK_BASED_YEAR)
@@ -340,52 +357,56 @@ object IsoFields {
     }
 
     lazy val WEEK_BASED_YEAR: Field = new Field("WEEK_BASED_YEAR", 3) {
-      override def toString: String = "WeekBasedYear"
-      def getBaseUnit: TemporalUnit = WEEK_BASED_YEARS
+      override def toString: String  = "WeekBasedYear"
+      def getBaseUnit: TemporalUnit  = WEEK_BASED_YEARS
       def getRangeUnit: TemporalUnit = FOREVER
-      def range: ValueRange = YEAR.range
-      def isSupportedBy(temporal: TemporalAccessor): Boolean = temporal.isSupported(EPOCH_DAY) && isIso(temporal)
+      def range: ValueRange          = YEAR.range
+      def isSupportedBy(temporal: TemporalAccessor): Boolean =
+        temporal.isSupported(EPOCH_DAY) && isIso(temporal)
       def rangeRefinedBy(temporal: TemporalAccessor): ValueRange = YEAR.range
-      def getFrom(temporal: TemporalAccessor): Long =
-        if (!temporal.isSupported(this)) throw new UnsupportedTemporalTypeException("Unsupported field: WeekBasedYear")
-        else getWeekBasedYear(LocalDate.from(temporal))
+      def getFrom(temporal:        TemporalAccessor): Long =
+        if (!temporal.isSupported(this))
+          throw new UnsupportedTemporalTypeException("Unsupported field: WeekBasedYear")
+        else getWeekBasedYear(LocalDate.from(temporal)).toLong
       def adjustInto[R <: Temporal](temporal: R, newValue: Long): R = {
         if (!isSupportedBy(temporal))
           throw new UnsupportedTemporalTypeException("Unsupported field: WeekBasedYear")
-        val newWby: Int = range.checkValidIntValue(newValue, WEEK_BASED_YEAR)
+        val newWby: Int     = range.checkValidIntValue(newValue, WEEK_BASED_YEAR)
         val date: LocalDate = LocalDate.from(temporal)
-        val dow: Int = date.get(DAY_OF_WEEK)
-        var week: Int = getWeek(date)
+        val dow: Int        = date.get(DAY_OF_WEEK)
+        var week: Int       = getWeek(date)
         if (week == 53 && getWeekRange(newWby) == 52) {
           week = 52
         }
         var resolved: LocalDate = LocalDate.of(newWby, 1, 4)
-        val days: Int = (dow - resolved.get(DAY_OF_WEEK)) + ((week - 1) * 7)
-        resolved = resolved.plusDays(days)
+        val days: Int           = (dow - resolved.get(DAY_OF_WEEK)) + ((week - 1) * 7)
+        resolved = resolved.plusDays(days.toLong)
         temporal.`with`(resolved).asInstanceOf[R]
       }
     }
 
     private lazy val QUARTER_DAYS: Array[Int] = Array(0, 90, 181, 273, 0, 91, 182, 274)
 
-    private def isIso(temporal: TemporalAccessor): Boolean = Chronology.from(temporal) == IsoChronology.INSTANCE
+    private def isIso(temporal: TemporalAccessor): Boolean =
+      Chronology.from(temporal) == IsoChronology.INSTANCE
 
     private def getWeekRange(date: LocalDate): ValueRange = {
       val wby: Int = getWeekBasedYear(date)
-      ValueRange.of(1, getWeekRange(wby))
+      ValueRange.of(1, getWeekRange(wby).toLong)
     }
 
     private def getWeekRange(wby: Int): Int = {
       val date: LocalDate = LocalDate.of(wby, 1, 1)
-      if ((date.getDayOfWeek eq THURSDAY) || ((date.getDayOfWeek eq WEDNESDAY) && date.isLeapYear)) 53
+      if ((date.getDayOfWeek eq THURSDAY) || ((date.getDayOfWeek eq WEDNESDAY) && date.isLeapYear))
+        53
       else 52
     }
 
     private def getWeek(date: LocalDate): Int = {
-      val dow0: Int = date.getDayOfWeek.ordinal
-      val doy0: Int = date.getDayOfYear - 1
-      val doyThu0: Int = doy0 + (3 - dow0)
-      val alignedWeek: Int = doyThu0 / 7
+      val dow0: Int         = date.getDayOfWeek.ordinal
+      val doy0: Int         = date.getDayOfYear - 1
+      val doyThu0: Int      = doy0 + (3 - dow0)
+      val alignedWeek: Int  = doyThu0 / 7
       val firstThuDoy0: Int = doyThu0 - (alignedWeek * 7)
       var firstMonDoy0: Int = firstThuDoy0 - 3
       if (firstMonDoy0 < -3) {
@@ -403,13 +424,12 @@ object IsoFields {
 
     private def getWeekBasedYear(date: LocalDate): Int = {
       var year: Int = date.getYear
-      var doy: Int = date.getDayOfYear
+      var doy: Int  = date.getDayOfYear
       if (doy <= 3) {
         val dow: Int = date.getDayOfWeek.ordinal
         if (doy - dow < -2)
           year -= 1
-      }
-      else if (doy >= 363) {
+      } else if (doy >= 363) {
         val dow: Int = date.getDayOfWeek.ordinal
         doy = doy - 363 - (if (date.isLeapYear) 1 else 0)
         if (doy - dow >= 0)
@@ -419,13 +439,19 @@ object IsoFields {
     }
   }
 
-  private sealed abstract class Field(name: String, ordinal: Int) extends Enum[Field](name, ordinal) with TemporalField {
+  private sealed abstract class Field(name: String, ordinal: Int)
+      extends Enum[Field](name, ordinal)
+      with TemporalField {
     def getDisplayName(locale: Locale): String = {
       Objects.requireNonNull(locale, "locale")
       toString
     }
 
-    def resolve(fieldValues: java.util.Map[TemporalField, java.lang.Long], partialTemporal: TemporalAccessor, resolverStyle: ResolverStyle): TemporalAccessor =
+    def resolve(
+      fieldValues:     java.util.Map[TemporalField, java.lang.Long],
+      partialTemporal: TemporalAccessor,
+      resolverStyle:   ResolverStyle
+    ): TemporalAccessor =
       null
 
     def isDateBased: Boolean = true
@@ -441,7 +467,9 @@ object IsoFields {
 
   /// !!! FIXME: Passing of name to the Enum constructor is not quite right.
   //             We should have a look at the compiled code to figure out what's happening exactly in the Java version.
-  private final class Unit(name: String, ordinal: Int, private val duration: Duration) extends Enum[Unit](name, ordinal) with TemporalUnit {
+  private final class Unit(name: String, ordinal: Int, private val duration: Duration)
+      extends Enum[Unit](name, ordinal)
+      with TemporalUnit {
 
     def getDuration: Duration = duration
 
@@ -455,17 +483,23 @@ object IsoFields {
 
     def addTo[R <: Temporal](temporal: R, periodToAdd: Long): R =
       this match {
-        case Unit.WEEK_BASED_YEARS => val added: Long = Math.addExact(temporal.get(WEEK_BASED_YEAR), periodToAdd)
-                                      temporal.`with`(WEEK_BASED_YEAR, added).asInstanceOf[R]
-        case Unit.QUARTER_YEARS    => temporal.plus(periodToAdd / 256, YEARS).plus((periodToAdd % 256) * 3, MONTHS).asInstanceOf[R]
-        case _                     => throw new IllegalStateException("Unreachable")
+        case Unit.WEEK_BASED_YEARS =>
+          val added: Long = Math.addExact(temporal.get(WEEK_BASED_YEAR).toLong, periodToAdd)
+          temporal.`with`(WEEK_BASED_YEAR, added).asInstanceOf[R]
+        case Unit.QUARTER_YEARS =>
+          temporal
+            .plus(periodToAdd / 256, YEARS)
+            .plus((periodToAdd % 256) * 3, MONTHS)
+            .asInstanceOf[R]
+        case _ => throw new IllegalStateException("Unreachable")
       }
 
     def between(temporal1: Temporal, temporal2: Temporal): Long =
       this match {
-        case Unit.WEEK_BASED_YEARS => Math.subtractExact(temporal2.getLong(WEEK_BASED_YEAR), temporal1.getLong(WEEK_BASED_YEAR))
-        case Unit.QUARTER_YEARS    => temporal1.until(temporal2, MONTHS) / 3
-        case _                     => throw new IllegalStateException("Unreachable")
+        case Unit.WEEK_BASED_YEARS =>
+          Math.subtractExact(temporal2.getLong(WEEK_BASED_YEAR), temporal1.getLong(WEEK_BASED_YEAR))
+        case Unit.QUARTER_YEARS => temporal1.until(temporal2, MONTHS) / 3
+        case _                  => throw new IllegalStateException("Unreachable")
       }
 
     override def toString: String = name

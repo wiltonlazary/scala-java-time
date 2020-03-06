@@ -31,39 +31,44 @@
  */
 package org.threeten.bp.format
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
 
 /** Test StringLiteralPrinterParser. */
-class TestStringLiteralPrinter extends FunSuite with GenTestPrinterParser with AssertionsHelper {
+class TestStringLiteralPrinter extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   test("test_print_emptyCalendrical") {
     buf.append("EXISTING")
-    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello")
+    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello")
     pp.print(printEmptyContext, buf)
     assertEquals(buf.toString, "EXISTINGhello")
   }
 
   test("test_print_dateTime") {
     buf.append("EXISTING")
-    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello")
+    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello")
     pp.print(printContext, buf)
     assertEquals(buf.toString, "EXISTINGhello")
   }
 
   test("test_print_emptyAppendable") {
-    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello")
+    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello")
     pp.print(printContext, buf)
     assertEquals(buf.toString, "hello")
   }
 
   test("test_toString") {
-    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello")
+    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello")
     assertEquals(pp.toString, "'hello'")
   }
 
   test("test_toString_apos") {
-    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser = new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("o'clock")
+    val pp: TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser =
+      new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("o'clock")
     assertEquals(pp.toString, "'o''clock'")
   }
 }

@@ -43,12 +43,14 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 
 object HijrahEra {
+
   /** The singleton instance for the era before the current one, 'Before Anno Hegirae',
     * which has the value 0.
     */
   lazy val BEFORE_AH = new HijrahEra("BEFORE_AH", 0)
+
   /** The singleton instance for the current era, 'Anno Hegirae', which has the value 1. */
-  lazy val AH        = new HijrahEra("AH", 1)
+  lazy val AH = new HijrahEra("AH", 1)
 
   lazy val values: Array[HijrahEra] = Array(BEFORE_AH, AH)
 
@@ -71,7 +73,7 @@ object HijrahEra {
   @throws[IOException]
   private[chrono] def readExternal(in: DataInput): HijrahEra = {
     val eraValue: Byte = in.readByte
-    HijrahEra.of(eraValue)
+    HijrahEra.of(eraValue.toInt)
   }
 }
 
@@ -87,6 +89,7 @@ object HijrahEra {
   * This is an immutable and thread-safe enum.
   */
 final class HijrahEra(name: String, ordinal: Int) extends Enum[HijrahEra](name, ordinal) with Era {
+
   /** Gets the era numeric value.
     *
     * The current era (from ISO date 622-06-19 onwards) has the value 1.
@@ -98,7 +101,8 @@ final class HijrahEra(name: String, ordinal: Int) extends Enum[HijrahEra](name, 
 
   override def range(field: TemporalField): ValueRange =
     if (field eq ERA) ValueRange.of(1, 1)
-    else if (field.isInstanceOf[ChronoField]) throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+    else if (field.isInstanceOf[ChronoField])
+      throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
     else field.rangeRefinedBy(this)
 
   /** Returns the proleptic year from this era and year of era.
@@ -106,7 +110,8 @@ final class HijrahEra(name: String, ordinal: Int) extends Enum[HijrahEra](name, 
     * @param yearOfEra the year of Era
     * @return the computed prolepticYear
     */
-  private[chrono] def prolepticYear(yearOfEra: Int): Int = if (this eq HijrahEra.AH) yearOfEra else 1 - yearOfEra
+  private[chrono] def prolepticYear(yearOfEra: Int): Int =
+    if (this eq HijrahEra.AH) yearOfEra else 1 - yearOfEra
 
   private def writeReplace: AnyRef = new Ser(Ser.HIJRAH_ERA_TYPE, this)
 

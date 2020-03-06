@@ -49,7 +49,7 @@ import org.threeten.bp.temporal.ChronoUnit.MONTHS
 import org.threeten.bp.temporal.ChronoUnit.WEEKS
 import org.threeten.bp.temporal.TemporalAdjusters.nextOrSame
 import java.io.Serializable
-import java.util.{Objects, Arrays, Calendar, Locale}
+import java.util.{ Arrays, Calendar, Locale, Objects }
 import org.threeten.bp.Clock
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.DayOfWeek
@@ -65,33 +65,47 @@ import org.threeten.bp.temporal.ValueRange
 @SerialVersionUID(459996390165777884L)
 object JapaneseChronology {
   private[chrono] val LOCALE: Locale = new Locale("ja", "JP", "JP")
+
   /** Singleton instance for Japanese chronology. */
   lazy val INSTANCE: JapaneseChronology = new JapaneseChronology
+
   /** Fallback language for the era names. */
-  private val FALLBACK_LANGUAGE: String = "en"
+  // private val FALLBACK_LANGUAGE: String = "en"
+
   /** Language that has the era names. */
-  private val TARGET_LANGUAGE: String = "ja"
+  // private val TARGET_LANGUAGE: String = "ja"
+
   /** Narrow names for eras. */
-  private lazy val ERA_NARROW_NAMES: java.util.Map[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
-    names.put(TARGET_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
-    names
-  }
-  /** Short names for eras. */
-  private lazy val ERA_SHORT_NAMES: java.util.Map[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
-    names.put(TARGET_LANGUAGE, Array[String]("Unknown", "\u6176", "\u660e", "\u5927", "\u662d", "\u5e73"))
-    names
-  }
-  /** Full names for eras. */
-  private lazy val ERA_FULL_NAMES: java.util.Map[String, Array[String]] = {
-    val names = new java.util.HashMap[String, Array[String]]
-    names.put(FALLBACK_LANGUAGE, Array[String]("Unknown", "Keio", "Meiji", "Taisho", "Showa", "Heisei"))
-    names.put(TARGET_LANGUAGE, Array[String]("Unknown", "\u6176\u5fdc", "\u660e\u6cbb", "\u5927\u6b63", "\u662d\u548c", "\u5e73\u6210"))
-    names
-  }
+//   private val ERA_NARROW_NAMES: java.util.Map[String, Array[String]] = {
+//     val names = new java.util.HashMap[String, Array[String]]
+//     names.put(FALLBACK_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
+//     names.put(TARGET_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
+//     names
+//   }
+//
+//   /** Short names for eras. */
+//   private val ERA_SHORT_NAMES: java.util.Map[String, Array[String]] = {
+//     val names = new java.util.HashMap[String, Array[String]]
+//     names.put(FALLBACK_LANGUAGE, Array[String]("Unknown", "K", "M", "T", "S", "H"))
+//     names.put(TARGET_LANGUAGE,
+//               Array[String]("Unknown", "\u6176", "\u660e", "\u5927", "\u662d", "\u5e73"))
+//     names
+//   }
+//
+//   /** Full names for eras. */
+//   private val ERA_FULL_NAMES: java.util.Map[String, Array[String]] = {
+//     val names = new java.util.HashMap[String, Array[String]]
+//     names.put(FALLBACK_LANGUAGE,
+//               Array[String]("Unknown", "Keio", "Meiji", "Taisho", "Showa", "Heisei"))
+//     names.put(TARGET_LANGUAGE,
+//               Array[String]("Unknown",
+//                             "\u6176\u5fdc",
+//                             "\u660e\u6cbb",
+//                             "\u5927\u6b63",
+//                             "\u662d\u548c",
+//                             "\u5e73\u6210"))
+//     names
+//   }
 }
 
 /** The Japanese Imperial calendar system.
@@ -124,7 +138,7 @@ object JapaneseChronology {
   * @constructor Restricted constructor.
   */
 @SerialVersionUID(459996390165777884L)
-final class JapaneseChronology private() extends Chronology with Serializable {
+final class JapaneseChronology private () extends Chronology with Serializable {
 
   /** Resolve singleton.
     *
@@ -246,9 +260,10 @@ final class JapaneseChronology private() extends Chronology with Serializable {
       throw new ClassCastException("Era must be JapaneseEra")
     }
     val jera: JapaneseEra = era.asInstanceOf[JapaneseEra]
-    val isoYear: Int = jera.startDate.getYear + yearOfEra - 1
-    val range: ValueRange = ValueRange.of(1, jera.endDate.getYear - jera.startDate.getYear + 1)
-    range.checkValidValue(yearOfEra, YEAR_OF_ERA)
+    val isoYear: Int      = jera.startDate.getYear + yearOfEra - 1
+    val range: ValueRange =
+      ValueRange.of(1, jera.endDate.getYear.toLong - jera.startDate.getYear.toLong + 1)
+    range.checkValidValue(yearOfEra.toLong, YEAR_OF_ERA)
     isoYear
   }
 
@@ -269,34 +284,41 @@ final class JapaneseChronology private() extends Chronology with Serializable {
   def range(field: ChronoField): ValueRange = {
     import ChronoField._
     field match {
-      case DAY_OF_MONTH | DAY_OF_WEEK | MICRO_OF_DAY | MICRO_OF_SECOND | HOUR_OF_DAY | HOUR_OF_AMPM | MINUTE_OF_DAY |
-           MINUTE_OF_HOUR | SECOND_OF_DAY | SECOND_OF_MINUTE | MILLI_OF_DAY | MILLI_OF_SECOND | NANO_OF_DAY |
-           NANO_OF_SECOND | CLOCK_HOUR_OF_DAY | CLOCK_HOUR_OF_AMPM | EPOCH_DAY | PROLEPTIC_MONTH =>
+      case DAY_OF_MONTH | DAY_OF_WEEK | MICRO_OF_DAY | MICRO_OF_SECOND | HOUR_OF_DAY |
+          HOUR_OF_AMPM | MINUTE_OF_DAY | MINUTE_OF_HOUR | SECOND_OF_DAY | SECOND_OF_MINUTE |
+          MILLI_OF_DAY | MILLI_OF_SECOND | NANO_OF_DAY | NANO_OF_SECOND | CLOCK_HOUR_OF_DAY |
+          CLOCK_HOUR_OF_AMPM | EPOCH_DAY | PROLEPTIC_MONTH =>
         field.range
       case ERA =>
         val eras: Array[JapaneseEra] = JapaneseEra.values
-        ValueRange.of(eras(0).getValue, eras(eras.length - 1).getValue)
+        ValueRange.of(eras(0).getValue.toLong, eras(eras.length - 1).getValue.toLong)
       case YEAR =>
         val eras: Array[JapaneseEra] = JapaneseEra.values
-        ValueRange.of(JapaneseDate.MIN_DATE.getYear, eras(eras.length - 1).endDate.getYear)
+        ValueRange.of(JapaneseDate.MIN_DATE.getYear.toLong,
+                      eras(eras.length - 1).endDate.getYear.toLong)
       case YEAR_OF_ERA =>
         val eras: Array[JapaneseEra] = JapaneseEra.values
-        val maxIso: Int = eras(eras.length - 1).endDate.getYear
-        val maxJapanese: Int = maxIso - eras(eras.length - 1).startDate.getYear + 1
-        var min: Int = Int.MaxValue
+        val maxIso: Int              = eras(eras.length - 1).endDate.getYear
+        val maxJapanese: Int         = maxIso - eras(eras.length - 1).startDate.getYear + 1
+        var min: Int                 = Int.MaxValue
 
         var i: Int = 0
         while (i < eras.length) {
           min = Math.min(min, eras(i).endDate.getYear - eras(i).startDate.getYear + 1)
           i += 1
         }
-        ValueRange.of(1, 6, min, maxJapanese)
+        ValueRange.of(1, 6, min.toLong, maxJapanese.toLong)
       case MONTH_OF_YEAR =>
         val jcal: Calendar = Calendar.getInstance(JapaneseChronology.LOCALE)
-        ValueRange.of(jcal.getMinimum(Calendar.MONTH) + 1, jcal.getGreatestMinimum(Calendar.MONTH) + 1, jcal.getLeastMaximum(Calendar.MONTH) + 1, jcal.getMaximum(Calendar.MONTH) + 1)
+        ValueRange.of(
+          jcal.getMinimum(Calendar.MONTH) + 1L,
+          jcal.getGreatestMinimum(Calendar.MONTH) + 1L,
+          jcal.getLeastMaximum(Calendar.MONTH) + 1L,
+          jcal.getMaximum(Calendar.MONTH) + 1L
+        )
       case DAY_OF_YEAR =>
         val eras: Array[JapaneseEra] = JapaneseEra.values
-        var min: Int = 366
+        var min: Int                 = 366
 
         var i: Int = 0
         while (i < eras.length) {
@@ -304,13 +326,16 @@ final class JapaneseChronology private() extends Chronology with Serializable {
           i += 1
         }
 
-        ValueRange.of(1, min, 366)
+        ValueRange.of(1, min.toLong, 366)
       case _ =>
         throw new UnsupportedOperationException(s"Unimplementable field: $field")
     }
   }
 
-  override def resolveDate(fieldValues: java.util.Map[TemporalField, java.lang.Long], resolverStyle: ResolverStyle): JapaneseDate = {
+  override def resolveDate(
+    fieldValues:   java.util.Map[TemporalField, java.lang.Long],
+    resolverStyle: ResolverStyle
+  ): JapaneseDate = {
     if (fieldValues.containsKey(EPOCH_DAY))
       return dateEpochDay(fieldValues.remove(EPOCH_DAY))
     val prolepticMonth: java.lang.Long = fieldValues.remove(PROLEPTIC_MONTH)
@@ -321,7 +346,7 @@ final class JapaneseChronology private() extends Chronology with Serializable {
       updateResolveMap(fieldValues, YEAR, Math.floorDiv(prolepticMonth, 12))
     }
     val eraLong: java.lang.Long = fieldValues.get(ERA)
-    var era: JapaneseEra = null
+    var era: JapaneseEra        = null
     if (eraLong != null) {
       era = eraOf(range(ERA).checkValidIntValue(eraLong, ERA))
     }
@@ -332,7 +357,9 @@ final class JapaneseChronology private() extends Chronology with Serializable {
         val _eras: java.util.List[Era] = eras
         era = _eras.get(_eras.size - 1).asInstanceOf[JapaneseEra]
       }
-      if (era != null && fieldValues.containsKey(MONTH_OF_YEAR) && fieldValues.containsKey(DAY_OF_MONTH)) {
+      if (era != null && fieldValues.containsKey(MONTH_OF_YEAR) && fieldValues.containsKey(
+            DAY_OF_MONTH
+          )) {
         fieldValues.remove(ERA)
         fieldValues.remove(YEAR_OF_ERA)
         return resolveEYMD(fieldValues, resolverStyle, era, yoe)
@@ -349,12 +376,13 @@ final class JapaneseChronology private() extends Chronology with Serializable {
           val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-            val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1)
+            val days: Long   = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1)
             return date(y, 1, 1).plusMonths(months).plusDays(days)
-          }
-          else {
-            val moy: Int = range(MONTH_OF_YEAR).checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR)
-            var dom: Int = range(DAY_OF_MONTH).checkValidIntValue(fieldValues.remove(DAY_OF_MONTH), DAY_OF_MONTH)
+          } else {
+            val moy: Int = range(MONTH_OF_YEAR)
+              .checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR)
+            var dom: Int =
+              range(DAY_OF_MONTH).checkValidIntValue(fieldValues.remove(DAY_OF_MONTH), DAY_OF_MONTH)
             if ((resolverStyle eq ResolverStyle.SMART) && dom > 28) {
               dom = Math.min(dom, date(y, moy, 1).lengthOfMonth)
             }
@@ -366,14 +394,18 @@ final class JapaneseChronology private() extends Chronology with Serializable {
             val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
             if (resolverStyle eq ResolverStyle.LENIENT) {
               val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-              val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
-              val days: Long = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1)
+              val weeks: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
+              val days: Long =
+                Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1)
               return date(y, 1, 1).plus(months, MONTHS).plus(weeks, WEEKS).plus(days, DAYS)
             }
             val moy: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
-            val aw: Int = ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
-            val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH))
-            val japDate: JapaneseDate = date(y, moy, 1).plus((aw - 1) * 7 + (ad - 1), DAYS)
+            val aw: Int =
+              ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
+            val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(
+              fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH)
+            )
+            val japDate: JapaneseDate = date(y, moy, 1).plus((aw.toLong - 1) * 7 + (ad - 1), DAYS)
             if ((resolverStyle eq ResolverStyle.STRICT) && japDate.get(MONTH_OF_YEAR) != moy) {
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             }
@@ -383,14 +415,16 @@ final class JapaneseChronology private() extends Chronology with Serializable {
             val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
             if (resolverStyle eq ResolverStyle.LENIENT) {
               val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-              val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
-              val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
+              val weeks: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
+              val days: Long   = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
               return date(y, 1, 1).plus(months, MONTHS).plus(weeks, WEEKS).plus(days, DAYS)
             }
             val moy: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
-            val aw: Int = ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
+            val aw: Int =
+              ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
             val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
-            val japDate: JapaneseDate = date(y, moy, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
+            val japDate: JapaneseDate =
+              date(y, moy, 1).plus(aw.toLong - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
             if ((resolverStyle eq ResolverStyle.STRICT) && japDate.get(MONTH_OF_YEAR) != moy) {
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
             }
@@ -412,12 +446,15 @@ final class JapaneseChronology private() extends Chronology with Serializable {
           val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1)
-            val days: Long = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1)
+            val days: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1)
             return date(y, 1, 1).plus(weeks, WEEKS).plus(days, DAYS)
           }
-          val aw: Int = ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
-          val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR))
-          val japDate: JapaneseDate = date(y, 1, 1).plusDays((aw - 1) * 7 + (ad - 1))
+          val aw: Int =
+            ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
+          val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(
+            fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR)
+          )
+          val japDate: JapaneseDate = date(y, 1, 1).plusDays((aw.toLong - 1) * 7 + (ad - 1))
           if ((resolverStyle eq ResolverStyle.STRICT) && japDate.get(YEAR) != y)
             throw new DateTimeException("Strict mode rejected date parsed to a different year")
           return japDate
@@ -426,12 +463,14 @@ final class JapaneseChronology private() extends Chronology with Serializable {
           val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1)
-            val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
+            val days: Long  = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
             return date(y, 1, 1).plus(weeks, WEEKS).plus(days, DAYS)
           }
-          val aw: Int = ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
+          val aw: Int =
+            ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
           val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
-          val japDate: JapaneseDate = date(y, 1, 1).plus(aw - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
+          val japDate: JapaneseDate =
+            date(y, 1, 1).plus(aw.toLong - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
           if ((resolverStyle eq ResolverStyle.STRICT) && japDate.get(YEAR) != y)
             throw new DateTimeException("Strict mode rejected date parsed to a different month")
           return japDate
@@ -441,15 +480,22 @@ final class JapaneseChronology private() extends Chronology with Serializable {
     null
   }
 
-  private def resolveEYMD(fieldValues: java.util.Map[TemporalField, java.lang.Long], resolverStyle: ResolverStyle, era: JapaneseEra, yoe: Int): JapaneseDate = {
+  private def resolveEYMD(
+    fieldValues:   java.util.Map[TemporalField, java.lang.Long],
+    resolverStyle: ResolverStyle,
+    era:           JapaneseEra,
+    yoe:           Int
+  ): JapaneseDate = {
     if (resolverStyle eq ResolverStyle.LENIENT) {
-      val y: Int = era.startDate.getYear + yoe - 1
+      val y: Int       = era.startDate.getYear + yoe - 1
       val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
-      val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1)
+      val days: Long   = Math.subtractExact(fieldValues.remove(DAY_OF_MONTH), 1)
       return date(y, 1, 1).plus(months, MONTHS).plus(days, DAYS)
     }
-    val moy: Int = range(MONTH_OF_YEAR).checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR)
-    var dom: Int = range(DAY_OF_MONTH).checkValidIntValue(fieldValues.remove(DAY_OF_MONTH), DAY_OF_MONTH)
+    val moy: Int =
+      range(MONTH_OF_YEAR).checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR)
+    var dom: Int =
+      range(DAY_OF_MONTH).checkValidIntValue(fieldValues.remove(DAY_OF_MONTH), DAY_OF_MONTH)
     if (resolverStyle eq ResolverStyle.SMART) {
       if (yoe < 1)
         throw new DateTimeException(s"Invalid YearOfEra: $yoe")
@@ -468,13 +514,19 @@ final class JapaneseChronology private() extends Chronology with Serializable {
     date(era, yoe, moy, dom)
   }
 
-  private def resolveEYD(fieldValues: java.util.Map[TemporalField, java.lang.Long], resolverStyle: ResolverStyle, era: JapaneseEra, yoe: Int): JapaneseDate = {
+  private def resolveEYD(
+    fieldValues:   java.util.Map[TemporalField, java.lang.Long],
+    resolverStyle: ResolverStyle,
+    era:           JapaneseEra,
+    yoe:           Int
+  ): JapaneseDate = {
     if (resolverStyle eq ResolverStyle.LENIENT) {
-      val y: Int = era.startDate.getYear + yoe - 1
+      val y: Int     = era.startDate.getYear + yoe - 1
       val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_YEAR), 1)
       return dateYearDay(y, 1).plus(days, DAYS)
     }
-    val doy: Int = range(DAY_OF_YEAR).checkValidIntValue(fieldValues.remove(DAY_OF_YEAR), DAY_OF_YEAR)
+    val doy: Int =
+      range(DAY_OF_YEAR).checkValidIntValue(fieldValues.remove(DAY_OF_YEAR), DAY_OF_YEAR)
     dateYearDay(era, yoe, doy)
   }
 }

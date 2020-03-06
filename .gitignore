@@ -38,3 +38,4 @@ tzdb/js/src/main/resources/
 .metaserver/
 .bloop/
 .metals/
+project/metals.sbt

@@ -266,7 +266,7 @@ object IsoFields {
       }
     }
 
-    lazy  val QUARTER_OF_YEAR: Field = new Field("QUARTER_OF_YEAR", 1) {
+    lazy val QUARTER_OF_YEAR: Field = new Field("QUARTER_OF_YEAR", 1) {
       override def toString: String  = "QuarterOfYear"
       def getBaseUnit: TemporalUnit  = QUARTER_YEARS
       def getRangeUnit: TemporalUnit = YEARS

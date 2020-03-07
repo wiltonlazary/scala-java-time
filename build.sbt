@@ -70,8 +70,8 @@ lazy val root = project
              scalajavatime.js,
              scalajavatimeTZDBJVM,
              scalajavatimeTZDBJS,
-             scalajavatimeTestsJVM,
-             scalajavatimeTestsJVM,
+             scalajavatimeTests.jvm,
+             scalajavatimeTests.js,
              demo)
 
 /**
@@ -218,9 +218,6 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
   )
   .dependsOn(scalajavatime, scalajavatimeTZDB)
 
-lazy val scalajavatimeTestsJVM = scalajavatimeTests.jvm
-lazy val scalajavatimeTestsJS  = scalajavatimeTests.js
-
 val zonesFilterFn = (x: String) => {
   x == "Europe/Helsinki" || x == "America/Santiago"
 }
@@ -256,5 +253,5 @@ lazy val docs = project
     micrositePushSiteWith := GitHub4s,
     //micrositeDocumentationUrl := "/scala-java-time/docs/",
     micrositeHighlightTheme := "color-brewer",
-    micrositeGithubToken := Option(System.getProperty("GITHUB_TOKEN"))
+    micrositeGithubToken := Option(System.getProperty("GH_TOKEN"))
   )

@@ -26,7 +26,7 @@ jobs:
           key: sbt-${{ hashFiles('**/build.sbt') }}
       - name: Publish docs
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.MICROSITE_TOKEN }}
         run: |
           mkdir docs/docs
           export GEM_HOME="$HOME/gems"

@@ -5,8 +5,8 @@ import org.threeten.bp.zone.ZoneMap
 
 object Platform {
   type NPE = scala.scalajs.js.JavaScriptException
-  type DFE = scala.scalajs.runtime.UndefinedBehaviorError
-  type CCE = scala.scalajs.runtime.UndefinedBehaviorError
+  type DFE = Throwable
+  type CCE = Throwable
 
   /** Returns `true` if and only if the code is executing on a JVM.
    *  Note: Returns `false` when executing on any JS VM.

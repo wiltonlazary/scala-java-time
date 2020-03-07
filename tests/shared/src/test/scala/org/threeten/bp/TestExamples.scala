@@ -71,6 +71,6 @@ class TestExamples extends AnyFunSuite with AssertionsHelper {
     // assertEquals(mingDate.format(format2), "Anno Domini") // WTF?
 
     ZonedDateTime.now(fixedClock)
-    ZonedDateTime.now(ZoneRegion.ofId("Europe/Berlin", true))
+    // ZonedDateTime.now(ZoneRegion.ofId("Europe/Berlin", true))
   }
 }

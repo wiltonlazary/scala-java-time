@@ -3,8 +3,9 @@
 
 [![Join the chat at https://gitter.im/scala-java-time/Lobby](https://badges.gitter.im/scala-java-time/Lobby.svg)](https://gitter.im/scala-java-time/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/cquiroz/scala-java-time.svg?branch=master)](https://travis-ci.org/cquiroz/scala-java-time)
+![build](https://github.com/cquiroz/scala-java-time/workflows/build/badge.svg)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.cquiroz/scala-java-time_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.cquiroz/scala-java-time_2.11)
+[![Scala.js](https://www.scala-js.org/assets/badges/scalajs-1.0.0.svg)](https://www.scala-js.org/)
 [![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.8.svg)](http://scala-js.org)
 
 This project provides an implementation of the `java.time` package, a date and time library that was added in Java 8.
@@ -17,8 +18,8 @@ Scala 2.11, Scala 2.12 and Scala 2.13-M4 are supported.
 
 To get started with SBT, add one (or both) of these dependencies:
 
-- `libraryDependencies += "io.github.cquiroz" %%  "scala-java-time" % "2.0.0-RC3"` (for Scala)
-- `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC3"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+- `libraryDependencies += "io.github.cquiroz" %%  "scala-java-time" % "2.0.0-RC4"` (for Scala)
+- `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC4"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 #### Documentation
 

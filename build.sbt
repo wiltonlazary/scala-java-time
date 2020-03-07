@@ -4,12 +4,11 @@ import sbt.io.Using
 
 val scalaVer             = "2.13.1"
 val tzdbVersion          = "2019c"
-val scalaJavaTimeVersion = "2.0.0-RC4-SNAPSHOT"
-val scalaTZDBVersion     = s"${scalaJavaTimeVersion}_$tzdbVersion"
-
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Global / resolvers += Resolver.sonatypeRepo("public")
+
+val scalaJSVersion06 = Option(System.getenv("SCALAJS_VERSION")).exists(_.startsWith("0.6"))
 
 lazy val downloadFromZip: TaskKey[Unit] =
   taskKey[Unit]("Download the tzdb tarball and extract it")
@@ -36,7 +35,6 @@ inThisBuild(
 
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
-  version := scalaJavaTimeVersion,
   scalaVersion := scalaVer,
   crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1"),
   // Don't include threeten on the binaries
@@ -147,8 +145,11 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "0.5.6-cldr31+25-bc07eea7-SNAPSHOT"
+      "io.github.cquiroz" %%% "scala-java-locales" % "0.6.0"
     )
+  )
+  .jvmSettings(
+    skip.in(publish) := scalaJSVersion06
   )
 
 lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
@@ -157,7 +158,7 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   .settings(commonSettings)
   .settings(
     name := "scala-java-time-tzdb",
-    version := scalaTZDBVersion
+    version := (Global / version).value + "_" + tzdbVersion
   )
   .jsSettings(
     dbVersion := TzdbPlugin.Version(tzdbVersion),
@@ -167,6 +168,9 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
       val destinationDir = (sourceManaged in Compile).value
       copyAndReplace(Seq(srcDirs), destinationDir)
     }.taskValue
+  )
+  .jvmSettings(
+    skip.in(publish) := scalaJSVersion06
   )
   .dependsOn(scalajavatime)
 
@@ -209,7 +213,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "locales-full-db" % "0.5.6-cldr31+25-bc07eea7-SNAPSHOT"
+      "io.github.cquiroz" %%% "locales-full-db" % "0.6.0"
     )
   )
   .dependsOn(scalajavatime, scalajavatimeTZDB)

@@ -6,9 +6,10 @@ section: "home"
 
 ## Scala Java-Time
 
-[![Build Status](https://travis-ci.org/cquiroz/scala-java-time.svg?branch=master)](https://travis-ci.org/cquiroz/scala-java-time)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.cquiroz/scala-java-time_2.12.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.cquiroz/scala-java-time_2.12)
-[![Scala.js](http://scala-js.org/assets/badges/scalajs-0.6.8.svg)](http://scala-js.org)
+![build](https://github.com/cquiroz/scala-java-time/workflows/build/badge.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.cquiroz/scala-java-time_2.13.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.cquiroz/scala-java-time_2.13)
+[![Scala.js](https://www.scala-js.org/assets/badges/scalajs-0.6.29.svg)](https://www.scala-js.org/)
+[![Scala.js](https://www.scala-js.org/assets/badges/scalajs-1.0.0.svg)](https://www.scala-js.org/)
 
 This project provides an implementation of the `java.time` package, a date and time library that was added in Java 8.
 The implementation is based on the original BSD-licensed reference implementation (before it was contributed to OpenJDK).
@@ -54,12 +55,12 @@ chrono.MinguoDate.now(fixedClock).toString       == "Minguo ROC 98-02-13"
 ### Usage
 
 The _scala-java-time_ library is currently available for Scala (JVM, version 8 and later) and Scala.js (JavaScript).
-Both Scala 2.11 and Scala 2.12 (2.0.0-M8 and later) are supported.
+Scala 2.11, 2.12 and 2.13 are supported.
 
 To get started with SBT, add one of these dependencies:
 
-* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-RC3"` (for Scala)
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC3"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-RC4"` (for Scala)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC4"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 To get the latest snapshots add the repo
 
@@ -70,8 +71,8 @@ resolvers +=
 
 and either:
 
-* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-RC3-SNAPSHOT"` (for Scala)
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC3-SNAPSHOT"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-SNAPSHOT"` (for Scala)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-SNAPSHOT"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 ### Time zones
 
@@ -84,7 +85,7 @@ If you don't need to use timezones in your application you can just stop here. B
 The timezone for js is provided in a separate bundle which contains all time zones available from
 [IANA Time Zone Database](https://www.iana.org/time-zones). To use them you need to add the following dependency
 
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-RC3_2019a"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-RC4_2019c"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 Note that the db is fairly large and due to the characteristics of the API it's not very ammenable to optimization
 This database is published every now and then so it maybe old. For current version see the following section.
@@ -101,7 +102,7 @@ To do that you need to:
 * Add `sbt-tzdb` to your list of plugins (Note you need sbt 1.x)
 
 ```scala
-addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "0.3.2")
+addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "0.4.0")
 ```
 
 * Enable the plugin for your `Scala.js` project:
@@ -134,6 +135,19 @@ Updating the time-zone database involves using the `TzdbZoneRulesCompiler` class
 and re-compiling the jar file.
 Pull requests with later versions of the dat file will be accepted.
 
+## Locale
+
+Starting on 2.0.0-RC4 it is no longer necessary to register locales but only a minimal locale based on english is
+provided. You may want to use [sbt-locales](https://github.com/cquiroz/sbt-locales) to generate
+a custom locale database.
+
+For example see:
+[gemini-locales](https://github.com/gemini-hlsw/gemini-locales/)
+
+It is probably a good idea to set your default Locale
+```
+Locale.setDefault(Locale.forLanguageTag(<my-locale>))
+``````
 #### Building
 
 This project builds using sbt.
@@ -154,7 +168,7 @@ Have a look at the [issues](https://github.com/cquiroz/scala-java-time/issues) o
 
 ##### 2.0
 
-A stable release of 2.0 will be published with only `java.time` on its binary after RC3 is published.
+A stable release of 2.0 will be published shortly after RC4 is published.
 
 #### FAQs
 

@@ -910,8 +910,9 @@ object DateTimeFormatter {
     def parseObject(text: String, pos: ParsePosition): AnyRef = {
       Objects.requireNonNull(text, "text")
       var unresolved: TTBPDateTimeParseContext#Parsed = null
-      try unresolved = formatter.parseUnresolved0(text, pos)
-      catch {
+      try {
+        unresolved = formatter.parseUnresolved0(text, pos)
+      } catch {
         case _: IndexOutOfBoundsException =>
           if (pos.getErrorIndex < 0)
             pos.setErrorIndex(0)
@@ -1597,14 +1598,14 @@ final class DateTimeFormatter private[format] (
     Objects.requireNonNull(text, "text")
     Objects.requireNonNull(position, "position")
     val context: TTBPDateTimeParseContext = new TTBPDateTimeParseContext(this)
-    var pos: Int                          = position.getIndex
-    pos = printerParser.parse(context, text, pos)
+    val pos                               = printerParser.parse(context, text, position.getIndex())
     if (pos < 0) {
       position.setErrorIndex(~pos)
-      return null
+      null
+    } else {
+      position.setIndex(pos)
+      context.toParsed
     }
-    position.setIndex(pos)
-    context.toParsed
   }
 
   /** Returns the formatter as a composite printer parser.

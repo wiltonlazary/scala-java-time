@@ -144,14 +144,14 @@ object JulianFields {
 
     /** Julian Day field. */
     // 719163L + 1721425L = 2440588L
-    lazy val JULIAN_DAY = new Field("JulianDay", 0, DAYS, FOREVER, 2440588L)
+    def JULIAN_DAY = new Field("JulianDay", 0, DAYS, FOREVER, 2440588L)
 
     /** Modified Julian Day field. */
     // 719163L - 678576L = 40587L
-    lazy val MODIFIED_JULIAN_DAY = new Field("ModifiedJulianDay", 1, DAYS, FOREVER, 40587L)
+    def MODIFIED_JULIAN_DAY = new Field("ModifiedJulianDay", 1, DAYS, FOREVER, 40587L)
 
     /** Rata Die field. */
-    lazy val RATA_DIE = new Field("RataDie", 2, DAYS, FOREVER, 719163L)
+    def RATA_DIE = new Field("RataDie", 2, DAYS, FOREVER, 719163L)
   }
 
   /// !!! FIXME: Passing of name to the Enum constructor is not quite right.

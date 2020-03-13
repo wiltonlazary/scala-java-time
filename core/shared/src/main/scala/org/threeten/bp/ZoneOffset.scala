@@ -256,6 +256,11 @@ object ZoneOffset {
     * @throws DateTimeException if the offset is not in the required range
     */
   private def validate(hours: Int, minutes: Int, seconds: Int): Unit = {
+    def msg(v: String) =
+      s"Zone offset $v not in valid range: abs(value) ${Math.abs(minutes)} is not in the range 0 to 59"
+
+    def msg2(v: String) =
+      s"Zone offset minutes and seconds must be $v because hours is $v"
     if (hours < -18 || hours > 18)
       throw new DateTimeException(
         s"Zone offset hours not in valid range: value $hours is not in the range -18 to 18"
@@ -263,22 +268,22 @@ object ZoneOffset {
     if (hours > 0) {
       if (minutes < 0 || seconds < 0)
         throw new DateTimeException(
-          "Zone offset minutes and seconds must be positive because hours is positive"
+          msg2("positive")
         )
     } else if (hours < 0) {
       if (minutes > 0 || seconds > 0)
         throw new DateTimeException(
-          "Zone offset minutes and seconds must be negative because hours is negative"
+          msg2("negative")
         )
     } else if ((minutes > 0 && seconds < 0) || (minutes < 0 && seconds > 0))
       throw new DateTimeException("Zone offset minutes and seconds must have the same sign")
     if (Math.abs(minutes) > 59)
       throw new DateTimeException(
-        s"Zone offset minutes not in valid range: abs(value) ${Math.abs(minutes)} is not in the range 0 to 59"
+        msg("minutes")
       )
     if (Math.abs(seconds) > 59)
       throw new DateTimeException(
-        s"Zone offset seconds not in valid range: abs(value) ${Math.abs(seconds)} is not in the range 0 to 59"
+        msg("seconds")
       )
     if (Math.abs(hours) == 18 && (Math.abs(minutes) > 0 || Math.abs(seconds) > 0))
       throw new DateTimeException("Zone offset not in valid range: -18:00 to +18:00")

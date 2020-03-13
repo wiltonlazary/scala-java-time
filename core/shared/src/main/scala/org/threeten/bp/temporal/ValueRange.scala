@@ -277,13 +277,9 @@ final class ValueRange private (
     * @return a string representation of this range, not null
     */
   override def toString: String = {
-    val buf: StringBuilder = new StringBuilder
-    buf.append(minSmallest)
-    if (minSmallest != minLargest)
-      buf.append('/').append(minLargest)
-    buf.append(" - ").append(maxSmallest)
-    if (maxSmallest != maxLargest)
-      buf.append('/').append(maxLargest)
-    buf.toString
+    val ss = if (minSmallest != minLargest) s"/$minLargest" else ""
+    val sl = if (maxSmallest != maxLargest) s"/$maxLargest" else ""
+
+    s"$minSmallest$ss - $maxSmallest$sl"
   }
 }

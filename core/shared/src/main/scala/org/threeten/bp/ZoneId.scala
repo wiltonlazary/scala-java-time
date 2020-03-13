@@ -93,39 +93,38 @@ object ZoneId {
     * </ul><p>
     * The map is unmodifiable.
     */
-  lazy val SHORT_IDS: java.util.Map[String, String] = {
-    val base = Map[String, String](
-      "ACT" -> "Australia/Darwin",
-      "AET" -> "Australia/Sydney",
-      "AGT" -> "America/Argentina/Buenos_Aires",
-      "ART" -> "Africa/Cairo",
-      "AST" -> "America/Anchorage",
-      "BET" -> "America/Sao_Paulo",
-      "BST" -> "Asia/Dhaka",
-      "CAT" -> "Africa/Harare",
-      "CNT" -> "America/St_Johns",
-      "CST" -> "America/Chicago",
-      "CTT" -> "Asia/Shanghai",
-      "EAT" -> "Africa/Addis_Ababa",
-      "ECT" -> "Europe/Paris",
-      "IET" -> "America/Indiana/Indianapolis",
-      "IST" -> "Asia/Kolkata",
-      "JST" -> "Asia/Tokyo",
-      "MIT" -> "Pacific/Apia",
-      "NET" -> "Asia/Yerevan",
-      "NST" -> "Pacific/Auckland",
-      "PLT" -> "Asia/Karachi",
-      "PNT" -> "America/Phoenix",
-      "PRT" -> "America/Puerto_Rico",
-      "PST" -> "America/Los_Angeles",
-      "SST" -> "Pacific/Guadalcanal",
-      "VST" -> "Asia/Ho_Chi_Minh",
-      "EST" -> "-05:00",
-      "MST" -> "-07:00",
-      "HST" -> "-10:00"
-    )
-    base.asJava
-  }
+  lazy val SHORT_IDS: java.util.Map[String, String] = ShortIds.asJava
+
+  private lazy val ShortIds: Map[String, String] = Map[String, String](
+    "ACT" -> "Australia/Darwin",
+    "AET" -> "Australia/Sydney",
+    "AGT" -> "America/Argentina/Buenos_Aires",
+    "ART" -> "Africa/Cairo",
+    "AST" -> "America/Anchorage",
+    "BET" -> "America/Sao_Paulo",
+    "BST" -> "Asia/Dhaka",
+    "CAT" -> "Africa/Harare",
+    "CNT" -> "America/St_Johns",
+    "CST" -> "America/Chicago",
+    "CTT" -> "Asia/Shanghai",
+    "EAT" -> "Africa/Addis_Ababa",
+    "ECT" -> "Europe/Paris",
+    "IET" -> "America/Indiana/Indianapolis",
+    "IST" -> "Asia/Kolkata",
+    "JST" -> "Asia/Tokyo",
+    "MIT" -> "Pacific/Apia",
+    "NET" -> "Asia/Yerevan",
+    "NST" -> "Pacific/Auckland",
+    "PLT" -> "Asia/Karachi",
+    "PNT" -> "America/Phoenix",
+    "PRT" -> "America/Puerto_Rico",
+    "PST" -> "America/Los_Angeles",
+    "SST" -> "Pacific/Guadalcanal",
+    "VST" -> "Asia/Ho_Chi_Minh",
+    "EST" -> "-05:00",
+    "MST" -> "-07:00",
+    "HST" -> "-10:00"
+  )
 
   /** Gets the system default time-zone.
     *
@@ -137,7 +136,7 @@ object ZoneId {
     * @throws DateTimeException if the converted zone ID has an invalid format
     * @throws ZoneRulesException if the converted zone region ID cannot be found
     */
-  def systemDefault: ZoneId = ZoneId.of(TimeZone.getDefault.getID, SHORT_IDS)
+  def systemDefault: ZoneId = of2(TimeZone.getDefault.getID, ShortIds)
 
   /** Gets the set of available zone IDs.
     *
@@ -168,13 +167,11 @@ object ZoneId {
     * @throws DateTimeException if the zone ID has an invalid format
     * @throws ZoneRulesException if the zone ID is a region ID that cannot be found
     */
-  def of(zoneId: String, aliasMap: java.util.Map[String, String]): ZoneId = {
-    Objects.requireNonNull(zoneId, "zoneId")
-    Objects.requireNonNull(aliasMap, "aliasMap")
-    var id: String = aliasMap.get(zoneId)
-    id = if (id != null) id else zoneId
-    of(id)
-  }
+  def of(zoneId: String, aliasMap: java.util.Map[String, String]): ZoneId =
+    of2(zoneId, aliasMap.asScala.toMap)
+
+  private def of2(zoneId: String, aliasMap: Map[String, String]): ZoneId =
+    of(aliasMap.get(zoneId).getOrElse(zoneId))
 
   /** Obtains an instance of {@code ZoneId} from an ID ensuring that the
     * ID is valid and available for use.

@@ -180,7 +180,7 @@ object WeekFields {
     private[temporal] def ofWeekOfWeekBasedYearField(
       weekDef: WeekFields
     ): WeekFields.ComputedDayOfField =
-      new WeekFields.ComputedDayOfField("WeekOfWeekBasedYear",
+      new WeekFields.ComputedDayOfField(WWBY,
                                         weekDef,
                                         ChronoUnit.WEEKS,
                                         IsoFields.WEEK_BASED_YEARS,
@@ -191,17 +191,17 @@ object WeekFields {
       * @see WeekFields#weekBasedYear()
       */
     private[temporal] def ofWeekBasedYearField(weekDef: WeekFields): WeekFields.ComputedDayOfField =
-      new WeekFields.ComputedDayOfField("WeekBasedYear",
+      new WeekFields.ComputedDayOfField(WBY,
                                         weekDef,
                                         IsoFields.WEEK_BASED_YEARS,
                                         ChronoUnit.FOREVER,
                                         WEEK_BASED_YEAR_RANGE)
 
-    private lazy val DAY_OF_WEEK_RANGE: ValueRange             = ValueRange.of(1, 7)
-    private lazy val WEEK_OF_MONTH_RANGE: ValueRange           = ValueRange.of(0, 1, 4, 6)
-    private lazy val WEEK_OF_YEAR_RANGE: ValueRange            = ValueRange.of(0, 1, 52, 54)
-    private lazy val WEEK_OF_WEEK_BASED_YEAR_RANGE: ValueRange = ValueRange.of(1, 52, 53)
-    private lazy val WEEK_BASED_YEAR_RANGE: ValueRange         = YEAR.range
+    private def DAY_OF_WEEK_RANGE: ValueRange             = ValueRange.of(1, 7)
+    private def WEEK_OF_MONTH_RANGE: ValueRange           = ValueRange.of(0, 1, 4, 6)
+    private def WEEK_OF_YEAR_RANGE: ValueRange            = ValueRange.of(0, 1, 52, 54)
+    private def WEEK_OF_WEEK_BASED_YEAR_RANGE: ValueRange = ValueRange.of(1, 52, 53)
+    private def WEEK_BASED_YEAR_RANGE: ValueRange         = YEAR.range
   }
 
   private[temporal] class ComputedDayOfField(

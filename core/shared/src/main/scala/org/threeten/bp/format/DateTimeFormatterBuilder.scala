@@ -673,7 +673,7 @@ final class DateTimeFormatterBuilder private (
     appendInternal(
       new TTBPDateTimeFormatterBuilder.TextPrinterParser(field,
                                                          textStyle,
-                                                         TTBPDateTimeTextProvider.getInstance)
+                                                         TTBPDateTimeTextProvider.Provider)
     )
     this
   }

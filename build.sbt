@@ -2,8 +2,8 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer             = "2.13.1"
-val tzdbVersion          = "2019c"
+val scalaVer    = "2.13.1"
+val tzdbVersion = "2019c"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Global / resolvers += Resolver.sonatypeRepo("public")
@@ -12,6 +12,9 @@ val scalaJSVersion06 = Option(System.getenv("SCALAJS_VERSION")).exists(_.startsW
 
 lazy val downloadFromZip: TaskKey[Unit] =
   taskKey[Unit]("Download the tzdb tarball and extract it")
+
+addCommandAlias("validate", ";clean;scalajavatimeTestsJVM/test;scalajavatimeTestsJS/test")
+addCommandAlias("demo", ";clean;demo/fastOptJS;demo/fullOptJS")
 
 inThisBuild(
   List(

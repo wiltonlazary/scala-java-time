@@ -160,8 +160,7 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   .in(file("tzdb"))
   .settings(commonSettings)
   .settings(
-    name := "scala-java-time-tzdb",
-    version := version.value + "_" + tzdbVersion
+    name := "scala-java-time-tzdb"
   )
   .jsSettings(
     dbVersion := TzdbPlugin.Version(tzdbVersion),

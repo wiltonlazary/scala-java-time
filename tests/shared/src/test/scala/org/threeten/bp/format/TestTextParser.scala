@@ -45,7 +45,7 @@ import org.threeten.bp.format.internal.TTBPDateTimeTextProvider
 
 /** Test TextPrinterParser. */
 object TestTextParser {
-  private val PROVIDER: TTBPDateTimeTextProvider = TTBPDateTimeTextProvider.getInstance
+  private val PROVIDER: TTBPDateTimeTextProvider = TTBPDateTimeTextProvider.Provider
 }
 
 class TestTextParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {

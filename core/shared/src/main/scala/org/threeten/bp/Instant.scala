@@ -69,19 +69,19 @@ object Instant {
   lazy val EPOCH: Instant = new Instant(0, 0)
 
   /** The minimum supported epoch second. */
-  private val MIN_SECOND: Long = -31557014167219200L
+  private def MIN_SECOND: Long = -31557014167219200L
 
   /** The maximum supported epoch second. */
-  private val MAX_SECOND: Long = 31556889864403199L
+  private def MAX_SECOND: Long = 31556889864403199L
 
   /** Constant for nanos per second. */
-  private val NANOS_PER_SECOND: Int = 1000000000
+  private def NANOS_PER_SECOND: Int = 1000000000
 
   /** Constant for nanos per milli. */
-  private val NANOS_PER_MILLI: Int = 1000000
+  private def NANOS_PER_MILLI: Int = 1000000
 
   /** Constant for millis per sec. */
-  private val MILLIS_PER_SEC = 1000
+  private def MILLIS_PER_SEC = 1000
 
   /** The minimum supported {@code Instant}, '-1000000000-01-01T00:00Z'.
     * This could be used by an application as a "far past" instant.
@@ -753,12 +753,13 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
     * @throws DateTimeException if the result exceeds the maximum or minimum instant
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def minusMillis(millisToSubtract: Long): Instant = {
+  def minusMillis(millisToSubtract: Long): Instant =
     if (millisToSubtract == Long.MinValue) {
-      return plusMillis(Long.MaxValue).plusMillis(1)
+      plusMillis(Long.MaxValue).plusMillis(1)
+    } else {
+      plusMillis(-millisToSubtract)
+
     }
-    plusMillis(-millisToSubtract)
-  }
 
   /** Returns a copy of this instant with the specified duration in nanoseconds subtracted.
     *
@@ -904,14 +905,13 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
   }
 
   private def secondsUntil(end: Instant): Long = {
-    var secsDiff: Long  = Math.subtractExact(end.seconds, seconds)
+    val secsDiff: Long  = Math.subtractExact(end.seconds, seconds)
     val nanosDiff: Long = end.nanos.toLong - nanos.toLong
     if (secsDiff > 0 && nanosDiff < 0) {
-      secsDiff -= 1
+      secsDiff - 1
     } else if (secsDiff < 0 && nanosDiff > 0) {
-      secsDiff += 1
-    }
-    secsDiff
+      secsDiff + 1
+    } else secsDiff
   }
 
   /** Combines this instant with an offset to create an {@code OffsetDateTime}.

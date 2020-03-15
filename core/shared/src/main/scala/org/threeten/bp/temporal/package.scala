@@ -92,4 +92,9 @@ package org.threeten.bp
   * This defines a year based on whole Monday to Monday weeks.
   * This is modeled in {@link org.threeten.bp.temporal.IsoFields}.
   */
-package object temporal
+package object temporal {
+
+  private[temporal] def WWBY = "WeekOfYWeekBasedYear"
+  private[temporal] def WBY  = "WeekBasedYear"
+
+}

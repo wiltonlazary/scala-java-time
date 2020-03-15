@@ -192,22 +192,22 @@ object TemporalAdjusters {
   private[TemporalAdjusters] object Impl {
 
     /** First day of month adjuster. */
-    lazy val FIRST_DAY_OF_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(0)
+    def FIRST_DAY_OF_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(0)
 
     /** Last day of month adjuster. */
-    lazy val LAST_DAY_OF_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(1)
+    def LAST_DAY_OF_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(1)
 
     /** First day of next month adjuster. */
-    lazy val FIRST_DAY_OF_NEXT_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(2)
+    def FIRST_DAY_OF_NEXT_MONTH: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(2)
 
     /** First day of year adjuster. */
-    lazy val FIRST_DAY_OF_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(3)
+    def FIRST_DAY_OF_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(3)
 
     /** Last day of year adjuster. */
-    lazy val LAST_DAY_OF_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(4)
+    def LAST_DAY_OF_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(4)
 
     /** First day of next month adjuster. */
-    lazy val FIRST_DAY_OF_NEXT_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(5)
+    def FIRST_DAY_OF_NEXT_YEAR: TemporalAdjusters.Impl = new TemporalAdjusters.Impl(5)
   }
 
   private class Impl(private val ordinal: Int) extends TemporalAdjuster {

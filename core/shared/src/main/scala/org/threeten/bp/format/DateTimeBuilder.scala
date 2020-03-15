@@ -552,7 +552,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
     * @return the extracted value, not null
     * @throws DateTimeException if an error occurs
     */
-  def build[R](`type`: TemporalQuery[R]): R = `type`.queryFrom(this)
+  def build[R](tpe: TemporalQuery[R]): R = tpe.queryFrom(this)
 
   def isSupported(field: TemporalField): Boolean =
     if (field == null)
@@ -591,15 +591,10 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
       query.queryFrom(this)
 
   override def toString: String = {
-    val buf: StringBuilder = new StringBuilder(128)
-    buf.append("DateTimeBuilder[")
-    if (fieldValues.size > 0)
-      buf.append("fields=").append(fieldValues)
-    buf.append(", ").append(chrono)
-    buf.append(", ").append(zone)
-    buf.append(", ").append(date)
-    buf.append(", ").append(time)
-    buf.append(']')
-    buf.toString
+    val fields =
+      if (fieldValues.size > 0)
+        s"fields=$fieldValues, "
+      else ""
+    s"DateTimeBuilder[$fields $chrono, $zone, $date, $time]"
   }
 }

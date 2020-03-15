@@ -32,48 +32,11 @@
 package org.threeten.bp.format.internal
 
 import java.util.Locale
-import java.util.concurrent.atomic.AtomicReference
 import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.format.TextStyle
 
 private[format] object TTBPDateTimeTextProvider {
-  lazy val MUTABLE_PROVIDER: AtomicReference[TTBPDateTimeTextProvider] =
-    new AtomicReference[TTBPDateTimeTextProvider]()
-
-  /** Gets the provider.
-    *
-    * @return the provider, not null
-    */
-  private[format] def getInstance: TTBPDateTimeTextProvider =
-    ProviderSingleton.PROVIDER
-
-  /**
-    * Sets the provider to use.
-    * <p>
-    * This can only be invoked before {@link DateTimeTextProvider} class is used for formatting/parsing.
-    * Invoking this method at a later point will throw an exception.
-    *
-    * @param provider the provider to use, not null
-    * @throws IllegalStateException if provider is already set
-    */
-  def setInitializer(provider: TTBPDateTimeTextProvider): Unit =
-    if (!MUTABLE_PROVIDER.compareAndSet(null, provider)) {
-      throw new IllegalStateException(
-        "Provider was already set, possibly with a default during initialization"
-      )
-    }
-
-  //-----------------------------------------------------------------------
-  // use JVM class initializtion to lock the singleton without additional synchronization
-  object ProviderSingleton {
-    lazy val PROVIDER: TTBPDateTimeTextProvider = initialize()
-    // initialize the provider
-    def initialize(): TTBPDateTimeTextProvider = {
-      // Set the default initializer if none has been provided yet
-      MUTABLE_PROVIDER.compareAndSet(null, new TTBPSimpleDateTimeTextProvider())
-      return MUTABLE_PROVIDER.get();
-    }
-  }
+  lazy val Provider: TTBPDateTimeTextProvider = new TTBPSimpleDateTimeTextProvider()
 }
 
 /** The Service Provider Interface (SPI) to be implemented by classes providing

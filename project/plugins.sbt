@@ -1,4 +1,4 @@
-addSbtPlugin("com.47deg" % "sbt-microsites" % "1.1.3")
+addSbtPlugin("com.47deg" % "sbt-microsites" % "1.1.5")
 
 val scalaJSVersion =
   Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.0.1")

@@ -32,11 +32,6 @@
 package org.threeten.bp
 
 import java.util.Objects
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 
 import org.threeten.bp.chrono.Chronology
@@ -218,8 +213,6 @@ object Year {
     */
   def isLeap(year: Long): Boolean = ((year & 3) == 0) && ((year % 100) != 0 || (year % 400) == 0)
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): Year = Year.of(in.readInt)
 }
 
 /** A year in the ISO-8601 calendar system, such as {@code 2007}.
@@ -826,17 +819,4 @@ final class Year private (private val year: Int)
     formatter.format(this)
   }
 
-  private def writeReplace: AnyRef = new Ser(Ser.YEAR_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = out.writeInt(year)
 }

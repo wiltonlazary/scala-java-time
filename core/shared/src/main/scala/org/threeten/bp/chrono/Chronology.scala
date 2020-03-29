@@ -31,14 +31,10 @@
  */
 package org.threeten.bp.chrono
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
-import java.util.{ Locale, Objects }
 import java.util.HashMap
 import java.util.Map
+import java.util.Objects
+import java.util.Locale
 
 import org.threeten.bp.Clock
 import org.threeten.bp.DateTimeException
@@ -211,11 +207,6 @@ object Chronology {
     ()
   }
 
-  @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): Chronology = {
-    val id: String = in.readUTF
-    Chronology.of(id)
-  }
 }
 
 /** A calendar system, used to organize and identify dates.
@@ -763,16 +754,4 @@ trait Chronology extends Ordered[Chronology] {
     */
   override def toString: String = getId
 
-  private def writeReplace: AnyRef = new Ser(Ser.CHRONO_TYPE, this)
-
-  /** Defend against malicious streams.
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = out.writeUTF(getId)
 }

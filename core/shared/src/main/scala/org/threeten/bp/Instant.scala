@@ -32,11 +32,6 @@
 package org.threeten.bp
 
 import java.util.Objects
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 
 import org.threeten.bp.LocalTime.SECONDS_PER_DAY
@@ -241,12 +236,6 @@ object Instant {
     else
       new Instant(seconds, nanoOfSecond)
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): Instant = {
-    val seconds: Long = in.readLong
-    val nanos: Int    = in.readInt
-    Instant.ofEpochSecond(seconds, nanos.toLong)
-  }
 }
 
 /** An instantaneous point on the time-line.
@@ -1040,19 +1029,4 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
     */
   override def toString: String = DateTimeFormatter.ISO_INSTANT.format(this)
 
-  private def writeReplace: AnyRef = new Ser(Ser.INSTANT_TYPE, this)
-
-  /** Defend against malicious streams.
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    out.writeLong(seconds)
-    out.writeInt(nanos)
-  }
 }

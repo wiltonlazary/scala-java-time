@@ -128,7 +128,8 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
   .in(file("core"))
   .settings(commonSettings: _*)
   .settings(
-    name := "scala-java-time"
+    name := "scala-java-time",
+    libraryDependencies += "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0"
   )
   .jsSettings(
     scalacOptions ++= {
@@ -172,11 +173,13 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
     }.taskValue
   )
   .jvmSettings(
+    includeTTBP := true,
+    jsOptimized := false,
     skip.in(publish) := scalaJSVersion06
   )
   .dependsOn(scalajavatime)
 
-lazy val scalajavatimeTZDBJVM = scalajavatimeTZDB.jvm
+lazy val scalajavatimeTZDBJVM = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
 lazy val scalajavatimeTZDBJS  = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
 
 lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)

@@ -36,11 +36,6 @@ import org.threeten.bp.temporal.ChronoField.INSTANT_SECONDS
 import org.threeten.bp.temporal.ChronoField.NANO_OF_DAY
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
 import org.threeten.bp.temporal.ChronoUnit.NANOS
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 import java.util.{ Comparator, Objects }
 
@@ -59,7 +54,6 @@ import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.temporal.ValueRange
 import org.threeten.bp.zone.ZoneRules
 
-@SerialVersionUID(2287754244819255394L)
 object OffsetDateTime {
 
   /** The minimum supported {@code OffsetDateTime}, '-999999999-01-01T00:00:00+18:00'.
@@ -296,12 +290,6 @@ object OffsetDateTime {
     })
   }
 
-  @throws(classOf[IOException])
-  private[bp] def readExternal(in: DataInput): OffsetDateTime = {
-    val dateTime: LocalDateTime = LocalDateTime.readExternal(in)
-    val offset: ZoneOffset      = ZoneOffset.readExternal(in)
-    OffsetDateTime.of(dateTime, offset)
-  }
 }
 
 /** A date-time with an offset from UTC/Greenwich in the ISO-8601 calendar system,
@@ -330,7 +318,6 @@ object OffsetDateTime {
   * @param dateTime  the local date-time, not null
   * @param offset  the zone offset, not null
   */
-@SerialVersionUID(2287754244819255394L)
 final class OffsetDateTime private (
   private val dateTime: LocalDateTime,
   private val offset:   ZoneOffset
@@ -1545,20 +1532,4 @@ final class OffsetDateTime private (
     formatter.format(this)
   }
 
-  private def writeReplace: AnyRef = new Ser(Ser.OFFSET_DATE_TIME_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    dateTime.writeExternal(out)
-    offset.writeExternal(out)
-  }
 }

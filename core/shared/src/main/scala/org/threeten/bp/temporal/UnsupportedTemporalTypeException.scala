@@ -43,7 +43,6 @@ import org.threeten.bp.DateTimeException
   * @param message  the message to use for this exception, may be null
   * @param cause  the cause of the exception, may be null
   */
-@SerialVersionUID(-189676278478L)
 class UnsupportedTemporalTypeException(message: String, cause: Throwable)
     extends DateTimeException(message, cause) {
 

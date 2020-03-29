@@ -32,11 +32,6 @@
 package org.threeten.bp
 
 import java.util.Objects
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 
 import org.threeten.bp.LocalTime.HOURS_PER_DAY
@@ -65,7 +60,6 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 import org.threeten.bp.zone.ZoneRules
 
-@SerialVersionUID(6207766400415563566L)
 object LocalDateTime {
 
   /** The minimum supported {@code LocalDateTime}, '-999999999-01-01T00:00:00'.
@@ -397,12 +391,6 @@ object LocalDateTime {
     })
   }
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): LocalDateTime = {
-    val date: LocalDate = LocalDate.readExternal(in)
-    val time: LocalTime = LocalTime.readExternal(in)
-    LocalDateTime.of(date, time)
-  }
 }
 
 /** A date-time without a time-zone in the ISO-8601 calendar system,
@@ -1632,19 +1620,4 @@ final class LocalDateTime private (private val date: LocalDate, private val time
     */
   override def format(formatter: DateTimeFormatter): String = super.format(formatter)
 
-  private def writeReplace: AnyRef = new Ser(Ser.LOCAL_DATE_TIME_TYPE, this)
-
-  /** Defend against malicious streams.
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    date.writeExternal(out)
-    time.writeExternal(out)
-  }
 }

@@ -34,7 +34,6 @@ package org.threeten.bp.temporal
 import java.io.Serializable
 import org.threeten.bp.DateTimeException
 
-@SerialVersionUID(-7317881728594519368L)
 object ValueRange {
 
   /** Obtains a fixed value range.
@@ -121,7 +120,6 @@ object ValueRange {
   * @param maxSmallest  the smallest minimum value
   * @param maxLargest  the largest minimum value
   */
-@SerialVersionUID(-7317881728594519368L)
 final class ValueRange private (
   private val minSmallest: Long,
   private val minLargest:  Long,

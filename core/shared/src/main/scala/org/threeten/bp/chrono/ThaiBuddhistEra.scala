@@ -31,10 +31,6 @@
  */
 package org.threeten.bp.chrono
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-
 import org.threeten.bp.DateTimeException
 
 object ThaiBuddhistEra {
@@ -65,11 +61,6 @@ object ThaiBuddhistEra {
       case _ => throw new DateTimeException("Era is not valid for ThaiBuddhistEra")
     }
 
-  @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): ThaiBuddhistEra = {
-    val eraValue: Byte = in.readByte
-    ThaiBuddhistEra.of(eraValue.toInt)
-  }
 }
 
 /** An era in the Thai Buddhist calendar system.
@@ -95,8 +86,4 @@ final class ThaiBuddhistEra(name: String, ordinal: Int)
     */
   def getValue: Int = ordinal
 
-  private def writeReplace: AnyRef = new Ser(Ser.THAIBUDDHIST_ERA_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = out.writeByte(this.getValue)
 }

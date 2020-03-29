@@ -31,11 +31,6 @@
  */
 package org.threeten.bp
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -60,7 +55,6 @@ import org.threeten.bp.temporal.TemporalAmount
 import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 
-@SerialVersionUID(3078945930695997490L)
 object Duration {
 
   /** Constant for a duration of zero. */
@@ -434,12 +428,6 @@ object Duration {
     ofSeconds(divRem(0).longValue, divRem(1).longValue)
   }
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): Duration = {
-    val seconds: Long = in.readLong
-    val nanos: Int    = in.readInt
-    Duration.ofSeconds(seconds, nanos.toLong)
-  }
 }
 
 /** A time-based amount of time, such as '34.5 seconds'.
@@ -1079,20 +1067,4 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     buf.toString
   }
 
-  private def writeReplace: AnyRef = new Ser(Ser.DURATION_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    out.writeLong(seconds)
-    out.writeInt(nanos)
-  }
 }

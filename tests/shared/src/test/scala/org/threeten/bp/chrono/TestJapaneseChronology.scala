@@ -134,10 +134,13 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
   }
 
   val data_japansesEras: List[(Era, Int, String)] = {
-    List((JapaneseEra.MEIJI, -1, "Meiji"),
-         (JapaneseEra.TAISHO, 0, "Taisho"),
-         (JapaneseEra.SHOWA, 1, "Showa"),
-         (JapaneseEra.HEISEI, 2, "Heisei"))
+    List(
+      (JapaneseEra.MEIJI, -1, "Meiji"),
+      (JapaneseEra.TAISHO, 0, "Taisho"),
+      (JapaneseEra.SHOWA, 1, "Showa"),
+      (JapaneseEra.HEISEI, 2, "Heisei"),
+      (JapaneseEra.REIWA, 3, "Reiwa")
+    )
   }
 
   test("test_Japanese_Eras") {
@@ -153,7 +156,7 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
   }
 
   test("test_Japanese_badEras") {
-    val badEras: Array[Int] = Array(-1000, -998, -997, -2, 3, 4, 1000)
+    val badEras: Array[Int] = Array(-1000, -998, -997, -2, 4, 5, 1000)
     for (badEra <- badEras)
       try {
         val era: Era = JapaneseChronology.INSTANCE.eraOf(badEra)
@@ -180,9 +183,9 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
       // ignore expected exception
     }
     val additional = TTBPJapaneseEra.registerEra(LocalDate.of(2100, 1, 1), "TestAdditional")
-    assertEquals(JapaneseEra.of(3), additional)
+    assertEquals(JapaneseEra.of(4), additional)
     assertEquals(JapaneseEra.valueOf("TestAdditional"), additional)
-    assertEquals(JapaneseEra.values.apply(4), additional)
+    assertEquals(JapaneseEra.values.apply(5), additional)
     try {
       TTBPJapaneseEra.registerEra(LocalDate.of(2200, 1, 1), "TestAdditional2")
       fail("JapaneseEra.registerEra should have failed")
@@ -202,7 +205,10 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
       (JapaneseChronology.INSTANCE.date(1926, 12, 25), "Japanese Showa 1-12-25"),
       (JapaneseChronology.INSTANCE.date(1989, 1, 7), "Japanese Showa 64-01-07"),
       (JapaneseChronology.INSTANCE.date(1989, 1, 8), "Japanese Heisei 1-01-08"),
-      (JapaneseChronology.INSTANCE.date(2012, 12, 6), "Japanese Heisei 24-12-06")
+      (JapaneseChronology.INSTANCE.date(2012, 12, 6), "Japanese Heisei 24-12-06"),
+      (JapaneseChronology.INSTANCE.date(2019, 4, 30), "Japanese Heisei 31-04-30"),
+      (JapaneseChronology.INSTANCE.date(2019, 5, 1), "Japanese Reiwa 1-05-01"),
+      (JapaneseChronology.INSTANCE.date(2020, 12, 24), "Japanese Reiwa 2-12-24")
     )
 
   test("test_toString") {

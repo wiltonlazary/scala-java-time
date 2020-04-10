@@ -184,14 +184,14 @@ class TestDateTimeTextPrinting extends AnyFunSuite with AssertionsHelper {
     Locale.setDefault(Locale.CANADA) // Passes for US
     val formatDayOfWeek = DateTimeFormatter.ofPattern("cccc MMM d") // Thursday Jan. 25
     val dt              = LocalDateTime.of(2018, 1, 30, 11, 2, 45, 750000)
-    assertResult("Tuesday Jan 30")(dt.format(formatDayOfWeek))
+    assertResult("Tuesday Jan. 30")(dt.format(formatDayOfWeek))
   }
 
   test("formatTime_AM_PM") {
     Locale.setDefault(Locale.CANADA) // Fails for both US and CANADA
     val formatTime_AM_PM = DateTimeFormatter.ofPattern("h:mm a") // 10:15 PM
     val dt               = LocalDateTime.of(2018, 1, 30, 11, 2, 45, 750000)
-    assertResult("11:02 AM")(dt.format(formatTime_AM_PM))
+    assertResult("11:02 a.m.")(dt.format(formatTime_AM_PM))
   }
 
 }

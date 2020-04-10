@@ -75,12 +75,18 @@ object JapaneseEra {
   lazy val HEISEI: JapaneseEra = new JapaneseEra(2, LocalDate.of(1989, 1, 8), "Heisei")
 
   /**
+    * The singleton instance for the 'Reiwa' era (2019-05-01 - current)
+    * which has the value 3.
+    */
+  lazy val REIWA = new JapaneseEra(3, LocalDate.of(2019, 5, 1), "Reiwa")
+
+  /**
     * The value of the additional era.
     */
-  private[chrono] val ADDITIONAL_VALUE: Int = 3
+  private[chrono] val ADDITIONAL_VALUE: Int = 4
 
   private[chrono] lazy val KNOWN_ERAS: AtomicReference[Array[JapaneseEra]] = new AtomicReference(
-    Array(MEIJI, TAISHO, SHOWA, HEISEI)
+    Array(MEIJI, TAISHO, SHOWA, HEISEI, REIWA)
   )
 
   /** Obtains an instance of {@code JapaneseEra} from an {@code int} value.

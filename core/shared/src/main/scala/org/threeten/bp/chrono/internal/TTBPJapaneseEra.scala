@@ -24,17 +24,17 @@ object TTBPJapaneseEra {
     */
   def registerEra(since: LocalDate, name: String): JapaneseEra = {
     val known = JapaneseEra.KNOWN_ERAS.get
-    if (known.length > 4)
+    if (known.length > 5)
       throw new DateTimeException("Only one additional Japanese era can be added")
     require(since != null)
     require(name != null)
-    if (!since.isAfter(JapaneseEra.HEISEI.since))
+    if (!since.isAfter(JapaneseEra.REIWA.since))
       throw new DateTimeException(
-        "Invalid since date for additional Japanese era, must be after Heisei"
+        "Invalid since date for additional Japanese era, must be after Reiwa"
       )
     val era      = new JapaneseEra(JapaneseEra.ADDITIONAL_VALUE, since, name)
-    val newArray = Arrays.copyOf(known, 5)
-    newArray(4) = era
+    val newArray = Arrays.copyOf(known, 6)
+    newArray(5) = era
     if (!JapaneseEra.KNOWN_ERAS.compareAndSet(known, newArray))
       throw new DateTimeException("Only one additional Japanese era can be added")
     era

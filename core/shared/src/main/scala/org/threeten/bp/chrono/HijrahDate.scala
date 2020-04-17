@@ -43,11 +43,7 @@ import org.threeten.bp.temporal.ChronoField.MONTH_OF_YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR
 import org.threeten.bp.temporal.ChronoField.YEAR_OF_ERA
 import org.threeten.bp.temporal.ChronoField.ERA
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
 import java.io.Serializable
-import java.text.ParseException
 import java.util.Objects
 import org.threeten.bp.Clock
 import org.threeten.bp.DateTimeException
@@ -64,7 +60,6 @@ import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 
-@SerialVersionUID(-5207853542612002020L)
 object HijrahDate {
 
   /** The minimum valid year-of-era. */
@@ -260,8 +255,7 @@ object HijrahDate {
 
   try HijrahDateConfigurator.readDeviationConfig()
   catch {
-    case _: IOException    =>
-    case _: ParseException =>
+    case _: Exception =>
   }
 
   /** Obtains the current {@code HijrahDate} of the Islamic Umm Al-Qura calendar
@@ -1071,13 +1065,6 @@ object HijrahDate {
     ADJUSTED_LEAST_MAX_VALUES(POSITION_DAY_OF_YEAR) = Integer.valueOf(leastMaxMonthDay)
   }
 
-  @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
-    val year: Int       = in.readInt
-    val month: Int      = in.readByte.toInt
-    val dayOfMonth: Int = in.readByte.toInt
-    HijrahChronology.INSTANCE.date(year, month, dayOfMonth)
-  }
 }
 
 /** A date in the Hijrah calendar system.
@@ -1313,12 +1300,4 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
 
   override def lengthOfYear: Int = HijrahDate.getYearLength(yearOfEra)
 
-  private def writeReplace: AnyRef = new Ser(Ser.HIJRAH_DATE_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = {
-    out.writeInt(get(YEAR))
-    out.writeByte(get(MONTH_OF_YEAR))
-    out.writeByte(get(DAY_OF_MONTH))
-  }
 }

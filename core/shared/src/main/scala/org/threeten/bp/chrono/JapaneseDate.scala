@@ -32,10 +32,6 @@
 package org.threeten.bp.chrono
 
 import org.threeten.bp.temporal.ChronoField._
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.ObjectInputStream
 import java.io.Serializable
 import java.util.{ Calendar, Objects }
 import org.threeten.bp.Clock
@@ -53,7 +49,6 @@ import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 
-@SerialVersionUID(-305327627230580483L)
 object JapaneseDate {
 
   /** Minimum date. */
@@ -205,13 +200,6 @@ object JapaneseDate {
     */
   def from(temporal: TemporalAccessor): JapaneseDate = JapaneseChronology.INSTANCE.date(temporal)
 
-  @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
-    val year: Int       = in.readInt
-    val month: Int      = in.readByte.toInt
-    val dayOfMonth: Int = in.readByte.toInt
-    JapaneseChronology.INSTANCE.date(year, month, dayOfMonth)
-  }
 }
 
 /** A date in the Japanese Imperial calendar system.
@@ -243,7 +231,6 @@ object JapaneseDate {
   * @param yearOfEra  the year-of-era, validated
   * @param isoDate  the standard local date, validated not null
   */
-@SerialVersionUID(-305327627230580483L)
 final class JapaneseDate private[chrono] (
   @transient private var era:       JapaneseEra,
   @transient private var yearOfEra: Int,
@@ -262,19 +249,6 @@ final class JapaneseDate private[chrono] (
     this(JapaneseEra.from(isoDate),
          isoDate.getYear - (JapaneseEra.from(isoDate).startDate.getYear - 1),
          isoDate)
-  }
-
-  /** Reconstitutes this object from a stream.
-    *
-    * @param stream object input stream
-    */
-  @throws[IOException]
-  @throws[ClassNotFoundException]
-  private def readObject(stream: ObjectInputStream): Unit = {
-    stream.defaultReadObject()
-    this.era = JapaneseEra.from(isoDate)
-    val yearOffset: Int = this.era.startDate.getYear - 1
-    this.yearOfEra = isoDate.getYear - yearOffset
   }
 
   def getChronology: JapaneseChronology = JapaneseChronology.INSTANCE
@@ -466,12 +440,4 @@ final class JapaneseDate private[chrono] (
 
   override def hashCode: Int = getChronology.getId.hashCode ^ isoDate.hashCode
 
-  private def writeReplace: AnyRef = new Ser(Ser.JAPANESE_DATE_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = {
-    out.writeInt(get(YEAR))
-    out.writeByte(get(MONTH_OF_YEAR))
-    out.writeByte(get(DAY_OF_MONTH))
-  }
 }

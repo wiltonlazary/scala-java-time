@@ -35,7 +35,6 @@ import java.util.Objects
 import org.threeten.bp.temporal.TemporalAdjusters.nextOrSame
 import org.threeten.bp.temporal.TemporalAdjusters.previousOrSame
 import java.io.DataInput
-import java.io.DataOutput
 import java.io.IOException
 import java.io.Serializable
 import org.threeten.bp.DayOfWeek
@@ -61,7 +60,6 @@ import org.threeten.bp.chrono.IsoChronology
   * <h3>Specification for implementors</h3>
   * This class is immutable and thread-safe.
   */
-@SerialVersionUID(6889046316657758795L)
 object ZoneOffsetTransitionRule {
 
   /** Obtains an instance defining the yearly rule to create transitions between two offsets.
@@ -251,43 +249,6 @@ final class ZoneOffsetTransitionRule private[zone] (
     * to last day, and so on.
     */
   private val dom: Byte = dayOfMonthIndicator.toByte
-
-  /** Uses a serialization delegate.
-    *
-    * @return the replacing object, not null
-    */
-  private def writeReplace: AnyRef = new Ser(Ser.ZOTRULE, this)
-
-  /** Writes the state to the stream.
-    *
-    * @param out  the output stream, not null
-    * @throws IOException if an error occurs
-    */
-  @throws[IOException]
-  private[zone] def writeExternal(out: DataOutput): Unit = {
-    val timeSecs: Int      = if (timeEndOfDay) 86400 else time.toSecondOfDay
-    val stdOffset: Int     = standardOffset.getTotalSeconds
-    val beforeDiff: Int    = offsetBefore.getTotalSeconds - stdOffset
-    val afterDiff: Int     = offsetAfter.getTotalSeconds - stdOffset
-    val timeByte: Int      = if (timeSecs % 3600 == 0) (if (timeEndOfDay) 24 else time.getHour) else 31
-    val stdOffsetByte: Int = if (stdOffset % 900 == 0) stdOffset / 900 + 128 else 255
-    val beforeByte: Int =
-      if (beforeDiff == 0 || beforeDiff == 1800 || beforeDiff == 3600) beforeDiff / 1800 else 3
-    val afterByte: Int =
-      if (afterDiff == 0 || afterDiff == 1800 || afterDiff == 3600) afterDiff / 1800 else 3
-    val dowByte: Int = if (dayOfWeek == null) 0 else dayOfWeek.getValue
-    val b: Int =
-      (month.getValue << 28) + ((dom + 32) << 22) + (dowByte << 19) + (timeByte << 14) + (timeDefinition.ordinal << 12) + (stdOffsetByte << 4) + (beforeByte << 2) + afterByte
-    out.writeInt(b)
-    if (timeByte == 31)
-      out.writeInt(timeSecs)
-    if (stdOffsetByte == 255)
-      out.writeInt(stdOffset)
-    if (beforeByte == 3)
-      out.writeInt(offsetBefore.getTotalSeconds)
-    if (afterByte == 3)
-      out.writeInt(offsetAfter.getTotalSeconds)
-  }
 
   /** Gets the month of the transition.
     *

@@ -31,9 +31,6 @@
  */
 package org.threeten.bp.zone
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
 import java.io.Serializable
 import java.util.Arrays
 import java.util.Collections
@@ -51,66 +48,6 @@ object StandardZoneRules {
 
   /** The last year to have its transitions cached. */
   private val LAST_CACHED_YEAR: Int = 2100
-
-  /** Reads the state from the stream.
-    *
-    * @param in  the input stream, not null
-    * @return the created object, not null
-    * @throws IOException if an error occurs
-    */
-  @throws(classOf[IOException])
-  @throws(classOf[ClassNotFoundException])
-  private[zone] def readExternal(in: DataInput): StandardZoneRules = {
-    val stdSize: Int          = in.readInt
-    val stdTrans: Array[Long] = new Array[Long](stdSize)
-
-    {
-      var i: Int = 0
-      while (i < stdSize) {
-        stdTrans(i) = Ser.readEpochSec(in)
-        i += 1
-      }
-    }
-    val stdOffsets: Array[ZoneOffset] = new Array[ZoneOffset](stdSize + 1)
-
-    {
-      var i: Int = 0
-      while (i < stdOffsets.length) {
-        stdOffsets(i) = Ser.readOffset(in)
-        i += 1
-      }
-    }
-    val savSize: Int          = in.readInt
-    val savTrans: Array[Long] = new Array[Long](savSize)
-
-    {
-      var i: Int = 0
-      while (i < savSize) {
-        savTrans(i) = Ser.readEpochSec(in)
-        i += 1
-      }
-    }
-    val savOffsets: Array[ZoneOffset] = new Array[ZoneOffset](savSize + 1)
-
-    {
-      var i: Int = 0
-      while (i < savOffsets.length) {
-        savOffsets(i) = Ser.readOffset(in)
-        i += 1
-      }
-    }
-    val ruleSize: Int                          = in.readByte.toInt
-    val rules: Array[ZoneOffsetTransitionRule] = new Array[ZoneOffsetTransitionRule](ruleSize)
-
-    {
-      var i: Int = 0
-      while (i < ruleSize) {
-        rules(i) = ZoneOffsetTransitionRule.readExternal(in)
-        i += 1
-      }
-    }
-    new StandardZoneRules(stdTrans, stdOffsets, savTrans, savOffsets, rules)
-  }
 
   /** Creates an instance.
     *
@@ -259,34 +196,6 @@ final class StandardZoneRules private (
       }
       localTransitionList.toArray(new Array[LocalDateTime](localTransitionList.size))
     })
-  }
-
-  /** Uses a serialization delegate.
-    *
-    * @return the replacing object, not null
-    */
-  private def writeReplace: AnyRef = new Ser(Ser.SZR, this)
-
-  /** Writes the state to the stream.
-    *
-    * @param out  the output stream, not null
-    * @throws IOException if an error occurs
-    */
-  @throws[IOException]
-  private[zone] def writeExternal(out: DataOutput): Unit = {
-    out.writeInt(standardTransitions.length)
-    for (trans <- standardTransitions)
-      Ser.writeEpochSec(trans, out)
-    for (offset <- standardOffsets)
-      Ser.writeOffset(offset, out)
-    out.writeInt(savingsInstantTransitions.length)
-    for (trans <- savingsInstantTransitions)
-      Ser.writeEpochSec(trans, out)
-    for (offset <- wallOffsets)
-      Ser.writeOffset(offset, out)
-    out.writeByte(lastRules.length)
-    for (rule <- lastRules)
-      rule.writeExternal(out)
   }
 
   def isFixedOffset: Boolean = savingsInstantTransitions.length == 0

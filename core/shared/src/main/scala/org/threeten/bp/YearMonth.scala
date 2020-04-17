@@ -43,11 +43,6 @@ import org.threeten.bp.temporal.ChronoUnit.ERAS
 import org.threeten.bp.temporal.ChronoUnit.MILLENNIA
 import org.threeten.bp.temporal.ChronoUnit.MONTHS
 import org.threeten.bp.temporal.ChronoUnit.YEARS
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 import org.threeten.bp.chrono.Chronology
 import org.threeten.bp.chrono.IsoChronology
@@ -86,7 +81,6 @@ import org.threeten.bp.temporal.ValueRange
   * <h3>Specification for implementors</h3>
   * This class is immutable and thread-safe.
   */
-@SerialVersionUID(4183400860270640070L)
 object YearMonth {
 
   /** Parser. */
@@ -222,19 +216,12 @@ object YearMonth {
     })
   }
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): YearMonth = {
-    val year: Int   = in.readInt
-    val month: Byte = in.readByte
-    YearMonth.of(year, month.toInt)
-  }
 }
 
 /** @constructor
   * @param year  the year to represent, validated from MIN_YEAR to MAX_YEAR
   * @param month  the month-of-year to represent, validated from 1 (January) to 12 (December)
   */
-@SerialVersionUID(4183400860270640070L)
 final class YearMonth private (private val year: Int, private val month: Int)
     extends TemporalAccessor
     with Temporal
@@ -939,20 +926,4 @@ final class YearMonth private (private val year: Int, private val month: Int)
     formatter.format(this)
   }
 
-  private def writeReplace: AnyRef = new Ser(Ser.YEAR_MONTH_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    out.writeInt(year)
-    out.writeByte(month)
-  }
 }

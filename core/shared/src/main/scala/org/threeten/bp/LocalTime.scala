@@ -32,11 +32,6 @@
 package org.threeten.bp
 
 import java.util.Objects
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 
 import org.threeten.bp.format.DateTimeFormatter
@@ -60,7 +55,6 @@ import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 
-@SerialVersionUID(6414437269572265201L)
 object LocalTime {
 
   /** Constants for the local time of each hour. */
@@ -357,28 +351,6 @@ object LocalTime {
     if ((minute | second | nanoOfSecond) == 0) HOURS(hour)
     else new LocalTime(hour, minute, second, nanoOfSecond)
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): LocalTime = {
-    var hour: Int   = in.readByte.toInt
-    var minute: Int = 0
-    var second: Int = 0
-    var nano: Int   = 0
-    if (hour < 0)
-      hour = ~hour
-    else {
-      minute = in.readByte.toInt
-      if (minute < 0)
-        minute = ~minute
-      else {
-        second = in.readByte.toInt
-        if (second < 0)
-          second = ~second
-        else
-          nano = in.readInt
-      }
-    }
-    LocalTime.of(hour, minute, second, nano)
-  }
 }
 
 /** A time without time-zone in the ISO-8601 calendar system,
@@ -1338,36 +1310,4 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     formatter.format(this)
   }
 
-  private def writeReplace: AnyRef = new Ser(Ser.LOCAL_TIME_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit =
-    if (nano == 0) {
-      if (second == 0) {
-        if (minute == 0)
-          out.writeByte(~hour)
-        else {
-          out.writeByte(hour.toInt)
-          out.writeByte(~minute)
-        }
-      } else {
-        out.writeByte(hour.toInt)
-        out.writeByte(minute.toInt)
-        out.writeByte(~second)
-      }
-    } else {
-      out.writeByte(hour.toInt)
-      out.writeByte(minute.toInt)
-      out.writeByte(second.toInt)
-      out.writeInt(nano)
-    }
 }

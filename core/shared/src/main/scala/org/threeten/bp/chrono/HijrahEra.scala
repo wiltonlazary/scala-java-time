@@ -31,10 +31,6 @@
  */
 package org.threeten.bp.chrono
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-
 import org.threeten.bp.DateTimeException
 import org.threeten.bp.temporal.ChronoField
 import org.threeten.bp.temporal.ChronoField.ERA
@@ -70,11 +66,6 @@ object HijrahEra {
       case _ => throw new DateTimeException("HijrahEra not valid")
     }
 
-  @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): HijrahEra = {
-    val eraValue: Byte = in.readByte
-    HijrahEra.of(eraValue.toInt)
-  }
 }
 
 /** An era in the Hijrah calendar system.
@@ -112,9 +103,4 @@ final class HijrahEra(name: String, ordinal: Int) extends Enum[HijrahEra](name, 
     */
   private[chrono] def prolepticYear(yearOfEra: Int): Int =
     if (this eq HijrahEra.AH) yearOfEra else 1 - yearOfEra
-
-  private def writeReplace: AnyRef = new Ser(Ser.HIJRAH_ERA_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = out.writeByte(this.getValue)
 }

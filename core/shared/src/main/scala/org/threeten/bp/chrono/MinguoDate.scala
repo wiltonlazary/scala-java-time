@@ -35,9 +35,6 @@ import java.util.Objects
 
 import org.threeten.bp.chrono.MinguoChronology.YEARS_DIFFERENCE
 import org.threeten.bp.temporal.ChronoField._
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
 import java.io.Serializable
 import org.threeten.bp.Clock
 import org.threeten.bp.LocalDate
@@ -53,7 +50,6 @@ import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 
-@SerialVersionUID(1300372329181994526L)
 object MinguoDate {
 
   /** Obtains the current {@code MinguoDate} from the system clock in the default time-zone.
@@ -127,13 +123,6 @@ object MinguoDate {
     */
   def from(temporal: TemporalAccessor): MinguoDate = MinguoChronology.INSTANCE.date(temporal)
 
-  @throws(classOf[IOException])
-  private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
-    val year: Int       = in.readInt
-    val month: Int      = in.readByte.toInt
-    val dayOfMonth: Int = in.readByte.toInt
-    MinguoChronology.INSTANCE.date(year, month, dayOfMonth)
-  }
 }
 
 /** A date in the Minguo calendar system.
@@ -149,7 +138,6 @@ object MinguoDate {
   *
   * @param isoDate  the standard local date, validated not null
   */
-@SerialVersionUID(1300372329181994526L)
 final class MinguoDate private[chrono] (private val isoDate: LocalDate)
     extends ChronoDateImpl[MinguoDate]
     with Serializable {
@@ -271,12 +259,4 @@ final class MinguoDate private[chrono] (private val isoDate: LocalDate)
 
   override def hashCode: Int = getChronology.getId.hashCode ^ isoDate.hashCode
 
-  private def writeReplace: AnyRef = new Ser(Ser.MINGUO_DATE_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = {
-    out.writeInt(get(YEAR))
-    out.writeByte(get(MONTH_OF_YEAR))
-    out.writeByte(get(DAY_OF_MONTH))
-  }
 }

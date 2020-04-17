@@ -31,11 +31,6 @@
  */
 package org.threeten.bp.chrono
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 import java.util.{ Arrays, Objects }
 import java.util.concurrent.atomic.AtomicReference
@@ -48,7 +43,6 @@ import org.threeten.bp.temporal.ValueRange
 
 import scala.annotation.meta.field
 
-@SerialVersionUID(1466499369062886794L)
 object JapaneseEra {
   private[chrono] val ERA_OFFSET: Int                  = 2
   private[chrono] val ERA_NAMES: Array[String]         = Array("Meiji", "Taisho", "Showa", "Heisei")
@@ -161,9 +155,6 @@ object JapaneseEra {
     */
   private def ordinal(eraValue: Int): Int = eraValue + 1
 
-  @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): JapaneseEra = JapaneseEra.of(in.readByte.toInt)
-
 }
 
 /** An era in the Japanese Imperial calendar system.
@@ -184,30 +175,12 @@ object JapaneseEra {
   * @param eraValue  the era value, validated
   * @param since  the date representing the first date of the era, validated not null
   */
-@SerialVersionUID(1466499369062886794L)
 final class JapaneseEra private[chrono] (
   private val eraValue:                          Int,
   @(transient @field) private[chrono] val since: LocalDate,
   @(transient @field) private val name:          String
 ) extends Era
     with Serializable {
-
-  /** Returns the singleton {@code JapaneseEra} corresponding to this object.
-    * It's possible that this version of {@code JapaneseEra} doesn't support the latest era value.
-    * In that case, this method throws an {@code ObjectStreamException}.
-    *
-    * @return the singleton { @code JapaneseEra} for this object
-    * @throws ObjectStreamException if the deserialized object has any unknown numeric era value.
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    try JapaneseEra.of(eraValue)
-    catch {
-      case e: DateTimeException =>
-        val ex: InvalidObjectException = new InvalidObjectException("Invalid era")
-        ex.initCause(e)
-        throw ex
-    }
 
   /** Returns the start date of the era.
     * @return the start date
@@ -240,8 +213,4 @@ final class JapaneseEra private[chrono] (
 
   override def toString: String = name
 
-  private def writeReplace: AnyRef = new Ser(Ser.JAPANESE_ERA_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = out.writeByte(this.getValue)
 }

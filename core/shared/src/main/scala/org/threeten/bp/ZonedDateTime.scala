@@ -35,11 +35,6 @@ import java.util.Objects
 import org.threeten.bp.temporal.ChronoField.INSTANT_SECONDS
 import org.threeten.bp.temporal.ChronoField.NANO_OF_SECOND
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 import org.threeten.bp.chrono.ChronoZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -57,7 +52,6 @@ import org.threeten.bp.temporal.ValueRange
 import org.threeten.bp.zone.ZoneOffsetTransition
 import org.threeten.bp.zone.ZoneRules
 
-@SerialVersionUID(-6260982410461394882L)
 object ZonedDateTime {
 
   /** Obtains the current date-time from the system clock in the default time-zone.
@@ -356,41 +350,6 @@ object ZonedDateTime {
     }
   }
 
-  /** Obtains an instance of {@code ZonedDateTime} leniently, for advanced use cases,
-    * allowing any combination of local date-time, offset and zone ID.
-    *
-    * This creates a zoned date-time with no checks other than no nulls.
-    * This means that the resulting zoned date-time may have an offset that is in conflict
-    * with the zone ID.
-    *
-    * This method is intended for advanced use cases.
-    * For example, consider the case where a zoned date-time with valid fields is created
-    * and then stored in a database or serialization-based store. At some later point,
-    * the object is then re-loaded. However, between those points in time, the government
-    * that defined the time-zone has changed the rules, such that the originally stored
-    * local date-time now does not occur. This method can be used to create the object
-    * in an "invalid" state, despite the change in rules.
-    *
-    * @param localDateTime  the local date-time, not null
-    * @param offset  the zone offset, not null
-    * @param zone  the time-zone, not null
-    * @return the zoned date-time, not null
-    */
-  private def ofLenient(
-    localDateTime: LocalDateTime,
-    offset:        ZoneOffset,
-    zone:          ZoneId
-  ): ZonedDateTime = {
-    Objects.requireNonNull(localDateTime, "localDateTime")
-    Objects.requireNonNull(offset, "offset")
-    Objects.requireNonNull(zone, "zone")
-    if (zone.isInstanceOf[ZoneOffset] && offset != zone) {
-      throw new IllegalArgumentException("ZoneId must match ZoneOffset")
-    } else {
-      new ZonedDateTime(localDateTime, offset, zone)
-    }
-  }
-
   /** Obtains an instance of {@code ZonedDateTime} from a temporal object.
     *
     * A {@code TemporalAccessor} represents some form of date and time information.
@@ -462,13 +421,6 @@ object ZonedDateTime {
     })
   }
 
-  @throws(classOf[IOException])
-  private[bp] def readExternal(in: DataInput): ZonedDateTime = {
-    val dateTime: LocalDateTime = LocalDateTime.readExternal(in)
-    val offset: ZoneOffset      = ZoneOffset.readExternal(in)
-    val zone: ZoneId            = Ser.read(in).asInstanceOf[ZoneId]
-    ZonedDateTime.ofLenient(dateTime, offset, zone)
-  }
 }
 
 /** A date-time with a time-zone in the ISO-8601 calendar system,
@@ -1857,21 +1809,4 @@ final class ZonedDateTime(
     */
   override def format(formatter: DateTimeFormatter): String = super.format(formatter)
 
-  private def writeReplace: AnyRef = new Ser(Ser.ZONED_DATE_TIME_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    dateTime.writeExternal(out)
-    offset.writeExternal(out)
-    zone.write(out)
-  }
 }

@@ -31,11 +31,6 @@
  */
 package org.threeten.bp
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 import java.util.Objects
 import java.util.regex.Pattern
@@ -44,47 +39,10 @@ import org.threeten.bp.zone.ZoneRulesException
 import org.threeten.bp.zone.ZoneRulesProvider
 import scala.annotation.meta.field
 
-@SerialVersionUID(8386373296231747096L)
 private object ZoneRegion {
 
   /** The regex pattern for region IDs. */
   private lazy val PATTERN: Pattern = Pattern.compile("[A-Za-z][A-Za-z0-9~/._+-]+")
-
-  /** Obtains an instance of {@code ZoneRegion} from an identifier without checking
-    * if the time-zone has available rules.
-    *
-    * This method parses the ID and applies any appropriate normalization.
-    * It does not validate the ID against the known set of IDsfor which rules are available.
-    *
-    * This method is intended for advanced use cases.
-    * For example, consider a system that always retrieves time-zone rules from a remote server.
-    * Using this factory would allow a {@code ZoneRegion}, and thus a {@code ZonedDateTime},
-    * to be created without loading the rules from the remote server.
-    *
-    * @param zoneId  the time-zone ID, not null
-    * @return the zone ID, not null
-    * @throws DateTimeException if the ID format is invalid
-    */
-  private def ofLenient(zoneId: String): ZoneRegion = {
-    if ((zoneId == "Z") || zoneId.startsWith("+") || zoneId.startsWith("-"))
-      throw new DateTimeException(s"Invalid ID for region-based ZoneId, invalid format: $zoneId")
-    if ((zoneId == "UTC") || (zoneId == "GMT") || (zoneId == "UT"))
-      return new ZoneRegion(zoneId, ZoneOffset.UTC.getRules)
-    if (zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId
-          .startsWith("GMT-")) {
-      val offset: ZoneOffset = ZoneOffset.of(zoneId.substring(3))
-      if (offset.getTotalSeconds == 0)
-        return new ZoneRegion(zoneId.substring(0, 3), offset.getRules)
-      return new ZoneRegion(zoneId.substring(0, 3) + offset.getId, offset.getRules)
-    }
-    if (zoneId.startsWith("UT+") || zoneId.startsWith("UT-")) {
-      val offset: ZoneOffset = ZoneOffset.of(zoneId.substring(2))
-      if (offset.getTotalSeconds == 0)
-        return new ZoneRegion("UT", offset.getRules)
-      return new ZoneRegion(s"UT${offset.getId}", offset.getRules)
-    }
-    ofId(zoneId, checkAvailable = false)
-  }
 
   /** Obtains an instance of {@code ZoneId} from an identifier.
     *
@@ -110,11 +68,6 @@ private object ZoneRegion {
     new ZoneRegion(zoneId, rules)
   }
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): ZoneId = {
-    val id: String = in.readUTF
-    ofLenient(id)
-  }
 }
 
 /** A geographical region where the same time-zone rules apply.
@@ -138,7 +91,6 @@ private object ZoneRegion {
   * @param id  the time-zone ID, not null
   * @param rules  the rules, null for lazy lookup
   */
-@SerialVersionUID(8386373296231747096L)
 final class ZoneRegion private[bp] (
   private val id:                        String,
   @(transient @field) private val rules: ZoneRules
@@ -150,23 +102,4 @@ final class ZoneRegion private[bp] (
   def getRules: ZoneRules =
     if (rules != null) rules else ZoneRulesProvider.getRules(id, forCaching = false)
 
-  private def writeReplace: AnyRef = new Ser(Ser.ZONE_REGION_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def write(out: DataOutput): Unit = {
-    out.writeByte(Ser.ZONE_REGION_TYPE.toInt)
-    writeExternal(out)
-  }
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = out.writeUTF(id)
 }

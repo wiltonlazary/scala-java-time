@@ -31,9 +31,6 @@
  */
 package org.threeten.bp.zone
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
 import java.io.Serializable
 import java.util.{ Arrays, Collections, Objects }
 import org.threeten.bp.Duration
@@ -58,7 +55,6 @@ import org.threeten.bp.ZoneOffset
   * <h3>Specification for implementors</h3>
   * This class is immutable and thread-safe.
   */
-@SerialVersionUID(-6946044323557704546L)
 object ZoneOffsetTransition {
 
   /** Obtains an instance defining a transition between two offsets.
@@ -89,22 +85,6 @@ object ZoneOffsetTransition {
     new ZoneOffsetTransition(transition, offsetBefore, offsetAfter)
   }
 
-  /** Reads the state from the stream.
-    *
-    * @param in  the input stream, not null
-    * @return the created object, not null
-    * @throws IOException if an error occurs
-    */
-  @throws[IOException]
-  private[zone] def readExternal(in: DataInput): ZoneOffsetTransition = {
-    val epochSecond: Long  = Ser.readEpochSec(in)
-    val before: ZoneOffset = Ser.readOffset(in)
-    val after: ZoneOffset  = Ser.readOffset(in)
-    if (before == after) {
-      throw new IllegalArgumentException("Offsets must not be equal")
-    }
-    new ZoneOffsetTransition(epochSecond, before, after)
-  }
 }
 
 /** Creates an instance defining a transition between two offsets.
@@ -113,7 +93,6 @@ object ZoneOffsetTransition {
   * @param offsetBefore  the offset before the transition, not null
   * @param offsetAfter  the offset at and after the transition, not null
   */
-@SerialVersionUID(-6946044323557704546L)
 final class ZoneOffsetTransition private[zone] (
   private val transition:   LocalDateTime,
   private val offsetBefore: ZoneOffset,
@@ -129,24 +108,6 @@ final class ZoneOffsetTransition private[zone] (
     */
   private[zone] def this(epochSecond: Long, offsetBefore: ZoneOffset, offsetAfter: ZoneOffset) {
     this(LocalDateTime.ofEpochSecond(epochSecond, 0, offsetBefore), offsetBefore, offsetAfter)
-  }
-
-  /** Uses a serialization delegate.
-    *
-    * @return the replacing object, not null
-    */
-  private def writeReplace: AnyRef = new Ser(Ser.ZOT, this)
-
-  /** Writes the state to the stream.
-    *
-    * @param out  the output stream, not null
-    * @throws IOException if an error occurs
-    */
-  @throws[IOException]
-  private[zone] def writeExternal(out: DataOutput): Unit = {
-    Ser.writeEpochSec(toEpochSecond, out)
-    Ser.writeOffset(offsetBefore, out)
-    Ser.writeOffset(offsetAfter, out)
   }
 
   /** Gets the transition instant.

@@ -34,9 +34,6 @@ package org.threeten.bp.chrono
 import java.util.Objects
 
 import org.threeten.bp.temporal.ChronoField.EPOCH_DAY
-import java.io.IOException
-import java.io.ObjectInput
-import java.io.ObjectOutput
 import java.io.Serializable
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZoneId
@@ -99,13 +96,6 @@ private[chrono] object ChronoLocalDateTimeImpl {
   ): ChronoLocalDateTimeImpl[R] =
     new ChronoLocalDateTimeImpl[R](date, time)
 
-  @throws(classOf[IOException])
-  @throws(classOf[ClassNotFoundException])
-  private[chrono] def readExternal(in: ObjectInput): ChronoLocalDateTime[_] = {
-    val date: ChronoLocalDate = in.readObject.asInstanceOf[ChronoLocalDate]
-    val time: LocalTime       = in.readObject.asInstanceOf[LocalTime]
-    date.atTime(time)
-  }
 }
 
 /** A date-time without a time-zone for the calendar neutral API.
@@ -298,11 +288,4 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
     unit.between(this, end)
   }
 
-  private def writeReplace: AnyRef = new Ser(Ser.CHRONO_LOCALDATETIME_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: ObjectOutput): Unit = {
-    out.writeObject(date)
-    out.writeObject(time)
-  }
 }

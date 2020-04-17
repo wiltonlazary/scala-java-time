@@ -33,11 +33,6 @@ package org.threeten.bp
 
 import java.util.Objects
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 import java.util.HashMap
 import java.util.Map
@@ -52,7 +47,6 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 import org.threeten.bp.zone.ZoneRules
 
-@SerialVersionUID(2357656521762053153L)
 object ZoneOffset {
 
   /** Cache of time-zone offset by offset in seconds. */
@@ -344,12 +338,6 @@ object ZoneOffset {
       buf.toString
     }
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): ZoneOffset = {
-    val offsetByte: Int = in.readByte.toInt
-    if (offsetByte == 127) ZoneOffset.ofTotalSeconds(in.readInt)
-    else ZoneOffset.ofTotalSeconds(offsetByte * 900)
-  }
 }
 
 /** A time-zone offset from Greenwich/UTC, such as {@code +02:00}.
@@ -631,28 +619,4 @@ final class ZoneOffset private (private val totalSeconds: Int)
     */
   override def toString: String = id
 
-  private def writeReplace: AnyRef = new Ser(Ser.ZONE_OFFSET_TYPE, this)
-
-  /** Defend against malicious streams.
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def write(out: DataOutput): Unit = {
-    out.writeByte(Ser.ZONE_OFFSET_TYPE.toInt)
-    writeExternal(out)
-  }
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    val offsetSecs: Int = totalSeconds
-    val offsetByte: Int = if (offsetSecs % 900 == 0) offsetSecs / 900 else 127
-    out.writeByte(offsetByte)
-    if (offsetByte == 127)
-      out.writeInt(offsetSecs)
-  }
 }

@@ -35,9 +35,6 @@ import java.util.Objects
 
 import org.threeten.bp.chrono.ThaiBuddhistChronology.YEARS_DIFFERENCE
 import org.threeten.bp.temporal.ChronoField._
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
 import java.io.Serializable
 import org.threeten.bp.Clock
 import org.threeten.bp.LocalDate
@@ -53,7 +50,6 @@ import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 
-@SerialVersionUID(-8722293800195731463L)
 object ThaiBuddhistDate {
 
   /** Obtains the current {@code ThaiBuddhistDate} from the system clock in the default time-zone.
@@ -128,13 +124,6 @@ object ThaiBuddhistDate {
   def from(temporal: TemporalAccessor): ThaiBuddhistDate =
     ThaiBuddhistChronology.INSTANCE.date(temporal)
 
-  @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): ChronoLocalDate = {
-    val year: Int       = in.readInt
-    val month: Int      = in.readByte.toInt
-    val dayOfMonth: Int = in.readByte.toInt
-    ThaiBuddhistChronology.INSTANCE.date(year, month, dayOfMonth)
-  }
 }
 
 /** A date in the Thai Buddhist calendar system.
@@ -150,7 +139,6 @@ object ThaiBuddhistDate {
   *
   * @param isoDate  the standard local date, validated not null
   */
-@SerialVersionUID(-8722293800195731463L)
 final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
     extends ChronoDateImpl[ThaiBuddhistDate]
     with Serializable {
@@ -274,12 +262,4 @@ final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
 
   override def hashCode: Int = getChronology.getId.hashCode ^ isoDate.hashCode
 
-  private def writeReplace: AnyRef = new Ser(Ser.THAIBUDDHIST_DATE_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = {
-    out.writeInt(this.get(YEAR))
-    out.writeByte(this.get(MONTH_OF_YEAR))
-    out.writeByte(this.get(DAY_OF_MONTH))
-  }
 }

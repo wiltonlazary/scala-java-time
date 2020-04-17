@@ -31,27 +31,25 @@
  */
 package org.threeten.bp.zone
 
-import java.util.ServiceConfigurationError
-import java.util.ServiceLoader
-import scala.collection.JavaConverters._
+import org.portablescala.reflect._
 
 /**
-  * Try to load time zone rules from implementations provided by {@link ServiceLoader}.
+  * Try to load time zone rules from implementations via reflefction
   */
 class ServiceLoaderZoneRulesInitializer extends ZoneRulesInitializer {
 
   override def initializeProviders(): Unit = {
-    val loader: ServiceLoader[ZoneRulesProvider] =
-      ServiceLoader.load(classOf[ZoneRulesProvider], ZoneRulesProvider.getClass.getClassLoader())
-    loader.iterator.asScala.foreach { provider =>
-      try {
-        ZoneRulesProvider.registerProvider(provider)
-      } catch {
-        case ex: ServiceConfigurationError =>
-          if (!(ex.getCause().isInstanceOf[SecurityException])) {
-            throw ex
-          }
+    // Load via reflection the tzdb
+    // find the package name dynamically to support both org.threeten.bp and java.time packages
+    val packageName  = this.getClass.getName.split("\\.").init.mkString(".")
+    val optClassData = Reflect.lookupInstantiatableClass(s"$packageName.TzdbZoneRulesProvider")
+    println(packageName)
+    println(optClassData)
+    optClassData
+      .fold(List[ZoneRulesProvider](new DefaultTzdbZoneRulesProvider())) { c =>
+        val instance = c.newInstance().asInstanceOf[ZoneRulesProvider]
+        List[ZoneRulesProvider](instance)
       }
-    }
+      .foreach(provider => ZoneRulesProvider.registerProvider(provider))
   }
 }

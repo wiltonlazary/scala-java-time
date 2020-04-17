@@ -32,11 +32,6 @@
 package org.threeten.bp
 
 import java.util.Objects
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 
 import org.threeten.bp.chrono.Chronology
@@ -55,7 +50,6 @@ import org.threeten.bp.temporal.TemporalQuery
 import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 
-@SerialVersionUID(-939150713474957432L)
 object MonthDay {
 
   /** Parser. */
@@ -211,12 +205,6 @@ object MonthDay {
     })
   }
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): MonthDay = {
-    val month: Byte = in.readByte
-    val day: Byte   = in.readByte
-    MonthDay.of(month.toInt, day.toInt)
-  }
 }
 
 /** A month-day in the ISO-8601 calendar system, such as {@code --12-03}.
@@ -624,19 +612,4 @@ final class MonthDay private (private val month: Int, private val day: Int)
     formatter.format(this)
   }
 
-  private def writeReplace: AnyRef = new Ser(Ser.MONTH_DAY_TYPE, this)
-
-  /** Defend against malicious streams.
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    out.writeByte(month)
-    out.writeByte(day)
-  }
 }

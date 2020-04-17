@@ -17,3 +17,7 @@ Commit 293f2dab345e2dbfda025b361723a9abd4b0eaf2
 2567763 Mar 15 19:37 demo/target/scala-2.13/demo-fastopt.js
 508845 Mar 15 19:37 demo/target/scala-2.13/demo-opt.js
 
+Commit 85e334c196242d284408984853d941b305660dec
+2568217 Apr 16 09:51 demo/target/scala-2.13/demo-fastopt.js
+508853 Apr 16 09:52 demo/target/scala-2.13/demo-opt.js
+

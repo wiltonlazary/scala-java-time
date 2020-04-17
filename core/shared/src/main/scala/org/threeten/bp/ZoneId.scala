@@ -31,8 +31,6 @@
  */
 package org.threeten.bp
 
-import java.io.DataOutput
-import java.io.IOException
 import java.io.Serializable
 import java.util.{ Locale, Objects, TimeZone }
 import org.threeten.bp.format.DateTimeFormatterBuilder
@@ -47,7 +45,6 @@ import org.threeten.bp.zone.ZoneRulesException
 import org.threeten.bp.zone.ZoneRulesProvider
 import scala.collection.JavaConverters._
 
-@SerialVersionUID(8352817235686L)
 object ZoneId {
 
   /** A map of zone overrides to enable the short time-zone names to be used.
@@ -485,6 +482,4 @@ abstract class ZoneId private[bp] () extends Serializable {
     */
   override def toString: String = getId
 
-  @throws[IOException]
-  private[bp] def write(out: DataOutput): Unit
 }

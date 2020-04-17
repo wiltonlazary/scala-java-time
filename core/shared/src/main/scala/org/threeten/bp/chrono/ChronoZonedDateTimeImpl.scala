@@ -34,12 +34,6 @@ package org.threeten.bp.chrono
 import java.util.Objects
 
 import org.threeten.bp.temporal.ChronoUnit.SECONDS
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectInput
-import java.io.ObjectOutput
-import java.io.ObjectStreamException
-import java.io.Serializable
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
@@ -52,7 +46,6 @@ import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.zone.ZoneOffsetTransition
 import org.threeten.bp.zone.ZoneRules
 
-@SerialVersionUID(-5261813987200935591L)
 private[chrono] object ChronoZonedDateTimeImpl {
 
   /** Obtains an instance from a local date-time using the preferred offset if possible.
@@ -116,14 +109,6 @@ private[chrono] object ChronoZonedDateTimeImpl {
     new ChronoZonedDateTimeImpl[R](cldt, offset, zone)
   }
 
-  @throws(classOf[IOException])
-  @throws(classOf[ClassNotFoundException])
-  private[chrono] def readExternal(in: ObjectInput): ChronoZonedDateTime[_] = {
-    val dateTime: ChronoLocalDateTime[_] = in.readObject.asInstanceOf[ChronoLocalDateTime[_]]
-    val offset: ZoneOffset               = in.readObject.asInstanceOf[ZoneOffset]
-    val zone: ZoneId                     = in.readObject.asInstanceOf[ZoneId]
-    dateTime.atZone(offset).withZoneSameLocal(zone)
-  }
 }
 
 /** A date-time with a time-zone in the calendar neutral API.
@@ -234,24 +219,6 @@ final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private (
       dateTime.until(end.toLocalDateTime, unit)
     } else
       unit.between(this, end)
-  }
-
-  private def writeReplace: AnyRef = new Ser(Ser.CHRONO_ZONEDDATETIME_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: ObjectOutput): Unit = {
-    out.writeObject(dateTime)
-    out.writeObject(offset)
-    out.writeObject(zone)
   }
 
   override def equals(obj: Any): Boolean =

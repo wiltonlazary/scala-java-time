@@ -40,7 +40,6 @@ import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.MONTHS
 import org.threeten.bp.temporal.ChronoUnit.WEEKS
 import org.threeten.bp.temporal.ChronoUnit.YEARS
-import java.io.InvalidObjectException
 import java.io.Serializable
 import java.util.{ GregorianCalendar, Locale, Objects }
 import java.util.HashMap
@@ -797,19 +796,6 @@ final class WeekFields private (private val firstDayOfWeek: DayOfWeek, private v
     */
   @transient
   val weekBasedYear: TemporalField = WeekFields.ComputedDayOfField.ofWeekBasedYearField(this)
-
-  /** Ensure valid singleton.
-    *
-    * @return the valid week fields instance, not null
-    * @throws InvalidObjectException if invalid
-    */
-  @throws[InvalidObjectException]
-  private def readResolve: AnyRef =
-    try WeekFields.of(firstDayOfWeek, minimalDays)
-    catch {
-      case ex: IllegalArgumentException =>
-        throw new InvalidObjectException(s"Invalid WeekFields${ex.getMessage}")
-    }
 
   /** Gets the first day-of-week.
     *

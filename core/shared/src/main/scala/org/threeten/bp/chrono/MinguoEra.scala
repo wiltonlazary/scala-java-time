@@ -31,10 +31,6 @@
  */
 package org.threeten.bp.chrono
 
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-
 import org.threeten.bp.DateTimeException
 
 object MinguoEra {
@@ -67,11 +63,6 @@ object MinguoEra {
       case _ => throw new DateTimeException(s"Invalid era: $era")
     }
 
-  @throws[IOException]
-  private[chrono] def readExternal(in: DataInput): MinguoEra = {
-    val eraValue: Byte = in.readByte
-    MinguoEra.of(eraValue.toInt)
-  }
 }
 
 /** An era in the Minguo calendar system.
@@ -95,8 +86,4 @@ final class MinguoEra(name: String, ordinal: Int) extends Enum[MinguoEra](name, 
     */
   def getValue: Int = ordinal
 
-  private def writeReplace: AnyRef = new Ser(Ser.MINGUO_ERA_TYPE, this)
-
-  @throws[IOException]
-  private[chrono] def writeExternal(out: DataOutput): Unit = out.writeByte(this.getValue)
 }

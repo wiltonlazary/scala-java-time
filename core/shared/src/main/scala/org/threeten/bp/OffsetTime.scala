@@ -40,11 +40,6 @@ import org.threeten.bp.LocalTime.SECONDS_PER_DAY
 import org.threeten.bp.temporal.ChronoField.NANO_OF_DAY
 import org.threeten.bp.temporal.ChronoField.OFFSET_SECONDS
 import org.threeten.bp.temporal.ChronoUnit.NANOS
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.IOException
-import java.io.InvalidObjectException
-import java.io.ObjectStreamException
 import java.io.Serializable
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.ChronoField
@@ -61,7 +56,6 @@ import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 import org.threeten.bp.temporal.ValueRange
 import org.threeten.bp.zone.ZoneRules
 
-@SerialVersionUID(7264499704384272492L)
 object OffsetTime {
 
   /** The minimum supported {@code OffsetTime}, '00:00:00+18:00'.
@@ -237,12 +231,6 @@ object OffsetTime {
     })
   }
 
-  @throws[IOException]
-  private[bp] def readExternal(in: DataInput): OffsetTime = {
-    val time: LocalTime    = LocalTime.readExternal(in)
-    val offset: ZoneOffset = ZoneOffset.readExternal(in)
-    OffsetTime.of(time, offset)
-  }
 }
 
 /** A time with an offset from UTC/Greenwich in the ISO-8601 calendar system,
@@ -1084,20 +1072,4 @@ final class OffsetTime(private val time: LocalTime, private val offset: ZoneOffs
     formatter.format(this)
   }
 
-  private def writeReplace: AnyRef = new Ser(Ser.OFFSET_TIME_TYPE, this)
-
-  /** Defend against malicious streams.
-    *
-    * @return never
-    * @throws InvalidObjectException always
-    */
-  @throws[ObjectStreamException]
-  private def readResolve: AnyRef =
-    throw new InvalidObjectException("Deserialization via serialization delegate")
-
-  @throws[IOException]
-  private[bp] def writeExternal(out: DataOutput): Unit = {
-    time.writeExternal(out)
-    offset.writeExternal(out)
-  }
 }

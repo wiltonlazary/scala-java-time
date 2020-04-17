@@ -1,3 +1,5 @@
+resolvers += Resolver.sonatypeRepo("public")
+
 addSbtPlugin("com.47deg" % "sbt-microsites" % "1.1.5")
 
 val scalaJSVersion =
@@ -9,7 +11,7 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % scalaJSVersion)
 
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.0.0")
 
-addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "0.4.0")
+addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "0.4.0+18-6f0c3073-SNAPSHOT")
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.3.4")
 

@@ -184,7 +184,7 @@ object Chronology {
       register(IsoChronology.INSTANCE)
       register(ThaiBuddhistChronology.INSTANCE)
       register(MinguoChronology.INSTANCE)
-      register(JapaneseChronology.INSTANCE)
+      // register(JapaneseChronology.INSTANCE)
       register(HijrahChronology.INSTANCE)
       CHRONOS_BY_ID.put("Hijrah", HijrahChronology.INSTANCE)
       CHRONOS_BY_TYPE.put("islamic", HijrahChronology.INSTANCE)

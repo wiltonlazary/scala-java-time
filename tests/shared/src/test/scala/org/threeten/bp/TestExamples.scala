@@ -54,9 +54,9 @@ class TestExamples extends AnyFunSuite with AssertionsHelper {
     // failes due to non-existent method String#toLowerCase(String, Locale): String
     LocalDate.parse("12.11.2010", format.DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 
-    val japDate = chrono.JapaneseDate.now(fixedClock)
-    assertEquals(japDate.toString, "Japanese Heisei 21-02-13")
-
+    // val japDate = chrono.JapaneseDate.now(fixedClock)
+    // assertEquals(japDate.toString, "Japanese Heisei 21-02-13")
+    //
     // This tries to read property files from disk
     val hijDate = chrono.HijrahDate.now(fixedClock)
     assertEquals(hijDate.toString, "Hijrah-umalqura AH 1430-02-17")

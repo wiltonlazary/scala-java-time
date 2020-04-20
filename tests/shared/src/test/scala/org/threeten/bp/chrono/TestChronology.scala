@@ -44,7 +44,7 @@ class TestChronology extends AnyFunSuite with BeforeAndAfterEach with Assertions
     var c: Chronology = null
     c = HijrahChronology.INSTANCE
     c = IsoChronology.INSTANCE
-    c = JapaneseChronology.INSTANCE
+    // c = JapaneseChronology.INSTANCE
     c = MinguoChronology.INSTANCE
     c = ThaiBuddhistChronology.INSTANCE
   }
@@ -53,7 +53,7 @@ class TestChronology extends AnyFunSuite with BeforeAndAfterEach with Assertions
     List(
       ("Hijrah-umalqura", "islamic-umalqura", "Hijrah calendar"),
       ("ISO", "iso8601", "ISO calendar"),
-      ("Japanese", "japanese", "Japanese calendar"),
+      // ("Japanese", "japanese", "Japanese calendar"),
       ("Minguo", "roc", "Minguo Calendar"),
       ("ThaiBuddhist", "buddhist", "ThaiBuddhist calendar")
     )
@@ -116,7 +116,7 @@ class TestChronology extends AnyFunSuite with BeforeAndAfterEach with Assertions
     List(
       (HijrahChronology.INSTANCE, "islamic-umalqura"),
       (IsoChronology.INSTANCE, "iso8601"),
-      (JapaneseChronology.INSTANCE, "japanese"),
+      // (JapaneseChronology.INSTANCE, "japanese"),
       (MinguoChronology.INSTANCE, "roc"),
       (ThaiBuddhistChronology.INSTANCE, "buddhist")
     )
@@ -135,11 +135,11 @@ class TestChronology extends AnyFunSuite with BeforeAndAfterEach with Assertions
     assertEquals(test, IsoChronology.INSTANCE)
   }
 
-  ignore("test_lookupLocale_jp_JP_JP") {
-    // TODO This requires a fix on the locales side with the locale.getUnicodeLocaleType("ca") call
-    val test: Chronology = Chronology.ofLocale(new Locale("ja", "JP", "JP"))
-    assertEquals(test.getId, "Japanese")
-    assertEquals(test, JapaneseChronology.INSTANCE)
-  }
+  // ignore("test_lookupLocale_jp_JP_JP") {
+  //   // TODO This requires a fix on the locales side with the locale.getUnicodeLocaleType("ca") call
+  //   val test: Chronology = Chronology.ofLocale(new Locale("ja", "JP", "JP"))
+  //   assertEquals(test.getId, "Japanese")
+  //   assertEquals(test, JapaneseChronology.INSTANCE)
+  // }
 
 }

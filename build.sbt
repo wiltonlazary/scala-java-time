@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer    = "2.13.1"
+val scalaVer    = "2.13.2"
 val tzdbVersion = "2019c"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -39,7 +39,7 @@ inThisBuild(
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
   scalaVersion := scalaVer,
-  crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.1"),
+  crossScalaVersions := Seq("2.11.12", "2.12.10", "2.13.2"),
   // Don't include threeten on the binaries
   mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter {
     case (f, s) => !s.contains("threeten")
@@ -149,7 +149,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "0.6.0"
+      "io.github.cquiroz" %%% "scala-java-locales" % "1.0.0"
     )
   )
   .jvmSettings(
@@ -218,7 +218,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "locales-full-db" % "0.6.0"
+      "io.github.cquiroz" %%% "locales-full-db" % "1.0.0"
     )
   )
   .dependsOn(scalajavatime, scalajavatimeTZDB)

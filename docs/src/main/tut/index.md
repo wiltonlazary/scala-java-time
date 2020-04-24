@@ -59,8 +59,8 @@ Scala 2.11, 2.12 and 2.13 are supported.
 
 To get started with SBT, add one of these dependencies:
 
-* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-RC4"` (for Scala)
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC4"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0"` (for Scala)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 To get the latest snapshots add the repo
 
@@ -71,8 +71,8 @@ resolvers +=
 
 and either:
 
-* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.0-SNAPSHOT"` (for Scala)
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-SNAPSHOT"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %% "scala-java-time" % "2.0.1-SNAPSHOT"` (for Scala)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.1-SNAPSHOT"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 ### Time zones
 
@@ -85,7 +85,7 @@ If you don't need to use timezones in your application you can just stop here. B
 The timezone for js is provided in a separate bundle which contains all time zones available from
 [IANA Time Zone Database](https://www.iana.org/time-zones). To use them you need to add the following dependency
 
-* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0-RC4_2019c"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
+* `libraryDependencies += "io.github.cquiroz" %%% "scala-java-time-tzdb" % "2.0.0_2019c"` (for Scala.js, [Scala.js plugin](http://www.scala-js.org/tutorial/basic/#sbt-setup) required)
 
 Note that the db is fairly large and due to the characteristics of the API it's not very ammenable to optimization
 This database is published every now and then so it maybe old. For current version see the following section.
@@ -102,7 +102,7 @@ To do that you need to:
 * Add `sbt-tzdb` to your list of plugins (Note you need sbt 1.x)
 
 ```scala
-addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "0.4.0")
+addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "1.0.0")
 ```
 
 * Enable the plugin for your `Scala.js` project:
@@ -137,7 +137,7 @@ Pull requests with later versions of the dat file will be accepted.
 
 ## Locale
 
-Starting on 2.0.0-RC4 it is no longer necessary to register locales but only a minimal locale based on english is
+Starting on 2.0.0 it is no longer necessary to register locales but only a minimal locale based on english is
 provided. You may want to use [sbt-locales](https://github.com/cquiroz/sbt-locales) to generate
 a custom locale database.
 
@@ -164,14 +164,6 @@ We are especially interested in contributions that tackle the following issues:
 
 Have a look at the [issues](https://github.com/cquiroz/scala-java-time/issues) or [issues](https://github.com/soc/scala-java-time/issues) to find something to work on! Let us know if you need help!
 
-#### Plans
-
-##### 2.0
-
-A stable release of 2.0 will be published shortly after RC4 is published.
-
-#### FAQs
-
 ##### What's with the packages? the code uses `org.threeten.bp` but I use `java.time`
 
 The original code was in the `org.threeten.bp` and that has been maintained, among other reasons, because writing
@@ -186,10 +178,6 @@ Most applications would use the `java.time` package mirroring the JVM
 No. This project is derived from the Reference Implementation previously hosted on GitHub.
 That project had a BSD license, which has been preserved here.
 Thus, this project is a fork of the original code before entry to OpenJDK.
-
-##### What is the relation to [this](https://github.com/soc/scala-java-time/) project
-
-This is a fork from the original [project](https://github.com/soc/scala-java-time/) aim to complete the API to work on Scala.js
 
 ##### Are there are differences with the Java Time API?
 

@@ -237,7 +237,7 @@ object LocalTime {
   def ofSecondOfDay(secondOfDay: Long): LocalTime = {
     var _secondOfDay = secondOfDay
     SECOND_OF_DAY.checkValidValue(_secondOfDay)
-    val hours: Int = (_secondOfDay / SECONDS_PER_HOUR).toInt
+    val hours: Int   = (_secondOfDay / SECONDS_PER_HOUR).toInt
     _secondOfDay -= hours * SECONDS_PER_HOUR
     val minutes: Int = (_secondOfDay / SECONDS_PER_MINUTE).toInt
     _secondOfDay -= minutes * SECONDS_PER_MINUTE
@@ -258,7 +258,7 @@ object LocalTime {
     var _secondOfDay = secondOfDay
     SECOND_OF_DAY.checkValidValue(_secondOfDay)
     NANO_OF_SECOND.checkValidValue(nanoOfSecond.toLong)
-    val hours: Int = (_secondOfDay / SECONDS_PER_HOUR).toInt
+    val hours: Int   = (_secondOfDay / SECONDS_PER_HOUR).toInt
     _secondOfDay -= hours * SECONDS_PER_HOUR
     val minutes: Int = (_secondOfDay / SECONDS_PER_MINUTE).toInt
     _secondOfDay -= minutes * SECONDS_PER_MINUTE
@@ -274,9 +274,9 @@ object LocalTime {
     * @throws DateTimeException if the nanos of day value is invalid
     */
   def ofNanoOfDay(nanoOfDay: Long): LocalTime = {
-    var _nanoOfDay = nanoOfDay
+    var _nanoOfDay   = nanoOfDay
     NANO_OF_DAY.checkValidValue(_nanoOfDay)
-    val hours: Int = (_nanoOfDay / NANOS_PER_HOUR).toInt
+    val hours: Int   = (_nanoOfDay / NANOS_PER_HOUR).toInt
     _nanoOfDay -= hours * NANOS_PER_HOUR
     val minutes: Int = (_nanoOfDay / NANOS_PER_MINUTE).toInt
     _nanoOfDay -= minutes * NANOS_PER_MINUTE
@@ -332,9 +332,12 @@ object LocalTime {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): LocalTime = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[LocalTime] {
-      override def queryFrom(temporal: TemporalAccessor): LocalTime = LocalTime.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[LocalTime] {
+                      override def queryFrom(temporal: TemporalAccessor): LocalTime =
+                        LocalTime.from(temporal)
+                    }
+    )
   }
 
   /** Creates a local time from the hour, minute, second and nanosecond fields.
@@ -517,9 +520,8 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
       if (field eq MICRO_OF_DAY)
         return toNanoOfDay / 1000
       get0(field)
-    } else {
+    } else
       field.getFrom(this)
-    }
 
   private def get0(field: TemporalField): Long = {
     import ChronoField._
@@ -696,7 +698,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
           case AMPM_OF_DAY        => plusHours((newValue - (hour / 12)) * 12)
           case _                  => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
-      case _ =>
+      case _              =>
         field.adjustInto(this, newValue)
     }
 
@@ -788,7 +790,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     val unitDur: Duration = unit.getDuration
     if (unitDur.getSeconds > LocalTime.SECONDS_PER_DAY)
       throw new DateTimeException("Unit is too large to be used for truncation")
-    val dur: Long = unitDur.toNanos
+    val dur: Long         = unitDur.toNanos
     if ((LocalTime.NANOS_PER_DAY % dur) != 0)
       throw new DateTimeException("Unit must divide into a standard day without remainder")
     val nod: Long = toNanoOfDay
@@ -840,7 +842,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
           case HALF_DAYS => plusHours((amountToAdd % 2) * 12)
           case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
-      case _ =>
+      case _             =>
         unit.addTo(this, amountToAdd)
     }
 
@@ -875,8 +877,8 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
   def plusMinutes(minutesToAdd: Long): LocalTime = {
     if (minutesToAdd == 0)
       return this
-    val mofd: Int = hour * LocalTime.MINUTES_PER_HOUR + minute
-    val newMofd: Int =
+    val mofd: Int      = hour * LocalTime.MINUTES_PER_HOUR + minute
+    val newMofd: Int   =
       ((minutesToAdd % LocalTime.MINUTES_PER_DAY).toInt + mofd + LocalTime.MINUTES_PER_DAY) % LocalTime.MINUTES_PER_DAY
     if (mofd == newMofd)
       return this
@@ -898,15 +900,15 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
   def plusSeconds(secondstoAdd: Long): LocalTime = {
     if (secondstoAdd == 0)
       return this
-    val sofd: Int =
+    val sofd: Int      =
       hour * LocalTime.SECONDS_PER_HOUR + minute * LocalTime.SECONDS_PER_MINUTE + second
-    val newSofd: Int =
+    val newSofd: Int   =
       ((secondstoAdd % LocalTime.SECONDS_PER_DAY).toInt + sofd + LocalTime.SECONDS_PER_DAY) % LocalTime.SECONDS_PER_DAY
     if (sofd == newSofd)
       return this
     val newHour: Int   = newSofd / LocalTime.SECONDS_PER_HOUR
     val newMinute: Int = (newSofd / LocalTime.SECONDS_PER_MINUTE) % LocalTime.MINUTES_PER_HOUR
-    val newSecond: Int = newSofd % LocalTime.SECONDS_PER_MINUTE
+    val newSecond: Int = newSofd                                  % LocalTime.SECONDS_PER_MINUTE
     LocalTime.create(newHour, newMinute, newSecond, nano)
   }
 
@@ -923,7 +925,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
   def plusNanos(nanosToAdd: Long): LocalTime = {
     if (nanosToAdd == 0)
       return this
-    val nofd: Long = toNanoOfDay
+    val nofd: Long    = toNanoOfDay
     val newNofd: Long =
       ((nanosToAdd % LocalTime.NANOS_PER_DAY) + nofd + LocalTime.NANOS_PER_DAY) % LocalTime.NANOS_PER_DAY
     if (nofd == newNofd)
@@ -982,7 +984,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     * @param hoursToSubtract  the hours to subtract, may be negative
     * @return a { @code LocalTime} based on this time with the hours subtracted, not null
     */
-  def minusHours(hoursToSubtract: Long): LocalTime =
+  def minusHours(hoursToSubtract:     Long): LocalTime     =
     plusHours(-(hoursToSubtract % LocalTime.HOURS_PER_DAY))
 
   /** Returns a copy of this {@code LocalTime} with the specified period in minutes subtracted.
@@ -995,7 +997,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     * @param minutesToSubtract  the minutes to subtract, may be negative
     * @return a { @code LocalTime} based on this time with the minutes subtracted, not null
     */
-  def minusMinutes(minutesToSubtract: Long): LocalTime =
+  def minusMinutes(minutesToSubtract: Long): LocalTime     =
     plusMinutes(-(minutesToSubtract % LocalTime.MINUTES_PER_DAY))
 
   /** Returns a copy of this {@code LocalTime} with the specified period in seconds subtracted.
@@ -1008,7 +1010,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     * @param secondsToSubtract  the seconds to subtract, may be negative
     * @return a { @code LocalTime} based on this time with the seconds subtracted, not null
     */
-  def minusSeconds(secondsToSubtract: Long): LocalTime =
+  def minusSeconds(secondsToSubtract: Long): LocalTime     =
     plusSeconds(-(secondsToSubtract % LocalTime.SECONDS_PER_DAY))
 
   /** Returns a copy of this {@code LocalTime} with the specified period in nanoseconds subtracted.
@@ -1021,7 +1023,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     * @param nanosToSubtract  the nanos to subtract, may be negative
     * @return a { @code LocalTime} based on this time with the nanoseconds subtracted, not null
     */
-  def minusNanos(nanosToSubtract: Long): LocalTime =
+  def minusNanos(nanosToSubtract:     Long): LocalTime     =
     plusNanos(-(nanosToSubtract % LocalTime.NANOS_PER_DAY))
 
   /** Queries this time using the specified query.
@@ -1041,14 +1043,14 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     * @throws DateTimeException if unable to query (defined by the query)
     * @throws ArithmeticException if numeric overflow occurs (defined by the query)
     */
-  override def query[R](query: TemporalQuery[R]): R =
+  override def query[R](query:        TemporalQuery[R]): R =
     query match {
       case TemporalQueries.precision => ChronoUnit.NANOS.asInstanceOf[R]
       case TemporalQueries.localTime => this.asInstanceOf[R]
       case TemporalQueries.chronology | TemporalQueries.zoneId | TemporalQueries.zone |
           TemporalQueries.offset | TemporalQueries.localDate =>
         null.asInstanceOf[R]
-      case _ => query.queryFrom(this)
+      case _                         => query.queryFrom(this)
     }
 
   /** Adjusts the specified temporal object to have the same time as this object.
@@ -1134,7 +1136,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
           case HALF_DAYS => nanosUntil / (12 * LocalTime.NANOS_PER_HOUR)
           case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
-      case _ =>
+      case _             =>
         unit.between(this, end)
     }
   }
@@ -1243,7 +1245,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
     obj match {
       case other: LocalTime =>
         (this eq other) || (hour == other.hour && minute == other.minute && second == other.second && nano == other.nano)
-      case _ => false
+      case _                => false
     }
 
   /** A hash code for this time.

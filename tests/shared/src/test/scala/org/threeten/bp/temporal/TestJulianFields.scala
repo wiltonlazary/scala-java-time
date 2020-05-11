@@ -59,7 +59,8 @@ class TestJulianFields extends AnyFunSuite with AssertionsHelper {
       List(JulianFields.RATA_DIE, TestJulianFields.NOV12_1945, 710347L),
       List(ChronoField.EPOCH_DAY,
            TestJulianFields.JAN01_0001,
-           (-24 * 365 - 6) - 31 - 30 + 11 - 710346L),
+           (-24 * 365 - 6) - 31 - 30 + 11 - 710346L
+      ),
       List(JulianFields.JULIAN_DAY, TestJulianFields.JAN01_0001, 2431772L - 710346L),
       List(JulianFields.MODIFIED_JULIAN_DAY, TestJulianFields.JAN01_0001, 31771L - 710346L),
       List(JulianFields.RATA_DIE, TestJulianFields.JAN01_0001, 1L)
@@ -69,7 +70,7 @@ class TestJulianFields extends AnyFunSuite with AssertionsHelper {
     data_samples.foreach {
       case (field: TemporalField) :: (date: LocalDate) :: (expected: Number) :: Nil =>
         assertEquals(date.getLong(field), expected)
-      case _ =>
+      case _                                                                        =>
         fail()
     }
   }
@@ -82,7 +83,7 @@ class TestJulianFields extends AnyFunSuite with AssertionsHelper {
         assertEquals(field.adjustInto(TestJulianFields.JAN01_1970, value.longValue), date)
         assertEquals(field.adjustInto(TestJulianFields.DEC31_1969, value.longValue), date)
         assertEquals(field.adjustInto(TestJulianFields.NOV12_1945, value.longValue), date)
-      case _ =>
+      case _                                                                     =>
         fail()
     }
   }

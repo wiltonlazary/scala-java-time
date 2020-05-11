@@ -211,32 +211,31 @@ object ZoneId {
     */
   def of(zoneId: String): ZoneId = {
     Objects.requireNonNull(zoneId, "zoneId")
-    if (zoneId == "Z") {
+    if (zoneId == "Z")
       ZoneOffset.UTC
-    } else if (zoneId.length == 1) {
+    else if (zoneId.length == 1)
       throw new DateTimeException(s"Invalid ID for ZoneOffset, invalid format: $zoneId")
-    } else if (zoneId.startsWith("+") || zoneId.startsWith("-")) {
+    else if (zoneId.startsWith("+") || zoneId.startsWith("-"))
       ZoneOffset.of(zoneId)
-    } else if ((zoneId == "UTC") || (zoneId == "GMT") || (zoneId == "UT")) {
+    else if ((zoneId == "UTC") || (zoneId == "GMT") || (zoneId == "UT"))
       new ZoneRegion(zoneId, ZoneOffset.UTC.getRules)
-    } else if (zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId
-                 .startsWith("GMT-")) {
+    else if (
+      zoneId.startsWith("UTC+") || zoneId.startsWith("GMT+") || zoneId.startsWith("UTC-") || zoneId
+        .startsWith("GMT-")
+    ) {
       val offset: ZoneOffset = ZoneOffset.of(zoneId.substring(3))
-      if (offset.getTotalSeconds == 0) {
+      if (offset.getTotalSeconds == 0)
         new ZoneRegion(zoneId.substring(0, 3), offset.getRules)
-      } else {
+      else
         new ZoneRegion(zoneId.substring(0, 3) + offset.getId, offset.getRules)
-      }
     } else if (zoneId.startsWith("UT+") || zoneId.startsWith("UT-")) {
       val offset: ZoneOffset = ZoneOffset.of(zoneId.substring(2))
-      if (offset.getTotalSeconds == 0) {
+      if (offset.getTotalSeconds == 0)
         new ZoneRegion("UT", offset.getRules)
-      } else {
+      else
         new ZoneRegion(s"UT${offset.getId}", offset.getRules)
-      }
-    } else {
+    } else
       ZoneRegion.ofId(zoneId, true)
-    }
   }
 
   /** Obtains an instance of {@code ZoneId} wrapping an offset.
@@ -424,10 +423,10 @@ abstract class ZoneId private[bp] () extends Serializable {
       .appendZoneText(style)
       .toFormatter(locale)
       .format(new TemporalAccessor() {
-        def isSupported(field: TemporalField): Boolean = false
-        def getLong(field:     TemporalField): Long =
+        def isSupported(field:       TemporalField): Boolean = false
+        def getLong(field:           TemporalField): Long    =
           throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-        override def query[R](query: TemporalQuery[R]): R =
+        override def query[R](query: TemporalQuery[R]): R    =
           if (query eq TemporalQueries.zoneId)
             ZoneId.this.asInstanceOf[R]
           else

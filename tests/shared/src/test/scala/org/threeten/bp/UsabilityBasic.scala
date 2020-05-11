@@ -59,7 +59,7 @@ class UsabilityBasic {
     System.out.println(date)
     date = date.withDayOfMonth(1)
     System.out.println(date)
-    val month: Int = date.getMonth.getValue
+    val month: Int      = date.getMonth.getValue
     date = date.`with`(previousOrSame(DayOfWeek.MONDAY))
     System.out.println(date)
     while (date.getMonth.getValue <= month) {
@@ -92,7 +92,7 @@ class UsabilityBasic {
     output(dateTime, ChronoField.DAY_OF_MONTH)
     output(time, ChronoField.HOUR_OF_DAY)
     output(time, ChronoField.MINUTE_OF_HOUR)
-    val cal: TemporalAccessor = date
+    val cal: TemporalAccessor   = date
     System.out.println("DoM: " + cal.get(DAY_OF_MONTH))
   }
 

@@ -129,9 +129,10 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1950, 1, 1, 1, 0),
-                STANDARD)
+                STANDARD
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_2)
-    val test: ZoneRules = b.toRules("Europe/London")
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertGap(test, 1950, 1, 1, 1, 30, TestZoneRulesBuilder.OFFSET_1, TestZoneRulesBuilder.OFFSET_2)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_2)
@@ -141,10 +142,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1_15,
                 TestZoneRulesBuilder.dateTime(1920, 1, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1950, 1, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
@@ -154,7 +157,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                      TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -163,8 +167,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1_15)
     assertOverlap(test,
                   1920,
@@ -173,24 +178,30 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   0,
                   55,
                   TestZoneRulesBuilder.OFFSET_1_15,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(1800, 7, 1, 1, 0),
-                     TestZoneRulesBuilder.OFFSET_1_15)
+                     TestZoneRulesBuilder.OFFSET_1_15
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(1920, 1, 1, 1, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(1960, 1, 1, 1, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 1, 1, 1, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_2008_01_01, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.DATE_TIME_2008_07_01,
-                     TestZoneRulesBuilder.OFFSET_2_30)
+                     TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertGap(test,
               2008,
               3,
@@ -198,7 +209,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               1,
               20,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2_30)
+              TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertOverlap(test,
                   2008,
                   10,
@@ -206,14 +218,16 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   0,
                   20,
                   TestZoneRulesBuilder.OFFSET_2_30,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("combined_windowChangeDuringDST") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(2000, 7, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
@@ -223,7 +237,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -232,20 +247,24 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/Dublin")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/Dublin")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test, 2000, 7, 1, 1, 20, TestZoneRulesBuilder.OFFSET_1, TestZoneRulesBuilder.OFFSET_2)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 7, 1, 3, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -253,20 +272,24 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   20,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 12, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("combined_windowChangeWithinDST") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(2000, 7, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(2000, 8, 1, 2, 0),
-                WALL)
+                WALL
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       MARCH,
@@ -275,7 +298,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -284,21 +308,25 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
-    val test: ZoneRules = b.toRules("Europe/Dublin")
+    val test: ZoneRules     = b.toRules("Europe/Dublin")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test, 2000, 7, 1, 1, 20, TestZoneRulesBuilder.OFFSET_1, TestZoneRulesBuilder.OFFSET_2)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 7, 1, 3, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   8,
@@ -306,17 +334,20 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   20,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 12, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("combined_endsInSavings") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1_15,
                 TestZoneRulesBuilder.dateTime(1920, 1, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
@@ -326,7 +357,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -335,8 +367,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
-    val test: ZoneRules = b.toRules("Pacific/Auckland")
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
+    val test: ZoneRules     = b.toRules("Pacific/Auckland")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1_15)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_2)
     assertOverlap(test,
@@ -346,13 +379,16 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   0,
                   55,
                   TestZoneRulesBuilder.OFFSET_1_15,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 3, 26, 0, 59),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 3, 26, 1, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2000,
               10,
@@ -360,7 +396,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               1,
               20,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2001,
                   3,
@@ -368,7 +405,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   0,
                   20,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2001,
               10,
@@ -376,14 +414,16 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               1,
               20,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
   }
 
   test("combined_closeTransitions") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1920, 1, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(2000,
                       MARCH,
@@ -391,20 +431,23 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       MARCH,
                       20,
                       TestZoneRulesBuilder.time(4, 2),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 3, 20, 1, 59),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test, 2000, 3, 20, 2, 0, TestZoneRulesBuilder.OFFSET_1, TestZoneRulesBuilder.OFFSET_2)
     assertGap(test,
               2000,
@@ -413,13 +456,16 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               59,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 3, 20, 3, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 3, 20, 3, 1),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   3,
@@ -427,7 +473,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   3,
                   2,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOverlap(test,
                   2000,
                   3,
@@ -435,17 +482,20 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   4,
                   1,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 3, 20, 4, 2),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("combined_closeTransitionsMeet") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1920, 1, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(2000,
                       MARCH,
@@ -453,20 +503,23 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       MARCH,
                       20,
                       TestZoneRulesBuilder.time(4, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 3, 20, 1, 59),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test, 2000, 3, 20, 2, 0, TestZoneRulesBuilder.OFFSET_1, TestZoneRulesBuilder.OFFSET_2)
     assertGap(test,
               2000,
@@ -475,7 +528,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               59,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   3,
@@ -483,7 +537,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   3,
                   0,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOverlap(test,
                   2000,
                   3,
@@ -491,17 +546,20 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   3,
                   59,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 3, 20, 4, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("combined_weirdSavingsBeforeLast") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1920, 1, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(1998,
                       MARCH,
@@ -509,7 +567,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                      TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       MARCH,
@@ -518,7 +577,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -527,13 +587,15 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(1999, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2_30)
+                     TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertOverlap(test,
                   2000,
                   3,
@@ -541,7 +603,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2_30,
-                  TestZoneRulesBuilder.OFFSET_2)
+                  TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -549,7 +612,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2001,
               3,
@@ -557,7 +621,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2001,
                   10,
@@ -565,14 +630,16 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("combined_differentLengthLastRules1") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1920, 1, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(1998,
                       MARCH,
@@ -580,7 +647,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1998,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -589,28 +657,32 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(1999,
                       MARCH,
                       21,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       MARCH,
                       22,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2001,
                       MARCH,
                       23,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2002,
                       Year.MAX_VALUE,
                       MARCH,
@@ -619,8 +691,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertGap(test,
@@ -630,7 +703,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   1998,
                   10,
@@ -638,7 +712,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               1999,
               3,
@@ -646,7 +721,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   1999,
                   10,
@@ -654,7 +730,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2000,
               3,
@@ -662,7 +739,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -670,7 +748,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2001,
               3,
@@ -678,7 +757,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2001,
                   10,
@@ -686,7 +766,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2002,
               3,
@@ -694,7 +775,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2002,
                   10,
@@ -702,7 +784,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2003,
               3,
@@ -710,7 +793,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2003,
                   10,
@@ -718,7 +802,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2004,
               3,
@@ -726,7 +811,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2004,
                   10,
@@ -734,7 +820,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2005,
               3,
@@ -742,7 +829,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2005,
                   10,
@@ -750,14 +838,16 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("combined_differentLengthLastRules2") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1920, 1, 1, 1, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(1998,
                       Year.MAX_VALUE,
@@ -767,35 +857,40 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1998,
                       OCTOBER,
                       20,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(1999,
                       OCTOBER,
                       21,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(2000,
                       OCTOBER,
                       22,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(2001,
                       OCTOBER,
                       23,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(2002,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -804,8 +899,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertGap(test,
@@ -815,7 +911,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   1998,
                   10,
@@ -823,7 +920,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               1999,
               3,
@@ -831,7 +929,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   1999,
                   10,
@@ -839,7 +938,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2000,
               3,
@@ -847,7 +947,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -855,7 +956,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2001,
               3,
@@ -863,7 +965,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2001,
                   10,
@@ -871,7 +974,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2002,
               3,
@@ -879,7 +983,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2002,
                   10,
@@ -887,7 +992,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2003,
               3,
@@ -895,7 +1001,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2003,
                   10,
@@ -903,7 +1010,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2004,
               3,
@@ -911,7 +1019,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2004,
                   10,
@@ -919,7 +1028,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2005,
               3,
@@ -927,7 +1037,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2005,
                   10,
@@ -935,7 +1046,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   1,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("twoChangesSameDay") {
@@ -951,7 +1063,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(12, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2010,
                       2010,
                       SEPTEMBER,
@@ -960,8 +1073,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(23, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Africa/Cairo")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Africa/Cairo")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, plus2)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, plus2)
     assertGap(test, 2010, 9, 10, 12, 0, plus2, plus3)
@@ -981,7 +1095,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2010,
                       2010,
                       SEPTEMBER,
@@ -990,8 +1105,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(23, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Africa/Cairo")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Africa/Cairo")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, plus2)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, plus2)
     assertGap(test, 2010, 9, 28, 0, 0, plus2, plus3)
@@ -1010,21 +1126,24 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(1999,
                       OCTOBER,
                       3,
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       MARCH,
                       3,
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindow(minus4, TestZoneRulesBuilder.dateTime(2000, 3, 3, 0, 0), WALL)
     b.addRuleToWindow(1993,
                       MARCH,
@@ -1032,23 +1151,26 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(1999,
                       OCTOBER,
                       3,
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       MARCH,
                       3,
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindowForever(minus3)
-    val test: ZoneRules = b.toRules("America/Argentina/Tucuman")
+    val test: ZoneRules     = b.toRules("America/Argentina/Tucuman")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, minus3)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, minus3)
     assertOffsetInfo(test, TestZoneRulesBuilder.dateTime(1999, 10, 2, 22, 59), minus3)
@@ -1074,7 +1196,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2008,
                       Year.MAX_VALUE,
                       AUGUST,
@@ -1083,8 +1206,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(23, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Africa/Cairo")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Africa/Cairo")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, plus2)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, plus2)
     assertGap(test, 2009, 4, 24, 0, 0, plus2, plus3)
@@ -1104,7 +1228,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(2010,
                       2010,
                       SEPTEMBER,
@@ -1113,7 +1238,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2010,
                       2010,
                       SEPTEMBER,
@@ -1122,8 +1248,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(23, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Africa/Cairo")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Africa/Cairo")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, plus2)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, plus2)
     assertGap(test, 2010, 9, 10, 0, 0, plus2, plus3)
@@ -1143,7 +1270,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1996,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -1152,7 +1280,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindowForever(plus2)
     b.addRuleToWindow(1996,
                       Year.MAX_VALUE,
@@ -1162,7 +1291,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1996,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -1171,8 +1301,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/Sofia")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/Sofia")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, plus2)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, plus2)
     assertGap(test, 1996, 3, 31, 1, 0, plus2, plus3)
@@ -1196,21 +1327,24 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1944,
                       OCTOBER,
                       2,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addRuleToWindow(1945,
                       SEPTEMBER,
                       16,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindow(plus1, TestZoneRulesBuilder.dateTime(1979, 1, 1, 0, 0), WALL)
     b.addRuleToWindow(1945,
                       APRIL,
@@ -1218,16 +1352,18 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1945,
                       NOVEMBER,
                       18,
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindowForever(plus1)
-    val test: ZoneRules = b.toRules("Europe/Sofia")
+    val test: ZoneRules     = b.toRules("Europe/Sofia")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, plus1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, plus1)
     assertGap(test, 1944, 4, 3, 2, 30, plus1, plus2)
@@ -1251,7 +1387,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1996,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -1260,7 +1397,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindow(plus4, TestZoneRulesBuilder.dateTime(1997, 3, 30, 0, 0), WALL)
     b.setFixedSavingsToWindow(TestZoneRulesBuilder.PERIOD_1HOUR)
     b.addWindowForever(plus4)
@@ -1272,7 +1410,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1996,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -1281,8 +1420,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/Sofia")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/Sofia")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, plus4)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, plus4)
     assertGap(test, 1996, 3, 31, 0, 30, plus4, plus5)
@@ -1310,7 +1450,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2007,
                       Year.MAX_VALUE,
                       NOVEMBER,
@@ -1319,7 +1460,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindowForever(minus5)
     b.addRuleToWindow(2007,
                       Year.MAX_VALUE,
@@ -1329,7 +1471,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2007,
                       Year.MAX_VALUE,
                       NOVEMBER,
@@ -1338,8 +1481,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("America/Indiana/Vincennes")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("America/Indiana/Vincennes")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, minus6)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, minus5)
     assertOffsetInfo(test, TestZoneRulesBuilder.dateTime(2007, 3, 11, 0, 0), minus6)
@@ -1364,7 +1508,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1987,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -1373,7 +1518,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
+                      TestZoneRulesBuilder.PERIOD_0
+    )
     b.addWindowForever(minus6)
     b.addRuleToWindow(1987,
                       Year.MAX_VALUE,
@@ -1383,7 +1529,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(1987,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -1392,8 +1539,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(2, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("America/Iqaluit")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("America/Iqaluit")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, minus5)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, minus6)
     assertOffsetInfo(test, TestZoneRulesBuilder.dateTime(1999, 10, 30, 23, 0), minus4)
@@ -1417,7 +1565,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = true,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2002,
                       Year.MAX_VALUE,
                       SEPTEMBER,
@@ -1426,8 +1575,9 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(0, 0),
                       timeEndOfDay = false,
                       STANDARD,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Asia/Amman")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Asia/Amman")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, plus2)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, plus2)
     assertGap(test, 2002, 3, 29, 0, 0, plus2, plus3)
@@ -1442,10 +1592,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1800, 7, 1, 0, 0),
-                WALL)
+                WALL
+    )
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(2008, 6, 30, 0, 0),
-                STANDARD)
+                STANDARD
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       MARCH,
@@ -1454,7 +1606,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                      TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -1463,14 +1616,16 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_2_30)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_2008_01_01, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.DATE_TIME_2008_07_01,
-                     TestZoneRulesBuilder.OFFSET_2_30)
+                     TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertGap(test,
               2000,
               3,
@@ -1478,7 +1633,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               1,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2_30)
+              TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -1486,7 +1642,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   0,
                   30,
                   TestZoneRulesBuilder.OFFSET_2_30,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2008,
               3,
@@ -1494,21 +1651,25 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               1,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2_30)
+              TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2008, 10, 26, 0, 30),
-                     TestZoneRulesBuilder.OFFSET_2_30)
+                     TestZoneRulesBuilder.OFFSET_2_30
+    )
   }
 
   test("addWindow_noRules") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1800, 7, 1, 0, 0),
-                WALL)
+                WALL
+    )
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(2008, 6, 30, 0, 0),
-                STANDARD)
-    val test: ZoneRules = b.toRules("Europe/London")
+                STANDARD
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_2008_01_01, TestZoneRulesBuilder.OFFSET_1)
@@ -1520,7 +1681,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
       val b: ZoneRulesBuilder = new ZoneRulesBuilder
       b.addWindow(null.asInstanceOf[ZoneOffset],
                   TestZoneRulesBuilder.dateTime(2008, 6, 30, 0, 0),
-                  STANDARD)
+                  STANDARD
+      )
     }
   }
 
@@ -1536,14 +1698,15 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
       val b: ZoneRulesBuilder = new ZoneRulesBuilder
       b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                   TestZoneRulesBuilder.dateTime(2008, 6, 30, 0, 0),
-                  null.asInstanceOf[ZoneOffsetTransitionRule.TimeDefinition])
+                  null.asInstanceOf[ZoneOffsetTransitionRule.TimeDefinition]
+      )
     }
   }
 
   test("addWindowForever_noRules") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
-    val test: ZoneRules = b.toRules("Europe/London")
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_2008_01_01, TestZoneRulesBuilder.OFFSET_1)
@@ -1561,7 +1724,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                      TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+    )
     b.addRuleToWindow(2000,
                       Year.MAX_VALUE,
                       OCTOBER,
@@ -1570,14 +1734,16 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       WALL,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_2008_01_01, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.DATE_TIME_2008_07_01,
-                     TestZoneRulesBuilder.OFFSET_2_30)
+                     TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertGap(test,
               2008,
               3,
@@ -1585,7 +1751,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               1,
               20,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2_30)
+              TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertOverlap(test,
                   2008,
                   10,
@@ -1593,7 +1760,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   0,
                   20,
                   TestZoneRulesBuilder.OFFSET_2_30,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("addWindowForever_nullOffset") {
@@ -1607,18 +1775,21 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindow(TestZoneRulesBuilder.OFFSET_1,
                 TestZoneRulesBuilder.dateTime(1800, 7, 1, 0, 0),
-                WALL)
+                WALL
+    )
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.setFixedSavingsToWindow(TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
-    val test: ZoneRules = b.toRules("Europe/London")
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_1)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_2_30)
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.DATE_TIME_2008_01_01,
-                     TestZoneRulesBuilder.OFFSET_2_30)
+                     TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.DATE_TIME_2008_07_01,
-                     TestZoneRulesBuilder.OFFSET_2_30)
+                     TestZoneRulesBuilder.OFFSET_2_30
+    )
     assertGap(test,
               1800,
               7,
@@ -1626,14 +1797,15 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               0,
               0,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2_30)
+              TestZoneRulesBuilder.OFFSET_2_30
+    )
   }
 
   test("setFixedSavingsToWindow_first") {
     val b: ZoneRulesBuilder = new ZoneRulesBuilder
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.setFixedSavingsToWindow(TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
-    val test: ZoneRules = b.toRules("Europe/London")
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_FIRST, TestZoneRulesBuilder.OFFSET_2_30)
     assertOffsetInfo(test, TestZoneRulesBuilder.DATE_TIME_LAST, TestZoneRulesBuilder.OFFSET_2_30)
   }
@@ -1657,7 +1829,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
       b.setFixedSavingsToWindow(TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
     }
   }
@@ -1674,7 +1847,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
       b.setFixedSavingsToWindow(TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
     }
   }
@@ -1690,7 +1864,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       2001,
                       OCTOBER,
@@ -1699,14 +1874,17 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(1999, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2000,
               3,
@@ -1714,10 +1892,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -1725,10 +1905,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   2,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2001, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2001,
               3,
@@ -1736,10 +1918,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2001, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2001,
                   10,
@@ -1747,10 +1931,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   2,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2002, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("addRuleToWindow_endOfMonthFeb") {
@@ -1764,7 +1950,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2004,
                       2005,
                       OCTOBER,
@@ -1773,14 +1960,17 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2003, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2004, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2004,
               2,
@@ -1788,10 +1978,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2004, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2004,
                   10,
@@ -1799,10 +1991,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   2,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2005, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2005,
               2,
@@ -1810,10 +2004,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2005, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2005,
                   10,
@@ -1821,10 +2017,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   2,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2006, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("addRuleToWindow_fromDayOfMonth") {
@@ -1838,7 +2036,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       2001,
                       OCTOBER,
@@ -1847,14 +2046,17 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(1999, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2000,
               3,
@@ -1862,10 +2064,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -1873,10 +2077,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   2,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2001, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2001,
               3,
@@ -1884,10 +2090,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2001, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2001,
                   10,
@@ -1895,10 +2103,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   2,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2002, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("addRuleToWindow_noWindow") {
@@ -1912,7 +2122,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -1929,7 +2140,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -1945,7 +2157,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -1961,7 +2174,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -1977,7 +2191,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -1993,7 +2208,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2009,7 +2225,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2025,7 +2242,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2041,7 +2259,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         null.asInstanceOf[LocalTime],
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2057,7 +2276,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = true,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2084,17 +2304,21 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
     b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
     b.addRuleToWindow(TestZoneRulesBuilder.dateTime(2000, MARCH, 26, 1, 0),
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(TestZoneRulesBuilder.dateTime(2000, OCTOBER, 29, 1, 0),
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(1999, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2000,
               3,
@@ -2102,10 +2326,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -2113,10 +2339,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   2,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2001, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("addRuleToWindow_singleYearObject_nullTime") {
@@ -2125,7 +2353,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
       b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
       b.addRuleToWindow(null.asInstanceOf[LocalDateTime],
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2135,7 +2364,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
       b.addWindowForever(TestZoneRulesBuilder.OFFSET_1)
       b.addRuleToWindow(TestZoneRulesBuilder.dateTime(2000, MARCH, 31, 1, 0),
                         null.asInstanceOf[ZoneOffsetTransitionRule.TimeDefinition],
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2148,21 +2378,25 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_1HOUR)
+                      TestZoneRulesBuilder.PERIOD_1HOUR
+    )
     b.addRuleToWindow(2000,
                       OCTOBER,
                       29,
                       TestZoneRulesBuilder.time(1, 0),
                       timeEndOfDay = false,
                       UTC,
-                      TestZoneRulesBuilder.PERIOD_0)
-    val test: ZoneRules = b.toRules("Europe/London")
+                      TestZoneRulesBuilder.PERIOD_0
+    )
+    val test: ZoneRules     = b.toRules("Europe/London")
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(1999, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 1, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
     assertGap(test,
               2000,
               3,
@@ -2170,10 +2404,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
               2,
               30,
               TestZoneRulesBuilder.OFFSET_1,
-              TestZoneRulesBuilder.OFFSET_2)
+              TestZoneRulesBuilder.OFFSET_2
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2000, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_2)
+                     TestZoneRulesBuilder.OFFSET_2
+    )
     assertOverlap(test,
                   2000,
                   10,
@@ -2181,10 +2417,12 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                   2,
                   30,
                   TestZoneRulesBuilder.OFFSET_2,
-                  TestZoneRulesBuilder.OFFSET_1)
+                  TestZoneRulesBuilder.OFFSET_1
+    )
     assertOffsetInfo(test,
                      TestZoneRulesBuilder.dateTime(2001, 7, 1, 0, 0),
-                     TestZoneRulesBuilder.OFFSET_1)
+                     TestZoneRulesBuilder.OFFSET_1
+    )
   }
 
   test("addRuleToWindow_singleYear_noWindow") {
@@ -2196,7 +2434,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2211,7 +2450,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2225,7 +2465,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2239,7 +2480,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2253,7 +2495,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2267,7 +2510,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2281,7 +2525,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         TestZoneRulesBuilder.time(1, 0),
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 
@@ -2295,7 +2540,8 @@ class TestZoneRulesBuilder extends AnyFunSuite with AssertionsHelper {
                         null.asInstanceOf[LocalTime],
                         timeEndOfDay = false,
                         WALL,
-                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN)
+                        TestZoneRulesBuilder.PERIOD_1HOUR30MIN
+      )
     }
   }
 

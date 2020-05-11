@@ -194,7 +194,7 @@ class TestMonth extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
     data_plus.foreach {
       case base :: amount :: expected :: Nil =>
         assertEquals(Month.of(base).plus(amount), Month.of(expected))
-      case _ =>
+      case _                                 =>
         fail()
     }
   }
@@ -234,7 +234,7 @@ class TestMonth extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
     data_minus.foreach {
       case base :: amount :: expected :: Nil =>
         assertEquals(Month.of(base).minus(amount), Month.of(expected))
-      case _ =>
+      case _                                 =>
         fail()
     }
   }
@@ -310,11 +310,14 @@ class TestMonth extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
     assertEquals(Month.AUGUST.firstDayOfYear(false), 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31)
     assertEquals(Month.SEPTEMBER.firstDayOfYear(false), 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31)
     assertEquals(Month.OCTOBER.firstDayOfYear(false),
-                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30)
+                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30
+    )
     assertEquals(Month.NOVEMBER.firstDayOfYear(false),
-                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31)
+                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31
+    )
     assertEquals(Month.DECEMBER.firstDayOfYear(false),
-                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30)
+                 1 + 31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30
+    )
   }
 
   test("firstDayOfYear_leapYear") {
@@ -329,9 +332,11 @@ class TestMonth extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
     assertEquals(Month.SEPTEMBER.firstDayOfYear(true), 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31)
     assertEquals(Month.OCTOBER.firstDayOfYear(true), 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30)
     assertEquals(Month.NOVEMBER.firstDayOfYear(true),
-                 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31)
+                 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31
+    )
     assertEquals(Month.DECEMBER.firstDayOfYear(true),
-                 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30)
+                 1 + 31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30
+    )
   }
 
   test("firstMonthOfQuarter") {

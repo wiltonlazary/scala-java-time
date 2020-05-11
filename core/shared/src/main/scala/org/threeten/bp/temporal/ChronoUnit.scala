@@ -178,7 +178,8 @@ object ChronoUnit {
                                              CENTURIES,
                                              MILLENNIA,
                                              ERAS,
-                                             FOREVER)
+                                             FOREVER
+  )
 }
 
 /// !!! FIXME: Passing of name to the Enum constructor is not quite right.
@@ -225,8 +226,10 @@ final class ChronoUnit private (name: String, ordinal: Int, private val duration
       return false
     if (temporal.isInstanceOf[ChronoLocalDate])
       return isDateBased
-    if (temporal.isInstanceOf[ChronoLocalDateTime[_]] || temporal
-          .isInstanceOf[ChronoZonedDateTime[_]])
+    if (
+      temporal.isInstanceOf[ChronoLocalDateTime[_]] || temporal
+        .isInstanceOf[ChronoZonedDateTime[_]]
+    )
       return true
     try {
       temporal.plus(1, this)

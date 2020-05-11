@@ -59,7 +59,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
     assertEquals(buf.toString, "EXISTING3")
   }
 
-  val provider_pad: List[(Int, Int, Long, String)] = {
+  val provider_pad: List[(Int, Int, Long, String)] =
     List(
       (1, 1, -10, null),
       (1, 1, -9, "9"),
@@ -140,7 +140,6 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
       (1, 10, Integer.MIN_VALUE + 1, "2147483647"),
       (1, 10, Integer.MIN_VALUE, "2147483648")
     )
-  }
 
   test("pad_NOT_NEGATIVE") {
     provider_pad.foreach {
@@ -151,7 +150,8 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
                                                                minPad,
                                                                maxPad,
-                                                               SignStyle.NOT_NEGATIVE)
+                                                               SignStyle.NOT_NEGATIVE
+          )
         try {
           pp.print(printContext, buf)
           if (result == null || value < 0)
@@ -164,7 +164,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
             else
               throw ex
         }
-      case _ =>
+      case _                               =>
         fail()
     }
   }
@@ -178,7 +178,8 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
                                                                minPad,
                                                                maxPad,
-                                                               SignStyle.NEVER)
+                                                               SignStyle.NEVER
+          )
         try {
           pp.print(printContext, buf)
           if (result == null)
@@ -190,7 +191,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
               throw ex
             assertEquals(ex.getMessage.contains(DAY_OF_MONTH.toString), true)
         }
-      case _ =>
+      case _                               =>
         fail()
     }
   }
@@ -204,7 +205,8 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
                                                                minPad,
                                                                maxPad,
-                                                               SignStyle.NORMAL)
+                                                               SignStyle.NORMAL
+          )
         try {
           pp.print(printContext, buf)
           if (result == null)
@@ -216,7 +218,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
               throw ex
             assertEquals(ex.getMessage.contains(DAY_OF_MONTH.toString), true)
         }
-      case _ =>
+      case _                               =>
         fail()
     }
   }
@@ -230,7 +232,8 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
                                                                minPad,
                                                                maxPad,
-                                                               SignStyle.ALWAYS)
+                                                               SignStyle.ALWAYS
+          )
         try {
           pp.print(printContext, buf)
           if (result == null)
@@ -242,7 +245,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
               throw ex
             assertEquals(ex.getMessage.contains(DAY_OF_MONTH.toString), true)
         }
-      case _ =>
+      case _                               =>
         fail()
     }
   }
@@ -251,21 +254,20 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
     provider_pad.foreach {
       case (minPad, maxPad, value, result) =>
         super.beforeEach
-        var _result = result
+        var _result                                              = result
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
                                                                minPad,
                                                                maxPad,
-                                                               SignStyle.EXCEEDS_PAD)
+                                                               SignStyle.EXCEEDS_PAD
+          )
         try {
           pp.print(printContext, buf)
-          if (_result == null) {
+          if (_result == null)
             fail("Expected exception")
-          }
-          if (_result.length > minPad || value < 0) {
+          if (_result.length > minPad || value < 0)
             _result = if (value < 0) "-" + _result else "+" + _result
-          }
           assertEquals(buf.toString, _result)
         } catch {
           case ex: DateTimeException =>
@@ -273,7 +275,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
               throw ex
             assertEquals(ex.getMessage.contains(DAY_OF_MONTH.toString), true)
         }
-      case _ =>
+      case _                               =>
         fail()
     }
   }
@@ -289,7 +291,8 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
       new TTBPDateTimeFormatterBuilder.NumberPrinterParser(HOUR_OF_DAY,
                                                            2,
                                                            2,
-                                                           SignStyle.NOT_NEGATIVE)
+                                                           SignStyle.NOT_NEGATIVE
+      )
     assertEquals(pp.toString, "Value(HourOfDay,2)")
   }
 
@@ -298,7 +301,8 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
       new TTBPDateTimeFormatterBuilder.NumberPrinterParser(HOUR_OF_DAY,
                                                            1,
                                                            2,
-                                                           SignStyle.NOT_NEGATIVE)
+                                                           SignStyle.NOT_NEGATIVE
+      )
     assertEquals(pp.toString, "Value(HourOfDay,1,2,NOT_NEGATIVE)")
   }
 }

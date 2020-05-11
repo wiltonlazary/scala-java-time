@@ -51,9 +51,8 @@ object TestZoneRulesProvider {
     }
 
     protected def provideRules(zoneId: String, forCaching: Boolean): ZoneRules = {
-      if (zoneId == "FooLocation") {
+      if (zoneId == "FooLocation")
         return rules
-      }
       throw new ZoneRulesException("Invalid")
     }
   }
@@ -82,7 +81,7 @@ class TestZoneRulesProvider extends AnyFunSuite with AssertionsHelper {
   }
 
   test("getRules_String") {
-    val rules: ZoneRules = ZoneRulesProvider.getRules("Europe/London", false)
+    val rules: ZoneRules  = ZoneRulesProvider.getRules("Europe/London", false)
     assertTrue(rules != null)
     val rules2: ZoneRules = ZoneRulesProvider.getRules("Europe/London", false)
     assertTrue(rules2 == rules)
@@ -101,12 +100,12 @@ class TestZoneRulesProvider extends AnyFunSuite with AssertionsHelper {
   }
 
   test("getVersions_String") {
-    val versions: java.util.NavigableMap[String, ZoneRules] =
+    val versions: java.util.NavigableMap[String, ZoneRules]  =
       ZoneRulesProvider.getVersions("Europe/London")
     assertTrue(versions.size >= 1)
-    val rules: ZoneRules = ZoneRulesProvider.getRules("Europe/London", false)
+    val rules: ZoneRules                                     = ZoneRulesProvider.getRules("Europe/London", false)
     assertTrue(versions.lastEntry.getValue == rules)
-    val copy = new java.util.HashMap[String, ZoneRules](versions)
+    val copy                                                 = new java.util.HashMap[String, ZoneRules](versions)
     versions.clear()
     assertTrue(versions.size == 0)
     val versions2: java.util.NavigableMap[String, ZoneRules] =
@@ -131,7 +130,7 @@ class TestZoneRulesProvider extends AnyFunSuite with AssertionsHelper {
   }
 
   test("registerProvider") {
-    val pre: java.util.Set[String] = ZoneRulesProvider.getAvailableZoneIds
+    val pre: java.util.Set[String]  = ZoneRulesProvider.getAvailableZoneIds
     assertTrue(!pre.contains("FooLocation"))
     ZoneRulesProvider.registerProvider(new TestZoneRulesProvider.MockTempProvider)
     val post: java.util.Set[String] = ZoneRulesProvider.getAvailableZoneIds

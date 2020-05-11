@@ -106,7 +106,8 @@ class TestIsoChronology extends AnyFunSuite with AssertionsHelper {
          (2012, 1, 32),
          (2012, 12, -1),
          (2012, 12, 0),
-         (2012, 12, 32))
+         (2012, 12, 32)
+    )
 
   test("test_badDates") {
     data_badDates.foreach {

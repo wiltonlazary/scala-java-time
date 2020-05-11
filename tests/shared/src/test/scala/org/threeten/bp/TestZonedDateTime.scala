@@ -152,7 +152,7 @@ class TestZonedDateTime
     TEST_DATE_TIME_PARIS =
       ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500, TestZonedDateTime.ZONE_PARIS)
     TEST_PARIS_OVERLAP_2008_10_26_02_30 = LocalDateTime.of(2008, 10, 26, 2, 30)
-    TEST_PARIS_GAP_2008_03_30_02_30     = LocalDateTime.of(2008, 3, 30, 2, 30)
+    TEST_PARIS_GAP_2008_03_30_02_30 = LocalDateTime.of(2008, 3, 30, 2, 30)
   }
 
   protected def samples: List[TemporalAccessor] =
@@ -204,8 +204,8 @@ class TestZonedDateTime
     var diff: Long              = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
     if (diff >= 100000000) {
       expected = ZonedDateTime.now(Clock.systemDefaultZone)
-      test     = ZonedDateTime.now
-      diff     = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
+      test = ZonedDateTime.now
+      diff = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
     }
     assertTrue(diff < 100000000)
   }
@@ -225,11 +225,10 @@ class TestZonedDateTime
       var i: Int = 0
       while (i < 100) {
         {
-          if (expected == test) {
+          if (expected == test)
             i = 99
-          }
           expected = ZonedDateTime.now(Clock.system(zone))
-          test     = ZonedDateTime.now(zone)
+          test = ZonedDateTime.now(zone)
         }
         {
           i += 1
@@ -240,8 +239,8 @@ class TestZonedDateTime
     var diff: Long = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
     if (diff >= 100000000) {
       expected = ZonedDateTime.now(Clock.systemDefaultZone)
-      test     = ZonedDateTime.now
-      diff     = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
+      test = ZonedDateTime.now
+      diff = Math.abs(test.toLocalTime.toNanoOfDay - expected.toLocalTime.toNanoOfDay)
     }
     assertTrue(diff < 100000000)
   }
@@ -264,8 +263,8 @@ class TestZonedDateTime
           assertEquals(test.getMonth, Month.JANUARY)
           assertEquals(test.getDayOfMonth, if (i < 24 * 60 * 60) 1 else 2)
           assertEquals(test.getHour, (i / (60 * 60)) % 24)
-          assertEquals(test.getMinute, (i / 60) % 60)
-          assertEquals(test.getSecond, i % 60)
+          assertEquals(test.getMinute, (i / 60)      % 60)
+          assertEquals(test.getSecond, i             % 60)
           assertEquals(test.getNano, 123456789)
           assertEquals(test.getOffset, ZoneOffset.UTC)
           assertEquals(test.getZone, ZoneOffset.UTC)
@@ -385,7 +384,8 @@ class TestZonedDateTime
           10,
           500,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("factory_of_LocalDateTime_nullDateTime") {
@@ -402,7 +402,7 @@ class TestZonedDateTime
   }
 
   test("factory_ofInstant_Instant_ZR") {
-    val instant: Instant =
+    val instant: Instant    =
       LocalDateTime.of(2008, 6, 30, 11, 30, 10, 35).toInstant(TestZonedDateTime.OFFSET_0200)
     val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.ZONE_PARIS)
     check(test,
@@ -414,11 +414,12 @@ class TestZonedDateTime
           10,
           35,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("factory_ofInstant_Instant_ZO") {
-    val instant: Instant =
+    val instant: Instant    =
       LocalDateTime.of(2008, 6, 30, 11, 30, 10, 45).toInstant(TestZonedDateTime.OFFSET_0200)
     val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_0200)
     check(test,
@@ -430,7 +431,8 @@ class TestZonedDateTime
           10,
           45,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.OFFSET_0200)
+          TestZonedDateTime.OFFSET_0200
+    )
   }
 
   test("factory_ofInstant_Instant_inGap") {
@@ -445,11 +447,12 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("factory_ofInstant_Instant_inOverlap_earlier") {
-    val instant: Instant =
+    val instant: Instant    =
       TEST_PARIS_OVERLAP_2008_10_26_02_30.toInstant(TestZonedDateTime.OFFSET_0200)
     val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.ZONE_PARIS)
     check(test,
@@ -461,11 +464,12 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("factory_ofInstant_Instant_inOverlap_later") {
-    val instant: Instant =
+    val instant: Instant    =
       TEST_PARIS_OVERLAP_2008_10_26_02_30.toInstant(TestZonedDateTime.OFFSET_0100)
     val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.ZONE_PARIS)
     check(test,
@@ -477,11 +481,12 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0100,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("factory_ofInstant_Instant_invalidOffset") {
-    val instant: Instant =
+    val instant: Instant    =
       LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).toInstant(TestZonedDateTime.OFFSET_0130)
     val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.ZONE_PARIS)
     check(test,
@@ -493,7 +498,8 @@ class TestZonedDateTime
           10,
           500,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("factory_ofInstant_allSecsInDay") {
@@ -507,8 +513,8 @@ class TestZonedDateTime
           assertEquals(test.getMonth, Month.JANUARY)
           assertEquals(test.getDayOfMonth, 1 + (if (i >= 23 * 60 * 60) 1 else 0))
           assertEquals(test.getHour, ((i / (60 * 60)) + 1) % 24)
-          assertEquals(test.getMinute, (i / 60) % 60)
-          assertEquals(test.getSecond, i % 60)
+          assertEquals(test.getMinute, (i / 60)            % 60)
+          assertEquals(test.getSecond, i                   % 60)
         }
         {
           i += 1
@@ -542,9 +548,9 @@ class TestZonedDateTime
     val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
     val year: Int               = Year.MIN_VALUE
     val days: Long              = (year * 365L + (year / 4 - year / 100 + year / 400)) - days_0000_to_1970
-    val instant: Instant =
+    val instant: Instant        =
       Instant.ofEpochSecond(days * 24L * 60L * 60L - TestZonedDateTime.OFFSET_MIN.getTotalSeconds)
-    val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_MIN)
+    val test: ZonedDateTime     = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_MIN)
     assertEquals(test.getYear, Year.MIN_VALUE)
     assertEquals(test.getMonth.getValue, 1)
     assertEquals(test.getDayOfMonth, 1)
@@ -559,9 +565,9 @@ class TestZonedDateTime
     val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
     val year: Int               = Year.MIN_VALUE
     val days: Long              = (year * 365L + (year / 4 - year / 100 + year / 400)) - days_0000_to_1970
-    val instant: Instant =
+    val instant: Instant        =
       Instant.ofEpochSecond(days * 24L * 60L * 60L - TestZonedDateTime.OFFSET_MAX.getTotalSeconds)
-    val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_MAX)
+    val test: ZonedDateTime     = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_MAX)
     assertEquals(test.getYear, Year.MIN_VALUE)
     assertEquals(test.getMonth.getValue, 1)
     assertEquals(test.getDayOfMonth, 1)
@@ -576,10 +582,10 @@ class TestZonedDateTime
     val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
     val year: Int               = Year.MAX_VALUE
     val days: Long              = (year * 365L + (year / 4 - year / 100 + year / 400)) + 365 - days_0000_to_1970
-    val instant: Instant = Instant.ofEpochSecond(
+    val instant: Instant        = Instant.ofEpochSecond(
       (days + 1) * 24L * 60L * 60L - 1 - TestZonedDateTime.OFFSET_MIN.getTotalSeconds
     )
-    val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_MIN)
+    val test: ZonedDateTime     = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_MIN)
     assertEquals(test.getYear, Year.MAX_VALUE)
     assertEquals(test.getMonth.getValue, 12)
     assertEquals(test.getDayOfMonth, 31)
@@ -594,10 +600,10 @@ class TestZonedDateTime
     val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
     val year: Int               = Year.MAX_VALUE
     val days: Long              = (year * 365L + (year / 4 - year / 100 + year / 400)) + 365 - days_0000_to_1970
-    val instant: Instant = Instant.ofEpochSecond(
+    val instant: Instant        = Instant.ofEpochSecond(
       (days + 1) * 24L * 60L * 60L - 1 - TestZonedDateTime.OFFSET_MAX.getTotalSeconds
     )
-    val test: ZonedDateTime = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_MAX)
+    val test: ZonedDateTime     = ZonedDateTime.ofInstant(instant, TestZonedDateTime.OFFSET_MAX)
     assertEquals(test.getYear, Year.MAX_VALUE)
     assertEquals(test.getMonth.getValue, 12)
     assertEquals(test.getDayOfMonth, 31)
@@ -656,7 +662,7 @@ class TestZonedDateTime
 
   test("factory_ofStrict_LDT_ZI_ZO") {
     val normal: LocalDateTime = LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500)
-    val test: ZonedDateTime =
+    val test: ZonedDateTime   =
       ZonedDateTime.ofStrict(normal, TestZonedDateTime.OFFSET_0200, TestZonedDateTime.ZONE_PARIS)
     check(test,
           2008,
@@ -667,16 +673,17 @@ class TestZonedDateTime
           10,
           500,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("factory_ofStrict_LDT_ZI_ZO_inGap") {
     assertThrows[DateTimeException] {
-      try {
-        ZonedDateTime.ofStrict(TEST_PARIS_GAP_2008_03_30_02_30,
-                               TestZonedDateTime.OFFSET_0100,
-                               TestZonedDateTime.ZONE_PARIS)
-      } catch {
+      try ZonedDateTime.ofStrict(TEST_PARIS_GAP_2008_03_30_02_30,
+                                 TestZonedDateTime.OFFSET_0100,
+                                 TestZonedDateTime.ZONE_PARIS
+      )
+      catch {
         case ex: DateTimeException =>
           assertEquals(ex.getMessage.contains(" gap"), true)
           throw ex
@@ -686,11 +693,11 @@ class TestZonedDateTime
 
   test("factory_ofStrict_LDT_ZI_ZO_inOverlap_invalidOfset") {
     assertThrows[DateTimeException] {
-      try {
-        ZonedDateTime.ofStrict(TEST_PARIS_OVERLAP_2008_10_26_02_30,
-                               TestZonedDateTime.OFFSET_0130,
-                               TestZonedDateTime.ZONE_PARIS)
-      } catch {
+      try ZonedDateTime.ofStrict(TEST_PARIS_OVERLAP_2008_10_26_02_30,
+                                 TestZonedDateTime.OFFSET_0130,
+                                 TestZonedDateTime.ZONE_PARIS
+      )
+      catch {
         case ex: DateTimeException =>
           assertEquals(ex.getMessage.contains(" is not valid for "), true)
           throw ex
@@ -700,11 +707,11 @@ class TestZonedDateTime
 
   test("factory_ofStrict_LDT_ZI_ZO_invalidOffset") {
     assertThrows[DateTimeException] {
-      try {
-        ZonedDateTime.ofStrict(TEST_LOCAL_2008_06_30_11_30_59_500,
-                               TestZonedDateTime.OFFSET_0130,
-                               TestZonedDateTime.ZONE_PARIS)
-      } catch {
+      try ZonedDateTime.ofStrict(TEST_LOCAL_2008_06_30_11_30_59_500,
+                                 TestZonedDateTime.OFFSET_0130,
+                                 TestZonedDateTime.ZONE_PARIS
+      )
+      catch {
         case ex: DateTimeException =>
           assertEquals(ex.getMessage.contains(" is not valid for "), true)
           throw ex
@@ -716,7 +723,8 @@ class TestZonedDateTime
     assertThrows[NullPointerException] {
       ZonedDateTime.ofStrict(null.asInstanceOf[LocalDateTime],
                              TestZonedDateTime.OFFSET_0100,
-                             TestZonedDateTime.ZONE_PARIS)
+                             TestZonedDateTime.ZONE_PARIS
+      )
     }
   }
 
@@ -730,7 +738,8 @@ class TestZonedDateTime
     assertThrows[NullPointerException] {
       ZonedDateTime.ofStrict(TEST_LOCAL_2008_06_30_11_30_59_500,
                              TestZonedDateTime.OFFSET_0100,
-                             null)
+                             null
+      )
     }
   }
 
@@ -748,9 +757,8 @@ class TestZonedDateTime
           TEST_DATE_TIME_PARIS.toLocalDateTime.getLong(field)
 
         @SuppressWarnings(Array("unchecked")) override def query[R](query: TemporalQuery[R]): R = {
-          if (query eq TemporalQueries.zoneId) {
+          if (query eq TemporalQueries.zoneId)
             return TEST_DATE_TIME_PARIS.getZone.asInstanceOf[R]
-          }
           query.queryFrom(this)
         }
 
@@ -779,9 +787,8 @@ class TestZonedDateTime
           TEST_DATE_TIME_PARIS.toInstant.getLong(field)
 
         @SuppressWarnings(Array("unchecked")) override def query[R](query: TemporalQuery[R]): R = {
-          if (query eq TemporalQueries.zoneId) {
+          if (query eq TemporalQueries.zoneId)
             return TEST_DATE_TIME_PARIS.getZone.asInstanceOf[R]
-          }
           query.queryFrom(this)
         }
 
@@ -823,12 +830,12 @@ class TestZonedDateTime
         assertEquals(t.getSecond, s)
         assertEquals(t.getNano, n)
         assertEquals(t.getZone.getId, zoneId)
-      case _ =>
+      case _                                                                                                                             =>
         fail()
     }
   }
 
-  val data_parseAdditional: List[List[Any]] = {
+  val data_parseAdditional: List[List[Any]] =
     List(
       List("2012-06-30T12:30:40Z[GMT]", 2012, 6, 30, 12, 30, 40, 0, "GMT"),
       List("2012-06-30T12:30:40Z[UT]", 2012, 6, 30, 12, 30, 40, 0, "UT"),
@@ -843,7 +850,6 @@ class TestZonedDateTime
       List("2012-06-30T12:30:40-01:00[UTC-01:00]", 2012, 6, 30, 12, 30, 40, 0, "UTC-01:00"),
       List("2012-06-30T12:30:40+01:00[Europe/London]", 2012, 6, 30, 12, 30, 40, 0, "Europe/London")
     )
-  }
 
   test("test_parseAdditional") {
     data_parseAdditional.foreach {
@@ -857,7 +863,7 @@ class TestZonedDateTime
         assertEquals(t.getSecond, s)
         assertEquals(t.getNano, n)
         assertEquals(t.getZone.getId, zoneId)
-      case _ =>
+      case _                                                                                                                                 =>
         fail()
     }
   }
@@ -938,7 +944,7 @@ class TestZonedDateTime
     }
   }
 
-  val provider_sampleTimes: List[List[Any]] = {
+  val provider_sampleTimes: List[List[Any]] =
     List(
       List(2008, 6, 30, 11, 30, 20, 500, TestZonedDateTime.ZONE_0100),
       List(2008, 6, 30, 11, 0, 0, 0, TestZonedDateTime.ZONE_0100),
@@ -947,7 +953,6 @@ class TestZonedDateTime
       List(2008, 6, 30, 23, 59, 59, 999999999, TestZonedDateTime.ZONE_0100),
       List(-1, 1, 1, 0, 0, 0, 0, TestZonedDateTime.ZONE_0100)
     )
-  }
 
   test("test_get") {
     provider_sampleTimes.foreach {
@@ -969,20 +974,21 @@ class TestZonedDateTime
         assertEquals(a.toLocalDate, localDate)
         assertEquals(a.toLocalTime, localTime)
         assertEquals(a.toLocalDateTime, localDateTime)
-        if (zone.isInstanceOf[ZoneOffset]) {
+        if (zone.isInstanceOf[ZoneOffset])
           assertEquals(a.toString, localDateTime.toString + offset.toString)
-        } else {
+        else
           assertEquals(a.toString,
-                       localDateTime.toString + offset.toString + "[" + zone.toString + "]")
-        }
-      case _ =>
+                       localDateTime.toString + offset.toString + "[" + zone.toString + "]"
+          )
+      case _                                                                                                         =>
         fail()
     }
   }
 
   test("test_get_DateTimeField") {
     val test: ZonedDateTime = ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 12, 30, 40, 987654321),
-                                               TestZonedDateTime.ZONE_0100)
+                                               TestZonedDateTime.ZONE_0100
+    )
     assertEquals(test.get(ChronoField.YEAR), 2008)
     assertEquals(test.get(ChronoField.MONTH_OF_YEAR), 6)
     assertEquals(test.get(ChronoField.DAY_OF_MONTH), 30)
@@ -1017,7 +1023,8 @@ class TestZonedDateTime
 
   test("test_getLong_DateTimeField") {
     val test: ZonedDateTime = ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 12, 30, 40, 987654321),
-                                               TestZonedDateTime.ZONE_0100)
+                                               TestZonedDateTime.ZONE_0100
+    )
     assertEquals(test.getLong(ChronoField.YEAR), 2008)
     assertEquals(test.getLong(ChronoField.MONTH_OF_YEAR), 6)
     assertEquals(test.getLong(ChronoField.DAY_OF_MONTH), 30)
@@ -1064,7 +1071,8 @@ class TestZonedDateTime
   test("test_withEarlierOffsetAtOverlap_notAtOverlap") {
     val base: ZonedDateTime = ZonedDateTime.ofStrict(TEST_LOCAL_2008_06_30_11_30_59_500,
                                                      TestZonedDateTime.OFFSET_0200,
-                                                     TestZonedDateTime.ZONE_PARIS)
+                                                     TestZonedDateTime.ZONE_PARIS
+    )
     val test: ZonedDateTime = base.withEarlierOffsetAtOverlap
     assertEquals(test, base)
   }
@@ -1072,7 +1080,8 @@ class TestZonedDateTime
   test("test_withEarlierOffsetAtOverlap_atOverlap") {
     val base: ZonedDateTime = ZonedDateTime.ofStrict(TEST_PARIS_OVERLAP_2008_10_26_02_30,
                                                      TestZonedDateTime.OFFSET_0100,
-                                                     TestZonedDateTime.ZONE_PARIS)
+                                                     TestZonedDateTime.ZONE_PARIS
+    )
     val test: ZonedDateTime = base.withEarlierOffsetAtOverlap
     assertEquals(test.getOffset, TestZonedDateTime.OFFSET_0200)
     assertEquals(test.toLocalDateTime, base.toLocalDateTime)
@@ -1081,7 +1090,8 @@ class TestZonedDateTime
   test("test_withEarlierOffsetAtOverlap_atOverlap_noChange") {
     val base: ZonedDateTime = ZonedDateTime.ofStrict(TEST_PARIS_OVERLAP_2008_10_26_02_30,
                                                      TestZonedDateTime.OFFSET_0200,
-                                                     TestZonedDateTime.ZONE_PARIS)
+                                                     TestZonedDateTime.ZONE_PARIS
+    )
     val test: ZonedDateTime = base.withEarlierOffsetAtOverlap
     assertEquals(test, base)
   }
@@ -1089,7 +1099,8 @@ class TestZonedDateTime
   test("test_withLaterOffsetAtOverlap_notAtOverlap") {
     val base: ZonedDateTime = ZonedDateTime.ofStrict(TEST_LOCAL_2008_06_30_11_30_59_500,
                                                      TestZonedDateTime.OFFSET_0200,
-                                                     TestZonedDateTime.ZONE_PARIS)
+                                                     TestZonedDateTime.ZONE_PARIS
+    )
     val test: ZonedDateTime = base.withLaterOffsetAtOverlap
     assertEquals(test, base)
   }
@@ -1097,7 +1108,8 @@ class TestZonedDateTime
   test("test_withLaterOffsetAtOverlap_atOverlap") {
     val base: ZonedDateTime = ZonedDateTime.ofStrict(TEST_PARIS_OVERLAP_2008_10_26_02_30,
                                                      TestZonedDateTime.OFFSET_0200,
-                                                     TestZonedDateTime.ZONE_PARIS)
+                                                     TestZonedDateTime.ZONE_PARIS
+    )
     val test: ZonedDateTime = base.withLaterOffsetAtOverlap
     assertEquals(test.getOffset, TestZonedDateTime.OFFSET_0100)
     assertEquals(test.toLocalDateTime, base.toLocalDateTime)
@@ -1106,7 +1118,8 @@ class TestZonedDateTime
   test("test_withLaterOffsetAtOverlap_atOverlap_noChange") {
     val base: ZonedDateTime = ZonedDateTime.ofStrict(TEST_PARIS_OVERLAP_2008_10_26_02_30,
                                                      TestZonedDateTime.OFFSET_0100,
-                                                     TestZonedDateTime.ZONE_PARIS)
+                                                     TestZonedDateTime.ZONE_PARIS
+    )
     val test: ZonedDateTime = base.withLaterOffsetAtOverlap
     assertEquals(test, base)
   }
@@ -1150,9 +1163,9 @@ class TestZonedDateTime
   }
 
   test("test_withZoneSameInstant") {
-    val base: ZonedDateTime =
+    val base: ZonedDateTime     =
       ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500, TestZonedDateTime.ZONE_0100)
-    val test: ZonedDateTime = base.withZoneSameInstant(TestZonedDateTime.ZONE_0200)
+    val test: ZonedDateTime     = base.withZoneSameInstant(TestZonedDateTime.ZONE_0200)
     val expected: ZonedDateTime =
       ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500.plusHours(1), TestZonedDateTime.ZONE_0200)
     assertEquals(test, expected)
@@ -1174,9 +1187,9 @@ class TestZonedDateTime
   }
 
   test("test_withZoneLocked") {
-    val base: ZonedDateTime =
+    val base: ZonedDateTime     =
       ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500, TestZonedDateTime.ZONE_PARIS)
-    val test: ZonedDateTime = base.withFixedOffsetZone
+    val test: ZonedDateTime     = base.withFixedOffsetZone
     val expected: ZonedDateTime =
       ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500, TestZonedDateTime.ZONE_0200)
     assertEquals(test, expected)
@@ -1195,7 +1208,8 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("test_with_WithAdjuster_LocalDateTime_adjustedOffset") {
@@ -1211,7 +1225,8 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0100,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("test_with_WithAdjuster_LocalDate") {
@@ -1227,7 +1242,8 @@ class TestZonedDateTime
           59,
           500,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("test_with_WithAdjuster_LocalTime") {
@@ -1243,7 +1259,8 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("test_with_WithAdjuster_Year") {
@@ -1266,7 +1283,8 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("test_with_WithAdjuster_Offset_same") {
@@ -1282,7 +1300,8 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("test_with_WithAdjuster_Offset_ignored") {
@@ -1298,7 +1317,8 @@ class TestZonedDateTime
           0,
           0,
           TestZonedDateTime.OFFSET_0200,
-          TestZonedDateTime.ZONE_PARIS)
+          TestZonedDateTime.ZONE_PARIS
+    )
   }
 
   test("test_with_WithAdjuster_LocalDate_retainOffset1") {
@@ -1333,7 +1353,9 @@ class TestZonedDateTime
     val test: ZonedDateTime = base.withYear(2007)
     assertEquals(test,
                  ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500.withYear(2007),
-                                  TestZonedDateTime.ZONE_0100))
+                                  TestZonedDateTime.ZONE_0100
+                 )
+    )
   }
 
   test("test_withYear_noChange") {
@@ -1396,7 +1418,9 @@ class TestZonedDateTime
     val test: ZonedDateTime = base.withDayOfMonth(15)
     assertEquals(test,
                  ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500.withDayOfMonth(15),
-                                  TestZonedDateTime.ZONE_0100))
+                                  TestZonedDateTime.ZONE_0100
+                 )
+    )
   }
 
   test("test_withDayOfMonth_noChange") {
@@ -1430,7 +1454,9 @@ class TestZonedDateTime
     val test: ZonedDateTime = base.withDayOfYear(33)
     assertEquals(test,
                  ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500.withDayOfYear(33),
-                                  TestZonedDateTime.ZONE_0100))
+                                  TestZonedDateTime.ZONE_0100
+                 )
+    )
   }
 
   test("test_withDayOfYear_noChange") {
@@ -1481,7 +1507,9 @@ class TestZonedDateTime
     val test: ZonedDateTime = base.withMinute(15)
     assertEquals(test,
                  ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500.withMinute(15),
-                                  TestZonedDateTime.ZONE_0100))
+                                  TestZonedDateTime.ZONE_0100
+                 )
+    )
   }
 
   test("test_withMinute_noChange") {
@@ -1497,7 +1525,9 @@ class TestZonedDateTime
     val test: ZonedDateTime = base.withSecond(12)
     assertEquals(test,
                  ZonedDateTime.of(TEST_LOCAL_2008_06_30_11_30_59_500.withSecond(12),
-                                  TestZonedDateTime.ZONE_0100))
+                                  TestZonedDateTime.ZONE_0100
+                 )
+    )
   }
 
   test("test_withSecond_noChange") {
@@ -1535,7 +1565,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100),
+                                   TestZonedDateTime.ZONE_0100
+        ),
         0,
         TestZonedDateTime.dateTime(2008,
                                    6,
@@ -1545,7 +1576,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100)
+                                   TestZonedDateTime.ZONE_0100
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1556,7 +1588,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100),
+                                   TestZonedDateTime.ZONE_0100
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    7,
@@ -1566,7 +1599,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100)
+                                   TestZonedDateTime.ZONE_0100
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1577,7 +1611,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100),
+                                   TestZonedDateTime.ZONE_0100
+        ),
         -1,
         TestZonedDateTime.dateTime(2008,
                                    6,
@@ -1587,7 +1622,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100)
+                                   TestZonedDateTime.ZONE_0100
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1598,7 +1634,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    3,
@@ -1608,7 +1645,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1619,7 +1657,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         -1,
         TestZonedDateTime.dateTime(2008,
                                    3,
@@ -1629,7 +1668,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1640,7 +1680,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    3,
@@ -1650,7 +1691,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1661,7 +1703,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         -1,
         TestZonedDateTime.dateTime(2008,
                                    3,
@@ -1671,7 +1714,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1682,7 +1726,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1692,7 +1737,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1703,7 +1749,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1713,7 +1760,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1724,7 +1772,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1734,7 +1783,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1745,7 +1795,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         -1,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1755,7 +1806,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       )
     )
   }
@@ -1771,7 +1823,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100),
+                                   TestZonedDateTime.ZONE_0100
+        ),
         0,
         TestZonedDateTime.dateTime(2008,
                                    6,
@@ -1781,7 +1834,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100)
+                                   TestZonedDateTime.ZONE_0100
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1792,7 +1846,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100),
+                                   TestZonedDateTime.ZONE_0100
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    7,
@@ -1802,7 +1857,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100)
+                                   TestZonedDateTime.ZONE_0100
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1813,7 +1869,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100),
+                                   TestZonedDateTime.ZONE_0100
+        ),
         -1,
         TestZonedDateTime.dateTime(2008,
                                    6,
@@ -1823,7 +1880,8 @@ class TestZonedDateTime
                                    59,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_0100)
+                                   TestZonedDateTime.ZONE_0100
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1834,7 +1892,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    3,
@@ -1844,7 +1903,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1855,7 +1915,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         -1,
         TestZonedDateTime.dateTime(2008,
                                    3,
@@ -1865,7 +1926,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1876,7 +1938,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1886,7 +1949,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1897,7 +1961,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         2,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1907,7 +1972,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1918,7 +1984,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         3,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1928,7 +1995,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1939,7 +2007,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         1,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1949,7 +2018,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       ),
       List(
         TestZonedDateTime.dateTime(2008,
@@ -1960,7 +2030,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0200,
-                                   TestZonedDateTime.ZONE_PARIS),
+                                   TestZonedDateTime.ZONE_PARIS
+        ),
         2,
         TestZonedDateTime.dateTime(2008,
                                    10,
@@ -1970,7 +2041,8 @@ class TestZonedDateTime
                                    0,
                                    0,
                                    TestZonedDateTime.OFFSET_0100,
-                                   TestZonedDateTime.ZONE_PARIS)
+                                   TestZonedDateTime.ZONE_PARIS
+        )
       )
     )
   }
@@ -1979,7 +2051,7 @@ class TestZonedDateTime
     data_plusDays.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plus(Period.ofDays(amount.toInt)), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -1988,7 +2060,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plus(Duration.ofHours(amount)), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -1997,23 +2069,23 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plus(Duration.ofHours(amount)), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
 
   test("test_plus_adjuster") {
     val period: MockSimplePeriod = MockSimplePeriod.of(7, ChronoUnit.MONTHS)
-    val t: ZonedDateTime =
+    val t: ZonedDateTime         =
       ZonedDateTime.of(LocalDateTime.of(2008, 6, 1, 12, 30, 59, 500), TestZonedDateTime.ZONE_0100)
-    val expected: ZonedDateTime =
+    val expected: ZonedDateTime  =
       ZonedDateTime.of(LocalDateTime.of(2009, 1, 1, 12, 30, 59, 500), TestZonedDateTime.ZONE_0100)
     assertEquals(t.plus(period), expected)
   }
 
   test("test_plus_adjuster_Duration") {
-    val duration: Duration = Duration.ofSeconds(4L * 60 * 60 + 5L * 60 + 6L)
-    val t: ZonedDateTime =
+    val duration: Duration      = Duration.ofSeconds(4L * 60 * 60 + 5L * 60 + 6L)
+    val t: ZonedDateTime        =
       ZonedDateTime.of(LocalDateTime.of(2008, 6, 1, 12, 30, 59, 500), TestZonedDateTime.ZONE_0100)
     val expected: ZonedDateTime =
       ZonedDateTime.of(LocalDateTime.of(2008, 6, 1, 16, 36, 5, 500), TestZonedDateTime.ZONE_0100)
@@ -2040,7 +2112,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plus(amount, HOURS), expected)
-      case _ =>
+      case _                                                                          =>
     }
   }
 
@@ -2048,7 +2120,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plus(amount * 60, MINUTES), expected)
-      case _ =>
+      case _                                                                          =>
     }
   }
 
@@ -2056,7 +2128,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plus(amount * 3600, SECONDS), expected)
-      case _ =>
+      case _                                                                          =>
     }
   }
 
@@ -2064,7 +2136,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plus(amount * 3600000000000L, NANOS), expected)
-      case _ =>
+      case _                                                                          =>
     }
   }
 
@@ -2120,7 +2192,7 @@ class TestZonedDateTime
     data_plusDays.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plusDays(amount), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2129,7 +2201,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plusHours(amount), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2138,7 +2210,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plusMinutes(amount * 60), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2154,7 +2226,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plusSeconds(amount * 3600), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2170,7 +2242,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.plusNanos(amount * 3600000000000L), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2186,7 +2258,7 @@ class TestZonedDateTime
     data_plusDays.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.minus(Period.ofDays(-amount.toInt)), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2195,7 +2267,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.minus(Duration.ofHours(-amount)), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2204,23 +2276,23 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.minus(Duration.ofHours(-amount)), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
 
   test("test_minus_adjuster") {
     val period: MockSimplePeriod = MockSimplePeriod.of(7, ChronoUnit.MONTHS)
-    val t: ZonedDateTime =
+    val t: ZonedDateTime         =
       ZonedDateTime.of(LocalDateTime.of(2008, 6, 1, 12, 30, 59, 500), TestZonedDateTime.ZONE_0100)
-    val expected: ZonedDateTime =
+    val expected: ZonedDateTime  =
       ZonedDateTime.of(LocalDateTime.of(2007, 11, 1, 12, 30, 59, 500), TestZonedDateTime.ZONE_0100)
     assertEquals(t.minus(period), expected)
   }
 
   test("test_minus_adjuster_Duration") {
-    val duration: Duration = Duration.ofSeconds(4L * 60 * 60 + 5L * 60 + 6L)
-    val t: ZonedDateTime =
+    val duration: Duration      = Duration.ofSeconds(4L * 60 * 60 + 5L * 60 + 6L)
+    val t: ZonedDateTime        =
       ZonedDateTime.of(LocalDateTime.of(2008, 6, 1, 12, 30, 59, 500), TestZonedDateTime.ZONE_0100)
     val expected: ZonedDateTime =
       ZonedDateTime.of(LocalDateTime.of(2008, 6, 1, 8, 25, 53, 500), TestZonedDateTime.ZONE_0100)
@@ -2289,7 +2361,7 @@ class TestZonedDateTime
     data_plusDays.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.minusDays(-amount), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2298,7 +2370,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.minusHours(-amount), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2307,7 +2379,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.minusMinutes(-amount * 60), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2323,7 +2395,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.minusSeconds(-amount * 3600), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2339,7 +2411,7 @@ class TestZonedDateTime
     data_plusTime.foreach {
       case (base: ZonedDateTime) :: (amount: Int) :: (expected: ZonedDateTime) :: Nil =>
         assertEquals(base.minusNanos(-amount * 3600000000000L), expected)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2351,7 +2423,7 @@ class TestZonedDateTime
     assertEquals(test, ZonedDateTime.of(ldt.minusNanos(1), TestZonedDateTime.ZONE_0100))
   }
 
-  val data_toInstant: List[List[Any]] = {
+  val data_toInstant: List[List[Any]] =
     List(
       List(LocalDateTime.of(1970, 1, 1, 0, 0, 0, 0), 0L, 0),
       List(LocalDateTime.of(1970, 1, 1, 0, 0, 0, 1), 0L, 1),
@@ -2362,7 +2434,6 @@ class TestZonedDateTime
       List(LocalDateTime.of(1970, 1, 2, 0, 0), 24L * 60L * 60L, 0),
       List(LocalDateTime.of(1969, 12, 31, 0, 0), -24L * 60L * 60L, 0)
     )
-  }
 
   test("test_toInstant_UTC") {
     data_toInstant.foreach {
@@ -2371,7 +2442,7 @@ class TestZonedDateTime
         val test: Instant     = dt.toInstant
         assertEquals(test.getEpochSecond, expectedEpSec)
         assertEquals(test.getNano, expectedNos)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2383,7 +2454,7 @@ class TestZonedDateTime
         val test: Instant     = dt.toInstant
         assertEquals(test.getEpochSecond, expectedEpSec - 3600)
         assertEquals(test.getNano, expectedNos)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2395,7 +2466,7 @@ class TestZonedDateTime
         val test: Instant     = dt.toInstant
         assertEquals(test.getEpochSecond, expectedEpSec + 3600)
         assertEquals(test.getNano, expectedNos)
-      case _ =>
+      case _                                                                          =>
         fail()
     }
   }
@@ -2427,7 +2498,7 @@ class TestZonedDateTime
       case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (_: Int) :: Nil =>
         val dt: ZonedDateTime = ldt.atZone(ZoneOffset.UTC)
         assertEquals(dt.toEpochSecond, expectedEpSec)
-      case _ =>
+      case _                                                                =>
         fail()
     }
   }
@@ -2437,7 +2508,7 @@ class TestZonedDateTime
       case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (_: Int) :: Nil =>
         val dt: ZonedDateTime = ldt.atZone(TestZonedDateTime.ZONE_0100)
         assertEquals(dt.toEpochSecond, expectedEpSec - 3600)
-      case _ =>
+      case _                                                                =>
         fail()
     }
   }
@@ -2447,7 +2518,7 @@ class TestZonedDateTime
       case (ldt: LocalDateTime) :: (expectedEpSec: Long) :: (_: Int) :: Nil =>
         val dt: ZonedDateTime = ldt.atZone(TestZonedDateTime.ZONE_M0100)
         assertEquals(dt.toEpochSecond, expectedEpSec + 3600)
-      case _ =>
+      case _                                                                =>
         fail()
     }
   }
@@ -2537,13 +2608,12 @@ class TestZonedDateTime
     }
   }
 
-  val data_isBefore: List[List[Any]] = {
+  val data_isBefore: List[List[Any]] =
     List(
       List(11, 30, TestZonedDateTime.ZONE_0100, 11, 31, TestZonedDateTime.ZONE_0100, true),
       List(11, 30, TestZonedDateTime.ZONE_0200, 11, 30, TestZonedDateTime.ZONE_0100, true),
       List(11, 30, TestZonedDateTime.ZONE_0200, 10, 30, TestZonedDateTime.ZONE_0100, false)
     )
-  }
 
   test("test_isBefore") {
     data_isBefore.foreach {
@@ -2556,7 +2626,7 @@ class TestZonedDateTime
         assertEquals(b.isBefore(a), false)
         assertEquals(a.isBefore(a), false)
         assertEquals(b.isBefore(b), false)
-      case _ =>
+      case _                                                                                                                                    =>
         fail()
     }
   }
@@ -2569,13 +2639,12 @@ class TestZonedDateTime
     }
   }
 
-  val data_isAfter: List[List[Any]] = {
+  val data_isAfter: List[List[Any]] =
     List(
       List(11, 31, TestZonedDateTime.ZONE_0100, 11, 30, TestZonedDateTime.ZONE_0100, true),
       List(11, 30, TestZonedDateTime.ZONE_0100, 11, 30, TestZonedDateTime.ZONE_0200, true),
       List(11, 30, TestZonedDateTime.ZONE_0200, 10, 30, TestZonedDateTime.ZONE_0100, false)
     )
-  }
 
   test("test_isAfter") {
     data_isAfter.foreach {
@@ -2588,7 +2657,7 @@ class TestZonedDateTime
         assertEquals(b.isAfter(a), false)
         assertEquals(a.isAfter(a), false)
         assertEquals(b.isAfter(b), false)
-      case _ =>
+      case _                                                                                                                                    =>
         fail()
     }
   }
@@ -2605,12 +2674,14 @@ class TestZonedDateTime
     provider_sampleTimes.foreach {
       case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         val b: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         assertEquals(a == b, true)
         assertEquals(a.hashCode == b.hashCode, true)
-      case _ =>
+      case _                                                                                                      =>
         fail()
     }
   }
@@ -2619,11 +2690,13 @@ class TestZonedDateTime
     provider_sampleTimes.foreach {
       case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         val b: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y + 1, o, d, h, m, s, n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                                                      =>
         fail()
     }
   }
@@ -2631,15 +2704,17 @@ class TestZonedDateTime
   test("test_equals_false_hour_differs") {
     provider_sampleTimes.foreach {
       case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
-        var _h = h
+        var _h               = h
         _h = if (_h == 23) 22 else _h
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, _h, m, s, n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         val b: ZonedDateTime =
           ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, _h + 1, m, s, n),
-                           TestZonedDateTime.ZONE_0100)
+                           TestZonedDateTime.ZONE_0100
+          )
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                                                      =>
         fail()
     }
   }
@@ -2647,15 +2722,17 @@ class TestZonedDateTime
   test("test_equals_false_minute_differs") {
     provider_sampleTimes.foreach {
       case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
-        var _m = m
+        var _m               = m
         _m = if (_m == 59) 58 else _m
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, _m, s, n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         val b: ZonedDateTime =
           ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, _m + 1, s, n),
-                           TestZonedDateTime.ZONE_0100)
+                           TestZonedDateTime.ZONE_0100
+          )
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                                                      =>
         fail()
     }
   }
@@ -2663,15 +2740,17 @@ class TestZonedDateTime
   test("test_equals_false_second_differs") {
     provider_sampleTimes.foreach {
       case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
-        var _s = s
+        var _s               = s
         _s = if (_s == 59) 58 else _s
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, _s, n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         val b: ZonedDateTime =
           ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, _s + 1, n),
-                           TestZonedDateTime.ZONE_0100)
+                           TestZonedDateTime.ZONE_0100
+          )
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                                                      =>
         fail()
     }
   }
@@ -2679,15 +2758,17 @@ class TestZonedDateTime
   test("test_equals_false_nano_differs") {
     provider_sampleTimes.foreach {
       case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
-        var _n = n
+        var _n               = n
         _n = if (_n == 999999999) 999999998 else _n
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, _n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         val b: ZonedDateTime =
           ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, _n + 1),
-                           TestZonedDateTime.ZONE_0100)
+                           TestZonedDateTime.ZONE_0100
+          )
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                                                      =>
         fail()
     }
   }
@@ -2696,11 +2777,13 @@ class TestZonedDateTime
     provider_sampleTimes.foreach {
       case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneId) :: Nil =>
         val a: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
-                                                TestZonedDateTime.ZONE_0100)
+                                                TestZonedDateTime.ZONE_0100
+        )
         val b: ZonedDateTime = ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n),
-                                                TestZonedDateTime.ZONE_0200)
+                                                TestZonedDateTime.ZONE_0200
+        )
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                                                      =>
         fail()
     }
   }
@@ -2713,7 +2796,7 @@ class TestZonedDateTime
     assertNotEquals(TEST_DATE_TIME, "2007-07-15")
   }
 
-  val provider_sampleToString: List[List[Any]] = {
+  val provider_sampleToString: List[List[Any]] =
     List(
       List(2008, 6, 30, 11, 30, 59, 0, "Z", "2008-06-30T11:30:59Z"),
       List(2008, 6, 30, 11, 30, 59, 0, "+01:00", "2008-06-30T11:30:59+01:00"),
@@ -2731,7 +2814,8 @@ class TestZonedDateTime
            59,
            999,
            "Europe/London",
-           "2008-06-30T11:30:59.000000999+01:00[Europe/London]"),
+           "2008-06-30T11:30:59.000000999+01:00[Europe/London]"
+      ),
       List(2008,
            6,
            30,
@@ -2740,25 +2824,25 @@ class TestZonedDateTime
            59,
            999,
            "Europe/Paris",
-           "2008-06-30T11:30:59.000000999+02:00[Europe/Paris]")
+           "2008-06-30T11:30:59.000000999+02:00[Europe/Paris]"
+      )
     )
-  }
 
   test("test_toString") {
     provider_sampleToString.foreach {
       case (y: Int) :: (o: Int) :: (d: Int) :: (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (zoneId: String) :: (expected: String) :: Nil =>
         val t: ZonedDateTime =
           ZonedDateTime.of(TestZonedDateTime.dateTime(y, o, d, h, m, s, n), ZoneId.of(zoneId))
-        val str: String = t.toString
+        val str: String      = t.toString
         assertEquals(str, expected)
-      case _ =>
+      case _                                                                                                                                 =>
         fail()
     }
   }
 
   test("test_format_formatter") {
     val f: DateTimeFormatter = DateTimeFormatter.ofPattern("y M d H m s")
-    val t: String = ZonedDateTime
+    val t: String            = ZonedDateTime
       .of(TestZonedDateTime.dateTime(2010, 12, 3, 11, 30), TestZonedDateTime.ZONE_PARIS)
       .format(f)
     assertEquals(t, "2010 12 3 11 30 0")

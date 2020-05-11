@@ -193,8 +193,8 @@ object PerformanceZone {
     val dt: GregorianCalendar = new GregorianCalendar(tz)
     dt.setGregorianChange(new Date(Long.MinValue))
     dt.set(YEAR, 5, 1, 12, 0)
-    val list: Array[Int] = new Array[Int](SIZE)
-    val start: Long      = System.nanoTime
+    val list: Array[Int]      = new Array[Int](SIZE)
+    val start: Long           = System.nanoTime
 
     {
       var i: Int = 0

@@ -191,7 +191,7 @@ object OffsetTime {
   def from(temporal: TemporalAccessor): OffsetTime =
     temporal match {
       case time: OffsetTime => time
-      case _ =>
+      case _                =>
         try {
           val time: LocalTime    = LocalTime.from(temporal)
           val offset: ZoneOffset = ZoneOffset.from(temporal)
@@ -226,9 +226,12 @@ object OffsetTime {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): OffsetTime = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[OffsetTime] {
-      override def queryFrom(temporal: TemporalAccessor): OffsetTime = OffsetTime.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[OffsetTime] {
+                      override def queryFrom(temporal: TemporalAccessor): OffsetTime =
+                        OffsetTime.from(temporal)
+                    }
+    )
   }
 
 }
@@ -546,7 +549,7 @@ final class OffsetTime(private val time: LocalTime, private val offset: ZoneOffs
         if (field eq OFFSET_SECONDS)
           `with`(time, ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue)))
         else `with`(time.`with`(field, newValue), offset)
-      case _ => field.adjustInto(this, newValue)
+      case _              => field.adjustInto(this, newValue)
     }
 
   /** Returns a copy of this {@code OffsetTime} with the hour-of-day value altered.
@@ -810,12 +813,12 @@ final class OffsetTime(private val time: LocalTime, private val offset: ZoneOffs
     */
   override def query[R](query: TemporalQuery[R]): R =
     query match {
-      case TemporalQueries.precision                     => NANOS.asInstanceOf[R]
-      case TemporalQueries.offset | TemporalQueries.zone => getOffset.asInstanceOf[R]
-      case TemporalQueries.localTime                     => time.asInstanceOf[R]
+      case TemporalQueries.precision                                                       => NANOS.asInstanceOf[R]
+      case TemporalQueries.offset | TemporalQueries.zone                                   => getOffset.asInstanceOf[R]
+      case TemporalQueries.localTime                                                       => time.asInstanceOf[R]
       case TemporalQueries.chronology | TemporalQueries.localDate | TemporalQueries.zoneId =>
         null.asInstanceOf[R]
-      case _ => super.query(query)
+      case _                                                                               => super.query(query)
     }
 
   /** Adjusts the specified temporal object to have the same offset and time
@@ -909,7 +912,7 @@ final class OffsetTime(private val time: LocalTime, private val offset: ZoneOffs
           case HALF_DAYS => nanosUntil / (12 * NANOS_PER_HOUR)
           case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
-      case _ =>
+      case _             =>
         unit.between(this, end)
     }
   }

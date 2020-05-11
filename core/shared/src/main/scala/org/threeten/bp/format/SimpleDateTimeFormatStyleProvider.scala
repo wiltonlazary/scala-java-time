@@ -69,27 +69,24 @@ final class SimpleDateTimeFormatStyleProvider extends DateTimeFormatStyleProvide
       if (cached == "")
         throw new IllegalArgumentException("Unable to convert DateFormat to DateTimeFormatter")
       cached.asInstanceOf[DateTimeFormatter]
-    } else {
-      (if (dateStyle != null) {
-         if (timeStyle != null) {
+    } else
+      (if (dateStyle != null)
+         if (timeStyle != null)
            DateFormat.getDateTimeInstance(convertStyle(dateStyle), convertStyle(timeStyle), locale)
-         } else {
+         else
            DateFormat.getDateInstance(convertStyle(dateStyle), locale)
-         }
-       } else {
-         DateFormat.getTimeInstance(convertStyle(timeStyle), locale)
-       }) match {
+       else
+         DateFormat.getTimeInstance(convertStyle(timeStyle), locale)) match {
         case format: SimpleDateFormat =>
-          val pattern: String = format.toPattern
+          val pattern: String              = format.toPattern
           val formatter: DateTimeFormatter =
             new DateTimeFormatterBuilder().appendPattern(pattern).toFormatter(locale)
           SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.put(key, formatter)
           formatter
-        case _ =>
+        case _                        =>
           SimpleDateTimeFormatStyleProvider.FORMATTER_CACHE.put(key, "")
           throw new IllegalArgumentException("Unable to convert DateFormat to DateTimeFormatter")
       }
-    }
   }
 
   /** Converts the enum style to the old format style.

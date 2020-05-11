@@ -35,12 +35,12 @@ import org.scalatest.funsuite.AnyFunSuite
 
 /** Test tick clock. */
 object TestClock_Tick {
-  val MOSCOW: ZoneId   = ZoneId.of("Europe/Moscow")
-  val PARIS: ZoneId    = ZoneId.of("Europe/Paris")
-  val AMOUNT: Duration = Duration.ofSeconds(2)
+  val MOSCOW: ZoneId     = ZoneId.of("Europe/Moscow")
+  val PARIS: ZoneId      = ZoneId.of("Europe/Paris")
+  val AMOUNT: Duration   = Duration.ofSeconds(2)
   val ZDT: ZonedDateTime =
     LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2))
-  val INSTANT: Instant = ZDT.toInstant
+  val INSTANT: Instant   = ZDT.toInstant
 }
 
 class TestClock_Tick extends AnyFunSuite with AssertionsHelper {
@@ -91,7 +91,8 @@ class TestClock_Tick extends AnyFunSuite with AssertionsHelper {
         {
           val test: Clock =
             Clock.tick(Clock.fixed(TestClock_Tick.ZDT.withNano(i).toInstant, TestClock_Tick.PARIS),
-                       Duration.ofNanos(20))
+                       Duration.ofNanos(20)
+            )
           assertEquals(test.instant, TestClock_Tick.ZDT.withNano((i / 20) * 20).toInstant)
           assertEquals(test.getZone, TestClock_Tick.PARIS)
         }
@@ -180,7 +181,7 @@ class TestClock_Tick extends AnyFunSuite with AssertionsHelper {
   }
 
   test("tickMinutes_ZoneId") {
-    val test: Clock = Clock.tickMinutes(TestClock_Tick.PARIS)
+    val test: Clock      = Clock.tickMinutes(TestClock_Tick.PARIS)
     assertEquals(test.getZone, TestClock_Tick.PARIS)
     val instant: Instant = test.instant
     assertEquals(instant.getEpochSecond % 60, 0)

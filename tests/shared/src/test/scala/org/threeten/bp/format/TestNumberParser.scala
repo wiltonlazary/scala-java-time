@@ -39,7 +39,7 @@ import org.threeten.bp.format.internal.{ TTBPDateTimeFormatterBuilder, TTBPDateT
 
 /** Test NumberPrinterParser. */
 class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
-  val data_error: List[List[Any]] = {
+  val data_error: List[List[Any]] =
     List[List[Any]](
       List(
         new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, 1, 2, SignStyle.NEVER),
@@ -54,16 +54,14 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
         classOf[IndexOutOfBoundsException]
       )
     )
-  }
 
   test("parse_error") {
     data_error.foreach {
       case (pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser) :: (text: String) :: (pos: Int) :: (expected: Class[
             _
-          ]) :: Nil =>
-        try {
-          pp.parse(parseContext, text, pos)
-        } catch {
+          ]) :: Nil                 =>
+        try pp.parse(parseContext, text, pos)
+        catch {
           case ex: RuntimeException =>
             assertTrue(expected.isInstance(ex))
             assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
@@ -74,7 +72,7 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
     }
   }
 
-  val provider_parseData: List[List[Any]] = {
+  val provider_parseData: List[List[Any]] =
     List(
       List(1, 2, SignStyle.NEVER, 0, "12", 0, 2, 12L),
       List(1, 2, SignStyle.NEVER, 0, "Xxx12Xxx", 3, 5, 12L),
@@ -118,7 +116,8 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
            "123456789012345678901234567890",
            0,
            19,
-           1234567890123456789L),
+           1234567890123456789L
+      ),
       List(1, 19, SignStyle.NEVER, 1, "1", 0, 1, 1L),
       List(2, 2, SignStyle.NEVER, 1, "12", 0, 2, 12L),
       List(2, 19, SignStyle.NEVER, 1, "1", 0, ~0, 0L),
@@ -133,14 +132,14 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
            "123456789012345678901234567890",
            0,
            19,
-           1234567890123456789L),
+           1234567890123456789L
+      ),
       List(1, 19, SignStyle.NEVER, 2, "1", 0, 1, 1L),
       List(1, 19, SignStyle.NEVER, 2, "12", 0, 1, 1L),
       List(2, 2, SignStyle.NEVER, 2, "12", 0, 2, 12L),
       List(2, 19, SignStyle.NEVER, 2, "1", 0, ~0, 0L),
       List(2, 19, SignStyle.NEVER, 2, "1AAAAABBBBBCCCCC", 0, ~0, 0L)
     )
-  }
 
   test("parse_fresh") {
     provider_parseData.foreach {
@@ -150,19 +149,19 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
                                                                minWidth,
                                                                maxWidth,
-                                                               signStyle)
-        if (subsequentWidth > 0) {
+                                                               signStyle
+          )
+        if (subsequentWidth > 0)
           pp = pp.withSubsequentWidth(subsequentWidth)
-        }
-        val newPos: Int = pp.parse(parseContext, text, pos)
+        val newPos: Int                                          = pp.parse(parseContext, text, pos)
         assertEquals(newPos, expectedPos)
-        if (expectedPos > 0) {
+        if (expectedPos > 0)
           assertParsed(parseContext, DAY_OF_MONTH, Some(expectedValue))
-        } else {
+        else {
           assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
           assertEquals(parseContext.toParsed.query(TemporalQueries.zoneId), null)
         }
-      case _ =>
+      case _                                                                                                                                                                            =>
         fail()
     }
   }
@@ -175,21 +174,20 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_WEEK,
                                                                minWidth,
                                                                maxWidth,
-                                                               signStyle)
-        if (subsequentWidth > 0) {
+                                                               signStyle
+          )
+        if (subsequentWidth > 0)
           pp = pp.withSubsequentWidth(subsequentWidth)
-        }
-        val newPos: Int = pp.parse(parseContext, text, pos)
+        val newPos: Int                                          = pp.parse(parseContext, text, pos)
         assertEquals(newPos, expectedPos)
-        if (expectedPos > 0) {
+        if (expectedPos > 0)
           assertParsed(parseContext, DAY_OF_WEEK, Some(expectedValue))
-        }
-      case _ =>
+      case _                                                                                                                                                                            =>
         fail()
     }
   }
 
-  val provider_parseSignsStrict: List[List[Any]] = {
+  val provider_parseSignsStrict: List[List[Any]] =
     List(
       List("0", 1, 2, SignStyle.NEVER, 1, Some(0)),
       List("1", 1, 2, SignStyle.NEVER, 1, Some(1)),
@@ -275,7 +273,6 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
       List("+500", 1, 2, SignStyle.EXCEEDS_PAD, 3, Some(50)),
       List("+AAA", 1, 2, SignStyle.EXCEEDS_PAD, ~1, None)
     )
-  }
 
   test("parseSignsStrict") {
     provider_parseSignsStrict.foreach {
@@ -285,22 +282,22 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
         super.beforeEach()
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, min, max, style)
-        val newPos: Int = pp.parse(parseContext, input, 0)
+        val newPos: Int                                          = pp.parse(parseContext, input, 0)
         assertEquals(newPos, parseLen)
         assertParsed(parseContext, DAY_OF_MONTH, Some(parseVal.toLong))
       case (input: String) :: (min: Int) :: (max: Int) :: (style: SignStyle) :: (parseLen: Int) :: None :: Nil =>
         super.beforeEach()
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, min, max, style)
-        val newPos: Int = pp.parse(parseContext, input, 0)
+        val newPos: Int                                          = pp.parse(parseContext, input, 0)
         assertEquals(newPos, parseLen)
         assertParsed(parseContext, DAY_OF_MONTH, None)
-      case _ =>
+      case _                                                                                                   =>
         fail()
     }
   }
 
-  val provider_parseSignsLenient: List[List[Any]] = {
+  val provider_parseSignsLenient: List[List[Any]] =
     List(
       List("0", 1, 2, SignStyle.NEVER, 1, Some(0)),
       List("5", 1, 2, SignStyle.NEVER, 1, Some(5)),
@@ -382,7 +379,6 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
       List("+500", 1, 2, SignStyle.EXCEEDS_PAD, 4, Some(500)),
       List("+AAA", 1, 2, SignStyle.EXCEEDS_PAD, ~1, None)
     )
-  }
 
   test("parseSignsLenient") {
     provider_parseSignsLenient.foreach {
@@ -393,7 +389,7 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
         parseContext.setStrict(false)
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, min, max, style)
-        val newPos: Int = pp.parse(parseContext, input, 0)
+        val newPos: Int                                          = pp.parse(parseContext, input, 0)
         assertEquals(newPos, parseLen)
         assertParsed(parseContext, DAY_OF_MONTH, Some(parseVal.toLong))
       case (input: String) :: (min: Int) :: (max: Int) :: (style: SignStyle) :: (parseLen: Int) :: None :: Nil =>
@@ -401,10 +397,10 @@ class TestNumberParser extends AnyFunSuite with GenTestPrinterParser with Assert
         parseContext.setStrict(false)
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH, min, max, style)
-        val newPos: Int = pp.parse(parseContext, input, 0)
+        val newPos: Int                                          = pp.parse(parseContext, input, 0)
         assertEquals(newPos, parseLen)
         assertParsed(parseContext, DAY_OF_MONTH, None)
-      case _ =>
+      case _                                                                                                   =>
         fail()
     }
   }

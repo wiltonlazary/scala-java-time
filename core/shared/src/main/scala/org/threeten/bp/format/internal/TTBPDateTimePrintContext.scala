@@ -53,23 +53,20 @@ object TTBPDateTimePrintContext {
   def adjust(temporal: TemporalAccessor, formatter: DateTimeFormatter): TemporalAccessor = {
     var overrideChrono: Chronology = formatter.getChronology
     var overrideZone: ZoneId       = formatter.getZone
-    if (overrideChrono == null && overrideZone == null) {
+    if (overrideChrono == null && overrideZone == null)
       temporal
-    } else {
-      val temporalChrono: Chronology = temporal.query(TemporalQueries.chronology)
-      val temporalZone: ZoneId       = temporal.query(TemporalQueries.zoneId)
-      if (Objects.equals(temporalChrono, overrideChrono)) {
+    else {
+      val temporalChrono: Chronology     = temporal.query(TemporalQueries.chronology)
+      val temporalZone: ZoneId           = temporal.query(TemporalQueries.zoneId)
+      if (Objects.equals(temporalChrono, overrideChrono))
         overrideChrono = null
-      }
-      if (Objects.equals(temporalZone, overrideZone)) {
+      if (Objects.equals(temporalZone, overrideZone))
         overrideZone = null
-      }
-      if (overrideChrono == null && overrideZone == null) {
+      if (overrideChrono == null && overrideZone == null)
         return temporal
-      }
-      val effectiveChrono: Chronology =
+      val effectiveChrono: Chronology    =
         if (overrideChrono != null) overrideChrono else temporalChrono
-      val effectiveZone: ZoneId = if (overrideZone != null) overrideZone else temporalZone
+      val effectiveZone: ZoneId          = if (overrideZone != null) overrideZone else temporalZone
       if (overrideZone != null) {
         if (temporal.isSupported(ChronoField.INSTANT_SECONDS)) {
           val chrono: Chronology =
@@ -78,29 +75,31 @@ object TTBPDateTimePrintContext {
         }
         val normalizedOffset: ZoneId   = overrideZone.normalized
         val temporalOffset: ZoneOffset = temporal.query(TemporalQueries.offset)
-        if (normalizedOffset
-              .isInstanceOf[ZoneOffset] && temporalOffset != null && !(normalizedOffset == temporalOffset))
+        if (
+          normalizedOffset
+            .isInstanceOf[
+              ZoneOffset
+            ] && temporalOffset != null && !(normalizedOffset == temporalOffset)
+        )
           throw new DateTimeException(
             s"Invalid override zone for temporal: $overrideZone $temporal"
           )
       }
-      val effectiveDate: ChronoLocalDate = if (overrideChrono != null) {
-        if (temporal.isSupported(ChronoField.EPOCH_DAY)) {
-          effectiveChrono.date(temporal)
-        } else {
-          if (!((overrideChrono eq IsoChronology.INSTANCE) && temporalChrono == null)) {
-            for (f <- ChronoField.values) {
-              if (f.isDateBased && temporal.isSupported(f))
-                throw new DateTimeException(
-                  s"Invalid override chronology for temporal: $overrideChrono $temporal"
-                )
-            }
+      val effectiveDate: ChronoLocalDate =
+        if (overrideChrono != null)
+          if (temporal.isSupported(ChronoField.EPOCH_DAY))
+            effectiveChrono.date(temporal)
+          else {
+            if (!((overrideChrono eq IsoChronology.INSTANCE) && temporalChrono == null))
+              for (f <- ChronoField.values)
+                if (f.isDateBased && temporal.isSupported(f))
+                  throw new DateTimeException(
+                    s"Invalid override chronology for temporal: $overrideChrono $temporal"
+                  )
+            null
           }
+        else
           null
-        }
-      } else {
-        null
-      }
       new TemporalAccessor() {
         def isSupported(field: TemporalField): Boolean =
           if (effectiveDate != null && field.isDateBased)
@@ -160,7 +159,8 @@ final class TTBPDateTimePrintContext(
   def this(temporal: TemporalAccessor, formatter: DateTimeFormatter) {
     this(TTBPDateTimePrintContext.adjust(temporal, formatter),
          formatter.getLocale,
-         formatter.getDecimalStyle)
+         formatter.getDecimalStyle
+    )
   }
 
   /** Gets the temporal object being output.

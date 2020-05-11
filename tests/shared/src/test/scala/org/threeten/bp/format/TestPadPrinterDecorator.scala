@@ -133,7 +133,7 @@ class TestPadPrinterDecorator extends AnyFunSuite with GenTestPrinterParser with
   test("test_toString1") {
     val wrapped: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
       new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Y')
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator     =
       new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(wrapped, 5, ' ')
     assertEquals(pp.toString, "Pad('Y',5)")
   }
@@ -141,7 +141,7 @@ class TestPadPrinterDecorator extends AnyFunSuite with GenTestPrinterParser with
   test("test_toString2") {
     val wrapped: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser =
       new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('Y')
-    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator =
+    val pp: TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator     =
       new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(wrapped, 5, '-')
     assertEquals(pp.toString, "Pad('Y',5,'-')")
   }

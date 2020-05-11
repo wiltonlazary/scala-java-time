@@ -90,7 +90,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     var i: Int              = 0
     while (i < 100 && (expected != test)) {
       expected = YearMonth.now(Clock.systemDefaultZone)
-      test     = YearMonth.now
+      test = YearMonth.now
       i += 1
     }
     assertEquals(test, expected)
@@ -110,7 +110,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     var i: Int = 0
     while (i < 100 && (expected != test)) {
       expected = YearMonth.now(Clock.system(zone))
-      test     = YearMonth.now(zone)
+      test = YearMonth.now(zone)
       i += 1
     }
     assertEquals(test, expected)
@@ -232,7 +232,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     }
   }
 
-  val provider_badParseData: List[(String, Int)] = {
+  val provider_badParseData: List[(String, Int)] =
     List(
       ("", 0),
       ("-00", 1),
@@ -249,7 +249,6 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
       ("12345-10", 0),
       ("+12345678901-10", 11)
     )
-  }
 
   test("factory_parse_fail") {
     provider_badParseData.foreach {
@@ -479,7 +478,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   test("test_plusYears_long_big") {
     val test: YearMonth = YearMonth.of(-40, 6)
     assertEquals(test.plusYears(20L + Year.MAX_VALUE),
-                 YearMonth.of((-40L + 20L + Year.MAX_VALUE).asInstanceOf[Int], 6))
+                 YearMonth.of((-40L + 20L + Year.MAX_VALUE).asInstanceOf[Int], 6)
+    )
   }
 
   test("test_plusYears_long_invalidTooLarge") {
@@ -539,7 +539,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     val test: YearMonth = YearMonth.of(-40, 6)
     val months: Long    = 20L + Integer.MAX_VALUE
     assertEquals(test.plusMonths(months),
-                 YearMonth.of((-40L + months / 12).toInt, 6 + (months % 12).toInt))
+                 YearMonth.of((-40L + months / 12).toInt, 6 + (months % 12).toInt)
+    )
   }
 
   test("test_plusMonths_long_invalidTooLarge") {
@@ -588,7 +589,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   test("test_minusYears_long_big") {
     val test: YearMonth = YearMonth.of(40, 6)
     assertEquals(test.minusYears(20L + Year.MAX_VALUE),
-                 YearMonth.of((40L - 20L - Year.MAX_VALUE).asInstanceOf[Int], 6))
+                 YearMonth.of((40L - 20L - Year.MAX_VALUE).asInstanceOf[Int], 6)
+    )
   }
 
   test("test_minusYears_long_invalidTooLarge") {
@@ -648,7 +650,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     val test: YearMonth = YearMonth.of(40, 6)
     val months: Long    = 20L + Integer.MAX_VALUE
     assertEquals(test.minusMonths(months),
-                 YearMonth.of((40L - months / 12).toInt, 6 - (months % 12).toInt))
+                 YearMonth.of((40L - months / 12).toInt, 6 - (months % 12).toInt)
+    )
   }
 
   test("test_minusMonths_long_invalidTooLarge") {
@@ -893,7 +896,8 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
          (2008, 12, "2008-12"),
          (7, 5, "0007-05"),
          (0, 5, "0000-05"),
-         (-1, 1, "-0001-01"))
+         (-1, 1, "-0001-01")
+    )
 
   test("test_toString") {
     provider_sampleToString.foreach {

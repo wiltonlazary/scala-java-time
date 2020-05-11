@@ -56,7 +56,8 @@ class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with Asserti
       val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
         new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
                                                            TextStyle.FULL,
-                                                           TestTextPrinter.PROVIDER)
+                                                           TestTextPrinter.PROVIDER
+        )
       pp.print(printEmptyContext, buf)
     }
   }
@@ -66,13 +67,14 @@ class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with Asserti
     val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
       new TTBPDateTimeFormatterBuilder.TextPrinterParser(DAY_OF_WEEK,
                                                          TextStyle.FULL,
-                                                         TestTextPrinter.PROVIDER)
+                                                         TestTextPrinter.PROVIDER
+      )
     buf.append("EXISTING")
     pp.print(printContext, buf)
     assertEquals(buf.toString, "EXISTINGWednesday")
   }
 
-  val provider_dow: List[(TemporalField, TextStyle, Int, String)] = {
+  val provider_dow: List[(TemporalField, TextStyle, Int, String)] =
     List(
       (DAY_OF_WEEK, TextStyle.FULL, 1, "Monday"),
       (DAY_OF_WEEK, TextStyle.FULL, 2, "Tuesday"),
@@ -107,7 +109,6 @@ class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with Asserti
       (MONTH_OF_YEAR, TextStyle.SHORT, 1, "Jan"),
       (MONTH_OF_YEAR, TextStyle.SHORT, 12, "Dec")
     )
-  }
 
   test("test_print") {
     provider_dow.foreach {
@@ -118,7 +119,7 @@ class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with Asserti
           new TTBPDateTimeFormatterBuilder.TextPrinterParser(field, style, TestTextPrinter.PROVIDER)
         pp.print(printContext, buf)
         assertEquals(buf.toString, expected)
-      case _ =>
+      case _                               =>
         fail()
     }
   }
@@ -129,7 +130,8 @@ class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with Asserti
     val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
       new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
                                                          TextStyle.FULL,
-                                                         TestTextPrinter.PROVIDER)
+                                                         TestTextPrinter.PROVIDER
+      )
     pp.print(printContext, buf)
     assertEquals(buf.toString, "janvier")
   }
@@ -140,7 +142,8 @@ class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with Asserti
     val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
       new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
                                                          TextStyle.SHORT,
-                                                         TestTextPrinter.PROVIDER)
+                                                         TestTextPrinter.PROVIDER
+      )
     pp.print(printContext, buf)
     assertEquals(buf.toString, "janv.")
   }
@@ -149,7 +152,8 @@ class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with Asserti
     val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
       new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
                                                          TextStyle.FULL,
-                                                         TestTextPrinter.PROVIDER)
+                                                         TestTextPrinter.PROVIDER
+      )
     assertEquals(pp.toString, "Text(MonthOfYear)")
   }
 
@@ -157,7 +161,8 @@ class TestTextPrinter extends AnyFunSuite with GenTestPrinterParser with Asserti
     val pp: TTBPDateTimeFormatterBuilder.TextPrinterParser =
       new TTBPDateTimeFormatterBuilder.TextPrinterParser(MONTH_OF_YEAR,
                                                          TextStyle.SHORT,
-                                                         TestTextPrinter.PROVIDER)
+                                                         TestTextPrinter.PROVIDER
+      )
     assertEquals(pp.toString, "Text(MonthOfYear,SHORT)")
   }
 }

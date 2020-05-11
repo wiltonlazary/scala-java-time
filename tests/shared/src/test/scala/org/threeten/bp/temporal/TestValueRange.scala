@@ -94,7 +94,8 @@ class TestValueRange extends AnyFunSuite with AssertionsHelper {
          List(1, 3, 31, 31),
          List(-5, -4, -3, -2),
          List(-5, -4, 3, 4),
-         List(1, 20, 10, 31))
+         List(1, 20, 10, 31)
+    )
 
   test("of_longlonglonglong") {
     data_valid.foreach {
@@ -106,7 +107,7 @@ class TestValueRange extends AnyFunSuite with AssertionsHelper {
         assertEquals(test.getMaximum, lMax)
         assertEquals(test.isFixed, sMin == lMin && sMax == lMax)
         assertEquals(test.isIntValue, true)
-      case _ =>
+      case _                                   =>
         fail()
     }
   }
@@ -118,7 +119,8 @@ class TestValueRange extends AnyFunSuite with AssertionsHelper {
          List(31, 2, 3, 28),
          List(2, 1, 28, 31),
          List(2, 1, 31, 28),
-         List(12, 13, 1, 2))
+         List(12, 13, 1, 2)
+    )
 
   test("of_longlonglonglong_invalid") {
     data_invalid.foreach {
@@ -126,7 +128,7 @@ class TestValueRange extends AnyFunSuite with AssertionsHelper {
         assertThrows[IllegalArgumentException] {
           ValueRange.of(sMin, lMin, sMax, lMax)
         }
-      case _ =>
+      case _                                   =>
         fail()
     }
   }

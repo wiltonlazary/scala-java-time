@@ -117,11 +117,10 @@ object MonthDay {
   def of(month: Month, dayOfMonth: Int): MonthDay = {
     Objects.requireNonNull(month, "month")
     DAY_OF_MONTH.checkValidValue(dayOfMonth.toLong)
-    if (dayOfMonth > month.maxLength) {
+    if (dayOfMonth > month.maxLength)
       throw new DateTimeException(
         s"Illegal value for DayOfMonth field, value $dayOfMonth is not valid for month ${month.name}"
       )
-    }
     new MonthDay(month.getValue, dayOfMonth)
   }
 
@@ -163,11 +162,10 @@ object MonthDay {
     _temporal match {
       case day: MonthDay =>
         day
-      case _ =>
+      case _             =>
         try {
-          if (IsoChronology.INSTANCE != Chronology.from(_temporal)) {
+          if (IsoChronology.INSTANCE != Chronology.from(_temporal))
             _temporal = LocalDate.from(_temporal)
-          }
           of(_temporal.get(MONTH_OF_YEAR), _temporal.get(DAY_OF_MONTH))
         } catch {
           case _: DateTimeException =>
@@ -200,9 +198,12 @@ object MonthDay {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): MonthDay = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[MonthDay] {
-      override def queryFrom(temporal: TemporalAccessor): MonthDay = MonthDay.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[MonthDay] {
+                      override def queryFrom(temporal: TemporalAccessor): MonthDay =
+                        MonthDay.from(temporal)
+                    }
+    )
   }
 
 }
@@ -363,7 +364,7 @@ final class MonthDay private (private val month: Int, private val day: Int)
           case MONTH_OF_YEAR => month.toLong
           case _             => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
-      case _ => field.getFrom(this)
+      case _                   => field.getFrom(this)
     }
 
   /** Gets the month-of-year field from 1 to 12.
@@ -435,9 +436,8 @@ final class MonthDay private (private val month: Int, private val day: Int)
     */
   def `with`(month: Month): MonthDay = {
     Objects.requireNonNull(month, "month")
-    if (month.getValue == this.month) {
+    if (month.getValue == this.month)
       return this
-    }
     val day: Int = Math.min(this.day, month.maxLength)
     new MonthDay(month.getValue, day)
   }
@@ -511,9 +511,8 @@ final class MonthDay private (private val month: Int, private val day: Int)
     */
   def adjustInto(temporal: Temporal): Temporal = {
     var _temporal = temporal
-    if (!(Chronology.from(_temporal) == IsoChronology.INSTANCE)) {
+    if (!(Chronology.from(_temporal) == IsoChronology.INSTANCE))
       throw new DateTimeException("Adjustment only supported on ISO date-time")
-    }
     _temporal = _temporal.`with`(MONTH_OF_YEAR, month.toLong)
     _temporal.`with`(DAY_OF_MONTH, Math.min(_temporal.range(DAY_OF_MONTH).getMaximum, day.toLong))
   }

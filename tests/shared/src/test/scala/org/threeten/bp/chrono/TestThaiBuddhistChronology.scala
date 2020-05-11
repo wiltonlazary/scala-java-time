@@ -62,37 +62,49 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
     assertEquals(test, c)
   }
 
-  val data_samples: List[(ChronoLocalDate, LocalDate)] = {
+  val data_samples: List[(ChronoLocalDate, LocalDate)] =
     List(
       (ThaiBuddhistChronology.INSTANCE.date(1 + TestThaiBuddhistChronology.YDIFF, 1, 1),
-       LocalDate.of(1, 1, 1)),
+       LocalDate.of(1, 1, 1)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(1 + TestThaiBuddhistChronology.YDIFF, 1, 2),
-       LocalDate.of(1, 1, 2)),
+       LocalDate.of(1, 1, 2)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(1 + TestThaiBuddhistChronology.YDIFF, 1, 3),
-       LocalDate.of(1, 1, 3)),
+       LocalDate.of(1, 1, 3)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(2 + TestThaiBuddhistChronology.YDIFF, 1, 1),
-       LocalDate.of(2, 1, 1)),
+       LocalDate.of(2, 1, 1)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(3 + TestThaiBuddhistChronology.YDIFF, 1, 1),
-       LocalDate.of(3, 1, 1)),
+       LocalDate.of(3, 1, 1)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(3 + TestThaiBuddhistChronology.YDIFF, 12, 6),
-       LocalDate.of(3, 12, 6)),
+       LocalDate.of(3, 12, 6)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(4 + TestThaiBuddhistChronology.YDIFF, 1, 1),
-       LocalDate.of(4, 1, 1)),
+       LocalDate.of(4, 1, 1)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(4 + TestThaiBuddhistChronology.YDIFF, 7, 3),
-       LocalDate.of(4, 7, 3)),
+       LocalDate.of(4, 7, 3)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(4 + TestThaiBuddhistChronology.YDIFF, 7, 4),
-       LocalDate.of(4, 7, 4)),
+       LocalDate.of(4, 7, 4)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(5 + TestThaiBuddhistChronology.YDIFF, 1, 1),
-       LocalDate.of(5, 1, 1)),
+       LocalDate.of(5, 1, 1)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(1662 + TestThaiBuddhistChronology.YDIFF, 3, 3),
-       LocalDate.of(1662, 3, 3)),
+       LocalDate.of(1662, 3, 3)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(1728 + TestThaiBuddhistChronology.YDIFF, 10, 28),
-       LocalDate.of(1728, 10, 28)),
+       LocalDate.of(1728, 10, 28)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(1728 + TestThaiBuddhistChronology.YDIFF, 10, 29),
-       LocalDate.of(1728, 10, 29)),
+       LocalDate.of(1728, 10, 29)
+      ),
       (ThaiBuddhistChronology.INSTANCE.date(2555, 8, 29), LocalDate.of(2012, 8, 29))
     )
-  }
 
   test("test_toLocalDate") {
     data_samples.foreach {
@@ -108,7 +120,7 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
     }
   }
 
-  val data_badDates: List[(Int, Int, Int)] = {
+  val data_badDates: List[(Int, Int, Int)] =
     List((1728, 0, 0),
          (1728, -1, 1),
          (1728, 0, 1),
@@ -119,8 +131,8 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
          (1728, 1, 32),
          (1728, 12, -1),
          (1728, 12, 0),
-         (1728, 12, 32))
-  }
+         (1728, 12, 32)
+    )
 
   test("test_badDates") {
     data_badDates.foreach {
@@ -198,7 +210,7 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
     assertEquals(test, LocalDateTime.of(2012, 10, 29, 0, 0))
   }
 
-  val data_toString: List[(ChronoLocalDate, String)] = {
+  val data_toString: List[(ChronoLocalDate, String)] =
     List(
       (ThaiBuddhistChronology.INSTANCE.date(544, 1, 1), "ThaiBuddhist BE 544-01-01"),
       (ThaiBuddhistChronology.INSTANCE.date(2271, 10, 28), "ThaiBuddhist BE 2271-10-28"),
@@ -206,7 +218,6 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
       (ThaiBuddhistChronology.INSTANCE.date(2270, 12, 5), "ThaiBuddhist BE 2270-12-05"),
       (ThaiBuddhistChronology.INSTANCE.date(2270, 12, 6), "ThaiBuddhist BE 2270-12-06")
     )
-  }
 
   test("test_toString") {
     data_toString.foreach {
@@ -220,7 +231,8 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
     val maxYear: Long = LocalDate.MAX.getYear + TestThaiBuddhistChronology.YDIFF
     assertEquals(ThaiBuddhistChronology.INSTANCE.range(YEAR), ValueRange.of(minYear, maxYear))
     assertEquals(ThaiBuddhistChronology.INSTANCE.range(YEAR_OF_ERA),
-                 ValueRange.of(1, -minYear + 1, maxYear))
+                 ValueRange.of(1, -minYear + 1, maxYear)
+    )
     assertEquals(ThaiBuddhistChronology.INSTANCE.range(DAY_OF_MONTH), DAY_OF_MONTH.range)
     assertEquals(ThaiBuddhistChronology.INSTANCE.range(DAY_OF_YEAR), DAY_OF_YEAR.range)
     assertEquals(ThaiBuddhistChronology.INSTANCE.range(MONTH_OF_YEAR), MONTH_OF_YEAR.range)

@@ -79,14 +79,13 @@ import scala.collection.JavaConverters._
 
 /** Test LocalTime. */
 object TestLocalTime {
-  private val INVALID_UNITS: Array[TemporalUnit] = {
+  private val INVALID_UNITS: Array[TemporalUnit] =
     //val set: java.util.EnumSet[ChronoUnit] = EnumSet.range(WEEKS, FOREVER)
     //set.toArray(new Array[TemporalUnit](set.size)).asInstanceOf[Array[TemporalUnit]]
     // We can't use the code above, because ChronoUnit is not an enum (yet), because we can't define enums in Scala (yet).
     ChronoUnit.values
       .filter(unit => unit.ordinal >= WEEKS.ordinal && unit.ordinal <= FOREVER.ordinal)
       .asInstanceOf[Array[TemporalUnit]]
-  }
 }
 
 class TestLocalTime
@@ -192,11 +191,11 @@ class TestLocalTime
       var i: Int = 0
       while (i < 100) {
         {
-          if (expected == test) {
+          if (expected == test)
             i = 99
-          } else {
+          else {
             expected = LocalTime.now(Clock.system(zone))
-            test     = LocalTime.now(zone)
+            test = LocalTime.now(zone)
           }
         }
         {
@@ -223,8 +222,8 @@ class TestLocalTime
           val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
           val test: LocalTime  = LocalTime.now(clock)
           assertEquals(test.getHour, (i / (60 * 60)) % 24)
-          assertEquals(test.getMinute, (i / 60) % 60)
-          assertEquals(test.getSecond, i % 60)
+          assertEquals(test.getMinute, (i / 60)      % 60)
+          assertEquals(test.getSecond, i             % 60)
           assertEquals(test.getNano, 8)
         }
         {
@@ -244,8 +243,8 @@ class TestLocalTime
           val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
           val test: LocalTime  = LocalTime.now(clock)
           assertEquals(test.getHour, ((i + 24 * 60 * 60) / (60 * 60)) % 24)
-          assertEquals(test.getMinute, ((i + 24 * 60 * 60) / 60) % 60)
-          assertEquals(test.getSecond, (i + 24 * 60 * 60) % 60)
+          assertEquals(test.getMinute, ((i + 24 * 60 * 60) / 60)      % 60)
+          assertEquals(test.getSecond, (i + 24 * 60 * 60)             % 60)
           assertEquals(test.getNano, 8)
         }
         {
@@ -488,12 +487,12 @@ class TestLocalTime
         assertEquals(t.getMinute, m)
         assertEquals(t.getSecond, s)
         assertEquals(t.getNano, n)
-      case _ =>
+      case _                                                                         =>
         fail()
     }
   }
 
-  val provider_sampleBadParse: List[String] = {
+  val provider_sampleBadParse: List[String] =
     List("00;00",
          "12-00",
          "-01:00",
@@ -502,8 +501,8 @@ class TestLocalTime
          "00:00:abs",
          "11",
          "11:30+01:00",
-         "11:30+01:00[Europe/Paris]")
-  }
+         "11:30+01:00[Europe/Paris]"
+    )
 
   test("factory_parse_invalidText") {
     provider_sampleBadParse.foreach { unparsable =>
@@ -601,7 +600,8 @@ class TestLocalTime
     assertEquals(test.getLong(ChronoField.SECOND_OF_MINUTE), 40)
     assertEquals(test.getLong(ChronoField.NANO_OF_SECOND), 987654321)
     assertEquals(test.getLong(ChronoField.NANO_OF_DAY),
-                 ((12 * 3600 + 30 * 60 + 40) * 1000000000L) + 987654321)
+                 ((12 * 3600 + 30 * 60 + 40) * 1000000000L) + 987654321
+    )
     assertEquals(test.getLong(ChronoField.SECOND_OF_DAY), 12 * 3600 + 30 * 60 + 40)
     assertEquals(test.getLong(ChronoField.MINUTE_OF_DAY), 12 * 60 + 30)
     assertEquals(test.getLong(ChronoField.HOUR_OF_AMPM), 0)
@@ -644,7 +644,7 @@ class TestLocalTime
     }
   }
 
-  val provider_sampleTimes: List[List[Int]] = {
+  val provider_sampleTimes: List[List[Int]] =
     List(
       List(0, 0, 0, 0),
       List(0, 0, 0, 1),
@@ -663,7 +663,6 @@ class TestLocalTime
       List(1, 1, 1, 0),
       List(1, 1, 1, 1)
     )
-  }
 
   test("test_get") {
     provider_sampleTimes.foreach {
@@ -673,13 +672,13 @@ class TestLocalTime
         assertEquals(a.getMinute, m)
         assertEquals(a.getSecond, s)
         assertEquals(a.getNano, ns)
-      case _ =>
+      case _                                                    =>
         fail()
     }
   }
 
   test("test_with_adjustment") {
-    val sample: LocalTime = LocalTime.of(23, 5)
+    val sample: LocalTime          = LocalTime.of(23, 5)
     val adjuster: TemporalAdjuster = new TemporalAdjuster {
       override def adjustInto(temporal: Temporal): Temporal = sample
     }
@@ -866,7 +865,7 @@ class TestLocalTime
     }
   }
 
-  private val NINETY_MINS: TemporalUnit = new TemporalUnit() {
+  private val NINETY_MINS: TemporalUnit      = new TemporalUnit() {
     override def toString: String =
       "NinetyMins"
 
@@ -917,7 +916,7 @@ class TestLocalTime
       throw new UnsupportedOperationException
   }
 
-  val data_truncatedToValid: List[List[AnyRef]] = {
+  val data_truncatedToValid: List[List[AnyRef]] =
     List(
       List(LocalTime.of(1, 2, 3, 123456789), NANOS, LocalTime.of(1, 2, 3, 123456789)),
       List(LocalTime.of(1, 2, 3, 123456789), MICROS, LocalTime.of(1, 2, 3, 123456000)),
@@ -930,24 +929,22 @@ class TestLocalTime
       List(LocalTime.of(2, 1, 1, 123456789), NINETY_MINS, LocalTime.of(1, 30)),
       List(LocalTime.of(3, 1, 1, 123456789), NINETY_MINS, LocalTime.of(3, 0))
     )
-  }
 
   test("test_truncatedTo_valid") {
     data_truncatedToValid.foreach {
       case (input: LocalTime) :: (unit: TemporalUnit) :: (expected: LocalTime) :: Nil =>
         assertEquals(input.truncatedTo(unit), expected)
-      case _ =>
+      case _                                                                          =>
     }
   }
 
-  val data_truncatedToInvalid: List[List[AnyRef]] = {
+  val data_truncatedToInvalid: List[List[AnyRef]] =
     List(
       List(LocalTime.of(1, 2, 3, 123456789), NINETY_FIVE_MINS),
       List(LocalTime.of(1, 2, 3, 123456789), WEEKS),
       List(LocalTime.of(1, 2, 3, 123456789), MONTHS),
       List(LocalTime.of(1, 2, 3, 123456789), YEARS)
     )
-  }
 
   test("test_truncatedTo_invalid") {
     data_truncatedToInvalid.foreach {
@@ -955,7 +952,7 @@ class TestLocalTime
         assertThrows[DateTimeException] {
           input.truncatedTo(unit)
         }
-      case _ =>
+      case _                                                 =>
         fail()
     }
   }
@@ -1019,14 +1016,13 @@ class TestLocalTime
   }
 
   test("test_plus_long_unit_invalidUnit") {
-    for (unit <- TestLocalTime.INVALID_UNITS) {
+    for (unit <- TestLocalTime.INVALID_UNITS)
       try {
         TEST_12_30_40_987654321.plus(1, unit)
         fail("Unit should not be allowed " + unit)
       } catch {
         case _: DateTimeException =>
       }
-    }
   }
 
   test("test_plus_long_multiples") {
@@ -1183,16 +1179,16 @@ class TestLocalTime
           val t: LocalTime = base.plusMinutes(i)
           if (i < -60) {
             hour = 22
-            min  = i + 120
+            min = i + 120
           } else if (i < 0) {
             hour = 23
-            min  = i + 60
+            min = i + 60
           } else if (i >= 60) {
             hour = 1
-            min  = i - 60
+            min = i - 60
           } else {
             hour = 0
-            min  = i
+            min = i
           }
           assertEquals(t.getHour, hour)
           assertEquals(t.getMinute, min)
@@ -1263,7 +1259,7 @@ class TestLocalTime
     }
   }
 
-  val plusSeconds_fromZero: java.util.Iterator[List[Int]] = {
+  val plusSeconds_fromZero: java.util.Iterator[List[Int]] =
     new java.util.Iterator[List[Int]]() {
       private[bp] var delta: Int = 30
       private[bp] var i: Int     = -3660
@@ -1282,9 +1278,8 @@ class TestLocalTime
           if (min == 60) {
             hour += 1
             min = 0
-            if (hour == 24) {
+            if (hour == 24)
               hour = 0
-            }
           }
         }
         List[Int](i, hour, min, sec)
@@ -1292,7 +1287,6 @@ class TestLocalTime
 
       override def remove(): Unit = throw new UnsupportedOperationException
     }
-  }
 
   test("test_plusSeconds_fromZero") {
     plusSeconds_fromZero.asScala.toList.foreach {
@@ -1302,7 +1296,7 @@ class TestLocalTime
         assertEquals(hour, t.getHour)
         assertEquals(min, t.getMinute)
         assertEquals(sec, t.getSecond)
-      case _ =>
+      case _                                                                =>
         fail()
     }
   }
@@ -1357,7 +1351,7 @@ class TestLocalTime
     }
   }
 
-  val plusNanos_fromZero: java.util.Iterator[List[Any]] = {
+  val plusNanos_fromZero: java.util.Iterator[List[Any]] =
     new java.util.Iterator[List[Any]]() {
       private[bp] var delta: Long = 7500000000L
       private[bp] var i: Long     = -3660 * 1000000000L
@@ -1380,9 +1374,8 @@ class TestLocalTime
             if (min == 60) {
               hour += 1
               min = 0
-              if (hour == 24) {
+              if (hour == 24)
                 hour = 0
-              }
             }
           }
         }
@@ -1391,7 +1384,6 @@ class TestLocalTime
 
       override def remove(): Unit = throw new UnsupportedOperationException
     }
-  }
 
   test("test_plusNanos_fromZero") {
     plusNanos_fromZero.asScala.toList.foreach {
@@ -1402,7 +1394,7 @@ class TestLocalTime
         assertEquals(min, t.getMinute)
         assertEquals(sec, t.getSecond)
         assertEquals(nanos, t.getNano)
-      case _ =>
+      case _                                                                                     =>
         fail()
     }
   }
@@ -1492,14 +1484,13 @@ class TestLocalTime
   }
 
   test("test_minus_long_unit_invalidUnit") {
-    for (unit <- TestLocalTime.INVALID_UNITS) {
+    for (unit <- TestLocalTime.INVALID_UNITS)
       try {
         TEST_12_30_40_987654321.minus(1, unit)
         fail("Unit should not be allowed " + unit)
       } catch {
         case _: DateTimeException =>
       }
-    }
   }
 
   test("test_minus_long_multiples") {
@@ -1603,9 +1594,8 @@ class TestLocalTime
           if (min == -1) {
             hour -= 1
             min = 59
-            if (hour == -1) {
+            if (hour == -1)
               hour = 23
-            }
           }
           assertEquals(t.getHour, hour)
           assertEquals(t.getMinute, min)
@@ -1632,9 +1622,8 @@ class TestLocalTime
           if (min == 60) {
             hour += 1
             min = 0
-            if (hour == 24) {
+            if (hour == 24)
               hour = 0
-            }
           }
           assertEquals(t.getHour, hour)
           assertEquals(t.getMinute, min)
@@ -1691,9 +1680,8 @@ class TestLocalTime
             if (min == -1) {
               hour -= 1
               min = 59
-              if (hour == -1) {
+              if (hour == -1)
                 hour = 23
-              }
             }
           }
           assertEquals(t.getHour, hour)
@@ -1708,7 +1696,7 @@ class TestLocalTime
     }
   }
 
-  val minusSeconds_fromZero: java.util.Iterator[List[Int]] = {
+  val minusSeconds_fromZero: java.util.Iterator[List[Int]] =
     new java.util.Iterator[List[Int]]() {
       private[bp] var delta: Int = 30
       private[bp] var i: Int     = 3660
@@ -1727,9 +1715,8 @@ class TestLocalTime
           if (min == 60) {
             hour += 1
             min = 0
-            if (hour == 24) {
+            if (hour == 24)
               hour = 0
-            }
           }
         }
         List[Int](i, hour, min, sec)
@@ -1737,7 +1724,6 @@ class TestLocalTime
 
       override def remove(): Unit = throw new UnsupportedOperationException
     }
-  }
 
   test("test_minusSeconds_fromZero") {
     minusSeconds_fromZero.asScala.toList.foreach {
@@ -1747,7 +1733,7 @@ class TestLocalTime
         assertEquals(t.getHour, hour)
         assertEquals(t.getMinute, min)
         assertEquals(t.getSecond, sec)
-      case _ =>
+      case _                                                                =>
         fail()
     }
   }
@@ -1800,9 +1786,8 @@ class TestLocalTime
               if (min == -1) {
                 hour -= 1
                 min += 60
-                if (hour == -1) {
+                if (hour == -1)
                   hour += 24
-                }
               }
             }
           }
@@ -1816,7 +1801,7 @@ class TestLocalTime
     }
   }
 
-  val minusNanos_fromZero: java.util.Iterator[List[Any]] = {
+  val minusNanos_fromZero: java.util.Iterator[List[Any]] =
     new java.util.Iterator[List[Any]]() {
       private[bp] var delta: Long = 7500000000L
       private[bp] var i: Long     = 3660 * 1000000000L
@@ -1839,9 +1824,8 @@ class TestLocalTime
             if (min == 60) {
               hour += 1
               min = 0
-              if (hour == 24) {
+              if (hour == 24)
                 hour = 0
-              }
             }
           }
         }
@@ -1850,7 +1834,6 @@ class TestLocalTime
 
       override def remove(): Unit = throw new UnsupportedOperationException
     }
-  }
 
   test("test_minusNanos_fromZero") {
     minusNanos_fromZero.asScala.toList.foreach {
@@ -1861,7 +1844,7 @@ class TestLocalTime
         assertEquals(min, t.getMinute)
         assertEquals(sec, t.getSecond)
         assertEquals(nanos, t.getNano)
-      case _ =>
+      case _                                                                                         =>
         fail()
     }
   }
@@ -1886,7 +1869,7 @@ class TestLocalTime
     assertEquals(t, LocalTime.NOON)
   }
 
-  val provider_until: List[List[Any]] = {
+  val provider_until: List[List[Any]] =
     List(
       List("00:00", "00:00", NANOS, 0L),
       List("00:00", "00:00", MICROS, 0L),
@@ -1910,7 +1893,6 @@ class TestLocalTime
       List("00:00", "00:01", HOURS, 0L),
       List("00:00", "00:01", HALF_DAYS, 0L)
     )
-  }
 
   test("test_until") {
     provider_until.foreach {
@@ -1919,7 +1901,7 @@ class TestLocalTime
         val end: LocalTime   = LocalTime.parse(endStr)
         assertEquals(start.until(end, unit), expected)
         assertEquals(end.until(start, unit), -expected)
-      case _ =>
+      case _                                                                                         =>
         fail()
     }
   }
@@ -2084,7 +2066,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h, m, s, n)
         assertEquals(a == b, true)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2095,7 +2077,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h + 1, m, s, n)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2106,7 +2088,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h, m + 1, s, n)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2117,7 +2099,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h, m, s + 1, n)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2128,7 +2110,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h, m, s, n + 1)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2151,7 +2133,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h, m, s, n)
         assertEquals(a.hashCode, b.hashCode)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2162,7 +2144,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h + 1, m, s, n)
         assertEquals(a.hashCode == b.hashCode, false)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2173,7 +2155,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h, m + 1, s, n)
         assertEquals(a.hashCode == b.hashCode, false)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2184,7 +2166,7 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h, m, s + 1, n)
         assertEquals(a.hashCode == b.hashCode, false)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
@@ -2195,12 +2177,12 @@ class TestLocalTime
         val a: LocalTime = LocalTime.of(h, m, s, n)
         val b: LocalTime = LocalTime.of(h, m, s, n + 1)
         assertEquals(a.hashCode == b.hashCode, false)
-      case _ =>
+      case _                                                   =>
         fail()
     }
   }
 
-  val provider_sampleToString: List[List[Any]] = {
+  val provider_sampleToString: List[List[Any]] =
     List(
       List(0, 0, 0, 0, "00:00"),
       List(1, 0, 0, 0, "01:00"),
@@ -2229,7 +2211,6 @@ class TestLocalTime
       List(0, 0, 0, 99, "00:00:00.000000099"),
       List(0, 0, 0, 9, "00:00:00.000000009")
     )
-  }
 
   test("test_toString") {
     provider_sampleToString.foreach {
@@ -2237,7 +2218,7 @@ class TestLocalTime
         val t: LocalTime = LocalTime.of(h, m, s, n)
         val str: String  = t.toString
         assertEquals(str, expected)
-      case _ =>
+      case _                                                                         =>
         fail()
     }
   }

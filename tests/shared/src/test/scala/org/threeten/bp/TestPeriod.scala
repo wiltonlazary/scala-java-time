@@ -169,7 +169,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
         val end: LocalDate   = LocalDate.of(y2, m2, d2)
         val test: Period     = Period.between(start, end)
         assertPeriod(test, ye, me, de)
-      case _ =>
+      case _                                                         =>
         fail()
     }
   }
@@ -231,7 +231,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
     data_parse.foreach {
       case (text: String) :: (expected: Period) :: Nil =>
         assertEquals(Period.parse(text), expected)
-      case _ =>
+      case _                                           =>
         fail()
     }
   }
@@ -240,7 +240,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
     data_toString.foreach {
       case (test: Period) :: (expected: String) :: Nil =>
         assertEquals(test, Period.parse(expected))
-      case _ =>
+      case _                                           =>
         fail()
     }
   }
@@ -338,7 +338,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
     data_plus.foreach {
       case base :: add :: expected :: Nil =>
         assertEquals(base.plus(add), expected)
-      case _ =>
+      case _                              =>
         fail()
     }
   }
@@ -455,7 +455,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
     data_minus.foreach {
       case base :: subtract :: expected :: Nil =>
         assertEquals(base.minus(subtract), expected)
-      case _ =>
+      case _                                   =>
         fail()
     }
   }
@@ -643,8 +643,9 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
         assertPeriod(Period.of(inputYears, inputMonths, 0).normalized,
                      expectedYears,
                      expectedMonths,
-                     0)
-      case _ =>
+                     0
+        )
+      case _                                                                   =>
         fail()
     }
   }
@@ -689,7 +690,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
     data_addTo.foreach {
       case (period: Period) :: (baseDate: LocalDate) :: (expected: LocalDate) :: Nil =>
         assertEquals(period.addTo(baseDate), expected)
-      case _ =>
+      case _                                                                         =>
         fail()
     }
   }
@@ -698,7 +699,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
     data_addTo.foreach {
       case (period: Period) :: (baseDate: LocalDate) :: (expected: LocalDate) :: Nil =>
         assertEquals(baseDate.plus(period), expected)
-      case _ =>
+      case _                                                                         =>
         fail()
     }
   }
@@ -742,16 +743,18 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
     data_subtractFrom.foreach {
       case (period: Period) :: (baseDate: LocalDate) :: (expected: LocalDate) :: Nil =>
         assertEquals(period.subtractFrom(baseDate), expected)
-      case _ =>
+      case _                                                                         =>
         fail()
     }
   }
 
-  test("subtractFrom_usingLocalDateMinus(period: Period, baseDate: LocalDate, expected: LocalDate") {
+  test(
+    "subtractFrom_usingLocalDateMinus(period: Period, baseDate: LocalDate, expected: LocalDate"
+  ) {
     data_subtractFrom.foreach {
       case (period: Period) :: (baseDate: LocalDate) :: (expected: LocalDate) :: Nil =>
         assertEquals(baseDate.minus(period), expected)
-      case _ =>
+      case _                                                                         =>
         fail()
     }
   }
@@ -825,7 +828,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
     data_toString.foreach {
       case (input: Period) :: (expected: String) :: Nil =>
         assertEquals(input.toString, expected)
-      case _ =>
+      case _                                            =>
         fail()
     }
   }

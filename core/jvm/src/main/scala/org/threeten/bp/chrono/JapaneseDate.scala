@@ -143,7 +143,7 @@ object JapaneseDate {
     *                           or if the day-of-year is invalid for the year
     */
   private[chrono] def ofYearDay(era: JapaneseEra, yearOfEra: Int, dayOfYear: Int): JapaneseDate = {
-    var _dayOfYear = dayOfYear
+    var _dayOfYear              = dayOfYear
     Objects.requireNonNull(era, "era")
     if (yearOfEra < 1)
       throw new DateTimeException(s"Invalid YearOfEra: $yearOfEra")
@@ -156,8 +156,8 @@ object JapaneseDate {
           s"DayOfYear exceeds maximum allowed in the first year of era $era"
         )
     }
-    val yearOffset: Int    = eraStartDate.getYear - 1
-    val isoDate: LocalDate = LocalDate.ofYearDay(yearOfEra + yearOffset, _dayOfYear)
+    val yearOffset: Int         = eraStartDate.getYear - 1
+    val isoDate: LocalDate      = LocalDate.ofYearDay(yearOfEra + yearOffset, _dayOfYear)
     if (isoDate.isBefore(eraStartDate) || isoDate.isAfter(eraEndDate))
       throw new DateTimeException(s"Requested date is outside bounds of era $era")
     new JapaneseDate(era, yearOfEra, isoDate)
@@ -248,7 +248,8 @@ final class JapaneseDate private[chrono] (
     // !!!! FIXME: JapaneseEra.from(isoDate) is called twice, because this call must be first ...
     this(JapaneseEra.from(isoDate),
          isoDate.getYear - (JapaneseEra.from(isoDate).startDate.getYear - 1),
-         isoDate)
+         isoDate
+    )
   }
 
   def getChronology: JapaneseChronology = JapaneseChronology.INSTANCE
@@ -304,16 +305,15 @@ final class JapaneseDate private[chrono] (
   override def range(field: TemporalField): ValueRange =
     field match {
       case f: ChronoField =>
-        if (isSupported(field)) {
+        if (isSupported(field))
           f match {
             case DAY_OF_YEAR => actualRange(Calendar.DAY_OF_YEAR)
             case YEAR_OF_ERA => actualRange(Calendar.YEAR)
             case _           => getChronology.range(f)
           }
-        } else {
+        else
           throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-        }
-      case _ =>
+      case _              =>
         field.rangeRefinedBy(this)
     }
 
@@ -322,7 +322,8 @@ final class JapaneseDate private[chrono] (
     jcal.set(Calendar.ERA, era.getValue + JapaneseEra.ERA_OFFSET)
     jcal.set(yearOfEra, isoDate.getMonthValue - 1, isoDate.getDayOfMonth)
     ValueRange.of(jcal.getActualMinimum(calendarField).toLong,
-                  jcal.getActualMaximum(calendarField).toLong)
+                  jcal.getActualMaximum(calendarField).toLong
+    )
   }
 
   def getLong(field: TemporalField): Long =
@@ -337,7 +338,7 @@ final class JapaneseDate private[chrono] (
           case DAY_OF_YEAR => getDayOfYear
           case _           => isoDate.getLong(field)
         }
-      case _ =>
+      case _              =>
         field.getFrom(this)
     }
 
@@ -363,9 +364,9 @@ final class JapaneseDate private[chrono] (
               case YEAR_OF_ERA => this.withYear(nvalue)
               case ERA         => this.withYear(JapaneseEra.of(nvalue), yearOfEra)
             }
-          case _ => `with`(isoDate.`with`(field, newValue))
+          case _                               => `with`(isoDate.`with`(field, newValue))
         }
-      case _ =>
+      case _              =>
         field.adjustInto(this, newValue)
     }
 

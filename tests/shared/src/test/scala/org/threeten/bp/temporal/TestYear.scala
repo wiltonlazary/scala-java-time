@@ -78,7 +78,7 @@ class TestYear extends GenDateTimeTest {
     var i: Int         = 0
     while (i < 100 && (expected != test)) {
       expected = Year.now(Clock.systemDefaultZone)
-      test     = Year.now
+      test = Year.now
       i += 1
     }
     assertEquals(test, expected)
@@ -97,7 +97,7 @@ class TestYear extends GenDateTimeTest {
     var i: Int         = 0
     while (i < 100 && (expected == test)) {
       expected = Year.now(Clock.system(zone))
-      test     = Year.now(zone)
+      test = Year.now(zone)
       i += 1
     }
     assertEquals(test, expected)
@@ -154,7 +154,7 @@ class TestYear extends GenDateTimeTest {
     }
   }
 
-  val provider_goodParseData: List[(String, Year)] = {
+  val provider_goodParseData: List[(String, Year)] =
     List(
       ("0000", Year.of(0)),
       ("9999", Year.of(9999)),
@@ -166,7 +166,6 @@ class TestYear extends GenDateTimeTest {
       ("+" + Year.MAX_VALUE, Year.of(Year.MAX_VALUE)),
       ("" + Year.MIN_VALUE, Year.of(Year.MIN_VALUE))
     )
-  }
 
   test("factory_parse_success") {
     provider_goodParseData.foreach {
@@ -176,7 +175,7 @@ class TestYear extends GenDateTimeTest {
     }
   }
 
-  val provider_badParseData: List[(String, Int)] = {
+  val provider_badParseData: List[(String, Int)] =
     List(
       ("", 0),
       ("-00", 1),
@@ -193,7 +192,6 @@ class TestYear extends GenDateTimeTest {
       ("12345-10", 0),
       ("+12345678901-10", 11)
     )
-  }
 
   test("factory_parse_fail") {
     provider_badParseData.foreach {

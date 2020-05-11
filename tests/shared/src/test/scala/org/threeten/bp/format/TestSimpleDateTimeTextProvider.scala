@@ -126,7 +126,7 @@ class TestTTBPSimpleDateTimeTextProvider extends AnyFunSuite with AssertionsHelp
       case (field, value, style, locale, expected) =>
         val tp: TTBPDateTimeTextProvider = TTBPDateTimeTextProvider.Provider
         assertTrue(tp.getText(field, value, style, locale).equalsIgnoreCase(expected))
-      case _ =>
+      case _                                       =>
         fail()
     }
   }

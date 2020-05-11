@@ -68,7 +68,7 @@ object TestDateTimeFormatters {
   private[format] class MockAccessor extends TemporalAccessor {
     private[format] var fields: java.util.Map[TemporalField, java.lang.Long] =
       new java.util.HashMap[TemporalField, java.lang.Long]
-    private[format] var zoneId: ZoneId = null
+    private[format] var zoneId: ZoneId                                       = null
 
     private[format] def setFields(dt: LocalDate): Unit =
       if (dt != null) {
@@ -131,8 +131,8 @@ object TestDateTimeFormatters {
   private[format] class Expected private[format] () {
     private[format] var fieldValues: java.util.Map[TemporalField, Long] =
       new java.util.HashMap[TemporalField, Long]
-    private[format] var zone: ZoneId       = null
-    private[format] var chrono: Chronology = null
+    private[format] var zone: ZoneId                                    = null
+    private[format] var chrono: Chronology                              = null
 
     private[format] def this(
       field1: TemporalField,
@@ -167,7 +167,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
   test("test_pattern_String") {
     val test: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM uuuu")
     assertEquals(test.toString,
-                 "Value(DayOfMonth)' 'Text(MonthOfYear,SHORT)' 'Value(Year,4,19,EXCEEDS_PAD)")
+                 "Value(DayOfMonth)' 'Text(MonthOfYear,SHORT)' 'Value(Year,4,19,EXCEEDS_PAD)"
+    )
     assertEquals(test.getLocale, Locale.getDefault)
   }
 
@@ -186,7 +187,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
   test("test_pattern_StringLocale") {
     val test: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM uuuu", Locale.UK)
     assertEquals(test.toString,
-                 "Value(DayOfMonth)' 'Text(MonthOfYear,SHORT)' 'Value(Year,4,19,EXCEEDS_PAD)")
+                 "Value(DayOfMonth)' 'Text(MonthOfYear,SHORT)' 'Value(Year,4,19,EXCEEDS_PAD)"
+    )
     assertEquals(test.getLocale, Locale.UK)
   }
 
@@ -230,9 +232,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (year, month, day, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(year, month, day, null, null, null, null, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_LOCAL_DATE.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_LOCAL_DATE.format(test)
             fail
@@ -240,7 +242,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
     }
   }
 
@@ -254,7 +255,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             expected
           )
         }
-      case _ =>
+      case _                                  =>
         fail()
     }
   }
@@ -327,9 +328,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (year, month, day, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(year, month, day, null, null, null, null, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_OFFSET_DATE.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_OFFSET_DATE.format(test)
             fail
@@ -337,8 +338,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                          =>
         fail()
     }
   }
@@ -354,7 +354,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             expected
           )
         }
-      case _ =>
+      case _                                         =>
         fail()
     }
   }
@@ -380,9 +380,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (year, month, day, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(year, month, day, null, null, null, null, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_DATE.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_DATE.format(test)
             fail
@@ -390,8 +390,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                          =>
         fail()
     }
   }
@@ -401,13 +400,13 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (year, month, day, offsetId, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected = createDate(year, month, day)
-          if (offsetId != null) {
+          if (offsetId != null)
             expected.fieldValues.put(OFFSET_SECONDS, ZoneOffset.of(offsetId).getTotalSeconds.toLong)
-          }
           assertParseMatch(DateTimeFormatter.ISO_DATE.parseUnresolved(input, new ParsePosition(0)),
-                           expected)
+                           expected
+          )
         }
-      case _ =>
+      case _                                         =>
         fail()
     }
   }
@@ -444,9 +443,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(null, null, null, hour, min, sec, nano, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_LOCAL_TIME.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_LOCAL_TIME.format(test)
             fail
@@ -454,8 +453,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                              =>
         fail()
     }
   }
@@ -470,7 +468,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             expected
           )
         }
-      case _ =>
+      case _                                      =>
         fail()
     }
   }
@@ -507,9 +505,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(null, null, null, hour, min, sec, nano, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_OFFSET_TIME.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_OFFSET_TIME.format(test)
             fail
@@ -517,8 +515,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                              =>
         fail()
     }
   }
@@ -534,7 +531,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             expected
           )
         }
-      case _ =>
+      case _                                             =>
         fail()
     }
   }
@@ -571,9 +568,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(null, null, null, hour, min, sec, nano, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_TIME.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_TIME.format(test)
             fail
@@ -581,8 +578,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                              =>
         fail()
     }
   }
@@ -592,13 +588,13 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (hour, min, sec, nano, offsetId, _, input, _) =>
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected = createTime(hour, min, sec, nano)
-          if (offsetId != null) {
+          if (offsetId != null)
             expected.fieldValues.put(OFFSET_SECONDS, ZoneOffset.of(offsetId).getTotalSeconds.toLong)
-          }
           assertParseMatch(DateTimeFormatter.ISO_TIME.parseUnresolved(input, new ParsePosition(0)),
-                           expected)
+                           expected
+          )
         }
-      case _ =>
+      case _                                             =>
         fail()
     }
   }
@@ -635,7 +631,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        null,
        "Europe/Paris",
        null,
-       classOf[DateTimeException]),
+       classOf[DateTimeException]
+      ),
       (2008, 6, 30, 11, null, null, null, null, null, null, classOf[DateTimeException]),
       (2008, 6, 30, null, 5, null, null, null, null, null, classOf[DateTimeException]),
       (2008, 6, null, 11, 5, null, null, null, null, null, classOf[DateTimeException]),
@@ -665,9 +662,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (year, month, day, hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(year, month, day, hour, min, sec, nano, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(test)
             fail
@@ -675,8 +672,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                                                =>
         fail()
     }
   }
@@ -692,7 +688,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             expected
           )
         }
-      case _ =>
+      case _                                                        =>
         fail()
     }
   }
@@ -729,7 +725,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        null,
        "Europe/Paris",
        null,
-       classOf[DateTimeException]),
+       classOf[DateTimeException]
+      ),
       (2008, 6, 30, 11, null, null, null, null, null, null, classOf[DateTimeException]),
       (2008, 6, 30, null, 5, null, null, null, null, null, classOf[DateTimeException]),
       (2008, 6, null, 11, 5, null, null, null, null, null, classOf[DateTimeException]),
@@ -755,7 +752,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05:30.5+01:00",
-       null),
+       null
+      ),
       (2008,
        6,
        30,
@@ -766,7 +764,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05:30.000000001+01:00",
-       null),
+       null
+      ),
       (2008, 6, 30, 11, 5, null, null, null, "Europe/Paris", null, classOf[DateTimeException]),
       (2008, 6, 30, 11, 5, 30, null, null, "Europe/Paris", null, classOf[DateTimeException]),
       (2008, 6, 30, 11, 5, 30, 500000000, null, "Europe/Paris", null, classOf[DateTimeException]),
@@ -779,9 +778,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (year, month, day, hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(year, month, day, hour, min, sec, nano, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(test)
             fail
@@ -789,8 +788,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                                                =>
         fail()
     }
   }
@@ -807,7 +805,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             expected
           )
         }
-      case _ =>
+      case _                                                               =>
         fail()
     }
   }
@@ -826,7 +824,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       String,
       Class[_]
     )
-  ] = {
+  ] =
     List(
       (2008, null, null, null, null, null, null, null, null, null, classOf[DateTimeException]),
       (null, 6, null, null, null, null, null, null, null, null, classOf[DateTimeException]),
@@ -844,7 +842,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        null,
        "Europe/Paris",
        null,
-       classOf[DateTimeException]),
+       classOf[DateTimeException]
+      ),
       (2008, 6, 30, 11, null, null, null, null, null, null, classOf[DateTimeException]),
       (2008, 6, 30, null, 5, null, null, null, null, null, classOf[DateTimeException]),
       (2008, 6, null, 11, 5, null, null, null, null, null, classOf[DateTimeException]),
@@ -872,7 +871,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05+01:00[Europe/Paris]",
-       null),
+       null
+      ),
       (2008,
        6,
        30,
@@ -883,7 +883,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05:30+01:00[Europe/Paris]",
-       null),
+       null
+      ),
       (2008,
        6,
        30,
@@ -894,7 +895,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05:30.5+01:00[Europe/Paris]",
-       null),
+       null
+      ),
       (2008,
        6,
        30,
@@ -905,7 +907,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05:30.000000001+01:00[Europe/Paris]",
-       null),
+       null
+      ),
       (2008, 6, 30, 11, 5, null, null, null, "Europe/Paris", null, classOf[DateTimeException]),
       (2008, 6, 30, 11, 5, 30, null, null, "Europe/Paris", null, classOf[DateTimeException]),
       (2008, 6, 30, 11, 5, 30, 500000000, null, "Europe/Paris", null, classOf[DateTimeException]),
@@ -920,18 +923,18 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "+123456-06-30T11:05+01:00[Europe/Paris]",
-       null)
+       null
+      )
     )
-  }
 
   test("test_print_isoZonedDateTime") {
     provider_sample_isoZonedDateTime.foreach {
       case (year, month, day, hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(year, month, day, hour, min, sec, nano, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_ZONED_DATE_TIME.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_ZONED_DATE_TIME.format(test)
             fail(test.toString)
@@ -939,8 +942,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                                                =>
         fail()
     }
   }
@@ -951,17 +953,16 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         if (input != null) {
           val expected: TestDateTimeFormatters.Expected =
             createDateTime(year, month, day, hour, min, sec, nano)
-          if (offsetId == zoneId) {
+          if (offsetId == zoneId)
             buildCalendrical(expected, offsetId, null)
-          } else {
+          else
             buildCalendrical(expected, offsetId, zoneId)
-          }
           assertParseMatch(
             DateTimeFormatter.ISO_ZONED_DATE_TIME.parseUnresolved(input, new ParsePosition(0)),
             expected
           )
         }
-      case _ =>
+      case _                                                                    =>
         fail()
     }
   }
@@ -998,7 +999,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        null,
        "Europe/Paris",
        null,
-       classOf[DateTimeException]),
+       classOf[DateTimeException]
+      ),
       (2008, 6, 30, 11, null, null, null, null, null, null, classOf[DateTimeException]),
       (2008, 6, 30, null, 5, null, null, null, null, null, classOf[DateTimeException]),
       (2008, 6, null, 11, 5, null, null, null, null, null, classOf[DateTimeException]),
@@ -1022,7 +1024,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05+01:00[Europe/Paris]",
-       null),
+       null
+      ),
       (2008,
        6,
        30,
@@ -1033,7 +1036,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05:30+01:00[Europe/Paris]",
-       null),
+       null
+      ),
       (2008,
        6,
        30,
@@ -1044,7 +1048,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05:30.5+01:00[Europe/Paris]",
-       null),
+       null
+      ),
       (2008,
        6,
        30,
@@ -1055,7 +1060,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
        "+01:00",
        "Europe/Paris",
        "2008-06-30T11:05:30.000000001+01:00[Europe/Paris]",
-       null),
+       null
+      ),
       (2008, 6, 30, 11, 5, null, null, null, "Europe/Paris", "2008-06-30T11:05", null),
       (2008, 6, 30, 11, 5, 30, null, null, "Europe/Paris", "2008-06-30T11:05:30", null),
       (2008, 6, 30, 11, 5, 30, 500000000, null, "Europe/Paris", "2008-06-30T11:05:30.5", null),
@@ -1068,9 +1074,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (year, month, day, hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
           buildAccessor(year, month, day, hour, min, sec, nano, offsetId, zoneId)
-        if (expectedEx == null) {
+        if (expectedEx == null)
           assertEquals(DateTimeFormatter.ISO_DATE_TIME.format(test), expected)
-        } else {
+        else
           try {
             DateTimeFormatter.ISO_DATE_TIME.format(test)
             fail
@@ -1078,8 +1084,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
           }
-        }
-      case _ =>
+      case _                                                                                =>
         fail()
     }
   }
@@ -1092,16 +1097,15 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
             createDateTime(year, month, day, hour, min, sec, nano)
           if (offsetId != null) {
             expected.fieldValues.put(OFFSET_SECONDS, ZoneOffset.of(offsetId).getTotalSeconds.toLong)
-            if (zoneId != null) {
+            if (zoneId != null)
               expected.zone = ZoneId.of(zoneId)
-            }
           }
           assertParseMatch(
             DateTimeFormatter.ISO_DATE_TIME.parseUnresolved(input, new ParsePosition(0)),
             expected
           )
         }
-      case _ =>
+      case _                                                                    =>
         fail()
     }
   }
@@ -1132,12 +1136,10 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       def isSupported(field: TemporalField): Boolean = (field eq YEAR) || (field eq DAY_OF_YEAR)
 
       def getLong(field: TemporalField): Long = {
-        if (field eq YEAR) {
+        if (field eq YEAR)
           return 2008
-        }
-        if (field eq DAY_OF_YEAR) {
+        if (field eq DAY_OF_YEAR)
           return 231
-        }
         throw new DateTimeException("Unsupported")
       }
 
@@ -1237,9 +1239,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     }
   }
 
-  val weekDate: java.util.Iterator[(TemporalAccessor, String)] = {
+  val weekDate: java.util.Iterator[(TemporalAccessor, String)] =
     new java.util.Iterator[(TemporalAccessor, String)]() {
-      private var date: ZonedDateTime =
+      private var date: ZonedDateTime    =
         ZonedDateTime.of(LocalDateTime.of(2003, 12, 29, 11, 5, 30), ZoneId.of("Europe/Paris"))
       private val endDate: ZonedDateTime = date.withYear(2005).withMonth(1).withDayOfMonth(2)
       private var week: Int              = 1
@@ -1250,11 +1252,10 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
 
       def next: (TemporalAccessor, String) = {
         val sb: StringBuilder = new StringBuilder("2004-W")
-        if (week < 10) {
+        if (week < 10)
           sb.append('0')
-        }
         sb.append(week).append('-').append(day).append(date.getOffset)
-        val ret = (date, sb.toString)
+        val ret               = (date, sb.toString)
         date = date.plusDays(1)
         day += 1
         if (day == 8) {
@@ -1267,7 +1268,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       override def remove(): Unit =
         throw new UnsupportedOperationException
     }
-  }
 
   test("test_print_isoWeekDate") {
     import scala.collection.JavaConverters._
@@ -1323,7 +1323,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (base: LocalDateTime) :: (offsetId: String) :: (expected: String) :: Nil =>
         val test: TemporalAccessor = buildAccessor(base, offsetId, null)
         assertEquals(DateTimeFormatter.RFC_1123_DATE_TIME.format(test), expected)
-      case _ =>
+      case _                                                                        =>
         fail()
     }
   }
@@ -1333,8 +1333,9 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
       case (base: LocalDateTime) :: (offsetId: String) :: (expected: String) :: Nil =>
         val test: TemporalAccessor = buildAccessor(base, offsetId, null)
         assertEquals(DateTimeFormatter.RFC_1123_DATE_TIME.withLocale(Locale.FRENCH).format(test),
-                     expected)
-      case _ =>
+                     expected
+        )
+      case _                                                                        =>
         fail()
     }
   }

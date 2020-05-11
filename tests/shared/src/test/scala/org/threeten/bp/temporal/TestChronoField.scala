@@ -37,22 +37,18 @@ import org.threeten.bp.AssertionsHelper
 /** Test. */
 class TestChronoField extends AnyFunSuite with AssertionsHelper {
   test("isDateBased") {
-    for (field <- ChronoField.values) {
-      if ((field eq ChronoField.INSTANT_SECONDS) || (field eq ChronoField.OFFSET_SECONDS)) {
+    for (field <- ChronoField.values)
+      if ((field eq ChronoField.INSTANT_SECONDS) || (field eq ChronoField.OFFSET_SECONDS))
         assertEquals(field.isTimeBased, false)
-      } else {
+      else
         assertEquals(field.isDateBased, field.getBaseUnit.isDateBased)
-      }
-    }
   }
 
   test("isTimeBased") {
-    for (field <- ChronoField.values) {
-      if ((field eq ChronoField.INSTANT_SECONDS) || (field eq ChronoField.OFFSET_SECONDS)) {
+    for (field <- ChronoField.values)
+      if ((field eq ChronoField.INSTANT_SECONDS) || (field eq ChronoField.OFFSET_SECONDS))
         assertEquals(field.isTimeBased, false)
-      } else {
+      else
         assertEquals(field.isTimeBased, field.getBaseUnit.isTimeBased)
-      }
-    }
   }
 }

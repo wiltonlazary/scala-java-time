@@ -284,10 +284,11 @@ class TestZoneOffsetTransitionRule extends AnyFunSuite with AssertionsHelper {
       TestZoneOffsetTransitionRule.OFFSET_0200,
       TestZoneOffsetTransitionRule.OFFSET_0300
     )
-    val trans: ZoneOffsetTransition =
+    val trans: ZoneOffsetTransition    =
       new ZoneOffsetTransition(LocalDateTime.of(2000, Month.MARCH, 26, 1, 0),
                                TestZoneOffsetTransitionRule.OFFSET_0200,
-                               TestZoneOffsetTransitionRule.OFFSET_0300)
+                               TestZoneOffsetTransitionRule.OFFSET_0300
+      )
     assertEquals(test.createTransition(2000), trans)
   }
 
@@ -303,10 +304,11 @@ class TestZoneOffsetTransitionRule extends AnyFunSuite with AssertionsHelper {
       TestZoneOffsetTransitionRule.OFFSET_0300,
       TestZoneOffsetTransitionRule.OFFSET_0200
     )
-    val trans: ZoneOffsetTransition =
+    val trans: ZoneOffsetTransition    =
       new ZoneOffsetTransition(LocalDateTime.of(2000, Month.MARCH, 27, 0, 0),
                                TestZoneOffsetTransitionRule.OFFSET_0300,
-                               TestZoneOffsetTransitionRule.OFFSET_0200)
+                               TestZoneOffsetTransitionRule.OFFSET_0200
+      )
     assertEquals(test.createTransition(2000), trans)
   }
 
@@ -322,10 +324,11 @@ class TestZoneOffsetTransitionRule extends AnyFunSuite with AssertionsHelper {
       TestZoneOffsetTransitionRule.OFFSET_0200,
       TestZoneOffsetTransitionRule.OFFSET_0300
     )
-    val trans: ZoneOffsetTransition =
+    val trans: ZoneOffsetTransition    =
       new ZoneOffsetTransition(LocalDateTime.of(2000, Month.MARCH, 26, 1, 0),
                                TestZoneOffsetTransitionRule.OFFSET_0200,
-                               TestZoneOffsetTransitionRule.OFFSET_0300)
+                               TestZoneOffsetTransitionRule.OFFSET_0300
+      )
     assertEquals(test.createTransition(2000), trans)
   }
 
@@ -341,10 +344,11 @@ class TestZoneOffsetTransitionRule extends AnyFunSuite with AssertionsHelper {
       TestZoneOffsetTransitionRule.OFFSET_0200,
       TestZoneOffsetTransitionRule.OFFSET_0300
     )
-    val trans: ZoneOffsetTransition =
+    val trans: ZoneOffsetTransition    =
       new ZoneOffsetTransition(LocalDateTime.of(2000, Month.MARCH, 19, 1, 0),
                                TestZoneOffsetTransitionRule.OFFSET_0200,
-                               TestZoneOffsetTransitionRule.OFFSET_0300)
+                               TestZoneOffsetTransitionRule.OFFSET_0300
+      )
     assertEquals(test.createTransition(2000), trans)
   }
 
@@ -360,10 +364,11 @@ class TestZoneOffsetTransitionRule extends AnyFunSuite with AssertionsHelper {
       TestZoneOffsetTransitionRule.OFFSET_0200,
       TestZoneOffsetTransitionRule.OFFSET_0300
     )
-    val trans: ZoneOffsetTransition =
+    val trans: ZoneOffsetTransition    =
       new ZoneOffsetTransition(LocalDateTime.of(2000, Month.MARCH, 26, 1, 0),
                                TestZoneOffsetTransitionRule.OFFSET_0200,
-                               TestZoneOffsetTransitionRule.OFFSET_0300)
+                               TestZoneOffsetTransitionRule.OFFSET_0300
+      )
     assertEquals(test.createTransition(2000), trans)
   }
 
@@ -379,10 +384,11 @@ class TestZoneOffsetTransitionRule extends AnyFunSuite with AssertionsHelper {
       TestZoneOffsetTransitionRule.OFFSET_0200,
       TestZoneOffsetTransitionRule.OFFSET_0300
     )
-    val trans: ZoneOffsetTransition =
+    val trans: ZoneOffsetTransition    =
       new ZoneOffsetTransition(LocalDateTime.of(2000, Month.MARCH, 20, 1, 0),
                                TestZoneOffsetTransitionRule.OFFSET_0200,
-                               TestZoneOffsetTransitionRule.OFFSET_0300)
+                               TestZoneOffsetTransitionRule.OFFSET_0300
+      )
     assertEquals(test.createTransition(2000), trans)
   }
 

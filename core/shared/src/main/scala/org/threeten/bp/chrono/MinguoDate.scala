@@ -150,36 +150,34 @@ final class MinguoDate private[chrono] (private val isoDate: LocalDate)
   def lengthOfMonth: Int = isoDate.lengthOfMonth
 
   override def range(field: TemporalField): ValueRange =
-    if (field.isInstanceOf[ChronoField]) {
+    if (field.isInstanceOf[ChronoField])
       if (isSupported(field)) {
         val f: ChronoField = field.asInstanceOf[ChronoField]
         f match {
           case DAY_OF_MONTH | DAY_OF_YEAR | ALIGNED_WEEK_OF_MONTH => isoDate.range(field)
-          case YEAR_OF_ERA =>
+          case YEAR_OF_ERA                                        =>
             val range: ValueRange = YEAR.range
-            val max: Long =
+            val max: Long         =
               if (getProlepticYear <= 0) -range.getMinimum + 1 + YEARS_DIFFERENCE
               else range.getMaximum - YEARS_DIFFERENCE
             ValueRange.of(1, max)
-          case _ => getChronology.range(f)
+          case _                                                  => getChronology.range(f)
         }
-      } else {
+      } else
         throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-      }
-    } else {
+    else
       field.rangeRefinedBy(this)
-    }
 
   def getLong(field: TemporalField): Long =
     if (field.isInstanceOf[ChronoField])
       field.asInstanceOf[ChronoField] match {
         case PROLEPTIC_MONTH => getProlepticMonth
-        case YEAR_OF_ERA =>
+        case YEAR_OF_ERA     =>
           val prolepticYear: Int = getProlepticYear
           if (prolepticYear >= 1) prolepticYear.toLong else 1 - prolepticYear.toLong
-        case YEAR => getProlepticYear.toLong
-        case ERA  => if (getProlepticYear >= 1) 1 else 0
-        case _    => isoDate.getLong(field)
+        case YEAR            => getProlepticYear.toLong
+        case ERA             => if (getProlepticYear >= 1) 1 else 0
+        case _               => isoDate.getLong(field)
       }
     else
       field.getFrom(this)
@@ -198,7 +196,7 @@ final class MinguoDate private[chrono] (private val isoDate: LocalDate)
         this
       else
         f match {
-          case PROLEPTIC_MONTH =>
+          case PROLEPTIC_MONTH          =>
             getChronology.range(f).checkValidValue(newValue, f)
             plusMonths(newValue - getProlepticMonth)
           case YEAR_OF_ERA | YEAR | ERA =>
@@ -211,14 +209,13 @@ final class MinguoDate private[chrono] (private val isoDate: LocalDate)
                     else (1 - nvalue) + YEARS_DIFFERENCE
                   )
                 )
-              case YEAR => `with`(isoDate.withYear(nvalue + YEARS_DIFFERENCE))
-              case ERA  => `with`(isoDate.withYear((1 - getProlepticYear) + YEARS_DIFFERENCE))
+              case YEAR        => `with`(isoDate.withYear(nvalue + YEARS_DIFFERENCE))
+              case ERA         => `with`(isoDate.withYear((1 - getProlepticYear) + YEARS_DIFFERENCE))
             }
-          case _ => `with`(isoDate.`with`(field, newValue))
+          case _                        => `with`(isoDate.`with`(field, newValue))
         }
-    } else {
+    } else
       field.adjustInto(this, newValue)
-    }
 
   override def plus(amount: TemporalAmount): MinguoDate =
     super.plus(amount).asInstanceOf[MinguoDate]

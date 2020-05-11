@@ -241,7 +241,7 @@ object OffsetDateTime {
   def from(temporal: TemporalAccessor): OffsetDateTime =
     temporal match {
       case time: OffsetDateTime => time
-      case _ =>
+      case _                    =>
         try {
           val offset: ZoneOffset = ZoneOffset.from(temporal)
           try {
@@ -284,10 +284,12 @@ object OffsetDateTime {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): OffsetDateTime = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[OffsetDateTime] {
-      override def queryFrom(temporal: TemporalAccessor): OffsetDateTime =
-        OffsetDateTime.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[OffsetDateTime] {
+                      override def queryFrom(temporal: TemporalAccessor): OffsetDateTime =
+                        OffsetDateTime.from(temporal)
+                    }
+    )
   }
 
 }
@@ -454,7 +456,7 @@ final class OffsetDateTime private (
           case OFFSET_SECONDS  => getOffset.getTotalSeconds
           case _               => dateTime.get(field)
         }
-      case _ =>
+      case _              =>
         super.get(field)
     }
 
@@ -487,7 +489,7 @@ final class OffsetDateTime private (
           case OFFSET_SECONDS  => getOffset.getTotalSeconds.toLong
           case _               => dateTime.getLong(field)
         }
-      case _ =>
+      case _              =>
         field.getFrom(this)
     }
 
@@ -677,10 +679,10 @@ final class OffsetDateTime private (
     adjuster match {
       case _: LocalDate | _: LocalTime | _: LocalDateTime =>
         `with`(dateTime.`with`(adjuster), offset)
-      case i: Instant        => OffsetDateTime.ofInstant(i, offset)
-      case z: ZoneOffset     => `with`(dateTime, z)
-      case o: OffsetDateTime => o
-      case _ =>
+      case i: Instant                                     => OffsetDateTime.ofInstant(i, offset)
+      case z: ZoneOffset                                  => `with`(dateTime, z)
+      case o: OffsetDateTime                              => o
+      case _                                              =>
         adjuster.adjustInto(this).asInstanceOf[OffsetDateTime]
     }
 
@@ -732,11 +734,11 @@ final class OffsetDateTime private (
         f match {
           case INSTANT_SECONDS =>
             OffsetDateTime.ofInstant(Instant.ofEpochSecond(newValue, getNano.toLong), offset)
-          case OFFSET_SECONDS =>
+          case OFFSET_SECONDS  =>
             `with`(dateTime, ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue)))
-          case _ => `with`(dateTime.`with`(field, newValue), offset)
+          case _               => `with`(dateTime.`with`(field, newValue), offset)
         }
-      case _ =>
+      case _              =>
         field.adjustInto(this, newValue)
     }
 
@@ -1492,7 +1494,7 @@ final class OffsetDateTime private (
     obj match {
       case other: OffsetDateTime =>
         (this eq other) || ((dateTime == other.dateTime) && (offset == other.offset))
-      case _ => false
+      case _                     => false
     }
 
   /** A hash code for this date-time.

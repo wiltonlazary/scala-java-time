@@ -85,7 +85,8 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
          (1890, 1, 32),
          (1890, 12, -1),
          (1890, 12, 0),
-         (1890, 12, 32))
+         (1890, 12, 32)
+    )
 
   test("test_badDates") {
     data_badDates.foreach {
@@ -133,7 +134,7 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
     assertEquals(test, LocalDateTime.of(1890, 10, 29, 0, 0))
   }
 
-  val data_japansesEras: List[(Era, Int, String)] = {
+  val data_japansesEras: List[(Era, Int, String)] =
     List(
       (JapaneseEra.MEIJI, -1, "Meiji"),
       (JapaneseEra.TAISHO, 0, "Taisho"),
@@ -141,7 +142,6 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
       (JapaneseEra.HEISEI, 2, "Heisei"),
       (JapaneseEra.REIWA, 3, "Reiwa")
     )
-  }
 
   test("test_Japanese_Eras") {
     data_japansesEras.foreach {

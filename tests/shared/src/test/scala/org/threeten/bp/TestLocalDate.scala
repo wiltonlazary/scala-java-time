@@ -65,10 +65,10 @@ class TestLocalDate
     val min: LocalDate = LocalDate.MIN
     MAX_VALID_EPOCHDAYS = max.toEpochDay
     MIN_VALID_EPOCHDAYS = min.toEpochDay
-    MAX_DATE            = max
-    MIN_DATE            = min
-    MAX_INSTANT         = max.atStartOfDay(ZoneOffset.UTC).toInstant
-    MIN_INSTANT         = min.atStartOfDay(ZoneOffset.UTC).toInstant
+    MAX_DATE = max
+    MIN_DATE = min
+    MAX_INSTANT = max.atStartOfDay(ZoneOffset.UTC).toInstant
+    MIN_INSTANT = min.atStartOfDay(ZoneOffset.UTC).toInstant
   }
 
   protected def samples: List[TemporalAccessor] =
@@ -113,7 +113,7 @@ class TestLocalDate
         {
           if (expected != test) {
             expected = LocalDate.now(Clock.systemDefaultZone)
-            test     = LocalDate.now
+            test = LocalDate.now
           }
         }
         {
@@ -142,7 +142,7 @@ class TestLocalDate
         {
           if (expected != test) {
             expected = LocalDate.now(Clock.system(zone))
-            test     = LocalDate.now(zone)
+            test = LocalDate.now(zone)
           }
         }
         {
@@ -186,10 +186,11 @@ class TestLocalDate
       while (i < (2 * 24 * 60 * 60)) {
         {
           val instant: Instant = Instant.ofEpochSecond(i)
-          val clock: Clock =
+          val clock: Clock     =
             Clock.fixed(instant.minusSeconds(TestLocalDate.OFFSET_PONE.getTotalSeconds),
-                        TestLocalDate.OFFSET_PONE)
-          val test: LocalDate = LocalDate.now(clock)
+                        TestLocalDate.OFFSET_PONE
+            )
+          val test: LocalDate  = LocalDate.now(clock)
           assertEquals(test.getYear, 1970)
           assertEquals(test.getMonth, Month.JANUARY)
           assertEquals(test.getDayOfMonth, if (i < 24 * 60 * 60) 1 else 2)
@@ -397,26 +398,22 @@ class TestLocalDate
   private def next(date: LocalDate): LocalDate = {
     var _date              = date
     val newDayOfMonth: Int = _date.getDayOfMonth + 1
-    if (newDayOfMonth <= _date.getMonth.length(isIsoLeap(_date.getYear))) {
+    if (newDayOfMonth <= _date.getMonth.length(isIsoLeap(_date.getYear)))
       return _date.withDayOfMonth(newDayOfMonth)
-    }
     _date = _date.withDayOfMonth(1)
-    if (_date.getMonth eq Month.DECEMBER) {
+    if (_date.getMonth eq Month.DECEMBER)
       _date = _date.withYear(_date.getYear + 1)
-    }
     _date.`with`(_date.getMonth.plus(1))
   }
 
   private def previous(date: LocalDate): LocalDate = {
     var _date              = date
     val newDayOfMonth: Int = _date.getDayOfMonth - 1
-    if (newDayOfMonth > 0) {
+    if (newDayOfMonth > 0)
       return _date.withDayOfMonth(newDayOfMonth)
-    }
     _date = _date.`with`(_date.getMonth.minus(1))
-    if (_date.getMonth eq Month.DECEMBER) {
+    if (_date.getMonth eq Month.DECEMBER)
       _date = _date.withYear(_date.getYear - 1)
-    }
     _date.withDayOfMonth(_date.getMonth.length(isIsoLeap(_date.getYear)))
   }
 
@@ -427,7 +424,7 @@ class TestLocalDate
     assertEquals(LocalDate.ofEpochDay(date_0000_01_01 - 1), LocalDate.of(-1, 12, 31))
     assertEquals(LocalDate.ofEpochDay(MAX_VALID_EPOCHDAYS), LocalDate.of(Year.MAX_VALUE, 12, 31))
     assertEquals(LocalDate.ofEpochDay(MIN_VALID_EPOCHDAYS), LocalDate.of(Year.MIN_VALUE, 1, 1))
-    var test: LocalDate = LocalDate.of(0, 1, 1)
+    var test: LocalDate       = LocalDate.of(0, 1, 1)
 
     {
       var i: Long = date_0000_01_01
@@ -496,7 +493,7 @@ class TestLocalDate
         assertEquals(t.getYear, y, parsable)
         assertEquals(t.getMonth.getValue, m, parsable)
         assertEquals(t.getDayOfMonth, d, parsable)
-      case _ =>
+      case _                                                             =>
         fail()
     }
   }
@@ -648,7 +645,8 @@ class TestLocalDate
          List(2006, 7, 5),
          List(2005, 7, 5),
          List(2004, 1, 1),
-         List(-1, 1, 2))
+         List(-1, 1, 2)
+    )
 
   test("get") {
     provider_sampleDates.foreach {
@@ -657,7 +655,7 @@ class TestLocalDate
         assertEquals(a.getYear, y)
         assertEquals(a.getMonth, Month.of(m))
         assertEquals(a.getDayOfMonth, d)
-      case _ =>
+      case _                                       =>
         fail()
     }
   }
@@ -682,7 +680,7 @@ class TestLocalDate
         }
         val doy: Int = total + d
         assertEquals(a.getDayOfYear, doy)
-      case _ =>
+      case _                                       =>
         fail()
     }
   }
@@ -760,7 +758,7 @@ class TestLocalDate
   }
 
   test("with_adjustment") {
-    val sample: LocalDate = LocalDate.of(2012, 3, 4)
+    val sample: LocalDate          = LocalDate.of(2012, 3, 4)
     val adjuster: TemporalAdjuster = new TemporalAdjuster() {
       def adjustInto(dateTime: Temporal): Temporal =
         sample
@@ -1578,7 +1576,7 @@ class TestLocalDate
         val end: LocalDate   = LocalDate.parse(endStr)
         assertEquals(start.until(end, unit), expected)
         assertEquals(end.until(start, unit), -expected)
-      case _ =>
+      case _                                                                                        =>
         fail()
     }
   }
@@ -1739,13 +1737,15 @@ class TestLocalDate
   test("atStartOfDay") {
     val t: LocalDate = LocalDate.of(2008, 6, 30)
     assertEquals(t.atStartOfDay(TestLocalDate.ZONE_PARIS),
-                 ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 0, 0), TestLocalDate.ZONE_PARIS))
+                 ZonedDateTime.of(LocalDateTime.of(2008, 6, 30, 0, 0), TestLocalDate.ZONE_PARIS)
+    )
   }
 
   test("atStartOfDay_dstGap") {
     val t: LocalDate = LocalDate.of(2007, 4, 1)
     assertEquals(t.atStartOfDay(TestLocalDate.ZONE_GAZA),
-                 ZonedDateTime.of(LocalDateTime.of(2007, 4, 1, 1, 0), TestLocalDate.ZONE_GAZA))
+                 ZonedDateTime.of(LocalDateTime.of(2007, 4, 1, 1, 0), TestLocalDate.ZONE_GAZA)
+    )
   }
 
   test("atStartOfDay_nullTimeZone") {
@@ -1894,7 +1894,7 @@ class TestLocalDate
         val a: LocalDate = LocalDate.of(y, m, d)
         val b: LocalDate = LocalDate.of(y, m, d)
         assertEquals(a == b, true)
-      case _ =>
+      case _                                       =>
         fail()
     }
   }
@@ -1905,7 +1905,7 @@ class TestLocalDate
         val a: LocalDate = LocalDate.of(y, m, d)
         val b: LocalDate = LocalDate.of(y + 1, m, d)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                       =>
         fail()
     }
   }
@@ -1916,7 +1916,7 @@ class TestLocalDate
         val a: LocalDate = LocalDate.of(y, m, d)
         val b: LocalDate = LocalDate.of(y, m + 1, d)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                       =>
         fail()
     }
   }
@@ -1927,7 +1927,7 @@ class TestLocalDate
         val a: LocalDate = LocalDate.of(y, m, d)
         val b: LocalDate = LocalDate.of(y, m, d + 1)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                       =>
         fail()
     }
   }
@@ -1951,7 +1951,7 @@ class TestLocalDate
         assertEquals(a.hashCode, a.hashCode)
         val b: LocalDate = LocalDate.of(y, m, d)
         assertEquals(a.hashCode, b.hashCode)
-      case _ =>
+      case _                                       =>
         fail()
     }
   }
@@ -1976,7 +1976,7 @@ class TestLocalDate
         val t: LocalDate = LocalDate.of(y, m, d)
         val str: String  = t.toString
         assertEquals(str, expected)
-      case _ =>
+      case _                                                             =>
         fail()
     }
   }

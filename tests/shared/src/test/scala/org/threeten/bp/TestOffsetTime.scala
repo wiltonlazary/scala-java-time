@@ -133,8 +133,8 @@ class TestOffsetTime
           val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
           val test: OffsetTime = OffsetTime.now(clock)
           assertEquals(test.getHour, (i / (60 * 60)) % 24)
-          assertEquals(test.getMinute, (i / 60) % 60)
-          assertEquals(test.getSecond, i % 60)
+          assertEquals(test.getMinute, (i / 60)      % 60)
+          assertEquals(test.getSecond, i             % 60)
           assertEquals(test.getNano, 8)
           assertEquals(test.getOffset, ZoneOffset.UTC)
         }
@@ -155,8 +155,8 @@ class TestOffsetTime
           val clock: Clock     = Clock.fixed(instant, ZoneOffset.UTC)
           val test: OffsetTime = OffsetTime.now(clock)
           assertEquals(test.getHour, ((i + 24 * 60 * 60) / (60 * 60)) % 24)
-          assertEquals(test.getMinute, ((i + 24 * 60 * 60) / 60) % 60)
-          assertEquals(test.getSecond, (i + 24 * 60 * 60) % 60)
+          assertEquals(test.getMinute, ((i + 24 * 60 * 60) / 60)      % 60)
+          assertEquals(test.getSecond, (i + 24 * 60 * 60)             % 60)
           assertEquals(test.getNano, 8)
           assertEquals(test.getOffset, ZoneOffset.UTC)
         }
@@ -271,8 +271,8 @@ class TestOffsetTime
           val instant: Instant = Instant.ofEpochSecond(i, 8)
           val test: OffsetTime = OffsetTime.ofInstant(instant, ZoneOffset.UTC)
           assertEquals(test.getHour, (i / (60 * 60)) % 24)
-          assertEquals(test.getMinute, (i / 60) % 60)
-          assertEquals(test.getSecond, i % 60)
+          assertEquals(test.getMinute, (i / 60)      % 60)
+          assertEquals(test.getSecond, i             % 60)
           assertEquals(test.getNano, 8)
         }
         {
@@ -291,8 +291,8 @@ class TestOffsetTime
           val instant: Instant = Instant.ofEpochSecond(i, 8)
           val test: OffsetTime = OffsetTime.ofInstant(instant, ZoneOffset.UTC)
           assertEquals(test.getHour, ((i + 24 * 60 * 60) / (60 * 60)) % 24)
-          assertEquals(test.getMinute, ((i + 24 * 60 * 60) / 60) % 60)
-          assertEquals(test.getSecond, (i + 24 * 60 * 60) % 60)
+          assertEquals(test.getMinute, ((i + 24 * 60 * 60) / 60)      % 60)
+          assertEquals(test.getSecond, (i + 24 * 60 * 60)             % 60)
           assertEquals(test.getNano, 8)
         }
         {
@@ -321,7 +321,8 @@ class TestOffsetTime
 
   test("factory_from_TemporalAccessor_OT") {
     assertEquals(OffsetTime.from(OffsetTime.of(LocalTime.of(17, 30), TestOffsetTime.OFFSET_PONE)),
-                 OffsetTime.of(LocalTime.of(17, 30), TestOffsetTime.OFFSET_PONE))
+                 OffsetTime.of(LocalTime.of(17, 30), TestOffsetTime.OFFSET_PONE)
+    )
   }
 
   test("test_from_TemporalAccessor_ZDT") {
@@ -348,12 +349,12 @@ class TestOffsetTime
         val t: OffsetTime = OffsetTime.parse(parsable)
         assertNotNull(t, parsable)
         check(t, h, m, s, n, ZoneOffset.of(offsetId))
-      case _ =>
+      case _                                                                                               =>
         fail()
     }
   }
 
-  val provider_sampleBadParse: List[String] = {
+  val provider_sampleBadParse: List[String] =
     List("00;00",
          "12-00",
          "-01:00",
@@ -362,8 +363,8 @@ class TestOffsetTime
          "00:00:abs",
          "11",
          "11:30",
-         "11:30+01:00[Europe/Paris]")
-  }
+         "11:30+01:00[Europe/Paris]"
+    )
 
   test("factory_parse_invalidText") {
     provider_sampleBadParse.foreach { unparsable =>
@@ -410,11 +411,11 @@ class TestOffsetTime
     }
   }
 
-  val provider_sampleTimes: List[List[Any]] = {
+  val provider_sampleTimes: List[List[Any]] =
     List(List(11, 30, 20, 500, TestOffsetTime.OFFSET_PONE),
          List(11, 0, 0, 0, TestOffsetTime.OFFSET_PONE),
-         List(23, 59, 59, 999999999, TestOffsetTime.OFFSET_PONE))
-  }
+         List(23, 59, 59, 999999999, TestOffsetTime.OFFSET_PONE)
+    )
 
   test("test_get") {
     provider_sampleTimes.foreach {
@@ -428,7 +429,7 @@ class TestOffsetTime
         assertEquals(a.getMinute, localTime.getMinute)
         assertEquals(a.getSecond, localTime.getSecond)
         assertEquals(a.getNano, localTime.getNano)
-      case _ =>
+      case _                                                                           =>
         fail()
     }
   }
@@ -461,12 +462,15 @@ class TestOffsetTime
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.chronology), null)
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.localDate), null)
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.localTime),
-                 TEST_11_30_59_500_PONE.toLocalTime)
+                 TEST_11_30_59_500_PONE.toLocalTime
+    )
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.offset),
-                 TEST_11_30_59_500_PONE.getOffset)
+                 TEST_11_30_59_500_PONE.getOffset
+    )
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.precision), ChronoUnit.NANOS)
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.zone),
-                 TEST_11_30_59_500_PONE.getOffset)
+                 TEST_11_30_59_500_PONE.getOffset
+    )
     assertEquals(TEST_11_30_59_500_PONE.query(TemporalQueries.zoneId), null)
   }
 
@@ -517,7 +521,7 @@ class TestOffsetTime
   }
 
   test("test_with_adjustment") {
-    val sample: OffsetTime = OffsetTime.of(LocalTime.of(23, 5), TestOffsetTime.OFFSET_PONE)
+    val sample: OffsetTime         = OffsetTime.of(LocalTime.of(23, 5), TestOffsetTime.OFFSET_PONE)
     val adjuster: TemporalAdjuster = new TemporalAdjuster {
       override def adjustInto(temporal: Temporal): Temporal = sample
     }
@@ -544,7 +548,7 @@ class TestOffsetTime
     val adjuster: TemporalAdjuster = new TemporalAdjuster {
       override def adjustInto(dateTime: Temporal): Temporal = dateTime.`with`(HOUR_OF_DAY, 23)
     }
-    val test: OffsetTime = TEST_11_30_59_500_PONE.`with`(adjuster)
+    val test: OffsetTime           = TEST_11_30_59_500_PONE.`with`(adjuster)
     assertEquals(test, OffsetTime.of(LocalTime.of(23, 30, 59, 500), TestOffsetTime.OFFSET_PONE))
   }
 
@@ -558,17 +562,23 @@ class TestOffsetTime
     val test: OffsetTime =
       OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
     assertEquals(test.`with`(ChronoField.HOUR_OF_DAY, 15),
-                 OffsetTime.of(LocalTime.of(15, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
+                 OffsetTime.of(LocalTime.of(15, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
+    )
     assertEquals(test.`with`(ChronoField.MINUTE_OF_HOUR, 50),
-                 OffsetTime.of(LocalTime.of(12, 50, 40, 987654321), TestOffsetTime.OFFSET_PONE))
+                 OffsetTime.of(LocalTime.of(12, 50, 40, 987654321), TestOffsetTime.OFFSET_PONE)
+    )
     assertEquals(test.`with`(ChronoField.SECOND_OF_MINUTE, 50),
-                 OffsetTime.of(LocalTime.of(12, 30, 50, 987654321), TestOffsetTime.OFFSET_PONE))
+                 OffsetTime.of(LocalTime.of(12, 30, 50, 987654321), TestOffsetTime.OFFSET_PONE)
+    )
     assertEquals(test.`with`(ChronoField.NANO_OF_SECOND, 12345),
-                 OffsetTime.of(LocalTime.of(12, 30, 40, 12345), TestOffsetTime.OFFSET_PONE))
+                 OffsetTime.of(LocalTime.of(12, 30, 40, 12345), TestOffsetTime.OFFSET_PONE)
+    )
     assertEquals(test.`with`(ChronoField.HOUR_OF_AMPM, 6),
-                 OffsetTime.of(LocalTime.of(18, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
+                 OffsetTime.of(LocalTime.of(18, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
+    )
     assertEquals(test.`with`(ChronoField.AMPM_OF_DAY, 0),
-                 OffsetTime.of(LocalTime.of(0, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE))
+                 OffsetTime.of(LocalTime.of(0, 30, 40, 987654321), TestOffsetTime.OFFSET_PONE)
+    )
     assertEquals(
       test.`with`(ChronoField.OFFSET_SECONDS, 7205),
       OffsetTime.of(LocalTime.of(12, 30, 40, 987654321), ZoneOffset.ofHoursMinutesSeconds(2, 0, 5))
@@ -639,7 +649,8 @@ class TestOffsetTime
     assertEquals(TEST_11_30_59_500_PONE.truncatedTo(NANOS), TEST_11_30_59_500_PONE)
     assertEquals(TEST_11_30_59_500_PONE.truncatedTo(SECONDS), TEST_11_30_59_500_PONE.withNano(0))
     assertEquals(TEST_11_30_59_500_PONE.truncatedTo(DAYS),
-                 TEST_11_30_59_500_PONE.`with`(LocalTime.MIDNIGHT))
+                 TEST_11_30_59_500_PONE.`with`(LocalTime.MIDNIGHT)
+    )
   }
 
   test("test_truncatedTo_null") {
@@ -780,7 +791,8 @@ class TestOffsetTime
     val base: OffsetTime = OffsetTime.of(LocalTime.of(11, 30, 59, 0), TestOffsetTime.OFFSET_PONE)
     val test: OffsetTime = base.minusNanos(1)
     assertEquals(test,
-                 OffsetTime.of(LocalTime.of(11, 30, 58, 999999999), TestOffsetTime.OFFSET_PONE))
+                 OffsetTime.of(LocalTime.of(11, 30, 58, 999999999), TestOffsetTime.OFFSET_PONE)
+    )
   }
 
   test("test_minusNanos_zero") {
@@ -903,7 +915,8 @@ class TestOffsetTime
   test("test_isBeforeIsAfterIsEqual2nanos") {
     val a: OffsetTime =
       OffsetTime.of(LocalTime.of(11, 30, 59, 4),
-                    ZoneOffset.ofTotalSeconds(TestOffsetTime.OFFSET_PONE.getTotalSeconds + 1))
+                    ZoneOffset.ofTotalSeconds(TestOffsetTime.OFFSET_PONE.getTotalSeconds + 1)
+      )
     val b: OffsetTime = OffsetTime.of(LocalTime.of(11, 30, 59, 3), TestOffsetTime.OFFSET_PONE)
     assertEquals(a.isBefore(b), true)
     assertEquals(a.isEqual(b), false)
@@ -964,7 +977,7 @@ class TestOffsetTime
         val b: OffsetTime = OffsetTime.of(LocalTime.of(h, m, s, n), TestOffsetTime.OFFSET_PONE)
         assertEquals(a == b, true)
         assertEquals(a.hashCode == b.hashCode, true)
-      case _ =>
+      case _                                                                      =>
         fail()
     }
   }
@@ -972,12 +985,12 @@ class TestOffsetTime
   test("test_equals_false_hour_differs") {
     provider_sampleTimes.foreach {
       case (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
-        var _h = h
+        var _h            = h
         _h = if (_h == 23) 22 else _h
         val a: OffsetTime = OffsetTime.of(LocalTime.of(_h, m, s, n), TestOffsetTime.OFFSET_PONE)
         val b: OffsetTime = OffsetTime.of(LocalTime.of(_h + 1, m, s, n), TestOffsetTime.OFFSET_PONE)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                      =>
         fail()
     }
   }
@@ -985,12 +998,12 @@ class TestOffsetTime
   test("test_equals_false_minute_differs") {
     provider_sampleTimes.foreach {
       case (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
-        var _m = m
+        var _m            = m
         _m = if (_m == 59) 58 else _m
         val a: OffsetTime = OffsetTime.of(LocalTime.of(h, _m, s, n), TestOffsetTime.OFFSET_PONE)
         val b: OffsetTime = OffsetTime.of(LocalTime.of(h, _m + 1, s, n), TestOffsetTime.OFFSET_PONE)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                      =>
         fail()
     }
   }
@@ -998,12 +1011,12 @@ class TestOffsetTime
   test("test_equals_false_second_differs") {
     provider_sampleTimes.foreach {
       case (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
-        var _s = s
+        var _s            = s
         _s = if (_s == 59) 58 else _s
         val a: OffsetTime = OffsetTime.of(LocalTime.of(h, m, _s, n), TestOffsetTime.OFFSET_PONE)
         val b: OffsetTime = OffsetTime.of(LocalTime.of(h, m, _s + 1, n), TestOffsetTime.OFFSET_PONE)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                      =>
         fail()
     }
   }
@@ -1011,12 +1024,12 @@ class TestOffsetTime
   test("test_equals_false_nano_differs") {
     provider_sampleTimes.foreach {
       case (h: Int) :: (m: Int) :: (s: Int) :: (n: Int) :: (_: ZoneOffset) :: Nil =>
-        var _n = n
+        var _n            = n
         _n = if (_n == 999999999) 999999998 else _n
         val a: OffsetTime = OffsetTime.of(LocalTime.of(h, m, s, _n), TestOffsetTime.OFFSET_PONE)
         val b: OffsetTime = OffsetTime.of(LocalTime.of(h, m, s, _n + 1), TestOffsetTime.OFFSET_PONE)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                      =>
         fail()
     }
   }
@@ -1027,7 +1040,7 @@ class TestOffsetTime
         val a: OffsetTime = OffsetTime.of(LocalTime.of(h, m, s, n), TestOffsetTime.OFFSET_PONE)
         val b: OffsetTime = OffsetTime.of(LocalTime.of(h, m, s, n), TestOffsetTime.OFFSET_PTWO)
         assertEquals(a == b, false)
-      case _ =>
+      case _                                                                      =>
         fail()
     }
   }
@@ -1044,7 +1057,7 @@ class TestOffsetTime
     assertEquals(TEST_11_30_59_500_PONE == null, false)
   }
 
-  val provider_sampleToString: List[List[Any]] = {
+  val provider_sampleToString: List[List[Any]] =
     List(
       List(11, 30, 59, 0, "Z", "11:30:59Z"),
       List(11, 30, 59, 0, "+01:00", "11:30:59+01:00"),
@@ -1055,7 +1068,6 @@ class TestOffsetTime
       List(11, 30, 59, 999, "Z", "11:30:59.000000999Z"),
       List(11, 30, 59, 999, "+01:00", "11:30:59.000000999+01:00")
     )
-  }
 
   test("test_toString") {
     provider_sampleToString.foreach {
@@ -1063,7 +1075,7 @@ class TestOffsetTime
         val t: OffsetTime = OffsetTime.of(LocalTime.of(h, m, s, n), ZoneOffset.of(offsetId))
         val str: String   = t.toString
         assertEquals(str, expected)
-      case _ =>
+      case _                                                                                               =>
         fail()
     }
   }

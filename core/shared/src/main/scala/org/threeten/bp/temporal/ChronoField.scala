@@ -447,7 +447,8 @@ object ChronoField {
                     26,
                     YEARS,
                     FOREVER,
-                    ValueRange.of(Year.MIN_VALUE.toLong, Year.MAX_VALUE.toLong))
+                    ValueRange.of(Year.MIN_VALUE.toLong, Year.MAX_VALUE.toLong)
+    )
 
   /** The era.
     *
@@ -484,7 +485,8 @@ object ChronoField {
                                              28,
                                              SECONDS,
                                              FOREVER,
-                                             ValueRange.of(Long.MinValue, Long.MaxValue))
+                                             ValueRange.of(Long.MinValue, Long.MaxValue)
+  )
 
   /** The offset from UTC/Greenwich.
     *

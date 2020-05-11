@@ -41,19 +41,19 @@ import org.threeten.bp.temporal.TemporalQueries
 
 /** Test ReducedPrinterParser. */
 class TestReducedParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
-  val data_error
-    : List[(TTBPDateTimeFormatterBuilder.ReducedPrinterParser, String, Int, Class[_])] = {
+  val data_error: List[(TTBPDateTimeFormatterBuilder.ReducedPrinterParser, String, Int, Class[_])] =
     List(
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "12",
        -1,
-       classOf[IndexOutOfBoundsException]),
+       classOf[IndexOutOfBoundsException]
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "12",
        3,
-       classOf[IndexOutOfBoundsException])
+       classOf[IndexOutOfBoundsException]
+      )
     )
-  }
 
   test("test_parse_error") {
     data_error.foreach {
@@ -65,7 +65,7 @@ class TestReducedParser extends AnyFunSuite with GenTestPrinterParser with Asser
             assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
             assertEquals(parseContext.toParsed.query(TemporalQueries.zoneId), null)
         }
-      case _ =>
+      case _                         =>
         fail()
     }
   }
@@ -73,7 +73,7 @@ class TestReducedParser extends AnyFunSuite with GenTestPrinterParser with Asser
   test("test_parse_fieldRangeIgnored") {
     val pp: TTBPDateTimeFormatterBuilder.ReducedPrinterParser =
       new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(DAY_OF_YEAR, 3, 3, 10, null)
-    val newPos: Int = pp.parse(parseContext, "456", 0)
+    val newPos: Int                                           = pp.parse(parseContext, "456", 0)
     assertEquals(newPos, 3)
     assertParsed(DAY_OF_YEAR, 456L)
   }
@@ -85,162 +85,194 @@ class TestReducedParser extends AnyFunSuite with GenTestPrinterParser with Asser
        "-0",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "Xxx12Xxx",
        3,
        5,
-       2012),
+       2012
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "12345",
        0,
        2,
-       2012),
+       2012
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "12-45",
        0,
        2,
-       2012),
+       2012
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "0",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "1",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "1",
        1,
        ~1,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "1-2",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "9",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "A0",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "0A",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "  1",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "-1",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "-10",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2010, null),
        "0",
        0,
        1,
-       2010),
+       2010
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2010, null),
        "9",
        0,
        1,
-       2019),
+       2019
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2010, null),
        "10",
        0,
        1,
-       2011),
+       2011
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "0",
        0,
        1,
-       2010),
+       2010
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "4",
        0,
        1,
-       2014),
+       2014
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "5",
        0,
        1,
-       2005),
+       2005
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "9",
        0,
        1,
-       2009),
+       2009
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "10",
        0,
        1,
-       2011),
+       2011
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "00",
        0,
        2,
-       2100),
+       2100
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "09",
        0,
        2,
-       2109),
+       2109
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "10",
        0,
        2,
-       2010),
+       2010
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "99",
        0,
        2,
-       2099),
+       2099
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "100",
        0,
        2,
-       2010),
+       2010
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "05",
        0,
        2,
-       -2005),
+       -2005
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "00",
        0,
        2,
-       -2000),
+       -2000
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "99",
        0,
        2,
-       -1999),
+       -1999
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "06",
        0,
        2,
-       -1906),
+       -1906
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "100",
        0,
        2,
-       -1910)
+       -1910
+      )
     )
   }
 
@@ -251,7 +283,7 @@ class TestReducedParser extends AnyFunSuite with GenTestPrinterParser with Asser
         val newPos: Int = pp.parse(parseContext, input, pos)
         assertEquals(newPos, parseLen)
         assertParsed(YEAR, if (parseVal != null) parseVal.toLong else null)
-      case _ =>
+      case _                                    =>
         fail()
     }
   }
@@ -263,150 +295,179 @@ class TestReducedParser extends AnyFunSuite with GenTestPrinterParser with Asser
        "-0",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "Xxx12Xxx",
        3,
        5,
-       2012),
+       2012
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "12345",
        0,
        5,
-       12345),
+       12345
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "12-45",
        0,
        2,
-       2012),
+       2012
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null), "0", 0, 1, 0),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null), "1", 0, 1, 1),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "1",
        1,
        ~1,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "1-2",
        0,
        1,
-       1),
+       1
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null), "9", 0, 1, 9),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "A0",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "0A",
        0,
        1,
-       0),
+       0
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "  1",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "-1",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "-10",
        0,
        ~0,
-       null),
+       null
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2010, null),
        "0",
        0,
        1,
-       2010),
+       2010
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2010, null),
        "9",
        0,
        1,
-       2019),
+       2019
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2010, null),
        "10",
        0,
        2,
-       10),
+       10
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "0",
        0,
        1,
-       2010),
+       2010
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "4",
        0,
        1,
-       2014),
+       2014
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "5",
        0,
        1,
-       2005),
+       2005
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "9",
        0,
        1,
-       2009),
+       2009
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 1, 1, 2005, null),
        "10",
        0,
        2,
-       10),
+       10
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "00",
        0,
        2,
-       2100),
+       2100
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "09",
        0,
        2,
-       2109),
+       2109
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "10",
        0,
        2,
-       2010),
+       2010
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "99",
        0,
        2,
-       2099),
+       2099
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, 2010, null),
        "100",
        0,
        3,
-       100),
+       100
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "05",
        0,
        2,
-       -2005),
+       -2005
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "00",
        0,
        2,
-       -2000),
+       -2000
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "99",
        0,
        2,
-       -1999),
+       -1999
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "06",
        0,
        2,
-       -1906),
+       -1906
+      ),
       (new TTBPDateTimeFormatterBuilder.ReducedPrinterParser(YEAR, 2, 2, -2005, null),
        "100",
        0,
        3,
-       100)
+       100
+      )
     )
   }
 
@@ -418,7 +479,7 @@ class TestReducedParser extends AnyFunSuite with GenTestPrinterParser with Asser
         val newPos: Int = pp.parse(parseContext, input, pos)
         assertEquals(newPos, parseLen)
         assertParsed(YEAR, if (parseVal != null) parseVal.toLong else null)
-      case _ =>
+      case _                                    =>
         fail()
     }
   }

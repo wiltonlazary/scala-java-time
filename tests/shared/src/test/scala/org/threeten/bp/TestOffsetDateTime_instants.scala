@@ -59,15 +59,15 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
       var i: Int = 0
       while (i < (24 * 60 * 60)) {
         {
-          val instant: Instant = Instant.ofEpochSecond(i)
+          val instant: Instant     = Instant.ofEpochSecond(i)
           val test: OffsetDateTime =
             OffsetDateTime.ofInstant(instant, TestOffsetDateTime_instants.OFFSET_PONE)
           assertEquals(test.getYear, 1970)
           assertEquals(test.getMonth, Month.JANUARY)
           assertEquals(test.getDayOfMonth, 1 + (if (i >= 23 * 60 * 60) 1 else 0))
           assertEquals(test.getHour, ((i / (60 * 60)) + 1) % 24)
-          assertEquals(test.getMinute, (i / 60) % 60)
-          assertEquals(test.getSecond, i % 60)
+          assertEquals(test.getMinute, (i / 60)            % 60)
+          assertEquals(test.getSecond, i                   % 60)
         }
         {
           i += 1
@@ -134,10 +134,10 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
     val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
     val year: Int               = Year.MIN_VALUE
     val days: Long              = (year * 365L + (year / 4 - year / 100 + year / 400)) - days_0000_to_1970
-    val instant: Instant = Instant.ofEpochSecond(
+    val instant: Instant        = Instant.ofEpochSecond(
       days * 24L * 60L * 60L - TestOffsetDateTime_instants.OFFSET_MIN.getTotalSeconds
     )
-    val test: OffsetDateTime =
+    val test: OffsetDateTime    =
       OffsetDateTime.ofInstant(instant, TestOffsetDateTime_instants.OFFSET_MIN)
     assertEquals(test.getYear, Year.MIN_VALUE)
     assertEquals(test.getMonth.getValue, 1)
@@ -153,10 +153,10 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
     val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
     val year: Int               = Year.MIN_VALUE
     val days: Long              = (year * 365L + (year / 4 - year / 100 + year / 400)) - days_0000_to_1970
-    val instant: Instant = Instant.ofEpochSecond(
+    val instant: Instant        = Instant.ofEpochSecond(
       days * 24L * 60L * 60L - TestOffsetDateTime_instants.OFFSET_MAX.getTotalSeconds
     )
-    val test: OffsetDateTime =
+    val test: OffsetDateTime    =
       OffsetDateTime.ofInstant(instant, TestOffsetDateTime_instants.OFFSET_MAX)
     assertEquals(test.getYear, Year.MIN_VALUE)
     assertEquals(test.getMonth.getValue, 1)
@@ -172,10 +172,10 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
     val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
     val year: Int               = Year.MAX_VALUE
     val days: Long              = (year * 365L + (year / 4 - year / 100 + year / 400)) + 365 - days_0000_to_1970
-    val instant: Instant = Instant.ofEpochSecond(
+    val instant: Instant        = Instant.ofEpochSecond(
       (days + 1) * 24L * 60L * 60L - 1 - TestOffsetDateTime_instants.OFFSET_MIN.getTotalSeconds
     )
-    val test: OffsetDateTime =
+    val test: OffsetDateTime    =
       OffsetDateTime.ofInstant(instant, TestOffsetDateTime_instants.OFFSET_MIN)
     assertEquals(test.getYear, Year.MAX_VALUE)
     assertEquals(test.getMonth.getValue, 12)
@@ -191,10 +191,10 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
     val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
     val year: Int               = Year.MAX_VALUE
     val days: Long              = (year * 365L + (year / 4 - year / 100 + year / 400)) + 365 - days_0000_to_1970
-    val instant: Instant = Instant.ofEpochSecond(
+    val instant: Instant        = Instant.ofEpochSecond(
       (days + 1) * 24L * 60L * 60L - 1 - TestOffsetDateTime_instants.OFFSET_MAX.getTotalSeconds
     )
-    val test: OffsetDateTime =
+    val test: OffsetDateTime    =
       OffsetDateTime.ofInstant(instant, TestOffsetDateTime_instants.OFFSET_MAX)
     assertEquals(test.getYear, Year.MAX_VALUE)
     assertEquals(test.getMonth.getValue, 12)
@@ -221,14 +221,14 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
   }
 
   private def doTest_factory_ofInstant_all(minYear: Long, maxYear: Long): Unit = {
-    val days_0000_to_1970: Long = (146097 * 5) - (30 * 365 + 7)
-    val minOffset: Int          = if (minYear <= 0) 0 else 3
-    val maxOffset: Int          = if (maxYear <= 0) 0 else 3
-    val minDays: Long =
+    val days_0000_to_1970: Long  = (146097 * 5) - (30 * 365 + 7)
+    val minOffset: Int           = if (minYear <= 0) 0 else 3
+    val maxOffset: Int           = if (maxYear <= 0) 0 else 3
+    val minDays: Long            =
       (minYear * 365L + ((minYear + minOffset) / 4L - (minYear + minOffset) / 100L + (minYear + minOffset) / 400L)) - days_0000_to_1970
-    val maxDays: Long =
+    val maxDays: Long            =
       (maxYear * 365L + ((maxYear + maxOffset) / 4L - (maxYear + maxOffset) / 100L + (maxYear + maxOffset) / 400L)) + 365L - days_0000_to_1970
-    val maxDate: LocalDate = LocalDate.of(Year.MAX_VALUE, 12, 31)
+    val maxDate: LocalDate       = LocalDate.of(Year.MAX_VALUE, 12, 31)
     var expected: OffsetDateTime =
       OffsetDateTime.of(LocalDate.of(minYear.toInt, 1, 1), LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC)
 
@@ -240,9 +240,8 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
           try {
             val test: OffsetDateTime = OffsetDateTime.ofInstant(instant, ZoneOffset.UTC)
             assertEquals(test, expected)
-            if ((expected.toLocalDate == maxDate) == false) {
+            if ((expected.toLocalDate == maxDate) == false)
               expected = expected.plusDays(1)
-            }
           } catch {
             case ex: RuntimeException =>
               System.out.println("RuntimeException: " + i + " " + expected)
@@ -263,7 +262,7 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
   test("toInstant_19700101") {
     val dt: OffsetDateTime =
       OffsetDateTime.of(LocalDate.of(1970, 1, 1), LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC)
-    val test: Instant = dt.toInstant
+    val test: Instant      = dt.toInstant
     assertEquals(test.getEpochSecond, 0)
     assertEquals(test.getNano, 0)
   }
@@ -271,7 +270,7 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
   test("toInstant_19700101_oneNano") {
     val dt: OffsetDateTime =
       OffsetDateTime.of(LocalDate.of(1970, 1, 1), LocalTime.of(0, 0, 0, 1), ZoneOffset.UTC)
-    val test: Instant = dt.toInstant
+    val test: Instant      = dt.toInstant
     assertEquals(test.getEpochSecond, 0)
     assertEquals(test.getNano, 1)
   }
@@ -279,8 +278,9 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
   test("toInstant_19700101_minusOneNano") {
     val dt: OffsetDateTime = OffsetDateTime.of(LocalDate.of(1969, 12, 31),
                                                LocalTime.of(23, 59, 59, 999999999),
-                                               ZoneOffset.UTC)
-    val test: Instant = dt.toInstant
+                                               ZoneOffset.UTC
+    )
+    val test: Instant      = dt.toInstant
     assertEquals(test.getEpochSecond, -1)
     assertEquals(test.getNano, 999999999)
   }
@@ -288,7 +288,7 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
   test("toInstant_19700102") {
     val dt: OffsetDateTime =
       OffsetDateTime.of(LocalDate.of(1970, 1, 2), LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC)
-    val test: Instant = dt.toInstant
+    val test: Instant      = dt.toInstant
     assertEquals(test.getEpochSecond, 24L * 60L * 60L)
     assertEquals(test.getNano, 0)
   }
@@ -296,7 +296,7 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
   test("toInstant_19691231") {
     val dt: OffsetDateTime =
       OffsetDateTime.of(LocalDate.of(1969, 12, 31), LocalTime.of(0, 0, 0, 0), ZoneOffset.UTC)
-    val test: Instant = dt.toInstant
+    val test: Instant      = dt.toInstant
     assertEquals(test.getEpochSecond, -24L * 60L * 60L)
     assertEquals(test.getNano, 0)
   }
@@ -316,7 +316,8 @@ class TestOffsetDateTime_instants extends AnyFunSuite with AssertionsHelper {
   test("toEpochSecond_19700101_minusOneNano") {
     val dt: OffsetDateTime = OffsetDateTime.of(LocalDate.of(1969, 12, 31),
                                                LocalTime.of(23, 59, 59, 999999999),
-                                               ZoneOffset.UTC)
+                                               ZoneOffset.UTC
+    )
     assertEquals(dt.toEpochSecond, -1)
   }
 

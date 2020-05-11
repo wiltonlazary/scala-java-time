@@ -151,11 +151,10 @@ object Year {
     _temporal match {
       case year: Year =>
         year
-      case _ =>
+      case _          =>
         try {
-          if (IsoChronology.INSTANCE != Chronology.from(_temporal)) {
+          if (IsoChronology.INSTANCE != Chronology.from(_temporal))
             _temporal = LocalDate.from(_temporal)
-          }
           of(_temporal.get(YEAR))
         } catch {
           case _: DateTimeException =>
@@ -188,9 +187,11 @@ object Year {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): Year = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[Year] {
-      override def queryFrom(temporal: TemporalAccessor): Year = Year.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[Year] {
+                      override def queryFrom(temporal: TemporalAccessor): Year = Year.from(temporal)
+                    }
+    )
   }
 
   /** Checks if the year is a leap year, according to the ISO proleptic
@@ -380,7 +381,7 @@ final class Year private (private val year: Int)
           case ERA         => if (year < 1) 0 else 1
           case _           => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
-      case _ => field.getFrom(this)
+      case _              => field.getFrom(this)
     }
 
   /** Checks if the year is a leap year, according to the ISO proleptic
@@ -487,7 +488,7 @@ final class Year private (private val year: Int)
           case ERA         => if (getLong(ERA) == newValue) this else Year.of(1 - year)
           case _           => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
         }
-      case _ =>
+      case _              =>
         field.adjustInto(this, newValue)
     }
 
@@ -524,7 +525,7 @@ final class Year private (private val year: Int)
           case ERAS      => `with`(ERA, Math.addExact(getLong(ERA), amountToAdd))
           case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
-      case _ =>
+      case _             =>
         unit.addTo(this, amountToAdd)
     }
 
@@ -602,7 +603,9 @@ final class Year private (private val year: Int)
       IsoChronology.INSTANCE.asInstanceOf[R]
     else if (query eq TemporalQueries.precision)
       YEARS.asInstanceOf[R]
-    else if ((query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.zone) || (query eq TemporalQueries.zoneId) || (query eq TemporalQueries.offset))
+    else if (
+      (query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.zone) || (query eq TemporalQueries.zoneId) || (query eq TemporalQueries.offset)
+    )
       null.asInstanceOf[R]
     else
       super.query(query)
@@ -693,7 +696,7 @@ final class Year private (private val year: Int)
           case ERAS      => end.getLong(ERA) - getLong(ERA)
           case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }
-      case _ =>
+      case _             =>
         unit.between(this, end)
     }
   }

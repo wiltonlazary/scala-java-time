@@ -87,7 +87,8 @@ object ZoneRules {
                       baseWallOffset,
                       standardOffsetTransitionList,
                       transitionList,
-                      lastRules)
+                      lastRules
+    )
   }
 
   /** Obtains an instance of {@code ZoneRules} that always uses the same offset.
@@ -144,10 +145,10 @@ object ZoneRules {
 
     override def equals(obj: Any): Boolean =
       obj match {
-        case fixed: Fixed => (this eq fixed) || offset == fixed.offset
+        case fixed: Fixed             => (this eq fixed) || offset == fixed.offset
         case rules: StandardZoneRules =>
           rules.isFixedOffset && (offset == rules.getOffset(Instant.EPOCH))
-        case _ => false
+        case _                        => false
       }
 
     override def hashCode: Int = 1 ^ (31 + offset.hashCode) ^ 1 ^ (31 + offset.hashCode) ^ 1

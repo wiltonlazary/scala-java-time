@@ -49,8 +49,8 @@ import org.threeten.bp.temporal.TemporalAdjusters.nextOrSame
 /** Test the fluency of the whole API. */
 object FluentAPIChecker {
   @SuppressWarnings(Array("unused")) def main(args: Array[String]): Unit = {
-    val clock: Clock   = Clock.systemDefaultZone
-    val tod: LocalTime = LocalTime.now(clock)
+    val clock: Clock    = Clock.systemDefaultZone
+    val tod: LocalTime  = LocalTime.now(clock)
     tod.plusHours(6).plusMinutes(2)
     tod.plus(6, HOURS).plus(2, MINUTES)
     var date: LocalDate = null
@@ -69,23 +69,22 @@ object FluentAPIChecker {
     date = date.`with`(Year.of(2009))
     date = date.`with`(Month.of(6))
     date = date.`with`(AUGUST)
-    val d2: Period = Period.ofDays(3)
+    val d2: Period      = Period.ofDays(3)
     System.out.println(d2)
     tod.withHour(12).withMinute(30)
-    var md: MonthDay = MonthDay.of(FEBRUARY, 4)
+    var md: MonthDay    = MonthDay.of(FEBRUARY, 4)
     md = md.`with`(MARCH)
     DAY_OF_MONTH.range.getMaximum
     date.getMonth.maxLength
     date.range(DAY_OF_MONTH).getMaximum
     FEBRUARY.maxLength
-    var dow: DayOfWeek = MONDAY
+    var dow: DayOfWeek  = MONDAY
     dow = dow.plus(1)
     ZoneOffset.ofHours(1)
-    val paris: ZoneId = ZoneId.of("Europe/Paris")
+    val paris: ZoneId   = ZoneId.of("Europe/Paris")
     import scala.collection.JavaConverters._
-    for (trans <- paris.getRules.getTransitions.asScala) {
+    for (trans <- paris.getRules.getTransitions.asScala)
       System.out.println("Paris transition: " + trans)
-    }
     System.out.println("Summer time Paris starts: " + paris.getRules.getTransitionRules.get(0))
     System.out.println("Summer time Paris ends: " + paris.getRules.getTransitionRules.get(1))
     date.atTime(tod)

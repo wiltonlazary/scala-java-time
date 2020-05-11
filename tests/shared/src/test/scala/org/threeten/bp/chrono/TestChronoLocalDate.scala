@@ -156,13 +156,13 @@ object TestChronoLocalDate {
 }
 
 class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
-  val data_of_calendars: List[Chronology] = {
+  val data_of_calendars: List[Chronology] =
     List[Chronology]((HijrahChronology.INSTANCE),
                      (IsoChronology.INSTANCE),
                      // (JapaneseChronology.INSTANCE),
                      (MinguoChronology.INSTANCE),
-                     (ThaiBuddhistChronology.INSTANCE))
-  }
+                     (ThaiBuddhistChronology.INSTANCE)
+    )
 
   test("test_badWithAdjusterChrono") {
     data_of_calendars.foreach { chrono =>
@@ -171,14 +171,14 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val date2: ChronoLocalDate     = chrono2.date(refDate)
         val adjuster: TemporalAdjuster = new TestChronoLocalDate.FixedAdjuster(date2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             date.`with`(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException")
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDate = date.`with`(adjuster)
           assertEquals(result, date2, "WithAdjuster failed to replace date")
         }
@@ -193,14 +193,14 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val date2: ChronoLocalDate   = chrono2.date(refDate)
         val adjuster: TemporalAmount = new TestChronoLocalDate.FixedAdjuster(date2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             date.plus(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException")
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDate = date.plus(adjuster)
           assertEquals(result, date2, "WithAdjuster failed to replace date")
         }
@@ -215,14 +215,14 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val date2: ChronoLocalDate   = chrono2.date(refDate)
         val adjuster: TemporalAmount = new TestChronoLocalDate.FixedAdjuster(date2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             date.minus(adjuster)
             fail("WithAdjuster should have thrown a ClassCastException")
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDate = date.minus(adjuster)
           assertEquals(result, date2, "WithAdjuster failed to replace date")
         }
@@ -237,7 +237,7 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val date2: ChronoLocalDate = chrono2.date(refDate)
         val adjuster: TemporalUnit = new TestChronoLocalDate.FixedPeriodUnit(date2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             date.plus(1, adjuster)
             fail(
@@ -246,7 +246,7 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDate = date.plus(1, adjuster)
           assertEquals(result, date2, "WithAdjuster failed to replace date")
         }
@@ -261,7 +261,7 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val date2: ChronoLocalDate = chrono2.date(refDate)
         val adjuster: TemporalUnit = new TestChronoLocalDate.FixedPeriodUnit(date2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             date.minus(1, adjuster)
             fail(
@@ -270,7 +270,7 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDate = date.minus(1, adjuster)
           assertEquals(result, date2, "WithAdjuster failed to replace date")
         }
@@ -285,7 +285,7 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val date2: ChronoLocalDate  = chrono2.date(refDate)
         val adjuster: TemporalField = new TestChronoLocalDate.FixedDateTimeField(date2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             date.`with`(adjuster, 1)
             fail(
@@ -294,7 +294,7 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Platform.CCE =>
           }
-        } else {
+        else {
           val result: ChronoLocalDate = date.`with`(adjuster, 1)
           assertEquals(result, date2, "DateTimeField doSet failed to replace date")
         }
@@ -323,15 +323,14 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
       dates.add(date.plus(10, ChronoUnit.YEARS))
       dates.add(date.plus(100, ChronoUnit.YEARS))
       dates.add(date.plus(1000, ChronoUnit.YEARS))
-      for (chrono2 <- data_of_calendars) {
+      for (chrono2 <- data_of_calendars)
         scala.util.control.Breaks.breakable {
           val otherDates: java.util.List[ChronoLocalDate] = new java.util.ArrayList[ChronoLocalDate]
           // if (chrono2 eq JapaneseChronology.INSTANCE)
           //   scala.util.control.Breaks.break()
           import scala.collection.JavaConverters._
-          for (d <- dates.asScala) {
+          for (d <- dates.asScala)
             otherDates.add(chrono2.date(d))
-          }
           var i: Int = 0
           while (i < dates.size) {
             val a: ChronoLocalDate = dates.get(i)
@@ -360,7 +359,6 @@ class TestChronoLocalDate extends AnyFunSuite with AssertionsHelper {
             i += 1
           }
         }
-      }
     }
   }
 }

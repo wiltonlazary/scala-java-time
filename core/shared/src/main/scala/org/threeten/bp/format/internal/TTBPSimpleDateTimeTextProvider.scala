@@ -54,14 +54,15 @@ object TTBPSimpleDateTimeTextProvider {
     val tmp1 =
       (valueTextMap + (TextStyle.FULL_STANDALONE -> valueTextMap
         .get(TextStyle.FULL)
-        .orNull)) + (TextStyle.SHORT_STANDALONE -> valueTextMap.get(TextStyle.SHORT).orNull)
+        .orNull)) + (TextStyle.SHORT_STANDALONE  -> valueTextMap.get(TextStyle.SHORT).orNull)
     val tmp2 =
-      if (valueTextMap.contains(TextStyle.NARROW) && !valueTextMap
-            .contains(TextStyle.NARROW_STANDALONE)) {
+      if (
+        valueTextMap.contains(TextStyle.NARROW) && !valueTextMap
+          .contains(TextStyle.NARROW_STANDALONE)
+      )
         tmp1 + (TextStyle.NARROW_STANDALONE -> valueTextMap.get(TextStyle.NARROW).orNull)
-      } else {
+      else
         tmp1
-      }
     new TTBPSimpleDateTimeTextProvider.LocaleStore(tmp2)
   }
 
@@ -89,12 +90,12 @@ object TTBPSimpleDateTimeTextProvider {
         case ((all, map), (style, entries)) =>
           val reverse =
             entries.toList.sortBy(_._1).foldLeft((true, Map.empty[String, (String, Long)])) {
-              case (a @ (false, _), _) => a
+              case (a @ (false, _), _)   => a
               case ((true, acc), (k, v)) =>
                 val continue = !acc.contains(v)
                 (continue, acc + (v -> (v -> k)))
             }
-          val list = reverse._2.values.toList.sortBy(x => (-x._1.length))
+          val list    = reverse._2.values.toList.sortBy(x => (-x._1.length))
           (all ::: list, map + (style -> list))
       }
       (u._1.sortBy(x => (-x._1.length)), u._2)
@@ -170,82 +171,82 @@ final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
 
   private def createStore(field: TemporalField, locale: Locale): AnyRef = {
     if (field eq MONTH_OF_YEAR) {
-      val oldSymbols: DateFormatSymbols = DateFormatSymbols.getInstance(locale)
-      val f1: Long                      = 1L
-      val f2: Long                      = 2L
-      val f3: Long                      = 3L
-      val f4: Long                      = 4L
-      val f5: Long                      = 5L
-      val f6: Long                      = 6L
-      val f7: Long                      = 7L
-      val f8: Long                      = 8L
-      val f9: Long                      = 9L
-      val f10: Long                     = 10L
-      val f11: Long                     = 11L
-      val f12: Long                     = 12L
-      var array: Array[String]          = oldSymbols.getMonths
-      val mapF: Map[Long, String] = Map[Long, String](
-        f1 -> array(Calendar.JANUARY),
-        f2 -> array(Calendar.FEBRUARY),
-        f3 -> array(Calendar.MARCH),
-        f4 -> array(Calendar.APRIL),
-        f5 -> array(Calendar.MAY),
-        f6 -> array(Calendar.JUNE),
-        f7 -> array(Calendar.JULY),
-        f8 -> array(Calendar.AUGUST),
-        f9 -> array(Calendar.SEPTEMBER),
+      val oldSymbols: DateFormatSymbols               = DateFormatSymbols.getInstance(locale)
+      val f1: Long                                    = 1L
+      val f2: Long                                    = 2L
+      val f3: Long                                    = 3L
+      val f4: Long                                    = 4L
+      val f5: Long                                    = 5L
+      val f6: Long                                    = 6L
+      val f7: Long                                    = 7L
+      val f8: Long                                    = 8L
+      val f9: Long                                    = 9L
+      val f10: Long                                   = 10L
+      val f11: Long                                   = 11L
+      val f12: Long                                   = 12L
+      var array: Array[String]                        = oldSymbols.getMonths
+      val mapF: Map[Long, String]                     = Map[Long, String](
+        f1  -> array(Calendar.JANUARY),
+        f2  -> array(Calendar.FEBRUARY),
+        f3  -> array(Calendar.MARCH),
+        f4  -> array(Calendar.APRIL),
+        f5  -> array(Calendar.MAY),
+        f6  -> array(Calendar.JUNE),
+        f7  -> array(Calendar.JULY),
+        f8  -> array(Calendar.AUGUST),
+        f9  -> array(Calendar.SEPTEMBER),
         f10 -> array(Calendar.OCTOBER),
         f11 -> array(Calendar.NOVEMBER),
         f12 -> array(Calendar.DECEMBER)
       )
-      val mapN = Map[Long, String](
-        f1 -> array(Calendar.JANUARY).substring(0, 1),
-        f2 -> array(Calendar.FEBRUARY).substring(0, 1),
-        f3 -> array(Calendar.MARCH).substring(0, 1),
-        f4 -> array(Calendar.APRIL).substring(0, 1),
-        f5 -> array(Calendar.MAY).substring(0, 1),
-        f6 -> array(Calendar.JUNE).substring(0, 1),
-        f7 -> array(Calendar.JULY).substring(0, 1),
-        f8 -> array(Calendar.AUGUST).substring(0, 1),
-        f9 -> array(Calendar.SEPTEMBER).substring(0, 1),
+      val mapN                                        = Map[Long, String](
+        f1  -> array(Calendar.JANUARY).substring(0, 1),
+        f2  -> array(Calendar.FEBRUARY).substring(0, 1),
+        f3  -> array(Calendar.MARCH).substring(0, 1),
+        f4  -> array(Calendar.APRIL).substring(0, 1),
+        f5  -> array(Calendar.MAY).substring(0, 1),
+        f6  -> array(Calendar.JUNE).substring(0, 1),
+        f7  -> array(Calendar.JULY).substring(0, 1),
+        f8  -> array(Calendar.AUGUST).substring(0, 1),
+        f9  -> array(Calendar.SEPTEMBER).substring(0, 1),
         f10 -> array(Calendar.OCTOBER).substring(0, 1),
         f11 -> array(Calendar.NOVEMBER).substring(0, 1),
         f12 -> array(Calendar.DECEMBER).substring(0, 1)
       )
       array = oldSymbols.getShortMonths
-      val mapS = Map[Long, String](
-        f1 -> array(Calendar.JANUARY),
-        f2 -> array(Calendar.FEBRUARY),
-        f3 -> array(Calendar.MARCH),
-        f4 -> array(Calendar.APRIL),
-        f5 -> array(Calendar.MAY),
-        f6 -> array(Calendar.JUNE),
-        f7 -> array(Calendar.JULY),
-        f8 -> array(Calendar.AUGUST),
-        f9 -> array(Calendar.SEPTEMBER),
+      val mapS                                        = Map[Long, String](
+        f1  -> array(Calendar.JANUARY),
+        f2  -> array(Calendar.FEBRUARY),
+        f3  -> array(Calendar.MARCH),
+        f4  -> array(Calendar.APRIL),
+        f5  -> array(Calendar.MAY),
+        f6  -> array(Calendar.JUNE),
+        f7  -> array(Calendar.JULY),
+        f8  -> array(Calendar.AUGUST),
+        f9  -> array(Calendar.SEPTEMBER),
         f10 -> array(Calendar.OCTOBER),
         f11 -> array(Calendar.NOVEMBER),
         f12 -> array(Calendar.DECEMBER)
       )
       val styleMap: Map[TextStyle, Map[Long, String]] = Map[TextStyle, Map[Long, String]](
-        TextStyle.FULL -> mapF,
+        TextStyle.FULL   -> mapF,
         TextStyle.NARROW -> mapN,
-        TextStyle.SHORT -> mapS
+        TextStyle.SHORT  -> mapS
       )
       return TTBPSimpleDateTimeTextProvider.createLocaleStore(styleMap)
     }
 
     if (field eq DAY_OF_WEEK) {
-      val oldSymbols: DateFormatSymbols = DateFormatSymbols.getInstance(locale)
-      val f1: Long                      = 1L
-      val f2: Long                      = 2L
-      val f3: Long                      = 3L
-      val f4: Long                      = 4L
-      val f5: Long                      = 5L
-      val f6: Long                      = 6L
-      val f7: Long                      = 7L
-      var array: Array[String]          = oldSymbols.getWeekdays
-      val mapF: Map[Long, String] = Map[Long, String](
+      val oldSymbols: DateFormatSymbols               = DateFormatSymbols.getInstance(locale)
+      val f1: Long                                    = 1L
+      val f2: Long                                    = 2L
+      val f3: Long                                    = 3L
+      val f4: Long                                    = 4L
+      val f5: Long                                    = 5L
+      val f6: Long                                    = 6L
+      val f7: Long                                    = 7L
+      var array: Array[String]                        = oldSymbols.getWeekdays
+      val mapF: Map[Long, String]                     = Map[Long, String](
         f1 -> array(Calendar.MONDAY),
         f2 -> array(Calendar.TUESDAY),
         f3 -> array(Calendar.WEDNESDAY),
@@ -254,7 +255,7 @@ final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
         f6 -> array(Calendar.SATURDAY),
         f7 -> array(Calendar.SUNDAY)
       )
-      val mapN = Map[Long, String](
+      val mapN                                        = Map[Long, String](
         f1 -> array(Calendar.MONDAY).substring(0, 1),
         f2 -> array(Calendar.TUESDAY).substring(0, 1),
         f3 -> array(Calendar.WEDNESDAY).substring(0, 1),
@@ -264,7 +265,7 @@ final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
         f7 -> array(Calendar.SUNDAY).substring(0, 1)
       )
       array = oldSymbols.getShortWeekdays
-      val mapS = Map[Long, String](
+      val mapS                                        = Map[Long, String](
         f1 -> array(Calendar.MONDAY),
         f2 -> array(Calendar.TUESDAY),
         f3 -> array(Calendar.WEDNESDAY),
@@ -274,48 +275,50 @@ final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
         f7 -> array(Calendar.SUNDAY)
       )
       val styleMap: Map[TextStyle, Map[Long, String]] = Map[TextStyle, Map[Long, String]](
-        TextStyle.FULL -> mapF,
+        TextStyle.FULL   -> mapF,
         TextStyle.NARROW -> mapN,
-        TextStyle.SHORT -> mapS
+        TextStyle.SHORT  -> mapS
       )
       return TTBPSimpleDateTimeTextProvider.createLocaleStore(styleMap)
     }
 
     if (field eq AMPM_OF_DAY) {
-      val oldSymbols: DateFormatSymbols = DateFormatSymbols.getInstance(locale)
-      val array: Array[String]          = oldSymbols.getAmPmStrings
-      val map: Map[Long, String] =
+      val oldSymbols: DateFormatSymbols               = DateFormatSymbols.getInstance(locale)
+      val array: Array[String]                        = oldSymbols.getAmPmStrings
+      val map: Map[Long, String]                      =
         Map[Long, String](0L -> array(Calendar.AM), 1L -> array(Calendar.PM))
       val styleMap: Map[TextStyle, Map[Long, String]] =
         Map[TextStyle, Map[Long, String]](TextStyle.FULL -> map, TextStyle.SHORT -> map)
       return TTBPSimpleDateTimeTextProvider.createLocaleStore(styleMap)
     }
     if (field eq ERA) {
-      val oldSymbols: DateFormatSymbols = DateFormatSymbols.getInstance(locale)
-      val array: Array[String]          = oldSymbols.getEras
-      val mapS: Map[Long, String] =
+      val oldSymbols: DateFormatSymbols               = DateFormatSymbols.getInstance(locale)
+      val array: Array[String]                        = oldSymbols.getEras
+      val mapS: Map[Long, String]                     =
         Map[Long, String](0L -> array(GregorianCalendar.BC), 1L -> array(GregorianCalendar.AD))
-      val mapF = if (locale.getLanguage == Locale.ENGLISH.getLanguage) {
-        Map[Long, String](0L -> "Before Christ", 1L -> "Anno Domini")
-      } else {
-        mapS
-      }
-      val mapN = Map[Long, String](0L -> array(GregorianCalendar.BC).substring(0, 1),
-                                   1L -> array(GregorianCalendar.AD).substring(0, 1))
+      val mapF                                        =
+        if (locale.getLanguage == Locale.ENGLISH.getLanguage)
+          Map[Long, String](0L -> "Before Christ", 1L -> "Anno Domini")
+        else
+          mapS
+      val mapN                                        = Map[Long, String](0L -> array(GregorianCalendar.BC).substring(0, 1),
+                                   1L -> array(GregorianCalendar.AD).substring(0, 1)
+      )
       val styleMap: Map[TextStyle, Map[Long, String]] = Map[TextStyle, Map[Long, String]](
-        TextStyle.SHORT -> mapS,
-        TextStyle.FULL -> mapF,
+        TextStyle.SHORT  -> mapS,
+        TextStyle.FULL   -> mapF,
         TextStyle.NARROW -> mapN
       )
       return TTBPSimpleDateTimeTextProvider.createLocaleStore(styleMap)
     }
     if (field eq IsoFields.QUARTER_OF_YEAR) {
-      val mapS: Map[Long, String] =
+      val mapS: Map[Long, String]                     =
         Map[Long, String](1L -> "Q1", 2L -> "Q2", 3L -> "Q3", 4L -> "Q4")
-      val mapF = Map[Long, String](1L -> "1st quarter",
+      val mapF                                        = Map[Long, String](1L -> "1st quarter",
                                    2L -> "2nd quarter",
                                    3L -> "3rd quarter",
-                                   4L -> "4th quarter")
+                                   4L -> "4th quarter"
+      )
       val styleMap: Map[TextStyle, Map[Long, String]] =
         Map[TextStyle, Map[Long, String]](TextStyle.SHORT -> mapS, TextStyle.FULL -> mapF)
       return TTBPSimpleDateTimeTextProvider.createLocaleStore(styleMap)

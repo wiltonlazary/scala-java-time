@@ -35,8 +35,8 @@ import org.scalatest.funsuite.AnyFunSuite
 
 /** Test offset clock. */
 object TestClock_Offset {
-  val MOSCOW: ZoneId = ZoneId.of("Europe/Moscow")
-  val PARIS: ZoneId  = ZoneId.of("Europe/Paris")
+  val MOSCOW: ZoneId   = ZoneId.of("Europe/Moscow")
+  val PARIS: ZoneId    = ZoneId.of("Europe/Paris")
   val INSTANT: Instant =
     LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2)).toInstant
   val OFFSET: Duration = Duration.ofSeconds(2)
@@ -45,7 +45,8 @@ object TestClock_Offset {
 class TestClock_Offset extends AnyFunSuite with AssertionsHelper {
   test("offset_ClockDuration") {
     val test: Clock = Clock.offset(Clock.fixed(TestClock_Offset.INSTANT, TestClock_Offset.PARIS),
-                                   TestClock_Offset.OFFSET)
+                                   TestClock_Offset.OFFSET
+    )
     assertEquals(test.instant, TestClock_Offset.INSTANT.plus(TestClock_Offset.OFFSET))
     assertEquals(test.getZone, TestClock_Offset.PARIS)
   }

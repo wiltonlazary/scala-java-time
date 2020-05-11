@@ -115,9 +115,9 @@ object ZoneOffset {
     val offset: ZoneOffset = ID_CACHE.get(_offsetId)
     if (offset != null)
       return offset
-    var hours: Int   = 0
-    var minutes: Int = 0
-    var seconds: Int = 0
+    var hours: Int         = 0
+    var minutes: Int       = 0
+    var seconds: Int       = 0
 
     // If we get a two character code such as "-9", pad the digits to "-09" and parse normally
     if (_offsetId.length == 2)
@@ -125,23 +125,23 @@ object ZoneOffset {
 
     _offsetId.length match {
       case 3 =>
-        hours   = parseNumber(_offsetId, 1, precededByColon = false)
+        hours = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = 0
         seconds = 0
       case 5 =>
-        hours   = parseNumber(_offsetId, 1, precededByColon = false)
+        hours = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = parseNumber(_offsetId, 3, precededByColon = false)
         seconds = 0
       case 6 =>
-        hours   = parseNumber(_offsetId, 1, precededByColon = false)
+        hours = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = parseNumber(_offsetId, 4, precededByColon = true)
         seconds = 0
       case 7 =>
-        hours   = parseNumber(_offsetId, 1, precededByColon = false)
+        hours = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = parseNumber(_offsetId, 3, precededByColon = false)
         seconds = parseNumber(_offsetId, 5, precededByColon = false)
       case 9 =>
-        hours   = parseNumber(_offsetId, 1, precededByColon = false)
+        hours = parseNumber(_offsetId, 1, precededByColon = false)
         minutes = parseNumber(_offsetId, 4, precededByColon = true)
         seconds = parseNumber(_offsetId, 7, precededByColon = true)
       case _ =>
@@ -331,10 +331,9 @@ object ZoneOffset {
         .append(absHours)
         .append(if (absMinutes < 10) ":0" else ":")
         .append(absMinutes)
-      val absSeconds: Int = absTotalSeconds % SECONDS_PER_MINUTE
-      if (absSeconds != 0) {
+      val absSeconds: Int      = absTotalSeconds                        % SECONDS_PER_MINUTE
+      if (absSeconds != 0)
         buf.append(if (absSeconds < 10) ":0" else ":").append(absSeconds)
-      }
       buf.toString
     }
 
@@ -546,7 +545,9 @@ final class ZoneOffset private (private val totalSeconds: Int)
   override def query[R](query: TemporalQuery[R]): R =
     if ((query eq TemporalQueries.offset) || (query eq TemporalQueries.zone))
       this.asInstanceOf[R]
-    else if ((query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.precision) || (query eq TemporalQueries.chronology) || (query eq TemporalQueries.zoneId))
+    else if (
+      (query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.precision) || (query eq TemporalQueries.chronology) || (query eq TemporalQueries.zoneId)
+    )
       null.asInstanceOf[R]
     else
       query.queryFrom(this)

@@ -238,22 +238,20 @@ object ZonedDateTime {
     var _localDateTime = localDateTime
     zone match {
       case offset: ZoneOffset => new ZonedDateTime(_localDateTime, offset, zone)
-      case _ =>
+      case _                  =>
         val rules: ZoneRules                         = zone.getRules
         val validOffsets: java.util.List[ZoneOffset] = rules.getValidOffsets(_localDateTime)
         var offset: ZoneOffset                       = null
-        if (validOffsets.size == 1) {
+        if (validOffsets.size == 1)
           offset = validOffsets.get(0)
-        } else if (validOffsets.size == 0) {
+        else if (validOffsets.size == 0) {
           val trans: ZoneOffsetTransition = rules.getTransition(_localDateTime)
           _localDateTime = _localDateTime.plusSeconds(trans.getDuration.getSeconds)
-          offset         = trans.getOffsetAfter
-        } else {
-          if (preferredOffset != null && validOffsets.contains(preferredOffset))
-            offset = preferredOffset
-          else
-            offset = Objects.requireNonNull(validOffsets.get(0), "offset")
-        }
+          offset = trans.getOffsetAfter
+        } else if (preferredOffset != null && validOffsets.contains(preferredOffset))
+          offset = preferredOffset
+        else
+          offset = Objects.requireNonNull(validOffsets.get(0), "offset")
         new ZonedDateTime(_localDateTime, offset, zone)
     }
   }
@@ -345,9 +343,8 @@ object ZonedDateTime {
       throw new DateTimeException(
         s"ZoneOffset '$offset' is not valid for LocalDateTime '$localDateTime' in zone '$zone'"
       )
-    } else {
+    } else
       new ZonedDateTime(localDateTime, offset, zone)
-    }
   }
 
   /** Obtains an instance of {@code ZonedDateTime} from a temporal object.
@@ -370,10 +367,10 @@ object ZonedDateTime {
   def from(temporal: TemporalAccessor): ZonedDateTime =
     temporal match {
       case time: ZonedDateTime => time
-      case _ =>
+      case _                   =>
         try {
-          val zone: ZoneId = ZoneId.from(temporal)
-          if (temporal.isSupported(INSTANT_SECONDS)) {
+          val zone: ZoneId       = ZoneId.from(temporal)
+          if (temporal.isSupported(INSTANT_SECONDS))
             try {
               val epochSecond: Long = temporal.getLong(INSTANT_SECONDS)
               val nanoOfSecond: Int = temporal.get(NANO_OF_SECOND)
@@ -381,7 +378,6 @@ object ZonedDateTime {
             } catch {
               case _: DateTimeException =>
             }
-          }
           val ldt: LocalDateTime = LocalDateTime.from(temporal)
           of(ldt, zone)
         } catch {
@@ -415,10 +411,12 @@ object ZonedDateTime {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): ZonedDateTime = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[ZonedDateTime] {
-      override def queryFrom(temporal: TemporalAccessor): ZonedDateTime =
-        ZonedDateTime.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[ZonedDateTime] {
+                      override def queryFrom(temporal: TemporalAccessor): ZonedDateTime =
+                        ZonedDateTime.from(temporal)
+                    }
+    )
   }
 
 }
@@ -573,7 +571,7 @@ final class ZonedDateTime(
   def isSupported(field: TemporalField): Boolean =
     field match {
       case _: ChronoField => true
-      case _ =>
+      case _              =>
         (field != null && field.isSupportedBy(this))
     }
 
@@ -581,7 +579,7 @@ final class ZonedDateTime(
     unit match {
       case _: ChronoUnit =>
         unit.isDateBased || unit.isTimeBased
-      case _ =>
+      case _             =>
         unit != null && unit.isSupportedBy(this)
     }
 
@@ -647,7 +645,7 @@ final class ZonedDateTime(
           case OFFSET_SECONDS  => getOffset.getTotalSeconds
           case _               => dateTime.get(field)
         }
-      case _ =>
+      case _              =>
         super.get(field)
     }
 
@@ -680,7 +678,7 @@ final class ZonedDateTime(
           case OFFSET_SECONDS  => getOffset.getTotalSeconds.toLong
           case _               => dateTime.getLong(field)
         }
-      case _ =>
+      case _              =>
         field.getFrom(this)
     }
 
@@ -1026,11 +1024,11 @@ final class ZonedDateTime(
       case f: ChronoField =>
         f match {
           case INSTANT_SECONDS => ZonedDateTime.create(newValue, getNano, zone)
-          case OFFSET_SECONDS =>
+          case OFFSET_SECONDS  =>
             resolveOffset(ZoneOffset.ofTotalSeconds(f.checkValidIntValue(newValue)))
-          case _ => resolveLocal(dateTime.`with`(field, newValue))
+          case _               => resolveLocal(dateTime.`with`(field, newValue))
         }
-      case _ =>
+      case _              =>
         field.adjustInto(this, newValue)
     }
 
@@ -1719,9 +1717,8 @@ final class ZonedDateTime(
         dateTime.until(end.dateTime, unit)
       else
         toOffsetDateTime.until(end.toOffsetDateTime, unit)
-    } else {
+    } else
       unit.between(this, end)
-    }
   }
 
   /** Gets the {@code LocalDateTime} part of this date-time.
@@ -1772,7 +1769,7 @@ final class ZonedDateTime(
     obj match {
       case other: ZonedDateTime =>
         (this eq other) || ((dateTime == other.dateTime) && (offset == other.offset) && (zone == other.zone))
-      case _ => false
+      case _                    => false
     }
 
   /** A hash code for this date-time.

@@ -19,7 +19,8 @@ final class DefaultTzdbZoneRulesProvider extends ZoneRulesProvider {
                  ZoneOffset.UTC,
                  new java.util.ArrayList(),
                  new java.util.ArrayList(),
-                 new java.util.ArrayList())
+                 new java.util.ArrayList()
+    )
 
   override protected def provideVersions(
     zoneId: String

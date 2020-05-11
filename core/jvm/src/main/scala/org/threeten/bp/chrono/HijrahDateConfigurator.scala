@@ -57,10 +57,8 @@ object HijrahDateConfigurator {
           line = line.trim
           parseLine(line, num)
         }
-      } finally {
-        if (br != null)
-          br.close()
-      }
+      } finally if (br != null)
+        br.close()
     }
   }
 
@@ -79,7 +77,7 @@ object HijrahDateConfigurator {
       if (offsetIndex != -1) {
         val offsetString: String =
           deviationElement.substring(offsetIndex + 1, deviationElement.length)
-        var offset: Int = 0
+        var offset: Int          = 0
         try offset = offsetString.toInt
         catch {
           case _: NumberFormatException =>
@@ -96,7 +94,7 @@ object HijrahDateConfigurator {
           var startMonth: Int            = -1
           var endMonth: Int              = -1
           if (startDateYearSepIndex != -1) {
-            val startYearStg: String = startDateStg.substring(0, startDateYearSepIndex)
+            val startYearStg: String  = startDateStg.substring(0, startDateYearSepIndex)
             val startMonthStg: String =
               startDateStg.substring(startDateYearSepIndex + 1, startDateStg.length)
             try startYear = startYearStg.toInt
@@ -112,7 +110,7 @@ object HijrahDateConfigurator {
           } else
             throw new ParseException(s"Start year/month has incorrect format at line $num.", num)
           if (endDateYearSepIndex != -1) {
-            val endYearStg: String = endDateStg.substring(0, endDateYearSepIndex)
+            val endYearStg: String  = endDateStg.substring(0, endDateYearSepIndex)
             val endMonthStg: String =
               endDateStg.substring(endDateYearSepIndex + 1, endDateStg.length)
             try endYear = endYearStg.toInt
@@ -120,9 +118,8 @@ object HijrahDateConfigurator {
               case _: NumberFormatException =>
                 throw new ParseException(s"End year is not properly set at line $num.", num)
             }
-            try {
-              endMonth = endMonthStg.toInt
-            } catch {
+            try endMonth = endMonthStg.toInt
+            catch {
               case _: NumberFormatException =>
                 throw new ParseException(s"End month is not properly set at line $num.", num)
             }
@@ -134,7 +131,8 @@ object HijrahDateConfigurator {
             throw new ParseException(s"Unknown error at line $num.", num)
         } else
           throw new ParseException(s"Start and end year/month has incorrect format at line $num.",
-                                   num)
+                                   num
+          )
       } else
         throw new ParseException(s"Offset has incorrect format at line $num.", num)
     }
@@ -165,35 +163,34 @@ object HijrahDateConfigurator {
     var fileName: String = System.getProperty("org.threeten.bp.i18n.HijrahDate.deviationConfigFile")
     if (fileName == null)
       fileName = DEFAULT_CONFIG_FILENAME
-    var dir: String = System.getProperty("org.threeten.bp.i18n.HijrahDate.deviationConfigDir")
+    var dir: String      = System.getProperty("org.threeten.bp.i18n.HijrahDate.deviationConfigDir")
     if (dir != null) {
       if (!(dir.length == 0 && dir.endsWith(System.getProperty("file.separator"))))
         dir = dir + System.getProperty("file.separator")
       val file: File = new File(dir + FILE_SEP + fileName)
-      if (file.exists) {
+      if (file.exists)
         try new FileInputStream(file)
         catch {
           case ioe: IOException =>
             throw ioe
         }
-      } else null
+      else null
     } else {
       val classPath: String   = System.getProperty("java.class.path")
       val st: StringTokenizer = new StringTokenizer(classPath, PATH_SEP)
       while (st.hasMoreTokens) {
         val path: String = st.nextToken
         val file: File   = new File(path)
-        if (file.exists) {
+        if (file.exists)
           if (file.isDirectory) {
             val f: File = new File(path + FILE_SEP + DEFAULT_CONFIG_PATH, fileName)
-            if (f.exists) {
+            if (f.exists)
               try return new FileInputStream(
                 path + FILE_SEP + DEFAULT_CONFIG_PATH + FILE_SEP + fileName
               )
               catch {
                 case ioe: IOException => throw ioe
               }
-            }
           } else {
             var zip: ZipFile = null
             try zip = new ZipFile(file)
@@ -210,15 +207,13 @@ object HijrahDateConfigurator {
                   targetFile = targetFile.replace('\\', '/')
                 entry = zip.getEntry(targetFile)
               }
-              if (entry != null) {
+              if (entry != null)
                 try return zip.getInputStream(entry)
                 catch {
                   case ioe: IOException => throw ioe
                 }
-              }
             }
           }
-        }
       }
       null
     }

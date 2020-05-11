@@ -11,8 +11,8 @@ import scala.collection.immutable
 
 // TreeMap is not available in Scala.js however it is needed for Time Zone support
 // This is a simple implementation of NavigableMap, performance is likely terrible
-private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMap[K, V])(
-  implicit ordering:                                            Ordering[K]
+private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMap[K, V])(implicit
+  ordering:                                                     Ordering[K]
 ) extends AbstractMap[K, V]
     with java.util.NavigableMap[K, V] {
   def this()(implicit ordering: Ordering[K]) =
@@ -38,7 +38,7 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
   }
 
   override def pollFirstEntry(): java.util.Map.Entry[K, V] = {
-    val fk = firstKey()
+    val fk    = firstKey()
     val entry = map
       .get(fk)
       .map(new SimpleEntry(fk, _))
@@ -60,7 +60,7 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
   }
 
   override def pollLastEntry(): java.util.Map.Entry[K, V] = {
-    val lk = lastKey()
+    val lk    = lastKey()
     val entry = map
       .get(lk)
       .map(new SimpleEntry(lk, _))
@@ -78,11 +78,11 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
   override def navigableKeySet() = ???
 
   override def subMap(fromKey: K, fromInclusive: Boolean, toKey: K, toInclusive: Boolean) = {
-    val hk =
+    val hk        =
       if (toInclusive) map.filterKeys(x => ordering.compare(x, toKey) <= 0)
       else
         map.filterKeys(x => ordering.compare(x, toKey) < 0)
-    val fk =
+    val fk        =
       if (fromInclusive) map.filterKeys(x => ordering.compare(x, fromKey) >= 0)
       else
         map.filterKeys(x => ordering.compare(x, fromKey) > 0)
@@ -163,7 +163,7 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
 
 object ZoneMap {
 
-  def apply[K: ClassTag, V](map: immutable.TreeMap[K, V])(
-    implicit ordering:           Ordering[K]
+  def apply[K: ClassTag, V](map: immutable.TreeMap[K, V])(implicit
+    ordering:                    Ordering[K]
   ): java.util.NavigableMap[K, V] = new ZoneMap[K, V](map)
 }

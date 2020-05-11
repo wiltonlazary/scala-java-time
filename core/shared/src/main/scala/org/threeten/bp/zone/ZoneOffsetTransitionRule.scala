@@ -113,7 +113,8 @@ object ZoneOffsetTransitionRule {
                                  timeDefnition,
                                  standardOffset,
                                  offsetBefore,
-                                 offsetAfter)
+                                 offsetAfter
+    )
   }
 
   /** Reads the state from the stream.
@@ -124,27 +125,27 @@ object ZoneOffsetTransitionRule {
     */
   @throws[IOException]
   private[zone] def readExternal(in: DataInput): ZoneOffsetTransitionRule = {
-    val data: Int      = in.readInt
-    val month: Month   = Month.of(data >>> 28)
-    val dom: Int       = ((data & (63 << 22)) >>> 22) - 32
-    val dowByte: Int   = (data & (7 << 19)) >>> 19
-    val dow: DayOfWeek = if (dowByte == 0) null else DayOfWeek.of(dowByte)
-    val timeByte: Int  = (data & (31 << 14)) >>> 14
+    val data: Int                                     = in.readInt
+    val month: Month                                  = Month.of(data >>> 28)
+    val dom: Int                                      = ((data & (63 << 22)) >>> 22) - 32
+    val dowByte: Int                                  = (data & (7 << 19)) >>> 19
+    val dow: DayOfWeek                                = if (dowByte == 0) null else DayOfWeek.of(dowByte)
+    val timeByte: Int                                 = (data & (31 << 14)) >>> 14
     val defn: ZoneOffsetTransitionRule.TimeDefinition =
       TimeDefinition.values((data & (3 << 12)) >>> 12)
-    val stdByte: Int    = (data & (255 << 4)) >>> 4
-    val beforeByte: Int = (data & (3 << 2)) >>> 2
-    val afterByte: Int  = data & 3
-    val time: LocalTime =
+    val stdByte: Int                                  = (data & (255 << 4)) >>> 4
+    val beforeByte: Int                               = (data & (3 << 2)) >>> 2
+    val afterByte: Int                                = data & 3
+    val time: LocalTime                               =
       if (timeByte == 31) LocalTime.ofSecondOfDay(in.readInt.toLong)
       else LocalTime.of(timeByte % 24, 0)
-    val std: ZoneOffset =
+    val std: ZoneOffset                               =
       if (stdByte == 255) ZoneOffset.ofTotalSeconds(in.readInt)
       else ZoneOffset.ofTotalSeconds((stdByte - 128) * 900)
-    val before: ZoneOffset =
+    val before: ZoneOffset                            =
       if (beforeByte == 3) ZoneOffset.ofTotalSeconds(in.readInt)
       else ZoneOffset.ofTotalSeconds(std.getTotalSeconds + beforeByte * 1800)
-    val after: ZoneOffset =
+    val after: ZoneOffset                             =
       if (afterByte == 3) ZoneOffset.ofTotalSeconds(in.readInt)
       else ZoneOffset.ofTotalSeconds(std.getTotalSeconds + afterByte * 1800)
     ZoneOffsetTransitionRule.of(month, dom, dow, time, timeByte == 24, defn, std, before, after)
@@ -199,13 +200,13 @@ object ZoneOffsetTransitionRule {
       wallOffset:     ZoneOffset
     ): LocalDateTime =
       this match {
-        case TimeDefinition.UTC =>
+        case TimeDefinition.UTC      =>
           val difference: Int = wallOffset.getTotalSeconds - ZoneOffset.UTC.getTotalSeconds
           dateTime.plusSeconds(difference.toLong)
         case TimeDefinition.STANDARD =>
           val difference: Int = wallOffset.getTotalSeconds - standardOffset.getTotalSeconds
           dateTime.plusSeconds(difference.toLong)
-        case _ =>
+        case _                       =>
           dateTime
       }
   }
@@ -345,24 +346,22 @@ final class ZoneOffsetTransitionRule private[zone] (
     * @return the transition instance, not null
     */
   def createTransition(year: Int): ZoneOffsetTransition = {
-    var date: LocalDate = null
+    var date: LocalDate           = null
     if (dom < 0) {
       date = LocalDate.of(year,
                           month,
-                          month.length(IsoChronology.INSTANCE.isLeapYear(year.toLong)) + 1 + dom)
-      if (dayOfWeek != null) {
+                          month.length(IsoChronology.INSTANCE.isLeapYear(year.toLong)) + 1 + dom
+      )
+      if (dayOfWeek != null)
         date = date.`with`(previousOrSame(dayOfWeek))
-      }
     } else {
       date = LocalDate.of(year, month, dom.toInt)
-      if (dayOfWeek != null) {
+      if (dayOfWeek != null)
         date = date.`with`(nextOrSame(dayOfWeek))
-      }
     }
-    if (timeEndOfDay) {
+    if (timeEndOfDay)
       date = date.plusDays(1)
-    }
-    val localDT: LocalDateTime = LocalDateTime.of(date, time)
+    val localDT: LocalDateTime    = LocalDateTime.of(date, time)
     val transition: LocalDateTime =
       timeDefinition.createDateTime(localDT, standardOffset, offsetBefore)
     new ZoneOffsetTransition(transition, offsetBefore, offsetAfter)
@@ -379,7 +378,7 @@ final class ZoneOffsetTransitionRule private[zone] (
     otherRule match {
       case other: ZoneOffsetTransitionRule =>
         (this eq other) || ((month eq other.month) && (dom == other.dom) && (dayOfWeek eq other.dayOfWeek) && (timeDefinition eq other.timeDefinition) && (time == other.time) && (timeEndOfDay == other.timeEndOfDay) && (standardOffset == other.standardOffset) && (offsetBefore == other.offsetBefore) && (offsetAfter == other.offsetAfter))
-      case _ => false
+      case _                               => false
     }
 
   /** Returns a suitable hash code.
@@ -388,10 +387,14 @@ final class ZoneOffsetTransitionRule private[zone] (
     */
   override def hashCode: Int = {
     val hash: Int =
-      ((time.toSecondOfDay + (if (timeEndOfDay) 1 else 0)) << 15) + (month.ordinal << 11) + ((dom + 32) << 5) + ((if (dayOfWeek == null)
-                                                                                                                    7
-                                                                                                                  else
-                                                                                                                    dayOfWeek.ordinal) << 2) + timeDefinition.ordinal
+      ((time.toSecondOfDay + (if (timeEndOfDay) 1
+                              else
+                                0)) << 15) + (month.ordinal << 11) + ((dom + 32) << 5) + ((if (
+                                                                                             dayOfWeek == null
+                                                                                           )
+                                                                                             7
+                                                                                           else
+                                                                                             dayOfWeek.ordinal) << 2) + timeDefinition.ordinal
     hash ^ standardOffset.hashCode ^ offsetBefore.hashCode ^ offsetAfter.hashCode
   }
 
@@ -408,27 +411,25 @@ final class ZoneOffsetTransitionRule private[zone] (
       .append(" to ")
       .append(offsetAfter)
       .append(", ")
-    if (dayOfWeek != null) {
-      if (dom == -1) {
+    if (dayOfWeek != null)
+      if (dom == -1)
         buf.append(dayOfWeek.name).append(" on or before last day of ").append(month.name)
-      } else if (dom < 0) {
+      else if (dom < 0)
         buf
           .append(dayOfWeek.name)
           .append(" on or before last day minus ")
           .append(-dom - 1)
           .append(" of ")
           .append(month.name)
-      } else {
+      else
         buf
           .append(dayOfWeek.name)
           .append(" on or after ")
           .append(month.name)
           .append(' ')
           .append(dom)
-      }
-    } else {
+    else
       buf.append(month.name).append(' ').append(dom)
-    }
     buf
       .append(" at ")
       .append(if (timeEndOfDay) "24:00" else time.toString)

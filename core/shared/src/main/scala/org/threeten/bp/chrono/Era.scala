@@ -120,6 +120,6 @@ trait Era extends TemporalAccessor with TemporalAdjuster {
       case TemporalQueries.chronology | TemporalQueries.zone | TemporalQueries.zoneId |
           TemporalQueries.offset | TemporalQueries.localDate | TemporalQueries.localTime =>
         null.asInstanceOf[R]
-      case _ => query.queryFrom(this)
+      case _                         => query.queryFrom(this)
     }
 }

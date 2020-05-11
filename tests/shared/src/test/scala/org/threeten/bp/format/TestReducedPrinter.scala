@@ -58,7 +58,7 @@ class TestReducedPrinter extends AnyFunSuite with GenTestPrinterParser with Asse
     assertEquals(buf.toString, "EXISTING12")
   }
 
-  val provider_pivot: List[List[Any]] = {
+  val provider_pivot: List[List[Any]] =
     List(
       List(1, 2010, 2010, "0"),
       List(1, 2010, 2011, "1"),
@@ -109,7 +109,6 @@ class TestReducedPrinter extends AnyFunSuite with GenTestPrinterParser with Asse
       List(2, -2005, -2006, "06"),
       List(2, -2005, -1905, "05")
     )
-  }
 
   test("test_pivot") {
     provider_pivot.foreach {
@@ -130,7 +129,7 @@ class TestReducedPrinter extends AnyFunSuite with GenTestPrinterParser with Asse
             else
               throw ex
         }
-      case _ =>
+      case _                                                                           =>
         fail()
     }
   }

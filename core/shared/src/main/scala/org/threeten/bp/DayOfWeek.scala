@@ -110,11 +110,12 @@ object DayOfWeek {
 
   lazy val values: Array[DayOfWeek] =
     Array(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
-  def valueOf(enum: String): DayOfWeek = values.find(_.name() == enum) match {
-    case Some(dayOfWeek) => dayOfWeek
-    case _ =>
-      throw new IllegalArgumentException(s"Unrecognized day of week name: $enum")
-  }
+  def valueOf(enum: String): DayOfWeek =
+    values.find(_.name() == enum) match {
+      case Some(dayOfWeek) => dayOfWeek
+      case _               =>
+        throw new IllegalArgumentException(s"Unrecognized day of week name: $enum")
+    }
 
   /** Private cache of all the constants.
     */
@@ -350,7 +351,9 @@ final class DayOfWeek(name: String, ordinal: Int)
   override def query[R](query: TemporalQuery[R]): R =
     if (query eq TemporalQueries.precision)
       temporal.ChronoUnit.DAYS.asInstanceOf[R]
-    else if ((query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.chronology) || (query eq TemporalQueries.zone) || (query eq TemporalQueries.zoneId) || (query eq TemporalQueries.offset))
+    else if (
+      (query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.chronology) || (query eq TemporalQueries.zone) || (query eq TemporalQueries.zoneId) || (query eq TemporalQueries.offset)
+    )
       null.asInstanceOf[R]
     else
       query.queryFrom(this)

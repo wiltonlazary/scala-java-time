@@ -56,7 +56,9 @@ object TTBPDateTimeParseContext {
     * @return true if equal
     */
   def charEqualsIgnoreCase(c1: Char, c2: Char): Boolean =
-    c1 == c2 || Character.toUpperCase(c1) == Character.toUpperCase(c2) || Character.toLowerCase(c1) == Character
+    c1 == c2 || Character.toUpperCase(c1) == Character.toUpperCase(c2) || Character.toLowerCase(
+      c1
+    ) == Character
       .toLowerCase(c2)
 }
 
@@ -109,7 +111,8 @@ final class TTBPDateTimeParseContext(
          other.overrideChronology,
          other.overrideZone,
          other.caseSensitive,
-         other.strict)
+         other.strict
+    )
   }
 
   /** Creates a copy of this context.
@@ -141,9 +144,8 @@ final class TTBPDateTimeParseContext(
     var chrono: Chronology = currentParsed.chrono
     if (chrono == null) {
       chrono = overrideChronology
-      if (chrono == null) {
+      if (chrono == null)
         chrono = IsoChronology.INSTANCE
-      }
     }
     chrono
   }
@@ -177,33 +179,28 @@ final class TTBPDateTimeParseContext(
     offset2: Int,
     length:  Int
   ): Boolean = {
-    if (offset1 + length > cs1.length || offset2 + length > cs2.length) {
+    if (offset1 + length > cs1.length || offset2 + length > cs2.length)
       return false
-    }
     if (isCaseSensitive) {
-      {
-        var i: Int = 0
-        while (i < length) {
-          val ch1: Char = cs1.charAt(offset1 + i)
-          val ch2: Char = cs2.charAt(offset2 + i)
-          if (ch1 != ch2) {
-            return false
-          }
-          i += 1
-        }
+      var i: Int = 0
+      while (i < length) {
+        val ch1: Char = cs1.charAt(offset1 + i)
+        val ch2: Char = cs2.charAt(offset2 + i)
+        if (ch1 != ch2)
+          return false
+        i += 1
       }
     } else {
-      {
-        var i: Int = 0
-        while (i < length) {
-          val ch1: Char = cs1.charAt(offset1 + i)
-          val ch2: Char = cs2.charAt(offset2 + i)
-          if (ch1 != ch2 && Character.toUpperCase(ch1) != Character.toUpperCase(ch2) && Character
-                .toLowerCase(ch1) != Character.toLowerCase(ch2)) {
-            return false
-          }
-          i += 1
-        }
+      var i: Int = 0
+      while (i < length) {
+        val ch1: Char = cs1.charAt(offset1 + i)
+        val ch2: Char = cs2.charAt(offset2 + i)
+        if (
+          ch1 != ch2 && Character.toUpperCase(ch1) != Character.toUpperCase(ch2) && Character
+            .toLowerCase(ch1) != Character.toLowerCase(ch2)
+        )
+          return false
+        i += 1
       }
     }
     true
@@ -217,11 +214,10 @@ final class TTBPDateTimeParseContext(
     * @return true if equal
     */
   def charEquals(ch1: Char, ch2: Char): Boolean =
-    if (isCaseSensitive) {
+    if (isCaseSensitive)
       ch1 == ch2
-    } else {
+    else
       TTBPDateTimeParseContext.charEqualsIgnoreCase(ch1, ch2)
-    }
 
   /** Checks if parsing is strict.
     *
@@ -313,7 +309,8 @@ final class TTBPDateTimeParseContext(
         pp.setValue(this,
                     objects(1).asInstanceOf[java.lang.Long],
                     objects(2).asInstanceOf[Integer],
-                    objects(3).asInstanceOf[Integer])
+                    objects(3).asInstanceOf[Integer]
+        )
       }
     }
   }
@@ -331,7 +328,8 @@ final class TTBPDateTimeParseContext(
       Array[AnyRef](reducedPrinterParser,
                     value.asInstanceOf[AnyRef],
                     errorPos.asInstanceOf[AnyRef],
-                    successPos.asInstanceOf[AnyRef])
+                    successPos.asInstanceOf[AnyRef]
+      )
     )
     ()
   }
@@ -368,18 +366,18 @@ final class TTBPDateTimeParseContext(
   /** Temporary store of parsed data.
     */
   final class Parsed() extends TemporalAccessor {
-    var chrono: Chronology = null
-    var zone: ZoneId       = null
+    var chrono: Chronology                                        = null
+    var zone: ZoneId                                              = null
     val fieldValues: java.util.Map[TemporalField, java.lang.Long] =
       new java.util.HashMap[TemporalField, java.lang.Long]
-    var leapSecond: Boolean                      = false
-    var excessDays: Period                       = Period.ZERO
-    var callbacks: java.util.List[Array[AnyRef]] = null
+    var leapSecond: Boolean                                       = false
+    var excessDays: Period                                        = Period.ZERO
+    var callbacks: java.util.List[Array[AnyRef]]                  = null
 
     protected[format] def copy: TTBPDateTimeParseContext#Parsed = {
       val cloned: TTBPDateTimeParseContext#Parsed = new Parsed
       cloned.chrono = this.chrono
-      cloned.zone   = this.zone
+      cloned.zone = this.zone
       cloned.fieldValues.putAll(this.fieldValues)
       cloned.leapSecond = this.leapSecond
       cloned

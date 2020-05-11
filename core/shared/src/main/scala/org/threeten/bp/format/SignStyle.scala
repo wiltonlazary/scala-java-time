@@ -92,11 +92,11 @@ final class SignStyle(name: String, ordinal: Int) extends Enum[SignStyle](name, 
     */
   private[format] def parse(positive: Boolean, strict: Boolean, fixedWidth: Boolean): Boolean =
     ordinal match {
-      case 0 =>
+      case 0     =>
         !positive || !strict
       case 1 | 4 =>
         true
-      case _ =>
+      case _     =>
         !strict && !fixedWidth
     }
 }

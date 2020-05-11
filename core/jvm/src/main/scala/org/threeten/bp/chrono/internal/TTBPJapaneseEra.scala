@@ -23,7 +23,7 @@ object TTBPJapaneseEra {
     * @throws DateTimeException if an additional era has already been registered
     */
   def registerEra(since: LocalDate, name: String): JapaneseEra = {
-    val known = JapaneseEra.KNOWN_ERAS.get
+    val known    = JapaneseEra.KNOWN_ERAS.get
     if (known.length > 5)
       throw new DateTimeException("Only one additional Japanese era can be added")
     require(since != null)

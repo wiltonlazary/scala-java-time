@@ -57,9 +57,7 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
       try {
         TimeZone.setDefault(new SimpleTimeZone(127, "Something Weird"))
         ZoneId.systemDefault
-      } finally {
-        TimeZone.setDefault(current)
-      }
+      } finally TimeZone.setDefault(current)
     }
   }
 
@@ -69,9 +67,7 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
       try {
         TimeZone.setDefault(new SimpleTimeZone(127, "SomethingWeird"))
         ZoneId.systemDefault
-      } finally {
-        TimeZone.setDefault(current)
-      }
+      } finally TimeZone.setDefault(current)
     }
   }
 
@@ -132,7 +128,7 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     val map: java.util.Map[String, String] = new java.util.HashMap[String, String]
     map.put("LONDON", "Europe/London")
     map.put("PARIS", "Europe/Paris")
-    val test: ZoneId = ZoneId.of("LONDON", map)
+    val test: ZoneId                       = ZoneId.of("LONDON", map)
     assertEquals(test.getId, "Europe/London")
   }
 
@@ -140,7 +136,7 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     val map: java.util.Map[String, String] = new java.util.HashMap[String, String]
     map.put("LONDON", "Europe/London")
     map.put("PARIS", "Europe/Paris")
-    val test: ZoneId = ZoneId.of("Europe/Madrid", map)
+    val test: ZoneId                       = ZoneId.of("Europe/Madrid", map)
     assertEquals(test.getId, "Europe/Madrid")
   }
 
@@ -164,7 +160,7 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     }
   }
 
-  val data_of_string_UTC: List[String] = {
+  val data_of_string_UTC: List[String] =
     List("",
          "+00",
          "+0000",
@@ -175,8 +171,8 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
          "-0000",
          "-00:00",
          "-000000",
-         "-00:00:00")
-  }
+         "-00:00:00"
+    )
 
   test("of_string_UTC") {
     data_of_string_UTC.foreach { id =>
@@ -230,53 +226,53 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
         val test: ZoneId       = ZoneId.of(input)
         val offset: ZoneOffset = ZoneOffset.of(if (id.isEmpty) "Z" else id)
         assertEquals(test, offset)
-      case _ => fail()
+      case _                  => fail()
     }
   }
 
   test("of_string_FixedUTC") {
     data_of_string_Fixed.foreach {
       case input :: id :: Nil =>
-        val test: ZoneId = ZoneId.of("UTC" + input)
+        val test: ZoneId       = ZoneId.of("UTC" + input)
         assertEquals(test.getId, "UTC" + id)
         assertEquals(test.getDisplayName(TextStyle.FULL, Locale.UK), "UTC" + id)
         assertEquals(test.getRules.isFixedOffset, true)
         val offset: ZoneOffset = ZoneOffset.of(if (id.isEmpty) "Z" else id)
         assertEquals(test.getRules.getOffset(Instant.ofEpochSecond(0L)), offset)
         checkOffset(test.getRules, createLDT(2008, 6, 30), offset, 1)
-      case _ => fail()
+      case _                  => fail()
     }
   }
 
   test("of_string_FixedGMT") {
     data_of_string_Fixed.foreach {
       case input :: id :: Nil =>
-        val test: ZoneId = ZoneId.of("GMT" + input)
+        val test: ZoneId       = ZoneId.of("GMT" + input)
         assertEquals(test.getId, "GMT" + id)
         assertEquals(test.getDisplayName(TextStyle.FULL, Locale.UK), "GMT" + id)
         assertEquals(test.getRules.isFixedOffset, true)
         val offset: ZoneOffset = ZoneOffset.of(if (id.isEmpty) "Z" else id)
         assertEquals(test.getRules.getOffset(Instant.ofEpochSecond(0L)), offset)
         checkOffset(test.getRules, createLDT(2008, 6, 30), offset, 1)
-      case _ => fail()
+      case _                  => fail()
     }
   }
 
   test("of_string_FixedUT") {
     data_of_string_Fixed.foreach {
       case input :: id :: Nil =>
-        val test: ZoneId = ZoneId.of("UT" + input)
+        val test: ZoneId       = ZoneId.of("UT" + input)
         assertEquals(test.getId, "UT" + id)
         assertEquals(test.getDisplayName(TextStyle.FULL, Locale.UK), "UT" + id)
         assertEquals(test.getRules.isFixedOffset, true)
         val offset: ZoneOffset = ZoneOffset.of(if (id.isEmpty) "Z" else id)
         assertEquals(test.getRules.getOffset(Instant.ofEpochSecond(0L)), offset)
         checkOffset(test.getRules, createLDT(2008, 6, 30), offset, 1)
-      case _ => fail()
+      case _                  => fail()
     }
   }
 
-  val data_of_string_UTC_invalid: List[String] = {
+  val data_of_string_UTC_invalid: List[String] =
     List(
       "A",
       "B",
@@ -349,7 +345,6 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
       "-01:AA",
       "@01:00"
     )
-  }
 
   test("of_string_UTC_invalid") {
     data_of_string_UTC_invalid.foreach { id =>
@@ -496,7 +491,8 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
 
   test("factory_CalendricalObject") {
     assertEquals(ZoneId.from(createZDT(2007, 7, 15, 17, 30, 0, 0, TestZoneId.ZONE_PARIS)),
-                 TestZoneId.ZONE_PARIS)
+                 TestZoneId.ZONE_PARIS
+    )
   }
 
   test("factory_CalendricalObject_invalid_noDerive") {
@@ -520,81 +516,111 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
   test("London_getOffset") {
     val test: ZoneId = ZoneId.of("Europe/London")
     assertEquals(test.getRules.getOffset(createInstant(2008, 1, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 2, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 4, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 5, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 6, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 7, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 8, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 9, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 12, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
   }
 
   test("London_getOffset_toDST") {
     val test: ZoneId = ZoneId.of("Europe/London")
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 24, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 25, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 26, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 27, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 28, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 29, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 30, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 31, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(
       test.getRules.getOffset(createInstant(2008, 3, 30, 0, 59, 59, 999999999, ZoneOffset.UTC)),
       ZoneOffset.ofHours(0)
     )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 30, 1, 0, 0, 0, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
   }
 
   test("London_getOffset_fromDST") {
     val test: ZoneId = ZoneId.of("Europe/London")
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 24, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 25, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 26, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 27, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 28, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 29, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 30, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 31, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
     assertEquals(
       test.getRules.getOffset(createInstant(2008, 10, 26, 0, 59, 59, 999999999, ZoneOffset.UTC)),
       ZoneOffset.ofHours(1)
     )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 26, 1, 0, 0, 0, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(0))
+                 ZoneOffset.ofHours(0)
+    )
   }
 
   test("London_getOffsetInfo") {
@@ -626,11 +652,13 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 3, 30, 0, 59, 59, 999999999),
                 ZoneOffset.ofHours(0),
-                1)
+                1
+    )
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 3, 30, 1, 30, 0, 0),
                 ZoneOffset.ofHours(0),
-                TestZoneId.GAP)
+                TestZoneId.GAP
+    )
     checkOffset(test.getRules, LocalDateTime.of(2008, 3, 30, 2, 0, 0, 0), ZoneOffset.ofHours(1), 1)
   }
 
@@ -647,18 +675,20 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 10, 26, 0, 59, 59, 999999999),
                 ZoneOffset.ofHours(1),
-                1)
+                1
+    )
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 10, 26, 1, 30, 0, 0),
                 ZoneOffset.ofHours(1),
-                TestZoneId.OVERLAP)
+                TestZoneId.OVERLAP
+    )
     checkOffset(test.getRules, LocalDateTime.of(2008, 10, 26, 2, 0, 0, 0), ZoneOffset.ofHours(0), 1)
   }
 
   test("London_getOffsetInfo_gap") {
-    val test: ZoneId            = ZoneId.of("Europe/London")
-    val dateTime: LocalDateTime = LocalDateTime.of(2008, 3, 30, 1, 0, 0, 0)
-    val trans: ZoneOffsetTransition =
+    val test: ZoneId                     = ZoneId.of("Europe/London")
+    val dateTime: LocalDateTime          = LocalDateTime.of(2008, 3, 30, 1, 0, 0, 0)
+    val trans: ZoneOffsetTransition      =
       checkOffset(test.getRules, dateTime, ZoneOffset.ofHours(0), TestZoneId.GAP)
     assertEquals(trans.isGap, true)
     assertEquals(trans.isOverlap, false)
@@ -681,9 +711,9 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
   }
 
   test("London_getOffsetInfo_overlap") {
-    val test: ZoneId            = ZoneId.of("Europe/London")
-    val dateTime: LocalDateTime = LocalDateTime.of(2008, 10, 26, 1, 0, 0, 0)
-    val trans: ZoneOffsetTransition =
+    val test: ZoneId                     = ZoneId.of("Europe/London")
+    val dateTime: LocalDateTime          = LocalDateTime.of(2008, 10, 26, 1, 0, 0, 0)
+    val trans: ZoneOffsetTransition      =
       checkOffset(test.getRules, dateTime, ZoneOffset.ofHours(1), TestZoneId.OVERLAP)
     assertEquals(trans.isGap, false)
     assertEquals(trans.isOverlap, true)
@@ -714,81 +744,111 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
   test("Paris_getOffset") {
     val test: ZoneId = ZoneId.of("Europe/Paris")
     assertEquals(test.getRules.getOffset(createInstant(2008, 1, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 2, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 4, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 5, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 6, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 7, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 8, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 9, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 12, 1, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
   }
 
   test("Paris_getOffset_toDST") {
     val test: ZoneId = ZoneId.of("Europe/Paris")
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 24, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 25, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 26, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 27, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 28, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 29, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 30, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 31, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(
       test.getRules.getOffset(createInstant(2008, 3, 30, 0, 59, 59, 999999999, ZoneOffset.UTC)),
       ZoneOffset.ofHours(1)
     )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 30, 1, 0, 0, 0, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
   }
 
   test("Paris_getOffset_fromDST") {
     val test: ZoneId = ZoneId.of("Europe/Paris")
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 24, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 25, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 26, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(2))
+                 ZoneOffset.ofHours(2)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 27, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 28, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 29, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 30, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 31, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
     assertEquals(
       test.getRules.getOffset(createInstant(2008, 10, 26, 0, 59, 59, 999999999, ZoneOffset.UTC)),
       ZoneOffset.ofHours(2)
     )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 26, 1, 0, 0, 0, ZoneOffset.UTC)),
-                 ZoneOffset.ofHours(1))
+                 ZoneOffset.ofHours(1)
+    )
   }
 
   test("Paris_getOffsetInfo") {
@@ -820,11 +880,13 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 3, 30, 1, 59, 59, 999999999),
                 ZoneOffset.ofHours(1),
-                1)
+                1
+    )
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 3, 30, 2, 30, 0, 0),
                 ZoneOffset.ofHours(1),
-                TestZoneId.GAP)
+                TestZoneId.GAP
+    )
     checkOffset(test.getRules, LocalDateTime.of(2008, 3, 30, 3, 0, 0, 0), ZoneOffset.ofHours(2), 1)
   }
 
@@ -841,18 +903,20 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 10, 26, 1, 59, 59, 999999999),
                 ZoneOffset.ofHours(2),
-                1)
+                1
+    )
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 10, 26, 2, 30, 0, 0),
                 ZoneOffset.ofHours(2),
-                TestZoneId.OVERLAP)
+                TestZoneId.OVERLAP
+    )
     checkOffset(test.getRules, LocalDateTime.of(2008, 10, 26, 3, 0, 0, 0), ZoneOffset.ofHours(1), 1)
   }
 
   test("Paris_getOffsetInfo_gap") {
-    val test: ZoneId            = ZoneId.of("Europe/Paris")
-    val dateTime: LocalDateTime = LocalDateTime.of(2008, 3, 30, 2, 0, 0, 0)
-    val trans: ZoneOffsetTransition =
+    val test: ZoneId                   = ZoneId.of("Europe/Paris")
+    val dateTime: LocalDateTime        = LocalDateTime.of(2008, 3, 30, 2, 0, 0, 0)
+    val trans: ZoneOffsetTransition    =
       checkOffset(test.getRules, dateTime, ZoneOffset.ofHours(1), TestZoneId.GAP)
     assertEquals(trans.isGap, true)
     assertEquals(trans.isOverlap, false)
@@ -873,9 +937,9 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
   }
 
   test("Paris_getOffsetInfo_overlap") {
-    val test: ZoneId            = ZoneId.of("Europe/Paris")
-    val dateTime: LocalDateTime = LocalDateTime.of(2008, 10, 26, 2, 0, 0, 0)
-    val trans: ZoneOffsetTransition =
+    val test: ZoneId                   = ZoneId.of("Europe/Paris")
+    val dateTime: LocalDateTime        = LocalDateTime.of(2008, 10, 26, 2, 0, 0, 0)
+    val trans: ZoneOffsetTransition    =
       checkOffset(test.getRules, dateTime, ZoneOffset.ofHours(2), TestZoneId.OVERLAP)
     assertEquals(trans.isGap, false)
     assertEquals(trans.isOverlap, true)
@@ -914,35 +978,50 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     assertEquals(test.getRules.getOffset(createInstant(2008, 8, 1, offset)), ZoneOffset.ofHours(-4))
     assertEquals(test.getRules.getOffset(createInstant(2008, 9, 1, offset)), ZoneOffset.ofHours(-4))
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 1, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 1, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 12, 1, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 1, 28, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 2, 28, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 28, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 4, 28, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 5, 28, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 6, 28, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 7, 28, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 8, 28, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 9, 28, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 10, 28, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 28, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 12, 28, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
   }
 
   test("NewYork_getOffset_toDST") {
@@ -951,42 +1030,58 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 8, offset)), ZoneOffset.ofHours(-5))
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 9, offset)), ZoneOffset.ofHours(-5))
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 10, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 11, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 12, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 13, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 14, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 9, 1, 59, 59, 999999999, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 3, 9, 2, 0, 0, 0, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
   }
 
   test("NewYork_getOffset_fromDST") {
     val test: ZoneId       = ZoneId.of("America/New_York")
     val offset: ZoneOffset = ZoneOffset.ofHours(-4)
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 1, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 2, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 3, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 4, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 5, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 6, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 7, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 2, 1, 59, 59, 999999999, offset)),
-                 ZoneOffset.ofHours(-4))
+                 ZoneOffset.ofHours(-4)
+    )
     assertEquals(test.getRules.getOffset(createInstant(2008, 11, 2, 2, 0, 0, 0, offset)),
-                 ZoneOffset.ofHours(-5))
+                 ZoneOffset.ofHours(-5)
+    )
   }
 
   test("NewYork_getOffsetInfo") {
@@ -1029,11 +1124,13 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 3, 9, 1, 59, 59, 999999999),
                 ZoneOffset.ofHours(-5),
-                1)
+                1
+    )
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 3, 9, 2, 30, 0, 0),
                 ZoneOffset.ofHours(-5),
-                TestZoneId.GAP)
+                TestZoneId.GAP
+    )
     checkOffset(test.getRules, LocalDateTime.of(2008, 3, 9, 3, 0, 0, 0), ZoneOffset.ofHours(-4), 1)
   }
 
@@ -1049,18 +1146,20 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 11, 2, 0, 59, 59, 999999999),
                 ZoneOffset.ofHours(-4),
-                1)
+                1
+    )
     checkOffset(test.getRules,
                 LocalDateTime.of(2008, 11, 2, 1, 30, 0, 0),
                 ZoneOffset.ofHours(-4),
-                TestZoneId.OVERLAP)
+                TestZoneId.OVERLAP
+    )
     checkOffset(test.getRules, LocalDateTime.of(2008, 11, 2, 2, 0, 0, 0), ZoneOffset.ofHours(-5), 1)
   }
 
   test("NewYork_getOffsetInfo_gap") {
-    val test: ZoneId            = ZoneId.of("America/New_York")
-    val dateTime: LocalDateTime = LocalDateTime.of(2008, 3, 9, 2, 0, 0, 0)
-    val trans: ZoneOffsetTransition =
+    val test: ZoneId                     = ZoneId.of("America/New_York")
+    val dateTime: LocalDateTime          = LocalDateTime.of(2008, 3, 9, 2, 0, 0, 0)
+    val trans: ZoneOffsetTransition      =
       checkOffset(test.getRules, dateTime, ZoneOffset.ofHours(-5), TestZoneId.GAP)
     assertEquals(trans.getOffsetBefore, ZoneOffset.ofHours(-5))
     assertEquals(trans.getOffsetAfter, ZoneOffset.ofHours(-4))
@@ -1079,9 +1178,9 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
   }
 
   test("NewYork_getOffsetInfo_overlap") {
-    val test: ZoneId            = ZoneId.of("America/New_York")
-    val dateTime: LocalDateTime = LocalDateTime.of(2008, 11, 2, 1, 0, 0, 0)
-    val trans: ZoneOffsetTransition =
+    val test: ZoneId                     = ZoneId.of("America/New_York")
+    val dateTime: LocalDateTime          = LocalDateTime.of(2008, 11, 2, 1, 0, 0, 0)
+    val trans: ZoneOffsetTransition      =
       checkOffset(test.getRules, dateTime, ZoneOffset.ofHours(-4), TestZoneId.OVERLAP)
     assertEquals(trans.getOffsetBefore, ZoneOffset.ofHours(-4))
     assertEquals(trans.getOffsetAfter, ZoneOffset.ofHours(-5))
@@ -1150,7 +1249,7 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
       case (id: String, expected: String) =>
         val test: ZoneId = ZoneId.of(id)
         assertEquals(test.toString, expected)
-      case _ =>
+      case _                              =>
         fail()
     }
   }

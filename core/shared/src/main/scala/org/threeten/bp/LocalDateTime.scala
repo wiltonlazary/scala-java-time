@@ -350,7 +350,7 @@ object LocalDateTime {
     temporal match {
       case l: LocalDateTime => l
       case z: ZonedDateTime => z.toLocalDateTime
-      case _ =>
+      case _                =>
         try {
           val date: LocalDate = LocalDate.from(temporal)
           val time: LocalTime = LocalTime.from(temporal)
@@ -385,10 +385,12 @@ object LocalDateTime {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): LocalDateTime = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[LocalDateTime] {
-      override def queryFrom(temporal: TemporalAccessor): LocalDateTime =
-        LocalDateTime.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[LocalDateTime] {
+                      override def queryFrom(temporal: TemporalAccessor): LocalDateTime =
+                        LocalDateTime.from(temporal)
+                    }
+    )
   }
 
 }
@@ -494,7 +496,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
     field match {
       case _: ChronoField =>
         field.isDateBased || field.isTimeBased
-      case _ => field != null && field.isSupportedBy(this)
+      case _              => field != null && field.isSupportedBy(this)
     }
 
   def isSupported(unit: TemporalUnit): Boolean =
@@ -529,7 +531,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
       case _: ChronoField =>
         if (field.isTimeBased) time.range(field)
         else date.range(field)
-      case _ =>
+      case _              =>
         field.rangeRefinedBy(this)
     }
 
@@ -562,7 +564,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
       case _: ChronoField =>
         if (field.isTimeBased) time.get(field)
         else date.get(field)
-      case _ =>
+      case _              =>
         super.get(field)
     }
 
@@ -592,7 +594,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
       case _: ChronoField =>
         if (field.isTimeBased) time.getLong(field)
         else date.getLong(field)
-      case _ =>
+      case _              =>
         field.getFrom(this)
     }
 
@@ -730,7 +732,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
       case l: LocalDate     => `with`(l, time)
       case l: LocalTime     => `with`(date, l)
       case l: LocalDateTime => l
-      case _ =>
+      case _                =>
         adjuster.adjustInto(this).asInstanceOf[LocalDateTime]
     }
 
@@ -930,10 +932,10 @@ final class LocalDateTime private (private val date: LocalDate, private val time
       case f: ChronoUnit =>
         import ChronoUnit._
         f match {
-          case NANOS => plusNanos(amountToAdd)
-          case MICROS =>
+          case NANOS     => plusNanos(amountToAdd)
+          case MICROS    =>
             plusDays(amountToAdd / MICROS_PER_DAY).plusNanos((amountToAdd % MICROS_PER_DAY) * 1000)
-          case MILLIS =>
+          case MILLIS    =>
             plusDays(amountToAdd / MILLIS_PER_DAY)
               .plusNanos((amountToAdd % MILLIS_PER_DAY) * 1000000)
           case SECONDS   => plusSeconds(amountToAdd)
@@ -942,7 +944,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
           case HALF_DAYS => plusDays(amountToAdd / 256).plusHours((amountToAdd % 256) * 12)
           case _         => `with`(date.plus(amountToAdd, unit), time)
         }
-      case _ =>
+      case _             =>
         unit.addTo(this, amountToAdd)
     }
 
@@ -1252,12 +1254,12 @@ final class LocalDateTime private (private val date: LocalDate, private val time
   ): LocalDateTime = {
     if ((hours | minutes | seconds | nanos) == 0)
       return `with`(newDate, time)
-    var totDays: Long =
+    var totDays: Long  =
       nanos / NANOS_PER_DAY + seconds / SECONDS_PER_DAY + minutes / MINUTES_PER_DAY + hours / HOURS_PER_DAY
     totDays *= sign
     var totNanos: Long =
       nanos % NANOS_PER_DAY + (seconds % SECONDS_PER_DAY) * NANOS_PER_SECOND + (minutes % MINUTES_PER_DAY) * NANOS_PER_MINUTE + (hours % HOURS_PER_DAY) * NANOS_PER_HOUR
-    val curNoD: Long = time.toNanoOfDay
+    val curNoD: Long       = time.toNanoOfDay
     totNanos = totNanos * sign + curNoD
     totDays += Math.floorDiv(totNanos, NANOS_PER_DAY)
     val newNoD: Long       = Math.floorMod(totNanos, NANOS_PER_DAY)
@@ -1373,39 +1375,43 @@ final class LocalDateTime private (private val date: LocalDate, private val time
           }
           import ChronoUnit._
           f match {
-            case NANOS =>
+            case NANOS     =>
               return Math.addExact(Math.multiplyExact(daysUntil, NANOS_PER_DAY), timeUntil)
-            case MICROS =>
+            case MICROS    =>
               return Math.addExact(Math.multiplyExact(daysUntil, MICROS_PER_DAY), timeUntil / 1000)
-            case MILLIS =>
+            case MILLIS    =>
               return Math.addExact(Math.multiplyExact(daysUntil, MILLIS_PER_DAY),
-                                   timeUntil / 1000000)
-            case SECONDS =>
+                                   timeUntil / 1000000
+              )
+            case SECONDS   =>
               return Math.addExact(Math.multiplyExact(daysUntil, SECONDS_PER_DAY.toLong),
-                                   timeUntil / NANOS_PER_SECOND)
-            case MINUTES =>
+                                   timeUntil / NANOS_PER_SECOND
+              )
+            case MINUTES   =>
               return Math.addExact(Math.multiplyExact(daysUntil, MINUTES_PER_DAY.toLong),
-                                   timeUntil / NANOS_PER_MINUTE)
-            case HOURS =>
+                                   timeUntil / NANOS_PER_MINUTE
+              )
+            case HOURS     =>
               return Math.addExact(Math.multiplyExact(daysUntil, HOURS_PER_DAY.toLong),
-                                   timeUntil / NANOS_PER_HOUR)
+                                   timeUntil / NANOS_PER_HOUR
+              )
             case HALF_DAYS =>
               return Math.addExact(Math.multiplyExact(daysUntil, 2),
-                                   timeUntil / (NANOS_PER_HOUR * 12))
-            case _ => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
+                                   timeUntil / (NANOS_PER_HOUR * 12)
+              )
+            case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
 
           }
         }
         val endDate =
-          if (end.date.isAfter(date) && end.time.isBefore(time)) {
+          if (end.date.isAfter(date) && end.time.isBefore(time))
             end.date.minusDays(1)
-          } else if (end.date.isBefore(date) && end.time.isAfter(time)) {
+          else if (end.date.isBefore(date) && end.time.isAfter(time))
             end.date.plusDays(1)
-          } else {
+          else
             end.date
-          }
         date.until(endDate, unit)
-      case _ =>
+      case _             =>
         unit.between(this, end)
     }
   }

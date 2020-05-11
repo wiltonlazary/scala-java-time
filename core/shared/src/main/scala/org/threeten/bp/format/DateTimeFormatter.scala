@@ -902,7 +902,7 @@ object DateTimeFormatter {
       } catch {
         case ex: DateTimeParseException =>
           throw new ParseException(ex.getMessage, ex.getErrorIndex)
-        case ex: RuntimeException =>
+        case ex: RuntimeException       =>
           throw new ParseException(ex.getMessage, 0).initCause(ex).asInstanceOf[ParseException]
       }
     }
@@ -910,9 +910,8 @@ object DateTimeFormatter {
     def parseObject(text: String, pos: ParsePosition): AnyRef = {
       Objects.requireNonNull(text, "text")
       var unresolved: TTBPDateTimeParseContext#Parsed = null
-      try {
-        unresolved = formatter.parseUnresolved0(text, pos)
-      } catch {
+      try unresolved = formatter.parseUnresolved0(text, pos)
+      catch {
         case _: IndexOutOfBoundsException =>
           if (pos.getErrorIndex < 0)
             pos.setErrorIndex(0)
@@ -930,7 +929,7 @@ object DateTimeFormatter {
           return builder
         builder.build(query)
       } catch {
-        case _: RuntimeException =>
+        case _: RuntimeException          =>
           pos.setErrorIndex(0)
           null
       }
@@ -1022,7 +1021,8 @@ final class DateTimeFormatter private[format] (
                             resolverStyle,
                             resolverFields,
                             chrono,
-                            zone)
+                            zone
+      )
 
   /** Gets the decimal style to be used during formatting.
     *
@@ -1047,7 +1047,8 @@ final class DateTimeFormatter private[format] (
                             resolverStyle,
                             resolverFields,
                             chrono,
-                            zone)
+                            zone
+      )
 
   /** Gets the overriding chronology to be used during formatting.
     *
@@ -1092,7 +1093,8 @@ final class DateTimeFormatter private[format] (
                             resolverStyle,
                             resolverFields,
                             chrono,
-                            zone)
+                            zone
+      )
 
   /** Gets the overriding zone to be used during formatting.
     *
@@ -1139,7 +1141,8 @@ final class DateTimeFormatter private[format] (
                             resolverStyle,
                             resolverFields,
                             chrono,
-                            zone)
+                            zone
+      )
 
   /** Gets the resolver style to use during parsing.
     *
@@ -1181,7 +1184,8 @@ final class DateTimeFormatter private[format] (
                             resolverStyle,
                             resolverFields,
                             chrono,
-                            zone)
+                            zone
+      )
   }
 
   /** Gets the resolver fields to use during parsing.
@@ -1234,22 +1238,22 @@ final class DateTimeFormatter private[format] (
     * @return a formatter based on this formatter with the requested resolver style, not null
     */
   def withResolverFields(resolverFields: TemporalField*): DateTimeFormatter =
-    if (resolverFields == null) {
+    if (resolverFields == null)
       new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, null, chrono, zone)
-    } else {
+    else {
       val fields: java.util.Set[TemporalField] =
         new java.util.HashSet[TemporalField](Arrays.asList(resolverFields: _*))
-      if (Objects.equals(this.resolverFields, fields)) {
+      if (Objects.equals(this.resolverFields, fields))
         this
-      } else {
+      else
         new DateTimeFormatter(printerParser,
                               locale,
                               decimalStyle,
                               resolverStyle,
                               Collections.unmodifiableSet(fields),
                               chrono,
-                              zone)
-      }
+                              zone
+        )
     }
 
   /** Returns a copy of this formatter with a new set of resolver fields.
@@ -1291,22 +1295,21 @@ final class DateTimeFormatter private[format] (
     * @return a formatter based on this formatter with the requested resolver style, not null
     */
   def withResolverFields(resolverFields: java.util.Set[TemporalField]): DateTimeFormatter =
-    if (resolverFields == null) {
+    if (resolverFields == null)
       new DateTimeFormatter(printerParser, locale, decimalStyle, resolverStyle, null, chrono, zone)
-    } else {
-      if (Objects.equals(this.resolverFields, resolverFields)) {
-        this
-      } else {
-        val _resolverFields =
-          Collections.unmodifiableSet(new java.util.HashSet[TemporalField](resolverFields))
-        new DateTimeFormatter(printerParser,
-                              locale,
-                              decimalStyle,
-                              resolverStyle,
-                              _resolverFields,
-                              chrono,
-                              zone)
-      }
+    else if (Objects.equals(this.resolverFields, resolverFields))
+      this
+    else {
+      val _resolverFields =
+        Collections.unmodifiableSet(new java.util.HashSet[TemporalField](resolverFields))
+      new DateTimeFormatter(printerParser,
+                            locale,
+                            decimalStyle,
+                            resolverStyle,
+                            _resolverFields,
+                            chrono,
+                            zone
+      )
     }
 
   /** Formats a date-time object using this formatter.
@@ -1482,18 +1485,16 @@ final class DateTimeFormatter private[format] (
   def parseBest(text: CharSequence, types: TemporalQuery[_]*): TemporalAccessor = {
     Objects.requireNonNull(text, "text")
     Objects.requireNonNull(types, "types")
-    if (types.length < 2) {
+    if (types.length < 2)
       throw new IllegalArgumentException("At least two types must be specified")
-    }
     try {
       val builder: DateTimeBuilder =
         parseToBuilder(text, null).resolve(resolverStyle, resolverFields)
-      for (tpe <- types) {
+      for (tpe <- types)
         try return builder.build(tpe).asInstanceOf[TemporalAccessor]
         catch {
           case _: RuntimeException =>
         }
-      }
       throw new DateTimeException(
         s"Unable to convert parsed text to any specified type: ${types.mkString("[", ", ", "]")}"
       )
@@ -1505,11 +1506,10 @@ final class DateTimeFormatter private[format] (
 
   private def createError(text: CharSequence, ex: RuntimeException): DateTimeParseException = {
     val abbr =
-      if (text.length > 64) {
+      if (text.length > 64)
         text.subSequence(0, 64).toString + "..."
-      } else {
+      else
         text.toString
-      }
     new DateTimeParseException(s"Text '$abbr' could not be parsed: ${ex.getMessage}", text, 0, ex)
   }
 
@@ -1528,7 +1528,9 @@ final class DateTimeFormatter private[format] (
   private def parseToBuilder(text: CharSequence, position: ParsePosition): DateTimeBuilder = {
     val pos: ParsePosition                      = if (position != null) position else new ParsePosition(0)
     val result: TTBPDateTimeParseContext#Parsed = parseUnresolved0(text, pos)
-    if (result == null || pos.getErrorIndex >= 0 || (position == null && pos.getIndex < text.length)) {
+    if (
+      result == null || pos.getErrorIndex >= 0 || (position == null && pos.getIndex < text.length)
+    ) {
       val abbr =
         if (text.length > 64)
           text.subSequence(0, 64).toString + "..."

@@ -155,13 +155,13 @@ object TestChronoLocalDateTime {
 }
 
 class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
-  val data_of_calendars: List[Chronology] = {
+  val data_of_calendars: List[Chronology] =
     List((HijrahChronology.INSTANCE),
          (IsoChronology.INSTANCE),
          // (JapaneseChronology.INSTANCE),
          (MinguoChronology.INSTANCE),
-         (ThaiBuddhistChronology.INSTANCE))
-  }
+         (ThaiBuddhistChronology.INSTANCE)
+    )
 
   test("test_badWithAdjusterChrono") {
     data_of_calendars.foreach { chrono =>
@@ -170,7 +170,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val cdt2: ChronoLocalDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON)
         val adjuster: TemporalAdjuster   = new TestChronoLocalDateTime.FixedAdjuster(cdt2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             cdt.`with`(adjuster)
             fail(
@@ -179,7 +179,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDateTime[_] = cdt.`with`(adjuster)
           assertTrue(result == cdt)
         }
@@ -194,7 +194,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val cdt2: ChronoLocalDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON)
         val adjuster: TemporalAmount     = new TestChronoLocalDateTime.FixedAdjuster(cdt2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             cdt.plus(adjuster)
             fail(
@@ -203,7 +203,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDateTime[_] = cdt.plus(adjuster)
           assertTrue(result == cdt2)
         }
@@ -218,7 +218,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val cdt2: ChronoLocalDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON)
         val adjuster: TemporalAmount     = new TestChronoLocalDateTime.FixedAdjuster(cdt2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             cdt.minus(adjuster)
             fail(
@@ -227,7 +227,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDateTime[_] = cdt.minus(adjuster)
           assertTrue(result == cdt2)
         }
@@ -242,7 +242,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val cdt2: ChronoLocalDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON)
         val adjuster: TemporalUnit       = new TestChronoLocalDateTime.FixedPeriodUnit(cdt2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             cdt.plus(1, adjuster)
             fail(
@@ -251,7 +251,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDateTime[_] = cdt.plus(1, adjuster)
           assertTrue(result == cdt2)
         }
@@ -266,7 +266,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val cdt2: ChronoLocalDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON)
         val adjuster: TemporalUnit       = new TestChronoLocalDateTime.FixedPeriodUnit(cdt2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             cdt.minus(1, adjuster)
             fail(
@@ -275,7 +275,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDateTime[_] = cdt.minus(1, adjuster)
           assertTrue(result == cdt2)
         }
@@ -290,7 +290,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
       for (chrono2 <- data_of_calendars) {
         val cdt2: ChronoLocalDateTime[_] = chrono2.date(refDate).atTime(LocalTime.NOON)
         val adjuster: TemporalField      = new TestChronoLocalDateTime.FixedDateTimeField(cdt2)
-        if (chrono ne chrono2) {
+        if (chrono ne chrono2)
           try {
             cdt.`with`(adjuster, 1)
             fail(
@@ -299,7 +299,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
           } catch {
             case _: Throwable =>
           }
-        } else {
+        else {
           val result: ChronoLocalDateTime[_] = cdt.`with`(adjuster, 1)
           assertTrue(result == cdt2)
         }
@@ -311,7 +311,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
     data_of_calendars.foreach { chrono =>
       val dates: java.util.List[ChronoLocalDateTime[_ <: ChronoLocalDate]] =
         new java.util.ArrayList[ChronoLocalDateTime[_ <: ChronoLocalDate]]
-      val date: ChronoLocalDateTime[_ <: ChronoLocalDate] = chrono
+      val date: ChronoLocalDateTime[_ <: ChronoLocalDate]                  = chrono
         .date(LocalDate.of(1900, 1, 1))
         .atTime(LocalTime.MIN)
         .asInstanceOf[ChronoLocalDateTime[_ <: ChronoLocalDate]]
@@ -336,7 +336,7 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
       dates.add(date.plus(1, ChronoUnit.MONTHS))
       dates.add(date.plus(1, ChronoUnit.YEARS))
       dates.add(date.plus(100, ChronoUnit.YEARS))
-      for (chrono2 <- data_of_calendars) {
+      for (chrono2 <- data_of_calendars)
         scala.util.control.Breaks.breakable {
           val otherDates: java.util.List[ChronoLocalDateTime[_ <: ChronoLocalDate]] =
             new java.util.ArrayList[ChronoLocalDateTime[_ <: ChronoLocalDate]]
@@ -344,14 +344,13 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
           //   scala.util.control.Breaks.break()
           // }
           import scala.collection.JavaConverters._
-          for (d <- dates.asScala) {
+          for (d <- dates.asScala)
             otherDates.add(
               chrono2
                 .date(d)
                 .atTime(d.toLocalTime)
                 .asInstanceOf[ChronoLocalDateTime[_ <: ChronoLocalDate]]
             )
-          }
           var i: Int = 0
           while (i < dates.size) {
             val a: ChronoLocalDateTime[_ <: ChronoLocalDate] = dates.get(i)
@@ -380,7 +379,6 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
             i += 1
           }
         }
-      }
     }
   }
 

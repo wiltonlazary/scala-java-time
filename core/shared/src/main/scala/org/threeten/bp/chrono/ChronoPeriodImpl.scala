@@ -72,8 +72,9 @@ final class ChronoPeriodImpl(
         new ChronoPeriodImpl(chronology,
                              Math.addExact(years, amount.years),
                              Math.addExact(months, amount.months),
-                             Math.addExact(days, amount.days))
-      case _ =>
+                             Math.addExact(days, amount.days)
+        )
+      case _                                                                 =>
         throw new DateTimeException(s"Unable to add amount: $amountToAdd")
     }
 
@@ -83,8 +84,9 @@ final class ChronoPeriodImpl(
         new ChronoPeriodImpl(chronology,
                              Math.subtractExact(years, amount.years),
                              Math.subtractExact(months, amount.months),
-                             Math.subtractExact(days, amount.days))
-      case _ =>
+                             Math.subtractExact(days, amount.days)
+        )
+      case _                                                                 =>
         throw new DateTimeException(s"Unable to subtract amount: $amountToSubtract")
     }
 
@@ -92,16 +94,17 @@ final class ChronoPeriodImpl(
     new ChronoPeriodImpl(chronology,
                          Math.multiplyExact(years, scalar),
                          Math.multiplyExact(months, scalar),
-                         Math.multiplyExact(days, scalar))
+                         Math.multiplyExact(days, scalar)
+    )
 
   def normalized: ChronoPeriod =
     if (chronology.range(ChronoField.MONTH_OF_YEAR).isFixed) {
       val monthLength: Long = chronology.range(ChronoField.MONTH_OF_YEAR).getMaximum - chronology
         .range(ChronoField.MONTH_OF_YEAR)
         .getMinimum + 1
-      val total: Long  = years * monthLength + months
-      val _years: Int  = Math.toIntExact(total / monthLength)
-      val _months: Int = Math.toIntExact(total % monthLength)
+      val total: Long       = years * monthLength + months
+      val _years: Int       = Math.toIntExact(total / monthLength)
+      val _months: Int      = Math.toIntExact(total % monthLength)
       new ChronoPeriodImpl(chronology, _years, _months, days)
     } else
       this
@@ -144,7 +147,7 @@ final class ChronoPeriodImpl(
     obj match {
       case other: ChronoPeriodImpl =>
         (this eq other) || (years == other.years && months == other.months && days == other.days && (chronology == other.chronology))
-      case _ => false
+      case _                       => false
     }
 
   override def hashCode: Int =

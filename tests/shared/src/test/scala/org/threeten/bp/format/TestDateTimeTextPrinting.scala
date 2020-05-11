@@ -85,9 +85,9 @@ class TestDateTimeTextPrinting extends AnyFunSuite with AssertionsHelper {
         val f: DateTimeFormatter = builder.appendText(field, style).toFormatter(Locale.ENGLISH)
         var dt: LocalDateTime    = LocalDateTime.of(2010, 1, 1, 0, 0)
         dt = dt.`with`(field, value)
-        val text: String = f.format(dt)
+        val text: String         = f.format(dt)
         assertEquals(text, expected)
-      case _ =>
+      case _                                                                                         =>
         fail()
     }
   }
@@ -100,29 +100,29 @@ class TestDateTimeTextPrinting extends AnyFunSuite with AssertionsHelper {
           val f: DateTimeFormatter = builder.appendText(field).toFormatter(Locale.ENGLISH)
           var dt: LocalDateTime    = LocalDateTime.of(2010, 1, 1, 0, 0)
           dt = dt.`with`(field, value)
-          val text: String = f.format(dt)
+          val text: String         = f.format(dt)
           assertEquals(text, expected)
         }
-      case _ =>
+      case _                                                                                         =>
         fail()
     }
   }
 
   test("print_appendText2arg_french_long") {
-    val builder = new DateTimeFormatterBuilder
+    val builder              = new DateTimeFormatterBuilder
     val f: DateTimeFormatter =
       builder.appendText(MONTH_OF_YEAR, TextStyle.FULL).toFormatter(Locale.FRENCH)
-    val dt: LocalDateTime = LocalDateTime.of(2010, 1, 1, 0, 0)
-    val text: String      = f.format(dt)
+    val dt: LocalDateTime    = LocalDateTime.of(2010, 1, 1, 0, 0)
+    val text: String         = f.format(dt)
     assertEquals(text, "janvier")
   }
 
   test("print_appendText2arg_french_short") {
-    val builder = new DateTimeFormatterBuilder
+    val builder              = new DateTimeFormatterBuilder
     val f: DateTimeFormatter =
       builder.appendText(MONTH_OF_YEAR, TextStyle.SHORT).toFormatter(Locale.FRENCH)
-    val dt: LocalDateTime = LocalDateTime.of(2010, 1, 1, 0, 0)
-    val text: String      = f.format(dt)
+    val dt: LocalDateTime    = LocalDateTime.of(2010, 1, 1, 0, 0)
+    val text: String         = f.format(dt)
     assertEquals(text, "janv.")
   }
 
@@ -140,13 +140,12 @@ class TestDateTimeTextPrinting extends AnyFunSuite with AssertionsHelper {
     map.put(10L, "OBR")
     map.put(11L, "NVR")
     map.put(12L, "DBR")
-    val builder = new DateTimeFormatterBuilder
+    val builder                          = new DateTimeFormatterBuilder
     builder.appendText(MONTH_OF_YEAR, map)
-    val f: DateTimeFormatter = builder.toFormatter
-    val dt: LocalDateTime    = LocalDateTime.of(2010, 1, 1, 0, 0)
-    for (month <- Month.values) {
+    val f: DateTimeFormatter             = builder.toFormatter
+    val dt: LocalDateTime                = LocalDateTime.of(2010, 1, 1, 0, 0)
+    for (month <- Month.values)
       assertEquals(f.format(dt.`with`(month)), map.get(month.getValue.toLong))
-    }
   }
 
   test("appendTextMap_DOM") {
@@ -154,10 +153,10 @@ class TestDateTimeTextPrinting extends AnyFunSuite with AssertionsHelper {
     map.put(1L, "1st")
     map.put(2L, "2nd")
     map.put(3L, "3rd")
-    val builder = new DateTimeFormatterBuilder
+    val builder                          = new DateTimeFormatterBuilder
     builder.appendText(DAY_OF_MONTH, map)
-    val f: DateTimeFormatter = builder.toFormatter
-    val dt: LocalDateTime    = LocalDateTime.of(2010, 1, 1, 0, 0)
+    val f: DateTimeFormatter             = builder.toFormatter
+    val dt: LocalDateTime                = LocalDateTime.of(2010, 1, 1, 0, 0)
     assertEquals(f.format(dt.withDayOfMonth(1)), "1st")
     assertEquals(f.format(dt.withDayOfMonth(2)), "2nd")
     assertEquals(f.format(dt.withDayOfMonth(3)), "3rd")
@@ -166,10 +165,10 @@ class TestDateTimeTextPrinting extends AnyFunSuite with AssertionsHelper {
   test("appendTextMapIncomplete") {
     val map: java.util.Map[Long, String] = new java.util.HashMap[Long, String]
     map.put(1L, "JNY")
-    val builder = new DateTimeFormatterBuilder
+    val builder                          = new DateTimeFormatterBuilder
     builder.appendText(MONTH_OF_YEAR, map)
-    val f: DateTimeFormatter = builder.toFormatter
-    val dt: LocalDateTime    = LocalDateTime.of(2010, 2, 1, 0, 0)
+    val f: DateTimeFormatter             = builder.toFormatter
+    val dt: LocalDateTime                = LocalDateTime.of(2010, 2, 1, 0, 0)
     assertEquals(f.format(dt), "2")
   }
 

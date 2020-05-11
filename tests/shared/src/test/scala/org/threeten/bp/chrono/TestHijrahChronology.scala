@@ -54,7 +54,7 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
     assertEquals(test, c)
   }
 
-  val data_samples: List[(ChronoLocalDate, LocalDate)] = {
+  val data_samples: List[(ChronoLocalDate, LocalDate)] =
     List(
       (HijrahChronology.INSTANCE.date(1, 1, 1), LocalDate.of(622, 7, 19)),
       (HijrahChronology.INSTANCE.date(1, 1, 2), LocalDate.of(622, 7, 20)),
@@ -70,7 +70,6 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
       (HijrahChronology.INSTANCE.date(1728, 10, 28), LocalDate.of(2298, 12, 3)),
       (HijrahChronology.INSTANCE.date(1728, 10, 29), LocalDate.of(2298, 12, 4))
     )
-  }
 
   test("test_toLocalDate") {
     data_samples.foreach {
@@ -86,7 +85,7 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
     }
   }
 
-  val data_badDates: List[(Int, Int, Int)] = {
+  val data_badDates: List[(Int, Int, Int)] =
     List((1728, 0, 0),
          (1728, -1, 1),
          (1728, 0, 1),
@@ -97,8 +96,8 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
          (1728, 1, 32),
          (1728, 12, -1),
          (1728, 12, 0),
-         (1728, 12, 32))
-  }
+         (1728, 12, 32)
+    )
 
   test("test_badDates") {
     data_badDates.foreach {
@@ -157,7 +156,7 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
     assertEquals(test, LocalDateTime.of(2298, 12, 4, 0, 0))
   }
 
-  val data_toString: List[(ChronoLocalDate, String)] = {
+  val data_toString: List[(ChronoLocalDate, String)] =
     List(
       (HijrahChronology.INSTANCE.date(1, 1, 1), "Hijrah-umalqura AH 1-01-01"),
       (HijrahChronology.INSTANCE.date(1728, 10, 28), "Hijrah-umalqura AH 1728-10-28"),
@@ -165,7 +164,6 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
       (HijrahChronology.INSTANCE.date(1727, 12, 5), "Hijrah-umalqura AH 1727-12-05"),
       (HijrahChronology.INSTANCE.date(1727, 12, 6), "Hijrah-umalqura AH 1727-12-06")
     )
-  }
 
   test("test_toString") {
     data_toString.foreach {

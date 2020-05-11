@@ -54,7 +54,7 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
     assertEquals(test, c)
   }
 
-  val data_samples: List[(ChronoLocalDate, LocalDate)] = {
+  val data_samples: List[(ChronoLocalDate, LocalDate)] =
     List(
       (MinguoChronology.INSTANCE.date(1, 1, 1), LocalDate.of(1912, 1, 1)),
       (MinguoChronology.INSTANCE.date(1, 1, 2), LocalDate.of(1912, 1, 2)),
@@ -70,7 +70,6 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
       (MinguoChronology.INSTANCE.date(101, 10, 28), LocalDate.of(2012, 10, 28)),
       (MinguoChronology.INSTANCE.date(101, 10, 29), LocalDate.of(2012, 10, 29))
     )
-  }
 
   test("test_toLocalDate") {
     data_samples.foreach {
@@ -115,7 +114,7 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
     h3.atZone(ZoneOffset.UTC)
   }
 
-  val data_badDates: List[(Int, Int, Int)] = {
+  val data_badDates: List[(Int, Int, Int)] =
     List(
       (1912, 0, 0),
       (1912, -1, 1),
@@ -131,7 +130,6 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
       (1912, 12, 0),
       (1912, 12, 32)
     )
-  }
 
   test("test_badDates") {
     data_badDates.foreach {
@@ -179,7 +177,7 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
     assertEquals(test, LocalDateTime.of(2012, 10, 29, 0, 0))
   }
 
-  val data_toString: List[(ChronoLocalDate, String)] = {
+  val data_toString: List[(ChronoLocalDate, String)] =
     List(
       (MinguoChronology.INSTANCE.date(1, 1, 1), "Minguo ROC 1-01-01"),
       (MinguoChronology.INSTANCE.date(1728, 10, 28), "Minguo ROC 1728-10-28"),
@@ -187,7 +185,6 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
       (MinguoChronology.INSTANCE.date(1727, 12, 5), "Minguo ROC 1727-12-05"),
       (MinguoChronology.INSTANCE.date(1727, 12, 6), "Minguo ROC 1727-12-06")
     )
-  }
 
   test("test_toString") {
     data_toString.foreach {

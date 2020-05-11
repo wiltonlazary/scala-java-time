@@ -55,7 +55,7 @@ object TestChronoUnit {
 }
 
 class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
-  val data_yearsBetween: List[(LocalDate, LocalDate, Int)] = {
+  val data_yearsBetween: List[(LocalDate, LocalDate, Int)] =
     List(
       (TestChronoUnit.date(1939, SEPTEMBER, 2), TestChronoUnit.date(1939, SEPTEMBER, 1), 0),
       (TestChronoUnit.date(1939, SEPTEMBER, 2), TestChronoUnit.date(1939, SEPTEMBER, 2), 0),
@@ -70,7 +70,6 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
       (TestChronoUnit.date(1939, SEPTEMBER, 2), TestChronoUnit.date(1945, OCTOBER, 3), 6),
       (TestChronoUnit.date(1939, SEPTEMBER, 2), TestChronoUnit.date(1945, AUGUST, 3), 5)
     )
-  }
 
   test("test_yearsBetween") {
     data_yearsBetween.foreach {
@@ -96,11 +95,10 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
   test("test_yearsBetween_LocalDateTimeLaterTime") {
     data_yearsBetween.foreach {
       case (start, end, expected) =>
-        if (end.isAfter(start)) {
+        if (end.isAfter(start))
           assertEquals(YEARS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
-        } else {
+        else
           assertEquals(YEARS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
-        }
     }
   }
 
@@ -108,27 +106,32 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
     data_yearsBetween.foreach {
       case (start, end, expected) =>
         assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                   end.atStartOfDay(ZoneOffset.ofHours(2))),
-                     expected)
+                                   end.atStartOfDay(ZoneOffset.ofHours(2))
+                     ),
+                     expected
+        )
     }
   }
 
   test("test_yearsBetween_ZonedDateLaterOffset") {
     data_yearsBetween.foreach {
       case (start, end, expected) =>
-        if (end.isAfter(start)) {
+        if (end.isAfter(start))
           assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                     end.atStartOfDay(ZoneOffset.ofHours(1))),
-                       expected)
-        } else {
+                                     end.atStartOfDay(ZoneOffset.ofHours(1))
+                       ),
+                       expected
+          )
+        else
           assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
-                                     end.atStartOfDay(ZoneOffset.ofHours(2))),
-                       expected)
-        }
+                                     end.atStartOfDay(ZoneOffset.ofHours(2))
+                       ),
+                       expected
+          )
     }
   }
 
-  val data_monthsBetween: List[(LocalDate, LocalDate, Long)] = {
+  val data_monthsBetween: List[(LocalDate, LocalDate, Long)] =
     List(
       (TestChronoUnit.date(2012, JULY, 2), TestChronoUnit.date(2012, JULY, 1), 0),
       (TestChronoUnit.date(2012, JULY, 2), TestChronoUnit.date(2012, JULY, 2), 0),
@@ -152,7 +155,6 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
       (TestChronoUnit.date(2012, FEBRUARY, 29), TestChronoUnit.date(2012, MARCH, 29), 1),
       (TestChronoUnit.date(2012, FEBRUARY, 29), TestChronoUnit.date(2012, MARCH, 30), 1)
     )
-  }
 
   test("test_monthsBetween") {
     data_monthsBetween.foreach {
@@ -178,11 +180,10 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
   test("test_monthsBetween_LocalDateTimeLaterTime") {
     data_monthsBetween.foreach {
       case (start, end, expected) =>
-        if (end.isAfter(start)) {
+        if (end.isAfter(start))
           assertEquals(MONTHS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
-        } else {
+        else
           assertEquals(MONTHS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
-        }
     }
   }
 
@@ -190,27 +191,32 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
     data_monthsBetween.foreach {
       case (start, end, expected) =>
         assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                    end.atStartOfDay(ZoneOffset.ofHours(2))),
-                     expected)
+                                    end.atStartOfDay(ZoneOffset.ofHours(2))
+                     ),
+                     expected
+        )
     }
   }
 
   test("test_monthsBetween_ZonedDateLaterOffset") {
     data_monthsBetween.foreach {
       case (start, end, expected) =>
-        if (end.isAfter(start)) {
+        if (end.isAfter(start))
           assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                      end.atStartOfDay(ZoneOffset.ofHours(1))),
-                       expected)
-        } else {
+                                      end.atStartOfDay(ZoneOffset.ofHours(1))
+                       ),
+                       expected
+          )
+        else
           assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
-                                      end.atStartOfDay(ZoneOffset.ofHours(2))),
-                       expected)
-        }
+                                      end.atStartOfDay(ZoneOffset.ofHours(2))
+                       ),
+                       expected
+          )
     }
   }
 
-  val data_weeksBetween: List[(LocalDate, LocalDate, Long)] = {
+  val data_weeksBetween: List[(LocalDate, LocalDate, Long)] =
     List(
       (TestChronoUnit.date(2012, JULY, 2), TestChronoUnit.date(2012, JUNE, 25), -1),
       (TestChronoUnit.date(2012, JULY, 2), TestChronoUnit.date(2012, JUNE, 26), 0),
@@ -232,7 +238,6 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
       (TestChronoUnit.date(2012, FEBRUARY, 29), TestChronoUnit.date(2012, MARCH, 6), 0),
       (TestChronoUnit.date(2012, FEBRUARY, 29), TestChronoUnit.date(2012, MARCH, 7), 1)
     )
-  }
 
   test("test_weeksBetween") {
     data_weeksBetween.foreach {
@@ -248,7 +253,7 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
     }
   }
 
-  val data_daysBetween: List[(LocalDate, LocalDate, Long)] = {
+  val data_daysBetween: List[(LocalDate, LocalDate, Long)] =
     List(
       (TestChronoUnit.date(2012, JULY, 2), TestChronoUnit.date(2012, JULY, 1), -1),
       (TestChronoUnit.date(2012, JULY, 2), TestChronoUnit.date(2012, JULY, 2), 0),
@@ -272,7 +277,6 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
       (TestChronoUnit.date(2011, MARCH, 1), TestChronoUnit.date(2012, FEBRUARY, 29), 365),
       (TestChronoUnit.date(2011, MARCH, 1), TestChronoUnit.date(2012, MARCH, 1), 366)
     )
-  }
 
   test("test_daysBetween") {
     data_daysBetween.foreach {
@@ -298,11 +302,10 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
   test("test_daysBetween_LocalDateTimeLaterTime") {
     data_daysBetween.foreach {
       case (start, end, expected) =>
-        if (end.isAfter(start)) {
+        if (end.isAfter(start))
           assertEquals(DAYS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
-        } else {
+        else
           assertEquals(DAYS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
-        }
     }
   }
 
@@ -310,47 +313,48 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
     data_daysBetween.foreach {
       case (start, end, expected) =>
         assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                  end.atStartOfDay(ZoneOffset.ofHours(2))),
-                     expected)
+                                  end.atStartOfDay(ZoneOffset.ofHours(2))
+                     ),
+                     expected
+        )
     }
   }
 
   test("test_daysBetween_ZonedDateLaterOffset") {
     data_daysBetween.foreach {
       case (start, end, expected) =>
-        if (end.isAfter(start)) {
+        if (end.isAfter(start))
           assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                    end.atStartOfDay(ZoneOffset.ofHours(1))),
-                       expected)
-        } else {
+                                    end.atStartOfDay(ZoneOffset.ofHours(1))
+                       ),
+                       expected
+          )
+        else
           assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
-                                    end.atStartOfDay(ZoneOffset.ofHours(2))),
-                       expected)
-        }
+                                    end.atStartOfDay(ZoneOffset.ofHours(2))
+                       ),
+                       expected
+          )
     }
   }
 
   test("test_isDateBased") {
-    for (unit <- ChronoUnit.values) {
-      if (unit.getDuration.getSeconds < 86400) {
+    for (unit <- ChronoUnit.values)
+      if (unit.getDuration.getSeconds < 86400)
         assertEquals(unit.isDateBased, false)
-      } else if (unit eq FOREVER) {
+      else if (unit eq FOREVER)
         assertEquals(unit.isDateBased, false)
-      } else {
+      else
         assertEquals(unit.isDateBased, true)
-      }
-    }
   }
 
   test("test_isTimeBased") {
-    for (unit <- ChronoUnit.values) {
-      if (unit.getDuration.getSeconds < 86400) {
+    for (unit <- ChronoUnit.values)
+      if (unit.getDuration.getSeconds < 86400)
         assertEquals(unit.isTimeBased, true)
-      } else if (unit eq FOREVER) {
+      else if (unit eq FOREVER)
         assertEquals(unit.isTimeBased, false)
-      } else {
+      else
         assertEquals(unit.isTimeBased, false)
-      }
-    }
   }
 }

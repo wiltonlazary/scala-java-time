@@ -83,20 +83,17 @@ object DateTimeFormatterBuilder {
     if (dateStyle == null && timeStyle == null)
       throw new IllegalArgumentException("Either dateStyle or timeStyle must be non-null")
     val dateFormat: DateFormat =
-      if (dateStyle != null) {
-        if (timeStyle != null) {
+      if (dateStyle != null)
+        if (timeStyle != null)
           DateFormat.getDateTimeInstance(dateStyle.ordinal, timeStyle.ordinal, locale)
-        } else {
+        else
           DateFormat.getDateInstance(dateStyle.ordinal, locale)
-        }
-      } else {
+      else
         DateFormat.getTimeInstance(timeStyle.ordinal, locale)
-      }
-    if (dateFormat.isInstanceOf[SimpleDateFormat]) {
+    if (dateFormat.isInstanceOf[SimpleDateFormat])
       dateFormat.asInstanceOf[SimpleDateFormat].toPattern
-    } else {
+    else
       throw new IllegalArgumentException("Unable to determine pattern")
-    }
   }
 
   /** Map of letters to fields. */
@@ -384,7 +381,8 @@ final class DateTimeFormatterBuilder private (
       new TTBPDateTimeFormatterBuilder.NumberPrinterParser(field,
                                                            width,
                                                            width,
-                                                           SignStyle.NOT_NEGATIVE)
+                                                           SignStyle.NOT_NEGATIVE
+      )
     )
     this
   }
@@ -569,10 +567,12 @@ final class DateTimeFormatterBuilder private (
     pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser
   ): DateTimeFormatterBuilder = {
     // Size checked
-    if (active.valueParserIndex >= 0 && active.printerParsers
-          .get(active.valueParserIndex)
-          .isInstanceOf[TTBPDateTimeFormatterBuilder.NumberPrinterParser]) {
-      val activeValueParser: Int = active.valueParserIndex
+    if (
+      active.valueParserIndex >= 0 && active.printerParsers
+        .get(active.valueParserIndex)
+        .isInstanceOf[TTBPDateTimeFormatterBuilder.NumberPrinterParser]
+    ) {
+      val activeValueParser: Int                                   = active.valueParserIndex
       var basePP: TTBPDateTimeFormatterBuilder.NumberPrinterParser = active.printerParsers
         .get(activeValueParser)
         .asInstanceOf[TTBPDateTimeFormatterBuilder.NumberPrinterParser]
@@ -581,13 +581,12 @@ final class DateTimeFormatterBuilder private (
         appendInternal(pp.withFixedWidth)
         active.valueParserIndex = activeValueParser
       } else {
-        basePP                  = basePP.withFixedWidth
+        basePP = basePP.withFixedWidth
         active.valueParserIndex = appendInternal(pp)
       }
       active.printerParsers.set(activeValueParser, basePP)
-    } else {
+    } else
       active.valueParserIndex = appendInternal(pp)
-    }
     this
   }
 
@@ -632,7 +631,8 @@ final class DateTimeFormatterBuilder private (
       new TTBPDateTimeFormatterBuilder.FractionPrinterParser(field,
                                                              minWidth,
                                                              maxWidth,
-                                                             decimalPoint)
+                                                             decimalPoint
+      )
     )
     this
   }
@@ -673,7 +673,8 @@ final class DateTimeFormatterBuilder private (
     appendInternal(
       new TTBPDateTimeFormatterBuilder.TextPrinterParser(field,
                                                          textStyle,
-                                                         TTBPDateTimeTextProvider.Provider)
+                                                         TTBPDateTimeTextProvider.Provider
+      )
     )
     this
   }
@@ -718,13 +719,13 @@ final class DateTimeFormatterBuilder private (
     Objects.requireNonNull(field, "field")
     Objects.requireNonNull(textLookup, "textLookup")
     import scala.collection.JavaConverters._
-    val copy: Map[scala.Long, String] = textLookup.asScala.toMap.map {
+    val copy: Map[scala.Long, String]                     = textLookup.asScala.toMap.map {
       case (x, i) => (x.toLong, i)
     }
-    val map: Map[TextStyle, Map[scala.Long, String]] = Map(TextStyle.FULL -> copy)
+    val map: Map[TextStyle, Map[scala.Long, String]]      = Map(TextStyle.FULL -> copy)
     val store: TTBPSimpleDateTimeTextProvider.LocaleStore =
       new TTBPSimpleDateTimeTextProvider.LocaleStore(map)
-    val provider: TTBPDateTimeTextProvider = new TTBPDateTimeTextProvider() {
+    val provider: TTBPDateTimeTextProvider                = new TTBPDateTimeTextProvider() {
       override def getText(
         field:  TemporalField,
         value:  scala.Long,
@@ -1162,13 +1163,11 @@ final class DateTimeFormatterBuilder private (
     */
   def appendLiteral(literal: String): DateTimeFormatterBuilder = {
     Objects.requireNonNull(literal, "literal")
-    if (literal.length > 0) {
-      if (literal.length == 1) {
+    if (literal.length > 0)
+      if (literal.length == 1)
         appendInternal(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser(literal.charAt(0)))
-      } else {
+      else
         appendInternal(new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser(literal))
-      }
-    }
     this
   }
 
@@ -1379,23 +1378,21 @@ final class DateTimeFormatterBuilder private (
     while (pos < pattern.length) {
       var cur: Char = pattern.charAt(pos)
       if ((cur >= 'A' && cur <= 'Z') || (cur >= 'a' && cur <= 'z')) {
-        var start: Int = pos
+        var start: Int           = pos
         pos += 1
-        while (pos < pattern.length && pattern.charAt(pos) == cur) {
+        while (pos < pattern.length && pattern.charAt(pos) == cur)
           pos += 1
-        }
-        var count: Int = pos - start
+        var count: Int           = pos - start
         if (cur == 'p') {
           var pad: Int = 0
           if (pos < pattern.length) {
             cur = pattern.charAt(pos)
             if ((cur >= 'A' && cur <= 'Z') || (cur >= 'a' && cur <= 'z')) {
-              pad   = count
+              pad = count
               start = pos
               pos += 1
-              while (pos < pattern.length && pattern.charAt(pos) == cur) {
+              while (pos < pattern.length && pattern.charAt(pos) == cur)
                 pos += 1
-              }
               count = pos - start
             }
           }
@@ -1408,18 +1405,18 @@ final class DateTimeFormatterBuilder private (
         val field: TemporalField = DateTimeFormatterBuilder.FIELD_MAP.get(cur)
         if (field != null)
           parseField(cur, count, field)
-        else if (cur == 'z') {
+        else if (cur == 'z')
           if (count > 4)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
           else if (count == 4)
             appendZoneText(TextStyle.FULL)
           else
             appendZoneText(TextStyle.SHORT)
-        } else if (cur == 'V') {
+        else if (cur == 'V') {
           if (count != 2)
             throw new IllegalArgumentException(s"Pattern letter count must be 2: $cur")
           appendZoneId
-        } else if (cur == 'Z') {
+        } else if (cur == 'Z')
           if (count < 4)
             appendOffset("+HHMM", "+0000")
           else if (count == 4)
@@ -1428,26 +1425,28 @@ final class DateTimeFormatterBuilder private (
             appendOffset("+HH:MM:ss", "Z")
           else
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
-        } else if (cur == 'O') {
+        else if (cur == 'O')
           if (count == 1)
             appendLocalizedOffset(TextStyle.SHORT)
           else if (count == 4)
             appendLocalizedOffset(TextStyle.FULL)
           else
             throw new IllegalArgumentException(s"Pattern letter count must be 1 or 4: $cur")
-        } else if (cur == 'X') {
+        else if (cur == 'X') {
           if (count > 5)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
           appendOffset(TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser
                          .PATTERNS(count + (if (count == 1) 0 else 1)),
-                       "Z")
+                       "Z"
+          )
         } else if (cur == 'x') {
           if (count > 5)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
           val zero: String = if (count == 1) "+00" else if (count % 2 == 0) "+0000" else "+00:00"
           appendOffset(TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser
                          .PATTERNS(count + (if (count == 1) 0 else 1)),
-                       zero)
+                       zero
+          )
         } else if (cur == 'W') {
           if (count > 1)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
@@ -1456,27 +1455,24 @@ final class DateTimeFormatterBuilder private (
           if (count > 2)
             throw new IllegalArgumentException(s"Too many pattern letters: $cur")
           appendInternal(new TTBPDateTimeFormatterBuilder.WeekFieldsPrinterParser('w', count))
-        } else if (cur == 'Y') {
+        } else if (cur == 'Y')
           appendInternal(new TTBPDateTimeFormatterBuilder.WeekFieldsPrinterParser('Y', count))
-        } else {
+        else
           throw new IllegalArgumentException(s"Unknown pattern letter: $cur")
-        }
         pos -= 1
       } else if (cur == '\'') {
         val start: Int = pos
         pos += 1
         // Size improved
-        var break = false
+        var break      = false
         while (!break && pos < pattern.length) {
-          if (pattern.charAt(pos) == '\'') {
+          if (pattern.charAt(pos) == '\'')
             if (pos + 1 < pattern.length && pattern.charAt(pos + 1) == '\'')
               pos += 1
             else
               break = true
-          }
-          if (!break) {
+          if (!break)
             pos += 1
-          }
         }
 
         if (pos >= pattern.length)
@@ -1505,17 +1501,18 @@ final class DateTimeFormatterBuilder private (
   private def parseField(cur: Char, count: Int, field: TemporalField): Unit = {
     val exc = new IllegalArgumentException(s"Too many pattern letters: $cur")
     cur match {
-      case 'u' | 'y' =>
+      case 'u' | 'y'                               =>
         if (count == 2)
           appendValueReduced(field,
                              2,
                              2,
-                             TTBPDateTimeFormatterBuilder.ReducedPrinterParser.BASE_DATE)
+                             TTBPDateTimeFormatterBuilder.ReducedPrinterParser.BASE_DATE
+          )
         else if (count < 4)
           appendValue(field, count, 19, SignStyle.NORMAL)
         else
           appendValue(field, count, 19, SignStyle.EXCEEDS_PAD)
-      case 'M' | 'Q' =>
+      case 'M' | 'Q'                               =>
         count match {
           case 1 =>
             appendValue(field)
@@ -1530,7 +1527,7 @@ final class DateTimeFormatterBuilder private (
           case _ =>
             throw exc
         }
-      case 'L' | 'q' =>
+      case 'L' | 'q'                               =>
         count match {
           case 1 =>
             appendValue(field)
@@ -1545,20 +1542,20 @@ final class DateTimeFormatterBuilder private (
           case _ =>
             throw exc
         }
-      case 'e' =>
+      case 'e'                                     =>
         count match {
           case 1 | 2 =>
             appendInternal(new TTBPDateTimeFormatterBuilder.WeekFieldsPrinterParser('e', count))
-          case 3 =>
+          case 3     =>
             appendText(field, TextStyle.SHORT)
-          case 4 =>
+          case 4     =>
             appendText(field, TextStyle.FULL)
-          case 5 =>
+          case 5     =>
             appendText(field, TextStyle.NARROW)
-          case _ =>
+          case _     =>
             throw exc
         }
-      case 'c' =>
+      case 'c'                                     =>
         count match {
           case 1 =>
             appendInternal(new TTBPDateTimeFormatterBuilder.WeekFieldsPrinterParser('c', count))
@@ -1573,25 +1570,25 @@ final class DateTimeFormatterBuilder private (
           case _ =>
             throw exc
         }
-      case 'a' =>
+      case 'a'                                     =>
         if (count == 1)
           appendText(field, TextStyle.SHORT)
         else
           throw exc
-      case 'E' | 'G' =>
+      case 'E' | 'G'                               =>
         count match {
           case 1 | 2 | 3 =>
             appendText(field, TextStyle.SHORT)
-          case 4 =>
+          case 4         =>
             appendText(field, TextStyle.FULL)
-          case 5 =>
+          case 5         =>
             appendText(field, TextStyle.NARROW)
-          case _ =>
+          case _         =>
             throw exc
         }
-      case 'S' =>
+      case 'S'                                     =>
         appendFraction(ChronoField.NANO_OF_SECOND, count, count, false)
-      case 'F' =>
+      case 'F'                                     =>
         if (count == 1)
           appendValue(field)
         else
@@ -1603,14 +1600,14 @@ final class DateTimeFormatterBuilder private (
           appendValue(field, count)
         else
           throw exc
-      case 'D' =>
+      case 'D'                                     =>
         if (count == 1)
           appendValue(field)
         else if (count <= 3)
           appendValue(field, count)
         else
           throw exc
-      case _ =>
+      case _                                       =>
         if (count == 1)
           appendValue(field)
         else
@@ -1662,8 +1659,8 @@ final class DateTimeFormatterBuilder private (
   def padNext(padWidth: Int, padChar: Char): DateTimeFormatterBuilder = {
     if (padWidth < 1)
       throw new IllegalArgumentException(s"The pad width must be at least one but was $padWidth")
-    active.padNextWidth     = padWidth
-    active.padNextChar      = padChar
+    active.padNextWidth = padWidth
+    active.padNextChar = padChar
     active.valueParserIndex = -1
     this
   }
@@ -1689,7 +1686,7 @@ final class DateTimeFormatterBuilder private (
     */
   def optionalStart(): DateTimeFormatterBuilder = {
     active.valueParserIndex = -1
-    active                  = new DateTimeFormatterBuilder(active, true)
+    active = new DateTimeFormatterBuilder(active, true)
     this
   }
 
@@ -1725,12 +1722,12 @@ final class DateTimeFormatterBuilder private (
     if (active.printerParsers.size > 0) {
       val cpp: TTBPDateTimeFormatterBuilder.CompositePrinterParser =
         new TTBPDateTimeFormatterBuilder.CompositePrinterParser(active.printerParsers,
-                                                                active.optional)
+                                                                active.optional
+        )
       active = active.parent
       appendInternal(cpp)
-    } else {
+    } else
       active = active.parent
-    }
     this
   }
 
@@ -1746,9 +1743,10 @@ final class DateTimeFormatterBuilder private (
       if (_pp != null)
         _pp = new TTBPDateTimeFormatterBuilder.PadPrinterParserDecorator(_pp,
                                                                          active.padNextWidth,
-                                                                         active.padNextChar)
+                                                                         active.padNextChar
+        )
       active.padNextWidth = 0
-      active.padNextChar  = 0
+      active.padNextChar = 0
     }
     active.printerParsers.add(_pp)
     active.valueParserIndex = -1

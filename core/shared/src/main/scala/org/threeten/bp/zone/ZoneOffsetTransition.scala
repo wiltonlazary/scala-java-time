@@ -253,7 +253,7 @@ final class ZoneOffsetTransition private[zone] (
     other match {
       case zot: ZoneOffsetTransition =>
         (this eq zot) || ((transition == zot.transition) && (offsetBefore == zot.offsetBefore) && (offsetAfter == zot.offsetAfter))
-      case _ => false
+      case _                         => false
     }
 
   /** Returns a suitable hash code.

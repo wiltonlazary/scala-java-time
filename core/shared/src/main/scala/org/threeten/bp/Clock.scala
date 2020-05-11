@@ -169,16 +169,13 @@ object Clock {
   def tick(baseClock: Clock, tickDuration: Duration): Clock = {
     Objects.requireNonNull(baseClock, "baseClock")
     Objects.requireNonNull(tickDuration, "tickDuration")
-    if (tickDuration.isNegative) {
+    if (tickDuration.isNegative)
       throw new IllegalArgumentException("Tick duration must not be negative")
-    }
     val tickNanos: Long = tickDuration.toNanos
-    if (tickNanos % 1000000 == 0) {} else if (1000000000 % tickNanos == 0) {} else {
+    if (tickNanos % 1000000 == 0) {} else if (1000000000 % tickNanos == 0) {} else
       throw new IllegalArgumentException("Invalid tick duration")
-    }
-    if (tickNanos <= 1) {
+    if (tickNanos <= 1)
       return baseClock
-    }
     new Clock.TickClock(baseClock, tickNanos)
   }
 
@@ -336,8 +333,8 @@ object Clock {
         return Instant.ofEpochMilli(millis - Math.floorMod(millis, tickNanos / 1000000L))
       }
       val instant: Instant = baseClock.instant
-      val nanos: Long      = instant.getNano.toLong
-      val adjust: Long     = Math.floorMod(nanos, tickNanos)
+      val nanos: Long  = instant.getNano.toLong
+      val adjust: Long = Math.floorMod(nanos, tickNanos)
       instant.minusNanos(adjust)
     }
 

@@ -84,9 +84,8 @@ object DecimalStyle {
   def of(locale: Locale): DecimalStyle = {
     Objects.requireNonNull(locale, "locale")
     // Size reduced
-    if (CACHE.get(locale) == null) {
+    if (CACHE.get(locale) == null)
       CACHE.put(locale, create(locale))
-    }
     CACHE.get(locale)
   }
 
@@ -245,7 +244,7 @@ final class DecimalStyle private (
     obj match {
       case other: DecimalStyle =>
         (this eq other) || (zeroDigit == other.zeroDigit && positiveSign == other.positiveSign && negativeSign == other.negativeSign && decimalSeparator == other.decimalSeparator)
-      case _ =>
+      case _                   =>
         false
     }
 

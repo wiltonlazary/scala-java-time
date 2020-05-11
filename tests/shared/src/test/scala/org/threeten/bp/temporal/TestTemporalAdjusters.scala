@@ -47,7 +47,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(false)) {
         val _date: LocalDate = date(2007, month, i)
-        val test: LocalDate = TemporalAdjusters.firstDayOfMonth
+        val test: LocalDate  = TemporalAdjusters.firstDayOfMonth
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2007)
@@ -63,7 +63,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(true)) {
         val _date: LocalDate = date(2008, month, i)
-        val test: LocalDate = TemporalAdjusters.firstDayOfMonth
+        val test: LocalDate  = TemporalAdjusters.firstDayOfMonth
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2008)
@@ -83,7 +83,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(false)) {
         val _date: LocalDate = date(2007, month, i)
-        val test: LocalDate = TemporalAdjusters.lastDayOfMonth
+        val test: LocalDate  = TemporalAdjusters.lastDayOfMonth
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2007)
@@ -99,7 +99,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(true)) {
         val _date: LocalDate = date(2008, month, i)
-        val test: LocalDate = TemporalAdjusters.lastDayOfMonth
+        val test: LocalDate  = TemporalAdjusters.lastDayOfMonth
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2008)
@@ -119,7 +119,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(false)) {
         val _date: LocalDate = date(2007, month, i)
-        val test: LocalDate = TemporalAdjusters.firstDayOfNextMonth
+        val test: LocalDate  = TemporalAdjusters.firstDayOfNextMonth
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, if (month eq DECEMBER) 2008 else 2007)
@@ -135,7 +135,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(true)) {
         val _date: LocalDate = date(2008, month, i)
-        val test: LocalDate = TemporalAdjusters.firstDayOfNextMonth
+        val test: LocalDate  = TemporalAdjusters.firstDayOfNextMonth
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, if (month eq DECEMBER) 2009 else 2008)
@@ -155,7 +155,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(false)) {
         val _date: LocalDate = date(2007, month, i)
-        val test: LocalDate = TemporalAdjusters.firstDayOfYear
+        val test: LocalDate  = TemporalAdjusters.firstDayOfYear
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2007)
@@ -171,7 +171,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(true)) {
         val _date: LocalDate = date(2008, month, i)
-        val test: LocalDate = TemporalAdjusters.firstDayOfYear
+        val test: LocalDate  = TemporalAdjusters.firstDayOfYear
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2008)
@@ -191,7 +191,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(false)) {
         val _date: LocalDate = date(2007, month, i)
-        val test: LocalDate = TemporalAdjusters.lastDayOfYear
+        val test: LocalDate  = TemporalAdjusters.lastDayOfYear
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2007)
@@ -207,7 +207,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(true)) {
         val _date: LocalDate = date(2008, month, i)
-        val test: LocalDate = TemporalAdjusters.lastDayOfYear
+        val test: LocalDate  = TemporalAdjusters.lastDayOfYear
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2008)
@@ -227,7 +227,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(false)) {
         val _date: LocalDate = date(2007, month, i)
-        val test: LocalDate = TemporalAdjusters.firstDayOfNextYear
+        val test: LocalDate  = TemporalAdjusters.firstDayOfNextYear
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2008)
@@ -243,7 +243,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
       var i: Int = 1
       while (i <= month.length(true)) {
         val _date: LocalDate = date(2008, month, i)
-        val test: LocalDate = TemporalAdjusters.firstDayOfNextYear
+        val test: LocalDate  = TemporalAdjusters.firstDayOfNextYear
           .adjustInto(_date)
           .asInstanceOf[LocalDate]
         assertEquals(test.getYear, 2009)
@@ -288,7 +288,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
           var day: Int = 1
           while (day <= Month.of(month).length(false)) {
             val _date: LocalDate = date(year, month, day)
-            val test: LocalDate = TemporalAdjusters
+            val test: LocalDate  = TemporalAdjusters
               .dayOfWeekInMonth(ordinal, dow)
               .adjustInto(_date)
               .asInstanceOf[LocalDate]
@@ -297,7 +297,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
           }
           ordinal += 1
         }
-      case _ =>
+      case _                                                                               =>
         fail()
     }
   }
@@ -324,14 +324,14 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
         var day: Int = 1
         while (day <= Month.of(month).length(false)) {
           val _date: LocalDate = date(year, month, day)
-          val test: LocalDate = TemporalAdjusters
+          val test: LocalDate  = TemporalAdjusters
             .dayOfWeekInMonth(0, dow)
             .adjustInto(_date)
             .asInstanceOf[LocalDate]
           assertEquals(test, expected)
           day += 1
         }
-      case _ =>
+      case _                                                                               =>
         fail()
     }
   }
@@ -360,7 +360,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
           var day: Int = 1
           while (day <= Month.of(month).length(false)) {
             val _date: LocalDate = date(year, month, day)
-            val test: LocalDate = TemporalAdjusters
+            val test: LocalDate  = TemporalAdjusters
               .dayOfWeekInMonth(-1 - ordinal, dow)
               .adjustInto(_date)
               .asInstanceOf[LocalDate]
@@ -369,7 +369,7 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
           }
           ordinal += 1
         }
-      case _ =>
+      case _                                                                               =>
         fail()
     }
   }
@@ -390,14 +390,14 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
         var day: Int = 1
         while (day <= Month.of(month).length(false)) {
           val _date: LocalDate = date(year, month, day)
-          val test: LocalDate = TemporalAdjusters
+          val test: LocalDate  = TemporalAdjusters
             .firstInMonth(dow)
             .adjustInto(_date)
             .asInstanceOf[LocalDate]
           assertEquals(test, expected, "day-of-month=" + day)
           day += 1
         }
-      case _ =>
+      case _                                                                               =>
         fail()
     }
   }
@@ -418,14 +418,14 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
         var day: Int = 1
         while (day <= Month.of(month).length(false)) {
           val _date: LocalDate = date(year, month, day)
-          val test: LocalDate = TemporalAdjusters
+          val test: LocalDate  = TemporalAdjusters
             .lastInMonth(dow)
             .adjustInto(_date)
             .asInstanceOf[LocalDate]
           assertEquals(test, expected, "day-of-month=" + day)
           day += 1
         }
-      case _ =>
+      case _                                                                               =>
         fail()
     }
   }

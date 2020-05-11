@@ -75,9 +75,8 @@ object ClassLoaderChecker {
     a.toString
     a = Collections.unmodifiableList(new java.util.ArrayList[AnyRef]).iterator
     a.toString
-    try {
-      a = new DataInputStream(new ZipInputStream(new FileInputStream("/a.zip")))
-    } catch {
+    try a = new DataInputStream(new ZipInputStream(new FileInputStream("/a.zip")))
+    catch {
       case _: FileNotFoundException =>
     }
     a.toString
@@ -88,9 +87,9 @@ object ClassLoaderChecker {
     System.out.println("************************************************************")
     a = classOf[LocalDate]
     System.out.println("************************************************************")
-    val d: LocalDate = LocalDate.of(2011, 12, 20)
+    val d: LocalDate       = LocalDate.of(2011, 12, 20)
     System.out.println("************************************************************")
-    val t: LocalTime = LocalTime.of(12, 20)
+    val t: LocalTime       = LocalTime.of(12, 20)
     System.out.println("************************************************************")
     val ldt: LocalDateTime = LocalDateTime.of(d, t)
     System.out.println("************************************************************")

@@ -149,12 +149,12 @@ object Period {
     }
 
     amount match {
-      case period: Period => period
+      case period: Period       => period
       case chrono: ChronoPeriod =>
         if (IsoChronology.INSTANCE != chrono.getChronology)
           throw new DateTimeException(s"Period requires ISO chronology: $amount")
         fromAmount
-      case _ =>
+      case _                    =>
         fromAmount
     }
   }
@@ -226,7 +226,7 @@ object Period {
       val monthMatch: String = matcher.group(3)
       val weekMatch: String  = matcher.group(4)
       val dayMatch: String   = matcher.group(5)
-      if (yearMatch != null || monthMatch != null || weekMatch != null || dayMatch != null) {
+      if (yearMatch != null || monthMatch != null || weekMatch != null || dayMatch != null)
         try {
           val years: Int  = parseNumber(text, yearMatch, negate)
           val months: Int = parseNumber(text, monthMatch, negate)
@@ -238,19 +238,16 @@ object Period {
           case ex: NumberFormatException =>
             throw new DateTimeParseException("Text cannot be parsed to a Period", text, 0, ex)
         }
-      }
     }
     throw new DateTimeParseException("Text cannot be parsed to a Period", text, 0)
   }
 
   private def parseNumber(text: CharSequence, str: String, negate: Int): Int = {
-    if (str == null) {
+    if (str == null)
       return 0
-    }
     val `val`: Int = str.toInt
-    try {
-      Math.multiplyExact(`val`, negate)
-    } catch {
+    try Math.multiplyExact(`val`, negate)
+    catch {
       case ex: ArithmeticException =>
         throw new DateTimeParseException("Text cannot be parsed to a Period", text, 0, ex)
     }
@@ -445,7 +442,8 @@ final class Period private (private val years: Int, private val months: Int, pri
     val amount: Period = Period.from(amountToAdd)
     Period.create(Math.addExact(years, amount.years),
                   Math.addExact(months, amount.months),
-                  Math.addExact(days, amount.days))
+                  Math.addExact(days, amount.days)
+    )
   }
 
   /** Returns a copy of this period with the specified years added.
@@ -514,7 +512,8 @@ final class Period private (private val years: Int, private val months: Int, pri
     val amount: Period = Period.from(amountToSubtract)
     Period.create(Math.subtractExact(years, amount.years),
                   Math.subtractExact(months, amount.months),
-                  Math.subtractExact(days, amount.days))
+                  Math.subtractExact(days, amount.days)
+    )
   }
 
   /** Returns a copy of this period with the specified years subtracted.
@@ -580,7 +579,8 @@ final class Period private (private val years: Int, private val months: Int, pri
     else
       Period.create(Math.multiplyExact(years, scalar),
                     Math.multiplyExact(months, scalar),
-                    Math.multiplyExact(days, scalar))
+                    Math.multiplyExact(days, scalar)
+      )
 
   /** Returns a new instance with each amount in this period negated.
     *
@@ -659,7 +659,7 @@ final class Period private (private val years: Int, private val months: Int, pri
     Objects.requireNonNull(_temporal, "temporal")
     if (years != 0)
       if (months != 0) _temporal = _temporal.plus(toTotalMonths, MONTHS)
-      else _temporal             = _temporal.plus(years.toLong, YEARS)
+      else _temporal = _temporal.plus(years.toLong, YEARS)
     else if (months != 0)
       _temporal = _temporal.plus(months.toLong, MONTHS)
     if (days != 0)
@@ -703,7 +703,7 @@ final class Period private (private val years: Int, private val months: Int, pri
     Objects.requireNonNull(_temporal, "temporal")
     if (years != 0)
       if (months != 0) _temporal = _temporal.minus(toTotalMonths, MONTHS)
-      else _temporal             = _temporal.minus(years.toLong, YEARS)
+      else _temporal = _temporal.minus(years.toLong, YEARS)
     else if (months != 0)
       _temporal = _temporal.minus(months.toLong, MONTHS)
     if (days != 0)
@@ -725,7 +725,7 @@ final class Period private (private val years: Int, private val months: Int, pri
     obj match {
       case other: Period =>
         (this eq other) || (years == other.years && months == other.months && days == other.days)
-      case _ => false
+      case _             => false
     }
 
   /** A hash code for this period.

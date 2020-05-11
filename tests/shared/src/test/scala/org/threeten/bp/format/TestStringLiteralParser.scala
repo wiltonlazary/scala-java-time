@@ -39,24 +39,27 @@ import org.threeten.bp.temporal.TemporalQueries
 /** Test StringLiteralPrinterParser. */
 class TestStringLiteralParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_success
-    : List[(TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser, Boolean, String, Int, Int)] = {
+    : List[(TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser, Boolean, String, Int, Int)] =
     List(
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), true, "hello", 0, 5),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"),
        true,
        "helloOTHER",
        0,
-       5),
+       5
+      ),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"),
        true,
        "OTHERhelloOTHER",
        5,
-       10),
+       10
+      ),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"),
        true,
        "OTHERhello",
        5,
-       10),
+       10
+      ),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), true, "", 0, ~0),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), true, "a", 1, ~1),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), true, "HELLO", 0, ~0),
@@ -65,12 +68,14 @@ class TestStringLiteralParser extends AnyFunSuite with GenTestPrinterParser with
        true,
        "OTHERhllooOTHER",
        5,
-       ~5),
+       ~5
+      ),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"),
        true,
        "OTHERhlloo",
        5,
-       ~5),
+       ~5
+      ),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), true, "h", 0, ~0),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), true, "OTHERh", 5, ~5),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), false, "hello", 0, 5),
@@ -78,7 +83,6 @@ class TestStringLiteralParser extends AnyFunSuite with GenTestPrinterParser with
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), false, "HelLo", 0, 5),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"), false, "HelLO", 0, 5)
     )
-  }
 
   test("test_parse_success") {
     data_success.foreach {
@@ -88,24 +92,25 @@ class TestStringLiteralParser extends AnyFunSuite with GenTestPrinterParser with
         assertEquals(result, expectedPos)
         assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
         assertEquals(parseContext.toParsed.query(TemporalQueries.zoneId), null)
-      case _ =>
+      case _                                           =>
         fail()
     }
   }
 
   val data_error
-    : List[(TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser, String, Int, Class[_])] = {
+    : List[(TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser, String, Int, Class[_])] =
     List(
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"),
        "hello",
        -1,
-       classOf[IndexOutOfBoundsException]),
+       classOf[IndexOutOfBoundsException]
+      ),
       (new TTBPDateTimeFormatterBuilder.StringLiteralPrinterParser("hello"),
        "hello",
        6,
-       classOf[IndexOutOfBoundsException])
+       classOf[IndexOutOfBoundsException]
+      )
     )
-  }
 
   test("test_parse_error") {
     data_error.foreach {
@@ -117,7 +122,7 @@ class TestStringLiteralParser extends AnyFunSuite with GenTestPrinterParser with
             assertEquals(parseContext.toParsed.query(TemporalQueries.chronology), null)
             assertEquals(parseContext.toParsed.query(TemporalQueries.zoneId), null)
         }
-      case _ =>
+      case _                         =>
         fail()
     }
   }

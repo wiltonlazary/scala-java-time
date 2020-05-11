@@ -211,9 +211,12 @@ object YearMonth {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): YearMonth = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[YearMonth] {
-      override def queryFrom(temporal: TemporalAccessor): YearMonth = YearMonth.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[YearMonth] {
+                      override def queryFrom(temporal: TemporalAccessor): YearMonth =
+                        YearMonth.from(temporal)
+                    }
+    )
   }
 
 }
@@ -366,9 +369,9 @@ final class YearMonth private (private val year: Int, private val month: Int)
       case YEAR_OF_ERA     => if (year < 1) 1L - year.toLong else year.toLong
       case YEAR            => year.toLong
       case ERA             => if (year < 1) 0 else 1
-      case _: ChronoField =>
+      case _: ChronoField  =>
         throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-      case _ => field.getFrom(this)
+      case _               => field.getFrom(this)
     }
 
   private def getProlepticMonth: Long = (year * 12L) + (month - 1)
@@ -526,17 +529,17 @@ final class YearMonth private (private val year: Int, private val month: Int)
       val f: ChronoField = field.asInstanceOf[ChronoField]
       f.checkValidValue(newValue)
       f match {
-        case MONTH_OF_YEAR =>
+        case MONTH_OF_YEAR   =>
           return withMonth(newValue.toInt)
         case PROLEPTIC_MONTH =>
           return plusMonths(newValue - getLong(PROLEPTIC_MONTH))
-        case YEAR_OF_ERA =>
+        case YEAR_OF_ERA     =>
           return withYear((if (year < 1) 1 - newValue else newValue).toInt)
-        case YEAR =>
+        case YEAR            =>
           return withYear(newValue.toInt)
-        case ERA =>
+        case ERA             =>
           return if (getLong(ERA) == newValue) this else withYear(1 - year)
-        case _ =>
+        case _               =>
           throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
       }
     }
@@ -592,7 +595,7 @@ final class YearMonth private (private val year: Int, private val month: Int)
     * @throws ArithmeticException { @inheritDoc}
     */
   def plus(amountToAdd: Long, unit: TemporalUnit): YearMonth =
-    if (unit.isInstanceOf[ChronoUnit]) {
+    if (unit.isInstanceOf[ChronoUnit])
       unit.asInstanceOf[ChronoUnit] match {
         case MONTHS    => plusMonths(amountToAdd)
         case YEARS     => plusYears(amountToAdd)
@@ -602,9 +605,8 @@ final class YearMonth private (private val year: Int, private val month: Int)
         case ERAS      => `with`(ERA, Math.addExact(getLong(ERA), amountToAdd))
         case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
       }
-    } else {
+    else
       unit.addTo(this, amountToAdd)
-    }
 
   /** Returns a copy of this year-month with the specified period in years added.
     *
@@ -713,7 +715,9 @@ final class YearMonth private (private val year: Int, private val month: Int)
       IsoChronology.INSTANCE.asInstanceOf[R]
     else if (query eq TemporalQueries.precision)
       MONTHS.asInstanceOf[R]
-    else if ((query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.zone) || (query eq TemporalQueries.zoneId) || (query eq TemporalQueries.offset))
+    else if (
+      (query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.zone) || (query eq TemporalQueries.zoneId) || (query eq TemporalQueries.offset)
+    )
       null.asInstanceOf[R]
     else
       query.queryFrom(this)
@@ -805,9 +809,8 @@ final class YearMonth private (private val year: Int, private val month: Int)
         case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
 
       }
-    } else {
+    } else
       unit.between(this, end)
-    }
   }
 
   /** Combines this year-month with a day-of-month to create a {@code LocalDate}.

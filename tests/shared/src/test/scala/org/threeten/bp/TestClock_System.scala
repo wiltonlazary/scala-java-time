@@ -49,9 +49,8 @@ class TestClock_System extends AnyFunSuite with AssertionsHelper {
       {
         val instant: Instant   = system.instant
         val systemMillis: Long = System.currentTimeMillis
-        if (systemMillis - instant.toEpochMilli < 10) {
+        if (systemMillis - instant.toEpochMilli < 10)
           i = 9999
-        }
       }
       {
         i += 1
@@ -71,9 +70,8 @@ class TestClock_System extends AnyFunSuite with AssertionsHelper {
       {
         val instant: Long      = system.millis
         val systemMillis: Long = System.currentTimeMillis
-        if (systemMillis - instant < 10) {
+        if (systemMillis - instant < 10)
           i = 9999
-        }
       }
       {
         i += 1

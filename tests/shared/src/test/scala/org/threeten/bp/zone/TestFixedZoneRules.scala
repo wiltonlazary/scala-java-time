@@ -168,7 +168,8 @@ class TestFixedZoneRules extends AnyFunSuite with AssertionsHelper {
       test.getTransitions.add(
         ZoneOffsetTransition.of(TestFixedZoneRules.LDT,
                                 TestFixedZoneRules.OFFSET_PONE,
-                                TestFixedZoneRules.OFFSET_PTWO)
+                                TestFixedZoneRules.OFFSET_PTWO
+        )
       )
     }
   }

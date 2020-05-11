@@ -61,7 +61,7 @@ class TestFractionPrinterParser
     assertEquals(buf.toString, "EXISTING.000000003")
   }
 
-  val provider_nanos: List[List[Any]] = {
+  val provider_nanos: List[List[Any]] =
     List(
       List(0, 9, 0, ""),
       List(0, 9, 2, ".000000002"),
@@ -131,7 +131,6 @@ class TestFractionPrinterParser
       List(6, 6, 12345678, ".012345"),
       List(6, 6, 123456789, ".123456")
     )
-  }
 
   test("test_print_nanos") {
     provider_nanos.foreach {
@@ -142,13 +141,13 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 true)
+                                                                 true
+          )
         pp.print(printContext, buf)
-        if (result == null) {
+        if (result == null)
           fail("Expected exception")
-        }
         assertEquals(buf.toString, result)
-      case _ => fail()
+      case _                                                                             => fail()
     }
   }
 
@@ -161,17 +160,17 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 false)
+                                                                 false
+          )
         pp.print(printContext, buf)
-        if (result == null) {
+        if (result == null)
           fail("Expected exception")
-        }
         assertEquals(buf.toString, if (result.startsWith(".")) result.substring(1) else result)
-      case _ => fail()
+      case _                                                                             => fail()
     }
   }
 
-  val provider_seconds: List[List[Any]] = {
+  val provider_seconds: List[List[Any]] =
     List(
       List(0, 9, 0, ""),
       List(0, 9, 3, ".05"),
@@ -190,7 +189,6 @@ class TestFractionPrinterParser
       List(2, 2, 30, ".50"),
       List(2, 2, 45, ".75")
     )
-  }
 
   test("test_print_seconds") {
     provider_seconds.foreach {
@@ -201,13 +199,13 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(SECOND_OF_MINUTE,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 true)
+                                                                 true
+          )
         pp.print(printContext, buf)
-        if (result == null) {
+        if (result == null)
           fail("Expected exception")
-        }
         assertEquals(buf.toString, result)
-      case _ => fail()
+      case _                                                                             => fail()
     }
   }
 
@@ -220,13 +218,13 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(SECOND_OF_MINUTE,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 false)
+                                                                 false
+          )
         pp.print(printContext, buf)
-        if (result == null) {
+        if (result == null)
           fail("Expected exception")
-        }
         assertEquals(buf.toString, if (result.startsWith(".")) result.substring(1) else result)
-      case _ => fail()
+      case _                                                                             => fail()
     }
   }
 
@@ -238,14 +236,16 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 true)
-        val newPos: Int = pp.parse(parseContext, result, 0)
+                                                                 true
+          )
+        val newPos: Int                                            = pp.parse(parseContext, result, 0)
         assertEquals(newPos, result.length)
-        val expectedValue: Int = fixParsedValue(maxWidth, value)
+        val expectedValue: Int                                     = fixParsedValue(maxWidth, value)
         assertParsed(parseContext,
                      NANO_OF_SECOND,
-                     if (value == 0 && minWidth == 0) null else expectedValue.toLong)
-      case _ => fail()
+                     if (value == 0 && minWidth == 0) null else expectedValue.toLong
+        )
+      case _                                                                             => fail()
     }
   }
 
@@ -257,14 +257,16 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 false)
-        val newPos: Int = pp.parse(parseContext, result, if (result.startsWith(".")) 1 else 0)
+                                                                 false
+          )
+        val newPos: Int                                            = pp.parse(parseContext, result, if (result.startsWith(".")) 1 else 0)
         assertEquals(newPos, result.length)
-        val expectedValue: Int = fixParsedValue(maxWidth, value)
+        val expectedValue: Int                                     = fixParsedValue(maxWidth, value)
         assertParsed(parseContext,
                      NANO_OF_SECOND,
-                     if (value == 0 && minWidth == 0) null else expectedValue.toLong)
-      case _ => fail()
+                     if (value == 0 && minWidth == 0) null else expectedValue.toLong
+        )
+      case _                                                                             => fail()
     }
   }
 
@@ -276,14 +278,16 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 true)
-        val newPos: Int = pp.parse(parseContext, result + " ", 0)
+                                                                 true
+          )
+        val newPos: Int                                            = pp.parse(parseContext, result + " ", 0)
         assertEquals(newPos, result.length)
-        val expectedValue: Int = fixParsedValue(maxWidth, value)
+        val expectedValue: Int                                     = fixParsedValue(maxWidth, value)
         assertParsed(parseContext,
                      NANO_OF_SECOND,
-                     if (value == 0 && minWidth == 0) null else expectedValue.toLong)
-      case _ => fail()
+                     if (value == 0 && minWidth == 0) null else expectedValue.toLong
+        )
+      case _                                                                             => fail()
     }
   }
 
@@ -295,14 +299,16 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 true)
-        val newPos: Int = pp.parse(parseContext, " " + result, 1)
+                                                                 true
+          )
+        val newPos: Int                                            = pp.parse(parseContext, " " + result, 1)
         assertEquals(newPos, result.length + 1)
-        val expectedValue: Int = fixParsedValue(maxWidth, value)
+        val expectedValue: Int                                     = fixParsedValue(maxWidth, value)
         assertParsed(parseContext,
                      NANO_OF_SECOND,
-                     if (value == 0 && minWidth == 0) null else expectedValue.toLong)
-      case _ => fail()
+                     if (value == 0 && minWidth == 0) null else expectedValue.toLong
+        )
+      case _                                                                             => fail()
     }
   }
 
@@ -323,13 +329,15 @@ class TestFractionPrinterParser
           new TTBPDateTimeFormatterBuilder.FractionPrinterParser(SECOND_OF_MINUTE,
                                                                  minWidth,
                                                                  maxWidth,
-                                                                 true)
-        val newPos: Int = pp.parse(parseContext, result, 0)
+                                                                 true
+          )
+        val newPos: Int                                            = pp.parse(parseContext, result, 0)
         assertEquals(newPos, result.length)
         assertParsed(parseContext,
                      SECOND_OF_MINUTE,
-                     if (value == 0 && minWidth == 0) null else value.toLong)
-      case _ => fail()
+                     if (value == 0 && minWidth == 0) null else value.toLong
+        )
+      case _                                                                             => fail()
     }
   }
 
@@ -338,44 +346,49 @@ class TestFractionPrinterParser
     field:   TemporalField,
     value:   java.lang.Long
   ): Unit =
-    if (value == null) {
+    if (value == null)
       assertEquals(context.getParsed(field), null)
-    } else {
+    else
       assertEquals(context.getParsed(field), value)
-    }
 
-  val provider_parseNothing: List[List[Any]] = {
+  val provider_parseNothing: List[List[Any]] =
     List(
       List(new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND, 3, 6, true),
            "",
            0,
-           ~0),
+           ~0
+      ),
       List(new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND, 3, 6, true),
            "A",
            0,
-           ~0),
+           ~0
+      ),
       List(new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND, 3, 6, true),
            ".",
            0,
-           ~1),
+           ~1
+      ),
       List(new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND, 3, 6, true),
            ".5",
            0,
-           ~1),
+           ~1
+      ),
       List(new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND, 3, 6, true),
            ".51",
            0,
-           ~1),
+           ~1
+      ),
       List(new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND, 3, 6, true),
            ".A23456",
            0,
-           ~1),
+           ~1
+      ),
       List(new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND, 3, 6, true),
            ".1A3456",
            0,
-           ~1)
+           ~1
+      )
     )
-  }
 
   test("test_parse_nothing") {
     provider_parseNothing.foreach {
@@ -384,7 +397,7 @@ class TestFractionPrinterParser
         val newPos: Int = pp.parse(parseContext, text, pos)
         assertEquals(newPos, expected)
         assertEquals(parseContext.getParsed(NANO_OF_SECOND), null)
-      case _ => fail()
+      case _                                                                                                                  => fail()
     }
   }
 

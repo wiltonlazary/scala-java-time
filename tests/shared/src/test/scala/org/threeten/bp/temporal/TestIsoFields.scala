@@ -67,7 +67,7 @@ class TestIsoFields extends AnyFunSuite with AssertionsHelper {
         assertEquals(date.getDayOfWeek, dow)
         assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.getFrom(date), week)
         assertEquals(date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR), week)
-      case _ =>
+      case _                                                                       =>
         fail()
     }
   }
@@ -78,7 +78,7 @@ class TestIsoFields extends AnyFunSuite with AssertionsHelper {
         assertEquals(date.getDayOfWeek, dow)
         assertEquals(IsoFields.WEEK_BASED_YEAR.getFrom(date), wby)
         assertEquals(date.get(IsoFields.WEEK_BASED_YEAR), wby)
-      case _ =>
+      case _                                                                      =>
         fail()
     }
   }
@@ -93,9 +93,9 @@ class TestIsoFields extends AnyFunSuite with AssertionsHelper {
           .appendLiteral('-')
           .appendValue(DAY_OF_WEEK)
           .toFormatter
-        val parsed: LocalDate = LocalDate.parse(wby + "-" + week + "-" + dow.getValue, f)
+        val parsed: LocalDate    = LocalDate.parse(wby + "-" + week + "-" + dow.getValue, f)
         assertEquals(parsed, date)
-      case _ =>
+      case _                                                                         =>
         fail()
     }
   }
@@ -108,37 +108,42 @@ class TestIsoFields extends AnyFunSuite with AssertionsHelper {
     var week: Int       = 1
     while (date.getYear < 2400) {
       val loopDow: DayOfWeek = date.getDayOfWeek
-      if (date.getYear != year) {
+      if (date.getYear != year)
         year = date.getYear
-      }
       if (loopDow eq MONDAY) {
         week += 1
         if ((week == 53 && weekLen == 52) || week == 54) {
           week = 1
           val firstDayOfWeekBasedYear: LocalDate = date.plusDays(14).withDayOfYear(1)
           val firstDay: DayOfWeek                = firstDayOfWeekBasedYear.getDayOfWeek
-          weekLen =
-            if ((firstDay eq THURSDAY) || ((firstDay eq WEDNESDAY) && firstDayOfWeekBasedYear.isLeapYear))
-              53
-            else 52
+          weekLen = if (
+            (firstDay eq THURSDAY) || ((firstDay eq WEDNESDAY) && firstDayOfWeekBasedYear.isLeapYear)
+          )
+            53
+          else 52
           wby += 1
         }
       }
       assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.rangeRefinedBy(date),
                    ValueRange.of(1, weekLen),
-                   "Failed on " + date + " " + date.getDayOfWeek)
+                   "Failed on " + date + " " + date.getDayOfWeek
+      )
       assertEquals(IsoFields.WEEK_OF_WEEK_BASED_YEAR.getFrom(date),
                    week,
-                   "Failed on " + date + " " + date.getDayOfWeek)
+                   "Failed on " + date + " " + date.getDayOfWeek
+      )
       assertEquals(date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR),
                    week,
-                   "Failed on " + date + " " + date.getDayOfWeek)
+                   "Failed on " + date + " " + date.getDayOfWeek
+      )
       assertEquals(IsoFields.WEEK_BASED_YEAR.getFrom(date),
                    wby,
-                   "Failed on " + date + " " + date.getDayOfWeek)
+                   "Failed on " + date + " " + date.getDayOfWeek
+      )
       assertEquals(date.get(IsoFields.WEEK_BASED_YEAR),
                    wby,
-                   "Failed on " + date + " " + date.getDayOfWeek)
+                   "Failed on " + date + " " + date.getDayOfWeek
+      )
       date = date.plusDays(1)
     }
   }
@@ -176,7 +181,7 @@ class TestIsoFields extends AnyFunSuite with AssertionsHelper {
     data_quartersBetween.foreach {
       case (start: LocalDate) :: (end: LocalDate) :: (expected: Int) :: Nil =>
         assertEquals(IsoFields.QUARTER_YEARS.between(start, end), expected)
-      case _ =>
+      case _                                                                =>
         fail()
     }
   }

@@ -252,7 +252,7 @@ final class ValueRange private (
     obj match {
       case other: ValueRange =>
         (this eq other) || (minSmallest == other.minSmallest && minLargest == other.minLargest && maxSmallest == other.maxSmallest && maxLargest == other.maxLargest)
-      case _ =>
+      case _                 =>
         false
     }
 

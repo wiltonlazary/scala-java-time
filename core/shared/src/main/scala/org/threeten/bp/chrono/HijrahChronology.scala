@@ -292,13 +292,12 @@ final class HijrahChronology private () extends Chronology with Serializable {
       return dateEpochDay(fieldValues.remove(EPOCH_DAY))
     val prolepticMonth: java.lang.Long = fieldValues.remove(PROLEPTIC_MONTH)
     if (prolepticMonth != null) {
-      if (resolverStyle ne ResolverStyle.LENIENT) {
+      if (resolverStyle ne ResolverStyle.LENIENT)
         PROLEPTIC_MONTH.checkValidValue(prolepticMonth)
-      }
       updateResolveMap(fieldValues, MONTH_OF_YEAR, Math.floorMod(prolepticMonth, 12) + 1L)
       updateResolveMap(fieldValues, YEAR, Math.floorDiv(prolepticMonth, 12))
     }
-    val yoeLong: java.lang.Long = fieldValues.remove(YEAR_OF_ERA)
+    val yoeLong: java.lang.Long        = fieldValues.remove(YEAR_OF_ERA)
     if (yoeLong != null) {
       if (resolverStyle ne ResolverStyle.LENIENT)
         YEAR_OF_ERA.checkValidValue(yoeLong)
@@ -309,7 +308,8 @@ final class HijrahChronology private () extends Chronology with Serializable {
           if (year != null)
             updateResolveMap(fieldValues,
                              YEAR,
-                             if (year > 0) yoeLong else Math.subtractExact(1, yoeLong))
+                             if (year > 0) yoeLong else Math.subtractExact(1, yoeLong)
+            )
           else
             fieldValues.put(YEAR_OF_ERA, yoeLong)
         else
@@ -339,57 +339,54 @@ final class HijrahChronology private () extends Chronology with Serializable {
               .checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR), MONTH_OF_YEAR)
             var dom: Int =
               range(DAY_OF_MONTH).checkValidIntValue(fieldValues.remove(DAY_OF_MONTH), DAY_OF_MONTH)
-            if ((resolverStyle eq ResolverStyle.SMART) && dom > 28) {
+            if ((resolverStyle eq ResolverStyle.SMART) && dom > 28)
               dom = Math.min(dom, date(y, moy, 1).lengthOfMonth)
-            }
             return date(y, moy, dom)
           }
         }
         if (fieldValues.containsKey(ALIGNED_WEEK_OF_MONTH)) {
           if (fieldValues.containsKey(ALIGNED_DAY_OF_WEEK_IN_MONTH)) {
-            val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
+            val y: Int                 = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
             if (resolverStyle eq ResolverStyle.LENIENT) {
               val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
               val weeks: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
-              val days: Long =
+              val days: Long   =
                 Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH), 1)
               return date(y, 1, 1).plus(months, MONTHS).plus(weeks, WEEKS).plus(days, DAYS)
             }
-            val moy: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
-            val aw: Int =
+            val moy: Int               = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
+            val aw: Int                =
               ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
-            val ad: Int = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(
+            val ad: Int                = ALIGNED_DAY_OF_WEEK_IN_MONTH.checkValidIntValue(
               fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_MONTH)
             )
             val hijrahDate: HijrahDate = date(y, moy, 1).plus((aw.toLong - 1) * 7 + (ad - 1), DAYS)
-            if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(MONTH_OF_YEAR) != moy) {
+            if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(MONTH_OF_YEAR) != moy)
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
-            }
             return hijrahDate
           }
           if (fieldValues.containsKey(DAY_OF_WEEK)) {
-            val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
+            val y: Int                 = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
             if (resolverStyle eq ResolverStyle.LENIENT) {
               val months: Long = Math.subtractExact(fieldValues.remove(MONTH_OF_YEAR), 1)
               val weeks: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_MONTH), 1)
               val days: Long   = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
               return date(y, 1, 1).plus(months, MONTHS).plus(weeks, WEEKS).plus(days, DAYS)
             }
-            val moy: Int = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
-            val aw: Int =
+            val moy: Int               = MONTH_OF_YEAR.checkValidIntValue(fieldValues.remove(MONTH_OF_YEAR))
+            val aw: Int                =
               ALIGNED_WEEK_OF_MONTH.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_MONTH))
-            val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
+            val dow: Int               = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
             val hijrahDate: HijrahDate =
               date(y, moy, 1).plus(aw.toLong - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
-            if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(MONTH_OF_YEAR) != moy) {
+            if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(MONTH_OF_YEAR) != moy)
               throw new DateTimeException("Strict mode rejected date parsed to a different month")
-            }
             return hijrahDate
           }
         }
       }
       if (fieldValues.containsKey(DAY_OF_YEAR)) {
-        val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
+        val y: Int   = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
         if (resolverStyle eq ResolverStyle.LENIENT) {
           val days: Long = Math.subtractExact(fieldValues.remove(DAY_OF_YEAR), 1)
           return dateYearDay(y, 1).plusDays(days)
@@ -399,38 +396,36 @@ final class HijrahChronology private () extends Chronology with Serializable {
       }
       if (fieldValues.containsKey(ALIGNED_WEEK_OF_YEAR)) {
         if (fieldValues.containsKey(ALIGNED_DAY_OF_WEEK_IN_YEAR)) {
-          val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
+          val y: Int                 = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1)
             val days: Long  = Math.subtractExact(fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR), 1)
             return date(y, 1, 1).plus(weeks, WEEKS).plus(days, DAYS)
           }
-          val aw: Int =
+          val aw: Int                =
             ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
-          val ad: Int = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(
+          val ad: Int                = ALIGNED_DAY_OF_WEEK_IN_YEAR.checkValidIntValue(
             fieldValues.remove(ALIGNED_DAY_OF_WEEK_IN_YEAR)
           )
           val hijrahDate: HijrahDate = date(y, 1, 1).plusDays((aw.toLong - 1) * 7 + (ad - 1))
-          if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(YEAR) != y) {
+          if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(YEAR) != y)
             throw new DateTimeException("Strict mode rejected date parsed to a different year")
-          }
           return hijrahDate
         }
         if (fieldValues.containsKey(DAY_OF_WEEK)) {
-          val y: Int = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
+          val y: Int                 = YEAR.checkValidIntValue(fieldValues.remove(YEAR))
           if (resolverStyle eq ResolverStyle.LENIENT) {
             val weeks: Long = Math.subtractExact(fieldValues.remove(ALIGNED_WEEK_OF_YEAR), 1)
             val days: Long  = Math.subtractExact(fieldValues.remove(DAY_OF_WEEK), 1)
             return date(y, 1, 1).plus(weeks, WEEKS).plus(days, DAYS)
           }
-          val aw: Int =
+          val aw: Int                =
             ALIGNED_WEEK_OF_YEAR.checkValidIntValue(fieldValues.remove(ALIGNED_WEEK_OF_YEAR))
-          val dow: Int = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
+          val dow: Int               = DAY_OF_WEEK.checkValidIntValue(fieldValues.remove(DAY_OF_WEEK))
           val hijrahDate: HijrahDate =
             date(y, 1, 1).plus(aw.toLong - 1, WEEKS).`with`(nextOrSame(DayOfWeek.of(dow)))
-          if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(YEAR) != y) {
+          if ((resolverStyle eq ResolverStyle.STRICT) && hijrahDate.get(YEAR) != y)
             throw new DateTimeException("Strict mode rejected date parsed to a different month")
-          }
           return hijrahDate
         }
       }

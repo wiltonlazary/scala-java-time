@@ -143,11 +143,13 @@ object Month {
                                         SEPTEMBER,
                                         OCTOBER,
                                         NOVEMBER,
-                                        DECEMBER)
-  def valueOf(enum: String): Month = values.find(_.name() == enum) match {
-    case Some(month) => month
-    case _           => throw new IllegalArgumentException(s"Unrecognized month name: $enum")
-  }
+                                        DECEMBER
+  )
+  def valueOf(enum: String): Month =
+    values.find(_.name() == enum) match {
+      case Some(month) => month
+      case _           => throw new IllegalArgumentException(s"Unrecognized month name: $enum")
+    }
 
   /** Private cache of all the constants.
     */
@@ -189,7 +191,7 @@ object Month {
     var _temporal = temporal
     _temporal match {
       case month: Month => month
-      case _ =>
+      case _            =>
         try {
           if (IsoChronology.INSTANCE != Chronology.from(_temporal))
             _temporal = LocalDate.from(_temporal)
@@ -479,7 +481,9 @@ final class Month private (name: String, ordinal: Int)
       IsoChronology.INSTANCE.asInstanceOf[R]
     else if (query eq TemporalQueries.precision)
       MONTHS.asInstanceOf[R]
-    else if ((query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.zone) || (query eq TemporalQueries.zoneId) || (query eq TemporalQueries.offset))
+    else if (
+      (query eq TemporalQueries.localDate) || (query eq TemporalQueries.localTime) || (query eq TemporalQueries.zone) || (query eq TemporalQueries.zoneId) || (query eq TemporalQueries.offset)
+    )
       null.asInstanceOf[R]
     else
       query.queryFrom(this)

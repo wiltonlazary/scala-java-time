@@ -163,9 +163,9 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate]
     field match {
       case INSTANT_SECONDS =>
         throw new UnsupportedTemporalTypeException(s"Field too large for an int: $field")
-      case OFFSET_SECONDS => getOffset.getTotalSeconds
-      case _: ChronoField => toLocalDateTime.get(field)
-      case _              => super.get(field)
+      case OFFSET_SECONDS  => getOffset.getTotalSeconds
+      case _: ChronoField  => toLocalDateTime.get(field)
+      case _               => super.get(field)
     }
 
   def getLong(field: TemporalField): Long =

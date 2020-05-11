@@ -36,9 +36,9 @@ object DemoApp {
     val instant   = Instant.ofEpochMilli(0)
     val datetime  = LocalDateTime.ofInstant(Instant.now, ZoneId.of("Europe/Helsinki"))
     val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
-    val odt =
+    val odt       =
       OffsetDateTime.parse("2011-12-03T10:15:30+01:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-    val strRepl = odt.format(formatter)
+    val strRepl   = odt.format(formatter)
 
     println(fixedClock)
     println(dateClock)

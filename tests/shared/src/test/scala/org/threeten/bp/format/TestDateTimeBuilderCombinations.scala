@@ -78,7 +78,7 @@ class TestDateTimeBuilderCombinations extends AnyFunSuite with AssertionsHelper 
       TemporalQuery[LocalDate],
       AnyRef
     )
-  ] = {
+  ] =
     List(
       (YEAR,
        2012,
@@ -89,7 +89,8 @@ class TestDateTimeBuilderCombinations extends AnyFunSuite with AssertionsHelper 
        null,
        null,
        localDateFrom,
-       LocalDate.of(2012, 6, 3)),
+       LocalDate.of(2012, 6, 3)
+      ),
       (PROLEPTIC_MONTH,
        2012 * 12 + 6 - 1,
        DAY_OF_MONTH,
@@ -99,7 +100,8 @@ class TestDateTimeBuilderCombinations extends AnyFunSuite with AssertionsHelper 
        null,
        null,
        localDateFrom,
-       LocalDate.of(2012, 6, 3)),
+       LocalDate.of(2012, 6, 3)
+      ),
       (YEAR,
        2012,
        ALIGNED_WEEK_OF_YEAR,
@@ -109,7 +111,8 @@ class TestDateTimeBuilderCombinations extends AnyFunSuite with AssertionsHelper 
        null,
        null,
        localDateFrom,
-       LocalDate.of(2012, 2, 8)),
+       LocalDate.of(2012, 2, 8)
+      ),
       (YEAR,
        2012,
        DAY_OF_YEAR,
@@ -119,28 +122,25 @@ class TestDateTimeBuilderCombinations extends AnyFunSuite with AssertionsHelper 
        null,
        null,
        localDateFrom,
-       LocalDate.of(2012, 6, 3)),
+       LocalDate.of(2012, 6, 3)
+      ),
       (EPOCH_DAY, 12, null, null, null, null, null, null, localDateFrom, LocalDate.of(1970, 1, 13))
     )
-  }
 
   test("test_derive") {
     data_combine.foreach {
       case (field1, value1, field2, value2, field3, value3, field4, value4, query, expectedVal) =>
         val builder: DateTimeBuilder = new DateTimeBuilder(field1, value1.longValue)
         builder.chrono = IsoChronology.INSTANCE
-        if (field2 != null) {
+        if (field2 != null)
           builder.addFieldValue(field2, value2.longValue)
-        }
-        if (field3 != null) {
+        if (field3 != null)
           builder.addFieldValue(field3, value3.longValue)
-        }
-        if (field4 != null) {
+        if (field4 != null)
           builder.addFieldValue(field4, value4.longValue)
-        }
         builder.resolve(ResolverStyle.SMART, null)
         assertEquals(builder.build(query), expectedVal)
-      case _ =>
+      case _                                                                                    =>
         fail()
     }
   }
@@ -168,19 +168,16 @@ class TestDateTimeBuilderCombinations extends AnyFunSuite with AssertionsHelper 
       case (field1, value1, field2, value2, field3, value3, query, expectedVal) =>
         val builder: DateTimeBuilder = new DateTimeBuilder(field1, value1.longValue)
         builder.chrono = IsoChronology.INSTANCE
-        if (field2 != null) {
+        if (field2 != null)
           builder.addFieldValue(field2, value2.longValue)
-        }
-        if (field3 != null) {
+        if (field3 != null)
           builder.addFieldValue(field3, value3.longValue)
-        }
         builder.resolve(ResolverStyle.SMART, null)
-        if (expectedVal != null) {
+        if (expectedVal != null)
           assertEquals(builder.getLong(query), expectedVal.longValue)
-        } else {
+        else
           assertEquals(builder.isSupported(query), false)
-        }
-      case _ =>
+      case _                                                                    =>
         fail()
     }
   }
@@ -189,16 +186,17 @@ class TestDateTimeBuilderCombinations extends AnyFunSuite with AssertionsHelper 
     val fmt: DateTimeFormatter = DateTimeFormatter
       .ofPattern("yyyy-MM-dd HH:mm:ss")
       .withZone(TestDateTimeBuilderCombinations.PARIS)
-    val acc: TemporalAccessor = fmt.parse("2014-06-30 01:02:03")
+    val acc: TemporalAccessor  = fmt.parse("2014-06-30 01:02:03")
     assertEquals(ZonedDateTime.from(acc),
-                 ZonedDateTime.of(2014, 6, 30, 1, 2, 3, 0, TestDateTimeBuilderCombinations.PARIS))
+                 ZonedDateTime.of(2014, 6, 30, 1, 2, 3, 0, TestDateTimeBuilderCombinations.PARIS)
+    )
   }
 
   test("test_parse_Instant_withZone") {
     val fmt: DateTimeFormatter = DateTimeFormatter
       .ofPattern("yyyy-MM-dd HH:mm:ss")
       .withZone(TestDateTimeBuilderCombinations.PARIS)
-    val acc: TemporalAccessor = fmt.parse("2014-06-30 01:02:03")
+    val acc: TemporalAccessor  = fmt.parse("2014-06-30 01:02:03")
     assertEquals(
       Instant.from(acc),
       ZonedDateTime.of(2014, 6, 30, 1, 2, 3, 0, TestDateTimeBuilderCombinations.PARIS).toInstant

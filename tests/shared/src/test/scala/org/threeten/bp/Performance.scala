@@ -90,45 +90,44 @@ object Performance {
       }
     }
     System.out.println()
-    for (name <- RESULTS.keySet.asScala) {
+    for (name <- RESULTS.keySet.asScala)
       System.out.println(name + " " + Arrays.toString(RESULTS.get(name)))
-    }
     System.out.println()
     for (name <- RESULTS.keySet.asScala) {
       val r: Array[Long]      = RESULTS.get(name)
       val percent: BigDecimal = BigDecimal.valueOf(r(6), 1)
       var max: String         = "           " + NF.format(r(0))
       max = max.substring(max.length - 12)
-      var min: String = "           " + NF.format(r(5))
+      var min: String         = "           " + NF.format(r(5))
       min = min.substring(min.length - 12)
       System.out.println(name + "\t" + max + "\t" + min + "\t-" + percent + "%")
     }
   }
 
   def process(): Unit = {
-    val time: LocalTime = LocalTime.of(12, 30, 20)
+    val time: LocalTime                          = LocalTime.of(12, 30, 20)
     System.out.println(time)
-    val ldt: java.util.List[LocalDateTime] = setupDateTime
+    val ldt: java.util.List[LocalDateTime]       = setupDateTime
     queryListDateTime(ldt)
     formatListDateTime(ldt)
     sortListDateTime(ldt)
-    val zdt: java.util.List[ZonedDateTime] = setupZonedDateTime
+    val zdt: java.util.List[ZonedDateTime]       = setupZonedDateTime
     queryListZonedDateTime(zdt)
     formatListZonedDateTime(zdt)
     sortListZonedDateTime(zdt)
-    val instants: java.util.List[Instant] = setupInstant
+    val instants: java.util.List[Instant]        = setupInstant
     queryListInstant(instants)
     formatListInstant(instants)
     sortListInstant(instants)
-    val judates: java.util.List[Date] = setupDate
+    val judates: java.util.List[Date]            = setupDate
     queryListDate(judates)
     formatListDate(judates)
     sortListDate(judates)
-    val ld: java.util.List[LocalDate] = setupLocalDate
+    val ld: java.util.List[LocalDate]            = setupLocalDate
     queryListLocalDate(ld)
     formatListLocalDate(ld)
     sortListLocalDate(ld)
-    val lt: java.util.List[LocalTime] = setupTime
+    val lt: java.util.List[LocalTime]            = setupTime
     queryListTime(lt)
     formatListTime(lt)
     sortListTime(lt)
@@ -151,11 +150,12 @@ object Performance {
                                               random.nextInt(28) + 1,
                                               random.nextInt(24),
                                               random.nextInt(60),
-                                              random.nextInt(60))
+                                              random.nextInt(60)
+      )
       list.add(t)
       i += 1
     }
-    val end: Long = System.nanoTime
+    val end: Long                           = System.nanoTime
     System.out.println("LocalDT:   Setup:  " + NF.format(end - start) + " ns")
     result("LocalDT-I", end - start)
     list
@@ -164,7 +164,7 @@ object Performance {
   private def sortListDateTime(list: java.util.List[LocalDateTime]): Unit = {
     val start: Long = System.nanoTime
     Collections.sort(list)
-    val end: Long = System.nanoTime
+    val end: Long   = System.nanoTime
     System.out.println("LocalDT:   Sort:   " + NF.format(end - start) + " ns " + list.get(0))
     result("LocalDT-S", end - start)
   }
@@ -224,7 +224,7 @@ object Performance {
       list.add(t)
       i += 1
     }
-    val end: Long = System.nanoTime
+    val end: Long                       = System.nanoTime
     System.out.println("LocalD:    Setup:  " + NF.format(end - start) + " ns")
     result("LocalD-I", end - start)
     list
@@ -233,7 +233,7 @@ object Performance {
   private def sortListLocalDate(list: java.util.List[LocalDate]): Unit = {
     val start: Long = System.nanoTime
     Collections.sort(list)
-    val end: Long = System.nanoTime
+    val end: Long   = System.nanoTime
     System.out.println("LocalD:    Sort:   " + NF.format(end - start) + " ns " + list.get(0))
     result("LocalD-S", end - start)
   }
@@ -273,11 +273,12 @@ object Performance {
       val t: LocalTime = LocalTime.of(random.nextInt(24),
                                       random.nextInt(60),
                                       random.nextInt(60),
-                                      random.nextInt(1000000000))
+                                      random.nextInt(1000000000)
+      )
       list.add(t)
       i += 1
     }
-    val end: Long = System.nanoTime
+    val end: Long                       = System.nanoTime
     System.out.println("LocalT:    Setup:  " + NF.format(end - start) + " ns")
     result("LocalT-I", end - start)
     list
@@ -286,7 +287,7 @@ object Performance {
   private def sortListTime(list: java.util.List[LocalTime]): Unit = {
     val start: Long = System.nanoTime
     Collections.sort(list)
-    val end: Long = System.nanoTime
+    val end: Long   = System.nanoTime
     System.out.println("LocalT:    Sort:   " + NF.format(end - start) + " ns " + list.get(0))
     result("LocalT-S", end - start)
   }
@@ -346,12 +347,13 @@ object Performance {
             random.nextInt(24),
             random.nextInt(60),
             random.nextInt(60),
-            0)
+            0
+        )
         .atZone(tz)
       list.add(t)
       i += 1
     }
-    val end: Long = System.nanoTime
+    val end: Long                           = System.nanoTime
     System.out.println("ZonedDT:   Setup:  " + NF.format(end - start) + " ns")
     result("ZonedDT-I", end - start)
     list
@@ -360,7 +362,7 @@ object Performance {
   private def sortListZonedDateTime(list: java.util.List[ZonedDateTime]): Unit = {
     val start: Long = System.nanoTime
     Collections.sort(list)
-    val end: Long = System.nanoTime
+    val end: Long   = System.nanoTime
     System.out.println("ZonedDT:   Sort:   " + NF.format(end - start) + " ns")
     result("ZonedDT-S", end - start)
   }
@@ -404,7 +406,7 @@ object Performance {
       list.add(t)
       i += 1
     }
-    val end: Long = System.nanoTime
+    val end: Long                     = System.nanoTime
     System.out.println("Instant:   Setup:  " + NF.format(end - start) + " ns")
     result("Instant-I", end - start)
     list
@@ -413,7 +415,7 @@ object Performance {
   private def sortListInstant(list: java.util.List[Instant]): Unit = {
     val start: Long = System.nanoTime
     Collections.sort(list)
-    val end: Long = System.nanoTime
+    val end: Long   = System.nanoTime
     System.out.println("Instant:   Sort:   " + NF.format(end - start) + " ns")
     result("Instant-S", end - start)
   }
@@ -452,7 +454,7 @@ object Performance {
       list.add(t)
       i += 1
     }
-    val end: Long = System.nanoTime
+    val end: Long                  = System.nanoTime
     System.out.println("Date:      Setup:  " + NF.format(end - start) + " ns")
     result("JUDate-I", end - start)
     list
@@ -461,7 +463,7 @@ object Performance {
   private def sortListDate(list: java.util.List[Date]): Unit = {
     val start: Long = System.nanoTime
     Collections.sort(list)
-    val end: Long = System.nanoTime
+    val end: Long   = System.nanoTime
     System.out.println("Date:      Sort:   " + NF.format(end - start) + " ns " + list.get(0))
     result("JUDate-S", end - start)
   }
@@ -469,9 +471,8 @@ object Performance {
   private def queryListDate(list: java.util.List[Date]): Unit = {
     var total: Long = 0
     val start: Long = System.nanoTime
-    for (dt <- list.asScala) {
+    for (dt <- list.asScala)
       total += dt.getTime
-    }
     val end: Long = System.nanoTime
     System.out.println("Date:      Query:  " + NF.format(end - start) + " ns" + " " + total)
     result("JUDate-Q", end - start)
@@ -503,11 +504,12 @@ object Performance {
             random.nextInt(28) + 1,
             random.nextInt(24),
             random.nextInt(60),
-            random.nextInt(60))
+            random.nextInt(60)
+      )
       list.add(t)
       i += 1
     }
-    val end: Long = System.nanoTime
+    val end: Long                               = System.nanoTime
     System.out.println("GCalendar: Setup:  " + NF.format(end - start) + " ns")
     result("GregCal-I", end - start)
     list
@@ -516,7 +518,7 @@ object Performance {
   private def sortListGCal(list: java.util.List[GregorianCalendar]): Unit = {
     val start: Long = System.nanoTime
     Collections.sort(list)
-    val end: Long = System.nanoTime
+    val end: Long   = System.nanoTime
     System.out.println("GCalendar: Sort:   " + NF.format(end - start) + " ns")
     result("GregCal-S", end - start)
   }
@@ -560,7 +562,8 @@ object Performance {
     values(loop) = result
     if (loop == 4) {
       values(5) = Math.min(values(0),
-                           Math.min(values(1), Math.min(values(2), Math.min(values(3), values(4)))))
+                           Math.min(values(1), Math.min(values(2), Math.min(values(3), values(4))))
+      )
       values(6) = ((values(0) - values(5)) * 1000) / values(0)
     }
   }

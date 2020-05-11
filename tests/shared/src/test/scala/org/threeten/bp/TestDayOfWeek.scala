@@ -171,7 +171,7 @@ class TestDayOfWeek extends AnyFunSuite with GenDateTimeTest with AssertionsHelp
     data_plus.foreach {
       case (base: Long) :: (amount: Long) :: (expected: Long) :: Nil =>
         assertEquals(DayOfWeek.of(base.toInt).plus(amount), DayOfWeek.of(expected.toInt))
-      case _ =>
+      case _                                                         =>
         fail()
     }
   }
@@ -201,7 +201,7 @@ class TestDayOfWeek extends AnyFunSuite with GenDateTimeTest with AssertionsHelp
     data_minus.foreach {
       case (base: Long) :: (amount: Long) :: (expected: Long) :: Nil =>
         assertEquals(DayOfWeek.of(base.toInt).minus(amount), DayOfWeek.of(expected.toInt))
-      case _ =>
+      case _                                                         =>
         fail()
     }
   }

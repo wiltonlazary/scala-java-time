@@ -70,9 +70,8 @@ trait GenDateTimeTest extends AnyFunSuite with AssertionsHelper {
   }
 
   test("basicTest_isSupported_DateTimeField_null") {
-    for (sample <- samples) {
+    for (sample <- samples)
       assertEquals(sample.isSupported(null), false, "Failed on " + sample)
-    }
   }
 
   test("basicTest_range_DateTimeField_unsupported") {
@@ -86,12 +85,11 @@ trait GenDateTimeTest extends AnyFunSuite with AssertionsHelper {
   }
 
   test("basicTest_range_DateTimeField_null") {
-    for (sample <- samples) {
+    for (sample <- samples)
       assertThrows[Platform.NPE] {
         sample.range(null)
         fail("Failed on " + sample)
       }
-    }
   }
 
   test("basicTest_get_DateTimeField_unsupported") {
@@ -105,12 +103,11 @@ trait GenDateTimeTest extends AnyFunSuite with AssertionsHelper {
   }
 
   test("basicTest_get_DateTimeField_null") {
-    for (sample <- samples) {
+    for (sample <- samples)
       assertThrows[Platform.NPE] {
         sample.get(null)
         fail("Failed on " + sample)
       }
-    }
   }
 
   test("basicTest_getLong_DateTimeField_unsupported") {
@@ -124,19 +121,19 @@ trait GenDateTimeTest extends AnyFunSuite with AssertionsHelper {
   }
 
   test("basicTest_getLong_DateTimeField_null") {
-    for (sample <- samples) {
+    for (sample <- samples)
       assertThrows[Platform.NPE] {
         sample.getLong(null)
         fail("Failed on " + sample)
       }
-    }
   }
 
   test("basicTest_query") {
-    for (sample <- samples) {
+    for (sample <- samples)
       assertEquals(sample.query(new TemporalQuery[String] {
-        override def queryFrom(temporal: TemporalAccessor): String = "foo"
-      }), "foo")
-    }
+                     override def queryFrom(temporal: TemporalAccessor): String = "foo"
+                   }),
+                   "foo"
+      )
   }
 }

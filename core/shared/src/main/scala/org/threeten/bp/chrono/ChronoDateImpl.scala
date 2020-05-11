@@ -124,10 +124,10 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
           case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10))
           case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100))
           case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000))
-          case _ =>
+          case _         =>
             throw new DateTimeException(s"$unit not valid for chronology ${getChronology.getId}")
         }
-      case _ =>
+      case _             =>
         getChronology
           .ensureChronoLocalDate(unit.addTo(this, amountToAdd))
       // .asInstanceOf[ChronoDateImpl[D]]

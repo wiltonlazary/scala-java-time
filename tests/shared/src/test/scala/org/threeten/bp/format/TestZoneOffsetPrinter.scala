@@ -44,7 +44,7 @@ object TestZoneOffsetPrinter {
 }
 
 class TestZoneOffsetPrinter extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
-  val provider_offsets: List[List[AnyRef]] = {
+  val provider_offsets: List[List[AnyRef]] =
     List(
       List("+HH", "NO-OFFSET", ZoneOffset.UTC),
       List("+HH", "+01", ZoneOffset.ofHours(1)),
@@ -104,7 +104,6 @@ class TestZoneOffsetPrinter extends AnyFunSuite with GenTestPrinterParser with A
       List("+HH:MM:SS", "+01:02:00", ZoneOffset.ofHoursMinutesSeconds(1, 2, 0)),
       List("+HH:MM:SS", "-01:02:00", ZoneOffset.ofHoursMinutesSeconds(-1, -2, 0))
     )
-  }
 
   test("test_print") {
     provider_offsets.foreach {
@@ -116,7 +115,7 @@ class TestZoneOffsetPrinter extends AnyFunSuite with GenTestPrinterParser with A
           new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("NO-OFFSET", pattern)
         pp.print(printContext, buf)
         assertEquals(buf.toString, "EXISTING" + expected)
-      case _ =>
+      case _                                                                      =>
         fail()
     }
   }
@@ -127,7 +126,7 @@ class TestZoneOffsetPrinter extends AnyFunSuite with GenTestPrinterParser with A
         val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser =
           new TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser("NO-OFFSET", pattern)
         assertEquals(pp.toString, "Offset(" + pattern + ",'NO-OFFSET')")
-      case _ =>
+      case _                                                          =>
         fail()
     }
   }

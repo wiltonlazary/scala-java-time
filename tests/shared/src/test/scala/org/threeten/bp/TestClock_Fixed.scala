@@ -35,8 +35,8 @@ import org.scalatest.funsuite.AnyFunSuite
 
 /** Test fixed clock. */
 object TestClock_Fixed {
-  val MOSCOW: ZoneId = ZoneId.of("Europe/Moscow")
-  val PARIS: ZoneId  = ZoneId.of("Europe/Paris")
+  val MOSCOW: ZoneId   = ZoneId.of("Europe/Moscow")
+  val PARIS: ZoneId    = ZoneId.of("Europe/Paris")
   val INSTANT: Instant =
     LocalDateTime.of(2008, 6, 30, 11, 30, 10, 500).atZone(ZoneOffset.ofHours(2)).toInstant
 }

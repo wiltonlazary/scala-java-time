@@ -76,7 +76,7 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     var i: Int             = 0
     while (i < 100 && expected != test) {
       expected = MonthDay.now(Clock.systemDefaultZone)
-      test     = MonthDay.now
+      test = MonthDay.now
       i += 1
     }
     assertEquals(test, expected)
@@ -95,7 +95,7 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     var i: Int             = 0
     while (i < 100 && expected != test) {
       expected = MonthDay.now(Clock.system(zone))
-      test     = MonthDay.now(zone)
+      test = MonthDay.now(zone)
       i += 1
     }
     assertEquals(test, expected)
@@ -181,7 +181,7 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     }
   }
 
-  val provider_goodParseData: List[(String, MonthDay)] = {
+  val provider_goodParseData: List[(String, MonthDay)] =
     List(
       ("--01-01", MonthDay.of(1, 1)),
       ("--01-31", MonthDay.of(1, 31)),
@@ -208,7 +208,6 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
       ("--12-01", MonthDay.of(12, 1)),
       ("--12-31", MonthDay.of(12, 31))
     )
-  }
 
   test("factory_parse_success") {
     provider_goodParseData.foreach {
@@ -218,9 +217,8 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     }
   }
 
-  val provider_badParseData: List[(String, Int)] = {
+  val provider_badParseData: List[(String, Int)] =
     List(("", 0), ("-00", 0), ("--FEB-23", 2), ("--01-0", 5), ("--01-3A", 5))
-  }
 
   test("factory_parse_fail") {
     provider_badParseData.foreach {
@@ -302,9 +300,8 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     }
   }
 
-  val provider_sampleDates: List[(Int, Int)] = {
+  val provider_sampleDates: List[(Int, Int)] =
     List((1, 1), (1, 31), (2, 1), (2, 28), (2, 29), (7, 4), (7, 5))
-  }
 
   test("test_get") {
     provider_sampleDates.foreach {
@@ -476,7 +473,8 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
                                 MonthDay.of(2, 1),
                                 MonthDay.of(2, 29),
                                 MonthDay.of(3, 1),
-                                MonthDay.of(12, 31))
+                                MonthDay.of(12, 31)
+    )
   }
 
   private[temporal] def doTest_comparisons_MonthDay(localDates: MonthDay*): Unit = {
@@ -591,18 +589,16 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     while (i <= 12) {
       var j: Int = 1
       while (j <= 31) {
-        if (YearMonth.of(leapYear, i).isValidDay(j)) {
+        if (YearMonth.of(leapYear, i).isValidDay(j))
           assertTrue(uniques.add(MonthDay.of(i, j).hashCode))
-        }
         j += 1
       }
       i += 1
     }
   }
 
-  val provider_sampleToString: List[(Int, Int, String)] = {
+  val provider_sampleToString: List[(Int, Int, String)] =
     List((7, 5, "--07-05"), (12, 31, "--12-31"), (1, 2, "--01-02"))
-  }
 
   test("test_toString") {
     provider_sampleToString.foreach {

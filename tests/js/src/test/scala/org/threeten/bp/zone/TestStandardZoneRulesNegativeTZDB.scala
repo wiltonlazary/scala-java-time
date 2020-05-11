@@ -46,18 +46,19 @@ class TestStandardZoneRulesNegative extends AnyFunSuite with AssertionsHelper {
     var zdt: ZonedDateTime = createZDT(1840, 1, 1, ZoneOffset.UTC)
     while (zdt.getYear < 2010) {
       val instant: Instant = zdt.toInstant
-      if (zdt.getYear < 1881) {
+      if (zdt.getYear < 1881)
         assertEquals(test.getStandardOffset(instant), ZoneOffset.ofHoursMinutes(0, -25))
-      } else if (zdt.getYear >= 1881 && zdt.getYear < 1917) {
+      else if (zdt.getYear >= 1881 && zdt.getYear < 1917)
         assertEquals(test.getStandardOffset(instant), ZoneOffset.ofHoursMinutesSeconds(0, -25, -21))
-      } else if (zdt.getYear >= 1917 && zdt.getYear < 1969) {
+      else if (zdt.getYear >= 1917 && zdt.getYear < 1969)
         assertEquals(test.getStandardOffset(instant),
                      TestStandardZoneRules.OFFSET_ZERO,
-                     zdt.toString())
-      } else {
+                     zdt.toString()
+        )
+      else
         assertEquals(test.getStandardOffset(instant),
-                     TestStandardZoneRules.OFFSET_PONE) // negative DST
-      }
+                     TestStandardZoneRules.OFFSET_PONE
+        ) // negative DST
       zdt = zdt.plusMonths(6)
     }
   }
@@ -66,17 +67,21 @@ class TestStandardZoneRulesNegative extends AnyFunSuite with AssertionsHelper {
     val test = europeDublin
     assertEquals(test.isDaylightSavings(createZDT(1960, 1, 1, ZoneOffset.UTC).toInstant), false)
     assertEquals(test.getDaylightSavings(createZDT(1960, 1, 1, ZoneOffset.UTC).toInstant),
-                 Duration.ofHours(0))
+                 Duration.ofHours(0)
+    )
     assertEquals(test.isDaylightSavings(createZDT(1960, 7, 1, ZoneOffset.UTC).toInstant), true)
     assertEquals(test.getDaylightSavings(createZDT(1960, 7, 1, ZoneOffset.UTC).toInstant),
-                 Duration.ofHours(1))
+                 Duration.ofHours(1)
+    )
     // negative DST causes isDaylightSavings() to reverse
     assertEquals(test.isDaylightSavings(createZDT(2016, 1, 1, ZoneOffset.UTC).toInstant), true)
     assertEquals(test.getDaylightSavings(createZDT(2016, 1, 1, ZoneOffset.UTC).toInstant),
-                 Duration.ofHours(-1))
+                 Duration.ofHours(-1)
+    )
     assertEquals(test.isDaylightSavings(createZDT(2016, 7, 1, ZoneOffset.UTC).toInstant), false)
     assertEquals(test.getDaylightSavings(createZDT(2016, 7, 1, ZoneOffset.UTC).toInstant),
-                 Duration.ofHours(0))
+                 Duration.ofHours(0)
+    )
 
     // TZDB data is messed up, comment out tests until better fix available
     // val formatter1 = new DateTimeFormatterBuilder().appendZoneText(TextStyle.FULL).toFormatter()

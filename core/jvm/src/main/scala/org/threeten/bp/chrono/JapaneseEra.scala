@@ -111,10 +111,9 @@ object JapaneseEra {
     */
   def valueOf(japaneseEra: String): JapaneseEra = {
     Objects.requireNonNull(japaneseEra, "japaneseEra")
-    for (era <- KNOWN_ERAS.get) {
+    for (era <- KNOWN_ERAS.get)
       if (japaneseEra == era.name)
         return era
-    }
     throw new IllegalArgumentException(s"Era not found: $japaneseEra")
   }
 

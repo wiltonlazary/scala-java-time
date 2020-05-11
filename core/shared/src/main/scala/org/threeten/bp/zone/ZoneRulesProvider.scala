@@ -155,7 +155,7 @@ object ZoneRulesProvider {
   private def registerProvider0(provider: ZoneRulesProvider): Unit = {
     val zoneIds = provider.provideZoneIds.iterator
     while (zoneIds.hasNext) {
-      val zoneId = zoneIds.next()
+      val zoneId                 = zoneIds.next()
       Objects.requireNonNull(zoneId, "zoneId")
       val old: ZoneRulesProvider = ZONES.put(zoneId, provider)
       if (old != null)
@@ -188,9 +188,7 @@ object ZoneRulesProvider {
     changed
   }
 
-  {
-    ZoneRulesInitializer.initialize();
-  }
+  ZoneRulesInitializer.initialize();
 }
 
 /** Provider of time-zone rules to the system.

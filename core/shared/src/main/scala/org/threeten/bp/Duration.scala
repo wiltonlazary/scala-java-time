@@ -70,10 +70,11 @@ object Duration {
   private def BI_NANOS_PER_SECOND: BigInteger = BigInteger.valueOf(NANOS_PER_SECOND.toLong)
 
   /** The pattern for parsing. */
-  private def PATTERN: Pattern = Pattern.compile(
-    "([-+]?)P(?:([-+]?[0-9]+)D)?" + "(T(?:([-+]?[0-9]+)H)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)(?:[.,]([0-9]{0,9}))?S)?)?",
-    Pattern.CASE_INSENSITIVE
-  )
+  private def PATTERN: Pattern =
+    Pattern.compile(
+      "([-+]?)P(?:([-+]?[0-9]+)D)?" + "(T(?:([-+]?[0-9]+)H)?(?:([-+]?[0-9]+)M)?(?:([-+]?[0-9]+)(?:[.,]([0-9]{0,9}))?S)?)?",
+      Pattern.CASE_INSENSITIVE
+    )
 
   /** Obtains an instance of {@code Duration} from a number of standard 24 hour days.
     *
@@ -245,15 +246,15 @@ object Duration {
   def between(startInclusive: Temporal, endExclusive: Temporal): Duration = {
     var secs: Long  = startInclusive.until(endExclusive, SECONDS)
     var nanos: Long = 0
-    if (startInclusive.isSupported(NANO_OF_SECOND) && endExclusive.isSupported(NANO_OF_SECOND)) {
+    if (startInclusive.isSupported(NANO_OF_SECOND) && endExclusive.isSupported(NANO_OF_SECOND))
       try {
         val startNos: Long = startInclusive.getLong(NANO_OF_SECOND)
         nanos = endExclusive.getLong(NANO_OF_SECOND) - startNos
-        if (secs > 0 && nanos < 0) {
+        if (secs > 0 && nanos < 0)
           nanos += NANOS_PER_SECOND
-        } else if (secs < 0 && nanos > 0) {
+        else if (secs < 0 && nanos > 0)
           nanos -= NANOS_PER_SECOND
-        } else if (secs == 0 && nanos != 0) {
+        else if (secs == 0 && nanos != 0) {
           val adjustedEnd: Temporal = endExclusive.`with`(NANO_OF_SECOND, startNos)
           secs = startInclusive.until(adjustedEnd, SECONDS)
         }
@@ -261,7 +262,6 @@ object Duration {
         case _: DateTimeException   =>
         case _: ArithmeticException =>
       }
-    }
     ofSeconds(secs, nanos)
   }
 
@@ -311,7 +311,7 @@ object Duration {
   def parse(text: CharSequence): Duration = {
     Objects.requireNonNull(text, "text")
     val matcher: Matcher = PATTERN.matcher(text)
-    if (matcher.matches) {
+    if (matcher.matches)
       if (!("T" == matcher.group(3))) {
         val negate: Boolean       = "-" == matcher.group(1)
         val dayMatch: String      = matcher.group(2)
@@ -332,11 +332,11 @@ object Duration {
               throw new DateTimeParseException("Text cannot be parsed to a Duration: overflow",
                                                text,
                                                0,
-                                               ex)
+                                               ex
+              )
           }
         }
       }
-    }
     throw new DateTimeParseException("Text cannot be parsed to a Duration", text, 0)
   }
 
@@ -359,12 +359,14 @@ object Duration {
         throw new DateTimeParseException(s"Text cannot be parsed to a Duration: $errorText",
                                          text,
                                          0,
-                                         ex)
+                                         ex
+        )
       case ex: ArithmeticException =>
         throw new DateTimeParseException(s"Text cannot be parsed to a Duration: $errorText",
                                          text,
                                          0,
-                                         ex)
+                                         ex
+        )
     }
   }
 
@@ -380,12 +382,14 @@ object Duration {
         throw new DateTimeParseException("Text cannot be parsed to a Duration: fraction",
                                          text,
                                          0,
-                                         ex)
-      case ex: ArithmeticException =>
+                                         ex
+        )
+      case ex: ArithmeticException   =>
         throw new DateTimeParseException("Text cannot be parsed to a Duration: fraction",
                                          text,
                                          0,
-                                         ex)
+                                         ex
+        )
     }
   }
 
@@ -588,15 +592,15 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     unit match {
       case u: ChronoUnit =>
         u match {
-          case NANOS => plusNanos(amountToAdd)
-          case MICROS =>
+          case NANOS   => plusNanos(amountToAdd)
+          case MICROS  =>
             plusSeconds((amountToAdd / (1000000L * 1000)) * 1000)
               .plusNanos((amountToAdd % (1000000L * 1000)) * 1000)
           case MILLIS  => plusMillis(amountToAdd)
           case SECONDS => plusSeconds(amountToAdd)
           case _       => plusSeconds(Math.multiplyExact(unit.getDuration.seconds, amountToAdd))
         }
-      case _ =>
+      case _             =>
         val duration: Duration = unit.getDuration.multipliedBy(amountToAdd)
         plusSeconds(duration.getSeconds).plusNanos(duration.getNano.toLong)
     }
@@ -664,7 +668,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     * @return a { @code Duration} based on this duration with the specified nanoseconds added, not null
     * @throws ArithmeticException if numeric overflow occurs
     */
-  def plusNanos(nanosToAdd: Long): Duration = plus(0, nanosToAdd)
+  def plusNanos(nanosToAdd:   Long): Duration = plus(0, nanosToAdd)
 
   /** Returns a copy of this duration with the specified duration added.
     *
@@ -676,11 +680,11 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     * @throws ArithmeticException if numeric overflow occurs
     */
   private def plus(secondsToAdd: Long, nanosToAdd: Long): Duration = {
-    var _nanosToAdd = nanosToAdd
+    var _nanosToAdd    = nanosToAdd
     if ((secondsToAdd | _nanosToAdd) == 0)
       return this
     var epochSec: Long = Math.addExact(seconds, secondsToAdd)
-    epochSec    = Math.addExact(epochSec, _nanosToAdd / Duration.NANOS_PER_SECOND)
+    epochSec = Math.addExact(epochSec, _nanosToAdd / Duration.NANOS_PER_SECOND)
     _nanosToAdd = _nanosToAdd % Duration.NANOS_PER_SECOND
     val nanoAdjustment: Long = nanos + _nanosToAdd
     Duration.ofSeconds(epochSec, nanoAdjustment)
@@ -1005,7 +1009,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
     other match {
       case otherDuration: Duration =>
         (this eq otherDuration) || (this.seconds == otherDuration.seconds && this.nanos == otherDuration.nanos)
-      case _ => false
+      case _                       => false
     }
 
   /** A hash code for this duration.
@@ -1049,12 +1053,11 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
       buf.append(minutes).append('M')
     if (secs == 0 && nanos == 0 && buf.length > 2)
       return buf.toString
-    if (secs < 0 && nanos > 0) {
+    if (secs < 0 && nanos > 0)
       if (secs == -1) buf.append("-0")
       else buf.append(secs + 1)
-    } else {
+    else
       buf.append(secs)
-    }
     if (nanos > 0) {
       val pos: Int = buf.length
       if (secs < 0) buf.append(2 * Duration.NANOS_PER_SECOND - nanos)

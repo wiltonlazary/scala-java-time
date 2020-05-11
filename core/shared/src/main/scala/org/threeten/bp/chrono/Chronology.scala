@@ -191,7 +191,7 @@ object Chronology {
       val chronologies: java.util.Iterator[Chronology] =
         ChronologyPlatformHelper.loadAdditionalChronologies
       while (chronologies.hasNext) {
-        val chrono = chronologies.next()
+        val chrono         = chronologies.next()
         CHRONOS_BY_ID.put(chrono.getId, chrono)
         val `type`: String = chrono.getCalendarType
         if (`type` != null)
@@ -514,8 +514,8 @@ trait Chronology extends Ordered[Chronology] {
         zonedDateTime(instant, zone)
       } catch {
         case _: DateTimeException =>
-          val cldt
-            : ChronoLocalDateTime[_] = localDateTime(temporal) /// !!! was _ <: ChronoLocalDate
+          val cldt: ChronoLocalDateTime[_] =
+            localDateTime(temporal) /// !!! was _ <: ChronoLocalDate
           val cldtImpl: ChronoLocalDateTimeImpl[_ <: ChronoLocalDate] = ensureChronoLocalDateTime(
             cldt
           )

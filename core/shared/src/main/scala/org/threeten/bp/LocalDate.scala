@@ -186,7 +186,7 @@ object LocalDate {
     val monthEnd: Int = moy.firstDayOfYear(leap) + moy.length(leap) - 1
     if (dayOfYear > monthEnd)
       moy = moy.plus(1)
-    val dom: Int = dayOfYear - moy.firstDayOfYear(leap) + 1
+    val dom: Int      = dayOfYear - moy.firstDayOfYear(leap) + 1
     create(year, moy, dom)
   }
 
@@ -201,16 +201,16 @@ object LocalDate {
     */
   def ofEpochDay(epochDay: Long): LocalDate = {
     EPOCH_DAY.checkValidValue(epochDay)
-    var zeroDay: Long = epochDay + DAYS_0000_TO_1970
+    var zeroDay: Long    = epochDay + DAYS_0000_TO_1970
     zeroDay -= 60
-    var adjust: Long = 0
+    var adjust: Long     = 0
     if (zeroDay < 0) {
       val adjustCycles: Long = (zeroDay + 1) / DAYS_PER_CYCLE - 1
       adjust = adjustCycles * 400
       zeroDay += -adjustCycles * DAYS_PER_CYCLE
     }
-    var yearEst: Long = (400 * zeroDay + 591) / DAYS_PER_CYCLE
-    var doyEst: Long  = zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400)
+    var yearEst: Long    = (400 * zeroDay + 591) / DAYS_PER_CYCLE
+    var doyEst: Long     = zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400)
     if (doyEst < 0) {
       yearEst -= 1
       doyEst = zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400)
@@ -221,7 +221,7 @@ object LocalDate {
     val month: Int       = (marchMonth0 + 2) % 12 + 1
     val dom: Int         = marchDoy0 - (marchMonth0 * 306 + 5) / 10 + 1
     yearEst += marchMonth0 / 10
-    val year: Int = YEAR.checkValidIntValue(yearEst)
+    val year: Int        = YEAR.checkValidIntValue(yearEst)
     new LocalDate(year, month, dom)
   }
 
@@ -271,9 +271,12 @@ object LocalDate {
     */
   def parse(text: CharSequence, formatter: DateTimeFormatter): LocalDate = {
     Objects.requireNonNull(formatter, "formatter")
-    formatter.parse(text, new TemporalQuery[LocalDate] {
-      override def queryFrom(temporal: TemporalAccessor): LocalDate = LocalDate.from(temporal)
-    })
+    formatter.parse(text,
+                    new TemporalQuery[LocalDate] {
+                      override def queryFrom(temporal: TemporalAccessor): LocalDate =
+                        LocalDate.from(temporal)
+                    }
+    )
   }
 
   /** Creates a local date from the year, month and day fields.
@@ -285,9 +288,11 @@ object LocalDate {
     * @throws DateTimeException if the day-of-month is invalid for the month-year
     */
   private def create(year: Int, month: Month, dayOfMonth: Int): LocalDate =
-    if (dayOfMonth > 28 && dayOfMonth > month.length(
-          IsoChronology.INSTANCE.isLeapYear(year.toLong)
-        ))
+    if (
+      dayOfMonth > 28 && dayOfMonth > month.length(
+        IsoChronology.INSTANCE.isLeapYear(year.toLong)
+      )
+    )
       if (dayOfMonth == 29)
         throw new DateTimeException(s"Invalid date 'February 29' as '$year' is not a leap year")
       else throw new DateTimeException(s"Invalid date '${month.name} $dayOfMonth'")
@@ -414,23 +419,21 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
   override def range(field: TemporalField): ValueRange =
     if (field.isInstanceOf[ChronoField]) {
       val f: ChronoField = field.asInstanceOf[ChronoField]
-      if (f.isDateBased) {
+      if (f.isDateBased)
         f match {
-          case DAY_OF_MONTH => ValueRange.of(1, lengthOfMonth.toLong)
-          case DAY_OF_YEAR  => ValueRange.of(1, lengthOfYear.toLong)
+          case DAY_OF_MONTH          => ValueRange.of(1, lengthOfMonth.toLong)
+          case DAY_OF_YEAR           => ValueRange.of(1, lengthOfYear.toLong)
           case ALIGNED_WEEK_OF_MONTH =>
             ValueRange.of(1, if ((getMonth eq Month.FEBRUARY) && !isLeapYear) 4 else 5)
-          case YEAR_OF_ERA =>
+          case YEAR_OF_ERA           =>
             if (getYear <= 0) ValueRange.of(1, Year.MAX_VALUE + 1L)
             else ValueRange.of(1, Year.MAX_VALUE.toLong)
-          case _ => field.range
+          case _                     => field.range
         }
-      } else {
+      else
         throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-      }
-    } else {
+    } else
       field.rangeRefinedBy(this)
-    }
 
   /** Gets the value of the specified field from this date as an {@code int}.
     *
@@ -487,14 +490,13 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
       if (field eq PROLEPTIC_MONTH)
         return getProlepticMonth
       get0(field)
-    } else {
+    } else
       field.getFrom(this)
-    }
 
   private def get0(field: TemporalField): Long =
     field.asInstanceOf[ChronoField] match {
       case DAY_OF_WEEK                  => getDayOfWeek.getValue.toLong
-      case ALIGNED_DAY_OF_WEEK_IN_MONTH => ((day - 1L) % 7) + 1
+      case ALIGNED_DAY_OF_WEEK_IN_MONTH => ((day - 1L)          % 7) + 1
       case ALIGNED_DAY_OF_WEEK_IN_YEAR  => ((getDayOfYear - 1L) % 7) + 1
       case DAY_OF_MONTH                 => day.toLong
       case DAY_OF_YEAR                  => getDayOfYear.toLong
@@ -794,26 +796,25 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
       val f: ChronoField = field.asInstanceOf[ChronoField]
       f.checkValidValue(newValue)
       f match {
-        case DAY_OF_WEEK => plusDays(newValue - getDayOfWeek.getValue)
+        case DAY_OF_WEEK                  => plusDays(newValue - getDayOfWeek.getValue)
         case ALIGNED_DAY_OF_WEEK_IN_MONTH =>
           plusDays(newValue - getLong(ALIGNED_DAY_OF_WEEK_IN_MONTH))
-        case ALIGNED_DAY_OF_WEEK_IN_YEAR =>
+        case ALIGNED_DAY_OF_WEEK_IN_YEAR  =>
           plusDays(newValue - getLong(ALIGNED_DAY_OF_WEEK_IN_YEAR))
-        case DAY_OF_MONTH          => withDayOfMonth(newValue.toInt)
-        case DAY_OF_YEAR           => withDayOfYear(newValue.toInt)
-        case EPOCH_DAY             => LocalDate.ofEpochDay(newValue)
-        case ALIGNED_WEEK_OF_MONTH => plusWeeks(newValue - getLong(ALIGNED_WEEK_OF_MONTH))
-        case ALIGNED_WEEK_OF_YEAR  => plusWeeks(newValue - getLong(ALIGNED_WEEK_OF_YEAR))
-        case MONTH_OF_YEAR         => withMonth(newValue.toInt)
-        case PROLEPTIC_MONTH       => plusMonths(newValue - getLong(PROLEPTIC_MONTH))
-        case YEAR_OF_ERA           => withYear((if (year >= 1) newValue else 1 - newValue).toInt)
-        case YEAR                  => withYear(newValue.toInt)
-        case ERA                   => if (getLong(ERA) == newValue) this else withYear(1 - year)
-        case _                     => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
+        case DAY_OF_MONTH                 => withDayOfMonth(newValue.toInt)
+        case DAY_OF_YEAR                  => withDayOfYear(newValue.toInt)
+        case EPOCH_DAY                    => LocalDate.ofEpochDay(newValue)
+        case ALIGNED_WEEK_OF_MONTH        => plusWeeks(newValue - getLong(ALIGNED_WEEK_OF_MONTH))
+        case ALIGNED_WEEK_OF_YEAR         => plusWeeks(newValue - getLong(ALIGNED_WEEK_OF_YEAR))
+        case MONTH_OF_YEAR                => withMonth(newValue.toInt)
+        case PROLEPTIC_MONTH              => plusMonths(newValue - getLong(PROLEPTIC_MONTH))
+        case YEAR_OF_ERA                  => withYear((if (year >= 1) newValue else 1 - newValue).toInt)
+        case YEAR                         => withYear(newValue.toInt)
+        case ERA                          => if (getLong(ERA) == newValue) this else withYear(1 - year)
+        case _                            => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
       }
-    } else {
+    } else
       field.adjustInto(this, newValue)
-    }
 
   /** Returns a copy of this date with the year altered.
     * If the day-of-month is invalid for the year, it will be changed to the last valid day of the month.
@@ -923,9 +924,8 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
         case ERAS      => `with`(ERA, Math.addExact(getLong(ERA), amountToAdd))
         case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
       }
-    } else {
+    } else
       unit.addTo(this, amountToAdd)
-    }
 
   /** Returns a copy of this {@code LocalDate} with the specified period in years added.
     *
@@ -1244,9 +1244,8 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
         case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
       }
 
-    } else {
+    } else
       unit.between(this, end)
-    }
   }
 
   private[bp] def daysUntil(end: LocalDate): Long = end.toEpochDay - toEpochDay
@@ -1302,8 +1301,8 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
       totalMonths += 1
       days -= end.lengthOfMonth
     }
-    val years: Long = totalMonths / 12
-    val months: Int = (totalMonths % 12).toInt
+    val years: Long       = totalMonths / 12
+    val months: Int       = (totalMonths % 12).toInt
     Period.of(Math.toIntExact(years), months, days)
   }
 
@@ -1416,9 +1415,8 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
     if (!zone.isInstanceOf[ZoneOffset]) {
       val rules: ZoneRules            = zone.getRules
       val trans: ZoneOffsetTransition = rules.getTransition(ldt)
-      if (trans != null && trans.isGap) {
+      if (trans != null && trans.isGap)
         ldt = trans.getDateTimeAfter
-      }
     }
     ZonedDateTime.of(ldt, zone)
   }
@@ -1566,7 +1564,7 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
     val yearValue: Int  = year
     val monthValue: Int = month.toInt
     val dayValue: Int   = day.toInt
-    (yearValue & 0xFFFFF800) ^ ((yearValue << 11) + (monthValue << 6) + dayValue)
+    (yearValue & 0xfffff800) ^ ((yearValue << 11) + (monthValue << 6) + dayValue)
   }
 
   /** Outputs this date as a {@code String}, such as {@code 2007-12-03}.
@@ -1581,12 +1579,12 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
     val dayValue: Int      = day.toInt
     val absYear: Int       = Math.abs(yearValue)
     val buf: StringBuilder = new StringBuilder(10)
-    if (absYear < 1000) {
+    if (absYear < 1000)
       if (yearValue < 0)
         buf.append(yearValue - 10000).deleteCharAt(1)
       else
         buf.append(yearValue + 10000).deleteCharAt(0)
-    } else {
+    else {
       if (yearValue > 9999)
         buf.append('+')
       buf.append(yearValue)

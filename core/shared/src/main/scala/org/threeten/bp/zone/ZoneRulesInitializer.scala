@@ -71,16 +71,15 @@ object ZoneRulesInitializer {
     */
   lazy val DO_NOTHING: ZoneRulesInitializer = new DoNothingZoneRulesInitializer()
 
-  private lazy val INITIALIZED: AtomicBoolean = new AtomicBoolean(false)
+  private lazy val INITIALIZED: AtomicBoolean                         = new AtomicBoolean(false)
   private lazy val INITIALIZER: AtomicReference[ZoneRulesInitializer] =
     new AtomicReference[ZoneRulesInitializer]()
 
   //-----------------------------------------------------------------------
   // initialize the providers
   def initialize(): Unit = {
-    if (INITIALIZED.getAndSet(true)) {
+    if (INITIALIZED.getAndSet(true))
       throw new IllegalStateException("Already initialized")
-    }
     // Set the default initializer if none has been provided yet.
     INITIALIZER.compareAndSet(null, new ServiceLoaderZoneRulesInitializer())
     INITIALIZER.get().initializeProviders()
@@ -96,14 +95,12 @@ object ZoneRulesInitializer {
     * @throws IllegalStateException if initialization has already occurred or another initializer has been set
     */
   def setInitializer(initializer: ZoneRulesInitializer): Unit = {
-    if (INITIALIZED.get()) {
+    if (INITIALIZED.get())
       throw new IllegalStateException("Already initialized")
-    }
-    if (!INITIALIZER.compareAndSet(null, initializer)) {
+    if (!INITIALIZER.compareAndSet(null, initializer))
       throw new IllegalStateException(
         "Initializer was already set, possibly with a default during initialization"
       )
-    }
   }
 
   //-----------------------------------------------------------------------

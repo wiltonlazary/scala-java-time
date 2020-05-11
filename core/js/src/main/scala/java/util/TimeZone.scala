@@ -56,7 +56,7 @@ object TimeZone {
   def setDefault(timeZone: TimeZone): Unit = default = timeZone
 
   def getTimeZone(timeZone: String): TimeZone = getTimeZone(ZoneId.of(timeZone))
-  def getTimeZone(zoneId:   ZoneId): TimeZone = {
+  def getTimeZone(zoneId: ZoneId): TimeZone = {
     val rules          = zoneId.getRules
     val offsetInMillis = rules.getStandardOffset(Instant.now).getTotalSeconds * 1000
     new SimpleTimeZone(offsetInMillis, zoneId.getId)
@@ -98,7 +98,7 @@ abstract class TimeZone extends Serializable with Cloneable {
       atIndex(strs, 0).exists(_ == id)
 
     val zoneStrings = DateFormatSymbols.getInstance(locale).getZoneStrings
-    val zoneName = zoneStrings.find(currentIdStrings).flatMap { strs =>
+    val zoneName    = zoneStrings.find(currentIdStrings).flatMap { strs =>
       (daylight, style) match {
         case (false, TimeZone.LONG)  => atIndex(strs, 1)
         case (false, TimeZone.SHORT) => atIndex(strs, 2)

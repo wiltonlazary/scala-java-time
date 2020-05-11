@@ -52,9 +52,9 @@ class TestDateTimeFormatterBuilder
     with AssertionsHelper
     with BeforeAndAfterEach {
   // We need these ugly converters to fit the signatures in everycase
-  implicit def convLongMap(al: Map[Long, String]): java.util.Map[java.lang.Long, String] =
+  implicit def convLongMap(al:  Map[Long, String]): java.util.Map[java.lang.Long, String] =
     al.map(k => (Long.box(k._1), k._2)).asJava
-  implicit def convSLongMap(al: Map[Long, String]): java.util.Map[Long, String] =
+  implicit def convSLongMap(al: Map[Long, String]): java.util.Map[Long, String]           =
     al.map(k => (k._1, k._2)).asJava
 
   private var builder: DateTimeFormatterBuilder = null
@@ -178,7 +178,7 @@ class TestDateTimeFormatterBuilder
 
   test("test_appendValue_subsequent2_parse3") {
     builder.appendValue(MONTH_OF_YEAR, 1, 2, SignStyle.NORMAL).appendValue(DAY_OF_MONTH, 2)
-    val f: DateTimeFormatter = builder.toFormatter
+    val f: DateTimeFormatter  = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear,1,2,NORMAL)Value(DayOfMonth,2)")
     val cal: TemporalAccessor = f.parseUnresolved("123", new ParsePosition(0))
     assertEquals(cal.get(MONTH_OF_YEAR), 1)
@@ -187,7 +187,7 @@ class TestDateTimeFormatterBuilder
 
   test("test_appendValue_subsequent2_parse4") {
     builder.appendValue(MONTH_OF_YEAR, 1, 2, SignStyle.NORMAL).appendValue(DAY_OF_MONTH, 2)
-    val f: DateTimeFormatter = builder.toFormatter
+    val f: DateTimeFormatter  = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear,1,2,NORMAL)Value(DayOfMonth,2)")
     val cal: TemporalAccessor = f.parseUnresolved("0123", new ParsePosition(0))
     assertEquals(cal.get(MONTH_OF_YEAR), 1)
@@ -199,7 +199,7 @@ class TestDateTimeFormatterBuilder
       .appendValue(MONTH_OF_YEAR, 1, 2, SignStyle.NORMAL)
       .appendValue(DAY_OF_MONTH, 2)
       .appendLiteral('4')
-    val f: DateTimeFormatter = builder.toFormatter
+    val f: DateTimeFormatter  = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear,1,2,NORMAL)Value(DayOfMonth,2)'4'")
     val cal: TemporalAccessor = f.parseUnresolved("01234", new ParsePosition(0))
     assertEquals(cal.get(MONTH_OF_YEAR), 1)
@@ -211,7 +211,7 @@ class TestDateTimeFormatterBuilder
       .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
       .appendValue(MONTH_OF_YEAR, 2)
       .appendValue(DAY_OF_MONTH, 2)
-    val f: DateTimeFormatter = builder.toFormatter
+    val f: DateTimeFormatter  = builder.toFormatter
     assertEquals(f.toString, "Value(Year,4,10,EXCEEDS_PAD)Value(MonthOfYear,2)Value(DayOfMonth,2)")
     val cal: TemporalAccessor = f.parseUnresolved("20090630", new ParsePosition(0))
     assertEquals(cal.get(YEAR), 2009)
@@ -227,7 +227,7 @@ class TestDateTimeFormatterBuilder
 
   test("test_appendValueReduced") {
     builder.appendValueReduced(YEAR, 2, 2, 2000)
-    val f: DateTimeFormatter = builder.toFormatter
+    val f: DateTimeFormatter  = builder.toFormatter
     assertEquals(f.toString, "ReducedValue(Year,2,2,2000)")
     val cal: TemporalAccessor = f.parseUnresolved("12", new ParsePosition(0))
     assertEquals(cal.get(YEAR), 2012)
@@ -235,7 +235,7 @@ class TestDateTimeFormatterBuilder
 
   test("test_appendValueReduced_subsequent_parse") {
     builder.appendValue(MONTH_OF_YEAR, 1, 2, SignStyle.NORMAL).appendValueReduced(YEAR, 2, 2, 2000)
-    val f: DateTimeFormatter = builder.toFormatter
+    val f: DateTimeFormatter  = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear,1,2,NORMAL)ReducedValue(Year,2,2,2000)")
     val cal: TemporalAccessor = f.parseUnresolved("123", new ParsePosition(0))
     assertEquals(cal.get(MONTH_OF_YEAR), 1)
@@ -315,18 +315,19 @@ class TestDateTimeFormatterBuilder
   }
 
   test("test_appendTextMap") {
-    val map = Map(1L -> "JNY",
-                  2L -> "FBY",
-                  3L -> "MCH",
-                  4L -> "APL",
-                  5L -> "MAY",
-                  6L -> "JUN",
-                  7L -> "JLY",
-                  8L -> "AGT",
-                  9L -> "SPT",
+    val map                  = Map(1L -> "JNY",
+                  2L  -> "FBY",
+                  3L  -> "MCH",
+                  4L  -> "APL",
+                  5L  -> "MAY",
+                  6L  -> "JUN",
+                  7L  -> "JLY",
+                  8L  -> "AGT",
+                  9L  -> "SPT",
                   10L -> "OBR",
                   11L -> "NVR",
-                  12L -> "DBR")
+                  12L -> "DBR"
+    )
     builder.appendText(MONTH_OF_YEAR, map)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Text(MonthOfYear)")
@@ -350,9 +351,8 @@ class TestDateTimeFormatterBuilder
     assertEquals(f.toString, "Offset(+HH:MM:ss,'Z')")
   }
 
-  val data_offsetPatterns: List[String] = {
+  val data_offsetPatterns: List[String] =
     List("+HH", "+HHMM", "+HH:MM", "+HHMMss", "+HH:MM:ss", "+HHMMSS", "+HH:MM:SS")
-  }
 
   test("test_appendOffset") {
     data_offsetPatterns.foreach { pattern =>
@@ -374,7 +374,8 @@ class TestDateTimeFormatterBuilder
          "+H",
          "+HMM",
          "+HHM",
-         "+A")
+         "+A"
+    )
 
   test("test_appendOffset_badPattern") {
     data_badOffsetPatterns.foreach { pattern =>
@@ -504,7 +505,8 @@ class TestDateTimeFormatterBuilder
       .optionalEnd
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString,
-                 "Value(MonthOfYear)[Value(DayOfMonth)[Value(DayOfWeek)]Value(DayOfMonth)]")
+                 "Value(MonthOfYear)[Value(DayOfMonth)[Value(DayOfWeek)]Value(DayOfMonth)]"
+    )
   }
 
   test("test_optionalEnd_doubleStartSingleEnd") {
@@ -631,13 +633,17 @@ class TestDateTimeFormatterBuilder
       ("ppH", "Pad(Value(HourOfDay),2)"),
       ("pppDD", "Pad(Value(DayOfYear,2),3)"),
       ("uuuu[-MM[-dd",
-       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)['-'Value(DayOfMonth,2)]]"),
+       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)['-'Value(DayOfMonth,2)]]"
+      ),
       ("uuuu[-MM[-dd]]",
-       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)['-'Value(DayOfMonth,2)]]"),
+       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)['-'Value(DayOfMonth,2)]]"
+      ),
       ("uuuu[-MM[]-dd]",
-       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2)]"),
+       "Value(Year,4,19,EXCEEDS_PAD)['-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2)]"
+      ),
       ("uuuu-MM-dd'T'HH:mm:ss.SSS",
-       "Value(Year,4,19,EXCEEDS_PAD)'-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2)" + "'T'Value(HourOfDay,2)':'Value(MinuteOfHour,2)':'Value(SecondOfMinute,2)'.'Fraction(NanoOfSecond,3,3)")
+       "Value(Year,4,19,EXCEEDS_PAD)'-'Value(MonthOfYear,2)'-'Value(DayOfMonth,2)" + "'T'Value(HourOfDay,2)':'Value(MinuteOfHour,2)':'Value(SecondOfMinute,2)'.'Fraction(NanoOfSecond,3,3)"
+      )
     )
 
   test("test_appendPattern_valid") {
@@ -647,7 +653,7 @@ class TestDateTimeFormatterBuilder
         builder.appendPattern(input)
         val f: DateTimeFormatter = builder.toFormatter
         assertEquals(f.toString, expected)
-      case _ =>
+      case _                 =>
         fail()
     }
   }

@@ -5,8 +5,8 @@ import org.threeten.bp.ZoneId
 
 class TestTimeZone extends AnyFunSuite {
 
-  val sampleTimeZones = Seq("UTC", "GMT", "Europe/Madrid", "Australia/Sydney")
-  val sampleOffsets   = Seq(0, 0, 3600000, 36000000)
+  val sampleTimeZones    = Seq("UTC", "GMT", "Europe/Madrid", "Australia/Sydney")
+  val sampleOffsets      = Seq(0, 0, 3600000, 36000000)
   val sampleDisplayNames = Seq(
     "Coordinated Universal Time",
     "Greenwich Mean Time",
@@ -33,9 +33,8 @@ class TestTimeZone extends AnyFunSuite {
 
   test("availableIDs") {
     val availableIds = TimeZone.getAvailableIDs
-    for (tzId <- sampleTimeZones) {
+    for (tzId <- sampleTimeZones)
       assert(availableIds.contains(tzId))
-    }
   }
 
   test("availableIDs by offset") {

@@ -71,7 +71,7 @@ class TestPadParserDecorator extends AnyFunSuite with GenTestPrinterParser with 
         3,
         '-'
       )
-    val result: Int = pp.parse(parseContext, "--2", 0)
+    val result: Int                                                = pp.parse(parseContext, "--2", 0)
     assertEquals(result, 3)
     assertParsed(MONTH_OF_YEAR, 2L)
   }
@@ -83,7 +83,7 @@ class TestPadParserDecorator extends AnyFunSuite with GenTestPrinterParser with 
         3,
         '-'
       )
-    val result: Int = pp.parse(parseContext, "--22", 0)
+    val result: Int                                                = pp.parse(parseContext, "--22", 0)
     assertEquals(result, 3)
     assertParsed(MONTH_OF_YEAR, 2L)
   }
@@ -95,7 +95,7 @@ class TestPadParserDecorator extends AnyFunSuite with GenTestPrinterParser with 
         3,
         '-'
       )
-    val result: Int = pp.parse(parseContext, "-1", 0)
+    val result: Int                                                = pp.parse(parseContext, "-1", 0)
     assertEquals(result, ~0)
   }
 
@@ -106,7 +106,7 @@ class TestPadParserDecorator extends AnyFunSuite with GenTestPrinterParser with 
         3,
         '-'
       )
-    val result: Int = pp.parse(parseContext, "--A", 0)
+    val result: Int                                                = pp.parse(parseContext, "--A", 0)
     assertEquals(result, ~2)
   }
 
@@ -117,14 +117,13 @@ class TestPadParserDecorator extends AnyFunSuite with GenTestPrinterParser with 
         3,
         '-'
       )
-    val result: Int = pp.parse(parseContext, "-1X", 0)
+    val result: Int                                                = pp.parse(parseContext, "-1X", 0)
     assertEquals(result, ~1)
   }
 
   private def assertParsed(field: TemporalField, value: java.lang.Long): Unit =
-    if (value == null) {
+    if (value == null)
       assertEquals(parseContext.getParsed(field), null)
-    } else {
+    else
       assertEquals(parseContext.getParsed(field), value)
-    }
 }

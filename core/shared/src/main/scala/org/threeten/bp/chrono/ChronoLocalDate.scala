@@ -354,7 +354,7 @@ trait ChronoLocalDate extends Temporal with TemporalAdjuster with Ordered[Chrono
       case TemporalQueries.localTime | TemporalQueries.zone | TemporalQueries.zoneId |
           TemporalQueries.offset =>
         null.asInstanceOf[R]
-      case _ => super.query(query)
+      case _                          => super.query(query)
     }
 
   def adjustInto(temporal: Temporal): Temporal = temporal.`with`(EPOCH_DAY, toEpochDay)

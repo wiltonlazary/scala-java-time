@@ -412,9 +412,9 @@ object TemporalAdjusters {
 
     def adjustInto(temporal: Temporal): Temporal = {
       val calDow: Int = temporal.get(DAY_OF_WEEK)
-      if (relative < 2 && calDow == dowValue) {
+      if (relative < 2 && calDow == dowValue)
         temporal
-      } else if ((relative & 1) == 0) {
+      else if ((relative & 1) == 0) {
         val daysDiff: Int = calDow - dowValue
         temporal.plus(if (daysDiff >= 0) 7L - daysDiff.toLong else -daysDiff.toLong, DAYS)
       } else {

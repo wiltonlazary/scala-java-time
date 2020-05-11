@@ -95,7 +95,7 @@ final class MockSimplePeriod private (private val amount: Long, private val unit
     obj match {
       case other: MockSimplePeriod =>
         (this eq other) || (this.amount == other.amount && (this.unit == other.unit))
-      case _ => false
+      case _                       => false
     }
 
   override def hashCode: Int = unit.hashCode ^ (amount ^ (amount >>> 32)).toInt

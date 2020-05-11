@@ -167,13 +167,13 @@ abstract class ChronoLocalDateTime[D <: ChronoLocalDate]
 
   override def query[R](query: TemporalQuery[R]): R =
     query match {
-      case TemporalQueries.chronology => getChronology.asInstanceOf[R]
-      case TemporalQueries.precision  => NANOS.asInstanceOf[R]
-      case TemporalQueries.localDate  => LocalDate.ofEpochDay(toLocalDate.toEpochDay).asInstanceOf[R]
-      case TemporalQueries.localTime  => toLocalTime.asInstanceOf[R]
+      case TemporalQueries.chronology                                             => getChronology.asInstanceOf[R]
+      case TemporalQueries.precision                                              => NANOS.asInstanceOf[R]
+      case TemporalQueries.localDate                                              => LocalDate.ofEpochDay(toLocalDate.toEpochDay).asInstanceOf[R]
+      case TemporalQueries.localTime                                              => toLocalTime.asInstanceOf[R]
       case TemporalQueries.zone | TemporalQueries.zoneId | TemporalQueries.offset =>
         null.asInstanceOf[R]
-      case _ => super.query(query)
+      case _                                                                      => super.query(query)
     }
 
   def adjustInto(temporal: Temporal): Temporal =

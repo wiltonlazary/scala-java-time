@@ -1,6 +1,6 @@
 resolvers += Resolver.sonatypeRepo("public")
 
-addSbtPlugin("com.47deg" % "sbt-microsites" % "1.2.0")
+addSbtPlugin("com.47deg" % "sbt-microsites" % "1.2.1")
 
 val scalaJSVersion =
   Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.0.1")

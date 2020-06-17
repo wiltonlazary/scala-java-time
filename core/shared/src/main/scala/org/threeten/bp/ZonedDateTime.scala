@@ -441,7 +441,7 @@ object ZonedDateTime {
   * Obtaining the offset for an instant is simple, as there is exactly one valid
   * offset for each instant. By contrast, obtaining the offset for a local date-time
   * is not straightforward. There are three cases:
-  *<ul>
+  * <ul>
   * <li>Normal, with one valid offset. For the vast majority of the year, the normal
   * case applies, where there is a single valid offset for the local date-time.</li>
   * <li>Gap, with zero valid offsets. This is when clocks jump forward typically
@@ -1355,7 +1355,7 @@ final class ZonedDateTime(
     *
     * For example, consider a time-zone where the spring DST cutover means that the
     * local times 01:00 to 01:59 occur twice changing from offset +02:00 to +01:00.
-    *<ul>
+    * <ul>
     * <li>Adding one hour to 00:30+02:00 will result in 01:30+02:00
     * <li>Adding one hour to 01:30+02:00 will result in 01:30+01:00
     * <li>Adding one hour to 01:30+01:00 will result in 02:30+01:00
@@ -1559,7 +1559,7 @@ final class ZonedDateTime(
     *
     * For example, consider a time-zone where the spring DST cutover means that the
     * local times 01:00 to 01:59 occur twice changing from offset +02:00 to +01:00.
-    *<ul>
+    * <ul>
     * <li>Subtracting one hour from 02:30+01:00 will result in 01:30+02:00
     * <li>Subtracting one hour from 01:30+01:00 will result in 01:30+02:00
     * <li>Subtracting one hour from 01:30+02:00 will result in 00:30+01:00

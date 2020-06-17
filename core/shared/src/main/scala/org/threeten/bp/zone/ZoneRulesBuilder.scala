@@ -50,7 +50,7 @@ import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
   * The rules of a time-zone describe how the offset changes over time.
   * The rules are created by building windows on the time-line within which
   * the different rules apply. The rules may be one of two kinds:
-  *<ul>
+  * <ul>
   * <li>Fixed savings - A single fixed amount of savings from the standard offset will apply.</li>
   * <li>Rules - A set of one or more rules describe how daylight savings changes during the window.</li>
   * </ul><p>

@@ -57,7 +57,7 @@ import org.threeten.bp.temporal.TemporalUnit
   * and to send dates and times across a network. The {@code ChronoLocalDate} instance is then used
   * at the user interface level to deal with localized input/output.
   *
-  *Example: </p>
+  * Example: </p>
   * <pre>
   * System.out.printf("Example()%n");
   * // Enumerate the list of available calendars and print today for each

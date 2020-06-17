@@ -77,7 +77,7 @@ object IsoChronology {
   * <i>de facto</i> world calendar.
   *
   * The fields are defined as follows:
-  *<ul>
+  * <ul>
   * <li>era - There are two eras, 'Current Era' (CE) and 'Before Current Era' (BCE).
   * <li>year-of-era - The year-of-era is the same as the proleptic-year for the current CE era.
   * For the BCE era before the ISO epoch the year increases from 1 upwards as time goes backwards.

@@ -291,7 +291,7 @@ object Instant {
   *
   * Given the complexity of accurate timekeeping described above, this Java API defines
   * its own time-scale with a simplification. The Java time-scale is defined as follows:
-  *<ul>
+  * <ul>
   * <li>midday will always be exactly as defined by the agreed international civil time</li>
   * <li>other times during the day will be broadly in line with the agreed international civil time</li>
   * <li>the day will be divided into exactly 86400 subdivisions, referred to as "seconds"</li>

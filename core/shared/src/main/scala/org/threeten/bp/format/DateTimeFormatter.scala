@@ -70,7 +70,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended local date format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>Four digits or more for the {@link ChronoField#YEAR year}.
     * Years in the range 0000 to 9999 will be pre-padded by zero to ensure four digits.
     * Years outside that range will have a prefixed positive or negative symbol.
@@ -97,7 +97,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended offset date format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>The {@link #ISO_LOCAL_DATE}
     * <li>The {@link ZoneOffset#getId() offset ID}. If the offset has seconds then
     * they will be handled even though this is not part of the ISO-8601 standard.
@@ -116,7 +116,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended date format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>The {@link #ISO_LOCAL_DATE}
     * <li>If the offset is not available to print/parse then the format is complete.
     * <li>The {@link ZoneOffset#getId() offset ID}. If the offset has seconds then
@@ -139,7 +139,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended local time format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>Two digits for the {@link ChronoField#HOUR_OF_DAY hour-of-day}.
     * This is pre-padded by zero to ensure two digits.
     * <li>A colon
@@ -172,7 +172,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended offset time format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>The {@link #ISO_LOCAL_TIME}
     * <li>The {@link ZoneOffset#getId() offset ID}. If the offset has seconds then
     * they will be handled even though this is not part of the ISO-8601 standard.
@@ -190,7 +190,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended offset time format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>The {@link #ISO_LOCAL_TIME}
     * <li>If the offset is not available to print/parse then the format is complete.
     * <li>The {@link ZoneOffset#getId() offset ID}. If the offset has seconds then
@@ -212,7 +212,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended offset date-time format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>The {@link #ISO_LOCAL_DATE}
     * <li>The letter 'T'. Parsing is case insensitive.
     * <li>The {@link #ISO_LOCAL_TIME}
@@ -232,7 +232,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended offset date-time format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>The {@link #ISO_LOCAL_DATE_TIME}
     * <li>The {@link ZoneOffset#getId() offset ID}. If the offset has seconds then
     * they will be handled even though this is not part of the ISO-8601 standard.
@@ -253,7 +253,7 @@ object DateTimeFormatter {
     * a format that extends the ISO-8601 extended offset date-time format
     * to add the time-zone.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>The {@link #ISO_OFFSET_DATE_TIME}
     * <li>If the zone ID is not available or is a {@code ZoneOffset} then the format is complete.
     * <li>An open square bracket '['.
@@ -279,7 +279,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended offset date-time format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>The {@link #ISO_LOCAL_DATE_TIME}
     * <li>If the offset is not available to print/parse then the format is complete.
     * <li>The {@link ZoneOffset#getId() offset ID}. If the offset has seconds then
@@ -311,7 +311,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended ordinal date format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>Four digits or more for the {@link ChronoField#YEAR year}.
     * Years in the range 0000 to 9999 will be pre-padded by zero to ensure four digits.
     * Years outside that range will have a prefixed positive or negative symbol.
@@ -341,7 +341,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 extended week-based date format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>Four digits or more for the {@link IsoFields#WEEK_BASED_YEAR week-based-year}.
     * Years in the range 0000 to 9999 will be pre-padded by zero to ensure four digits.
     * Years outside that range will have a prefixed positive or negative symbol.
@@ -411,7 +411,7 @@ object DateTimeFormatter {
     * This returns an immutable formatter capable of printing and parsing
     * the ISO-8601 basic local date format.
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>Four digits for the {@link ChronoField#YEAR year}.
     * Only years in the range 0000 to 9999 are supported.
     * <li>Two digits for the {@link ChronoField#MONTH_OF_YEAR month-of-year}.
@@ -445,7 +445,7 @@ object DateTimeFormatter {
     * names, only 'GMT' and offset amounts.
     *
     * The format consists of:
-    *<ul>
+    * <ul>
     * <li>If the day-of-week is not available to print/parse then jump to day-of-month.
     * <li>Three letter {@link ChronoField#DAY_OF_WEEK day-of-week} in English.
     * <li>A comma
@@ -941,7 +941,7 @@ object DateTimeFormatter {
   *
   * This class provides the main application entry point for printing and parsing.
   * Common instances of {@code DateTimeFormatter} are provided:
-  *<ul>
+  * <ul>
   * <li>Using pattern letters, such as {@code yyyy-MMM-dd}
   * <li>Using localized styles, such as {@code long} or {@code medium}
   * <li>Using predefined constants, such as {@link #ISO_LOCAL_DATE}

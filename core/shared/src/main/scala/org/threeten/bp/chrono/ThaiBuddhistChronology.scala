@@ -109,7 +109,7 @@ object ThaiBuddhistChronology {
   * Dates are aligned such that {@code 2484-01-01 (Buddhist)} is {@code 1941-01-01 (ISO)}.
   *
   * The fields are defined as follows:
-  *<ul>
+  * <ul>
   * <li>era - There are two eras, the current 'Buddhist' (BE) and the previous era (BEFORE_BE).
   * <li>year-of-era - The year-of-era for the current era increases uniformly from the epoch at year one.
   * For the previous era the year increases from one as time goes backwards.

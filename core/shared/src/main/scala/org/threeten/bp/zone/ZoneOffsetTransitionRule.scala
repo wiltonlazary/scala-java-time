@@ -49,7 +49,7 @@ import org.threeten.bp.chrono.IsoChronology
   *
   * This class allows rules for identifying future transitions to be expressed.
   * A rule might be written in many forms:
-  *<ul>
+  * <ul>
   * <li>the 16th March
   * <li>the Sunday on or after the 16th March
   * <li>the Sunday on or before the 16th March
@@ -155,7 +155,7 @@ object ZoneOffsetTransitionRule {
     * transition date-time.
     *
     * Time zone rules are expressed in one of three ways:
-    *<ul>
+    * <ul>
     * <li>Relative to UTC</li>
     * <li>Relative to the standard offset in force</li>
     * <li>Relative to the wall offset (what you would see on a clock on the wall)</li>

@@ -1260,7 +1260,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
   /** Outputs this time as a {@code String}, such as {@code 10:15}.
     *
     * The output will be one of the following ISO-8601 formats:
-    *<ul>
+    * <ul>
     * <li>{@code HH:mm}</li>
     * <li>{@code HH:mm:ss}</li>
     * <li>{@code HH:mm:ss.SSS}</li>

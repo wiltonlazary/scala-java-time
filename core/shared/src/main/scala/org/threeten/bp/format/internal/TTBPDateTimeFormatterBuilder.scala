@@ -577,10 +577,10 @@ object TTBPDateTimeFormatterBuilder {
     private val baseDate:  ChronoLocalDate,
     subsequentWidth:       Int
   ) extends NumberPrinterParser(field,
-                                  minWidth,
-                                  maxWidth,
-                                  SignStyle.NOT_NEGATIVE,
-                                  subsequentWidth
+                                minWidth,
+                                maxWidth,
+                                SignStyle.NOT_NEGATIVE,
+                                subsequentWidth
       ) {
 
     if (minWidth < 1 || minWidth > 10)

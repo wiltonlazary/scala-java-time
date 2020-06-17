@@ -1436,7 +1436,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
     * The local date-time is resolved to a single instant on the time-line.
     * This is achieved by finding a valid offset from UTC/Greenwich for the local
     * date-time as defined by the {@link ZoneRules rules} of the zone ID.
-    *<p>
+    * <p>
     * In most cases, there is only one valid offset for a local date-time.
     * In the case of an overlap, where clocks are set back, there are two valid offsets.
     * This method uses the earlier offset typically corresponding to "summer".
@@ -1601,7 +1601,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
   /** Outputs this date-time as a {@code String}, such as {@code 2007-12-03T10:15:30}.
     *
     * The output will be one of the following ISO-8601 formats:
-    *<ul>
+    * <ul>
     * <li>{@code yyyy-MM-dd'T'HH:mm}</li>
     * <li>{@code yyyy-MM-dd'T'HH:mm:ss}</li>
     * <li>{@code yyyy-MM-dd'T'HH:mm:ss.SSS}</li>

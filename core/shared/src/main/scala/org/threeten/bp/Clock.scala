@@ -434,7 +434,6 @@ abstract class Clock protected () {
     * where the creation of an object would be unacceptable.
     * The default implementation currently calls {@link #instant()}.
     *
-    *
     * @return the current millisecond instant from this clock, measured from
     *         the Java epoch of 1970-01-01T00:00 UTC, not null
     * @throws DateTimeException if the instant cannot be obtained, not thrown by most implementations

@@ -98,7 +98,7 @@ object HijrahChronology {
   * This chronology defines the rules of the Hijrah calendar system.
   *
   * The implementation follows the Freeman-Grenville algorithm (*1) and has following features.
-  *<ul>
+  * <ul>
   * <li>A year has 12 months.</li>
   * <li>Over a cycle of 30 years there are 11 leap years.</li>
   * <li>There are 30 days in month number 1, 3, 5, 7, 9, and 11,
@@ -185,7 +185,6 @@ object HijrahChronology {
   *
   * (*1) The algorithm is taken from the book,
   * The Muslim and Christian Calendars by G.S.P. Freeman-Grenville.
-  *
   *
   * <h3>Specification for implementors</h3>
   * This class is immutable and thread-safe.

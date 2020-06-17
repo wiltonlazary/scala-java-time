@@ -577,7 +577,6 @@ trait Chronology extends Ordered[Chronology] {
     *  - a leap-year must imply a year-length longer than a non leap-year.
     *  - a chronology that does not support the concept of a year must return false.
     *
-    *
     * @param prolepticYear  the proleptic-year to check, not validated for range
     * @return true if the year is a leap year
     */

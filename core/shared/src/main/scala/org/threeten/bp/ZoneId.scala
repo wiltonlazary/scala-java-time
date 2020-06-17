@@ -58,7 +58,7 @@ object ZoneId {
     * savings.
     *
     * This maps as follows:
-    *<ul>
+    * <ul>
     * <li>EST - -05:00</li>
     * <li>HST - -10:00</li>
     * <li>MST - -07:00</li>

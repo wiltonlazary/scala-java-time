@@ -79,7 +79,7 @@ object MinguoChronology {
   * Dates are aligned such that {@code 0001-01-01 (Minguo)} is {@code 1912-01-01 (ISO)}.
   *
   * The fields are defined as follows:
-  *<ul>
+  * <ul>
   * <li>era - There are two eras, the current 'Republic' (ROC) and the previous era (BEFORE_ROC).
   * <li>year-of-era - The year-of-era for the current era increases uniformly from the epoch at year one.
   * For the previous era the year increases from one as time goes backwards.

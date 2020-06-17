@@ -77,7 +77,6 @@ object WeekFields {
     *
     * Defined as starting on Sunday and with a minimum of 1 day in the month.
     * This week definition is in use in the US and other European countries.
-    *
     */
   lazy val SUNDAY_START: WeekFields = WeekFields.of(DayOfWeek.SUNDAY, 1)
 
@@ -551,7 +550,7 @@ object WeekFields {
   * {@link ChronoField#EPOCH_DAY epoch-day} and the chronology.
   * The values may not be aligned with the {@link ChronoField#YEAR_OF_ERA year-of-Era}
   * depending on the Chronology.
-  *A week is defined by:
+  * A week is defined by:
   * <ul>
   * <li>The first day-of-week.
   * For example, the ISO-8601 standard considers Monday to be the first day-of-week.

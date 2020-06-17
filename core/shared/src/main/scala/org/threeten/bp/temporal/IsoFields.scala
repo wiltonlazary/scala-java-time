@@ -65,7 +65,7 @@ import org.threeten.bp.format.ResolverStyle
   * October, November and December are in Q4.
   *
   * The complete date is expressed using three fields:
-  *<ul>
+  * <ul>
   * <li>{@link #DAY_OF_QUARTER DAY_OF_QUARTER} - the day within the quarter, from 1 to 90, 91 or 92
   * <li>{@link #QUARTER_OF_YEAR QUARTER_OF_YEAR} - the week within the week-based-year
   * <li>{@link ChronoField#YEAR YEAR} - the standard ISO year
@@ -77,7 +77,7 @@ import org.threeten.bp.format.ResolverStyle
   * alternate way of expressing the date, based on the concept of week-based-year.
   *
   * The date is expressed using three fields:
-  *<ul>
+  * <ul>
   * <li>{@link ChronoField#DAY_OF_WEEK DAY_OF_WEEK} - the standard field defining the
   * day-of-week from Monday (1) to Sunday (7)
   * <li>{@link #WEEK_OF_WEEK_BASED_YEAR} - the week within the week-based-year
@@ -88,7 +88,7 @@ import org.threeten.bp.format.ResolverStyle
   *
   * The first week of a week-based-year is the first Monday-based week of the standard
   * ISO year that has at least 4 days in the new year.
-  *<ul>
+  * <ul>
   * <li>If January 1st is Monday then week 1 starts on January 1st
   * <li>If January 1st is Tuesday then week 1 starts on December 31st of the previous standard year
   * <li>If January 1st is Wednesday then week 1 starts on December 30th of the previous standard year

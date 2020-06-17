@@ -56,7 +56,7 @@ import org.threeten.bp.temporal.TemporalQuery
   *
   * The builder is used to hold onto different elements of date and time.
   * It is designed as two separate maps:
-  *<ul>
+  * <ul>
   * <li>from {@link TemporalField} to {@code long} value, where the value may be
   * outside the valid range for the field
   * <li>from {@code Class} to {@link TemporalAccessor}, holding larger scale objects

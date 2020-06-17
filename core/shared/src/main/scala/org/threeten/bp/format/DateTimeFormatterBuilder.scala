@@ -141,7 +141,7 @@ object DateTimeFormatterBuilder {
   * All date-time formatters are created ultimately using this builder.
   *
   * The basic elements of date-time can all be added:
-  *<ul>
+  * <ul>
   * <li>Value - a numeric value</li>
   * <li>Fraction - a fractional value including the decimal place. Always use this when
   * outputting fractions to ensure that the fraction is parsed correctly</li>
@@ -846,7 +846,7 @@ final class DateTimeFormatterBuilder private (
     *
     * The format of the offset is controlled by a pattern which must be one
     * of the following:
-    *<ul>
+    * <ul>
     * <li>{@code +HH} - hour only, ignoring minute and second
     * <li>{@code +HHmm} - hour, with minute if non-zero, ignoring second, no colon
     * <li>{@code +HH:mm} - hour, with minute if non-zero, ignoring second, with colon
@@ -1111,7 +1111,7 @@ final class DateTimeFormatterBuilder private (
     * This appends a localized section to the builder, suitable for outputting
     * a date, time or date-time combination. The format of the localized
     * section is lazily looked up based on four items:
-    *<ul>
+    * <ul>
     * <li>the {@code dateStyle} specified to this method
     * <li>the {@code timeStyle} specified to this method
     * <li>the {@code Locale} of the {@code DateTimeFormatter}

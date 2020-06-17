@@ -61,7 +61,7 @@ package org.threeten.bp.temporal
   * <h3>When to implement</h3>
   *
   * A class should implement this interface if it meets three criteria:
-  *<ul>
+  * <ul>
   * <li>it provides access to date/time/offset information, as per {@code TemporalAccessor}
   * <li>the set of fields are contiguous from the largest to the smallest
   * <li>the set of fields are complete, such that no other field is needed to define the
@@ -69,7 +69,7 @@ package org.threeten.bp.temporal
   * </ul><p>
   *
   * Four examples make this clear:
-  *<ul>
+  * <ul>
   * <li>{@code LocalDate} implements this interface as it represents a set of fields
   * that are contiguous from days to forever and require no external information to determine
   * the validity of each date. It is therefore able to implement plus/minus correctly.

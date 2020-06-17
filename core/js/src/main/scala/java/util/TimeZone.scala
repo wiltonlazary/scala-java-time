@@ -43,10 +43,9 @@ object TimeZone {
         // First try with the intl API
         new DateTimeFormat().resolvedOptions().timeZone.getOrElse(browserTZ.getOrElse("UTC"))
       }.orElse {
-          // If it fails try to parse it from the date string
-          browserTZ
-        }
-        .getOrElse("UTC") // Fallback to UTC
+        // If it fails try to parse it from the date string
+        browserTZ
+      }.getOrElse("UTC") // Fallback to UTC
     }
 
     new SimpleTimeZone(offsetInMillis, timeZone)

@@ -220,7 +220,7 @@ object ChronoLocalDate {
   *
   * <h4>Using LocalDate instead</h4>
   * The primary alternative to using this interface throughout your application is as follows.
-  *<ul>
+  * <ul>
   * <li>Declare all method signatures referring to dates in terms of {@code LocalDate}.
   * <li>Either store the chronology (calendar system) in the user profile or lookup
   * the chronology from the user locale
@@ -247,7 +247,7 @@ object ChronoLocalDate {
   * For example, an application may need to calculate the next Islamic or Hebrew holiday
   * which may require manipulating the date.
   * This kind of use case can be handled as follows:
-  *<ul>
+  * <ul>
   * <li>start from the ISO {@code LocalDate} being passed to the method
   * <li>convert the date to the alternate calendar system, which for this use case is known
   * rather than arbitrary

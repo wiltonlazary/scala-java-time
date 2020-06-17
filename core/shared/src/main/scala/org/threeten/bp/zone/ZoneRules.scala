@@ -183,7 +183,7 @@ abstract class ZoneRules private[zone] () {
     *
     * The mapping from a local date-time to an offset is not straightforward.
     * There are three cases:
-    *<ul>
+    * <ul>
     * <li>Normal, with one valid offset. For the vast majority of the year, the normal
     * case applies, where there is a single valid offset for the local date-time.</li>
     * <li>Gap, with zero valid offsets. This is when clocks jump forward typically
@@ -212,7 +212,7 @@ abstract class ZoneRules private[zone] () {
     *
     * The mapping from a local date-time to an offset is not straightforward.
     * There are three cases:
-    *<ul>
+    * <ul>
     * <li>Normal, with one valid offset. For the vast majority of the year, the normal
     * case applies, where there is a single valid offset for the local date-time.</li>
     * <li>Gap, with zero valid offsets. This is when clocks jump forward typically
@@ -255,7 +255,7 @@ abstract class ZoneRules private[zone] () {
     *
     * The mapping from a local date-time to an offset is not straightforward.
     * There are three cases:
-    *<ul>
+    * <ul>
     * <li>Normal, with one valid offset. For the vast majority of the year, the normal
     * case applies, where there is a single valid offset for the local date-time.</li>
     * <li>Gap, with zero valid offsets. This is when clocks jump forward typically

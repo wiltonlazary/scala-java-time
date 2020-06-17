@@ -1506,7 +1506,7 @@ final class OffsetDateTime private (
   /** Outputs this date-time as a {@code String}, such as {@code 2007-12-03T10:15:30+01:00}.
     *
     * The output will be one of the following ISO-8601 formats:
-    *<ul>
+    * <ul>
     * <li>{@code yyyy-MM-dd'T'HH:mmXXXXX}</li>
     * <li>{@code yyyy-MM-dd'T'HH:mm:ssXXXXX}</li>
     * <li>{@code yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX}</li>

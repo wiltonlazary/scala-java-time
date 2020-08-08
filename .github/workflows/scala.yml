@@ -11,7 +11,7 @@ jobs:
       - name: Set up JDK 14
         uses: olafurpg/setup-scala@v6
         with:
-          java-version: openjdk@1.14
+          java-version: adopt@1.14
       - name: Cache Coursier
         uses: actions/cache@v1
         with:
@@ -29,4 +29,4 @@ jobs:
       - name: Run test
         run: csbt clean +scalajavatimeTestsJVM/test +scalajavatimeTestsJS/test demo/run
       - name: Run test 0.6
-        run: SCALAJS_VERSION=0.6.32 csbt clean +scalajavatimeTestsJS/fastOptJS
+        run: SCALAJS_VERSION=0.6.33 csbt clean +scalajavatimeTestsJS/fastOptJS

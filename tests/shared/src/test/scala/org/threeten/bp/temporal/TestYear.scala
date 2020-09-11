@@ -168,10 +168,9 @@ class TestYear extends GenDateTimeTest {
     )
 
   test("factory_parse_success") {
-    provider_goodParseData.foreach {
-      case (text, expected) =>
-        val year: Year = Year.parse(text)
-        assertEquals(year, expected)
+    provider_goodParseData.foreach { case (text, expected) =>
+      val year: Year = Year.parse(text)
+      assertEquals(year, expected)
     }
   }
 
@@ -194,16 +193,15 @@ class TestYear extends GenDateTimeTest {
     )
 
   test("factory_parse_fail") {
-    provider_badParseData.foreach {
-      case (text, pos) =>
-        try {
-          Year.parse(text)
-          fail(f"Parse should have failed for $text%s at position $pos%d")
-        } catch {
-          case ex: DateTimeParseException =>
-            assertEquals(ex.getParsedString, text)
-            assertEquals(ex.getErrorIndex, pos)
-        }
+    provider_badParseData.foreach { case (text, pos) =>
+      try {
+        Year.parse(text)
+        fail(f"Parse should have failed for $text%s at position $pos%d")
+      } catch {
+        case ex: DateTimeParseException =>
+          assertEquals(ex.getParsedString, text)
+          assertEquals(ex.getErrorIndex, pos)
+      }
     }
   }
 
@@ -491,9 +489,8 @@ class TestYear extends GenDateTimeTest {
     )
 
   test("test_atMonthDay") {
-    data_atMonthDay.foreach {
-      case (year, monthDay, expected) =>
-        assertEquals(year.atMonthDay(monthDay), expected)
+    data_atMonthDay.foreach { case (year, monthDay, expected) =>
+      assertEquals(year.atMonthDay(monthDay), expected)
     }
   }
 

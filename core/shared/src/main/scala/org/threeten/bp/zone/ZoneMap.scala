@@ -154,8 +154,8 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
 
   override def entrySet(): JSet[JMap.Entry[K, V]] =
     map
-      .map {
-        case (k, v) => new SimpleEntry[K, V](k, v): JMap.Entry[K, V]
+      .map { case (k, v) =>
+        new SimpleEntry[K, V](k, v): JMap.Entry[K, V]
       }
       .toSet
       .asJava

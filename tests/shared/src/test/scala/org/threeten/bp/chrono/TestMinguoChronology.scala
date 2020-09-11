@@ -72,38 +72,35 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_toLocalDate") {
-    data_samples.foreach {
-      case (minguo, iso) =>
-        assertEquals(LocalDate.from(minguo), iso)
+    data_samples.foreach { case (minguo, iso) =>
+      assertEquals(LocalDate.from(minguo), iso)
     }
   }
 
   test("test_fromCalendrical") {
-    data_samples.foreach {
-      case (minguo, iso) =>
-        assertEquals(MinguoChronology.INSTANCE.date(iso), minguo)
+    data_samples.foreach { case (minguo, iso) =>
+      assertEquals(MinguoChronology.INSTANCE.date(iso), minguo)
     }
   }
 
   // This was already ignored on the original version and it doesn't compile
   // properly on scala 2.10
   ignore("test_MinguoDate") {
-    data_samples.foreach {
-      case (minguoDate, _) =>
-        val hd: ChronoLocalDate         = minguoDate
-        var hdt: ChronoLocalDateTime[_] = hd.atTime(LocalTime.NOON)
-        val zo: ZoneOffset              = ZoneOffset.ofHours(1)
-        hdt.atZone(zo)
-        hdt = hdt.plus(1, ChronoUnit.YEARS)
-        hdt = hdt.plus(1, ChronoUnit.MONTHS)
-        hdt = hdt.plus(1, ChronoUnit.DAYS)
-        hdt = hdt.plus(1, ChronoUnit.HOURS)
-        hdt = hdt.plus(1, ChronoUnit.MINUTES)
-        hdt = hdt.plus(1, ChronoUnit.SECONDS)
-        hdt = hdt.plus(1, ChronoUnit.NANOS)
-      //val a2: ChronoLocalDateTime[_] = hzdt.toLocalDateTime
-      //val a3: ChronoLocalDate = a2.toLocalDate
-      //val a5: ChronoLocalDate = hzdt.toLocalDate
+    data_samples.foreach { case (minguoDate, _) =>
+      val hd: ChronoLocalDate         = minguoDate
+      var hdt: ChronoLocalDateTime[_] = hd.atTime(LocalTime.NOON)
+      val zo: ZoneOffset              = ZoneOffset.ofHours(1)
+      hdt.atZone(zo)
+      hdt = hdt.plus(1, ChronoUnit.YEARS)
+      hdt = hdt.plus(1, ChronoUnit.MONTHS)
+      hdt = hdt.plus(1, ChronoUnit.DAYS)
+      hdt = hdt.plus(1, ChronoUnit.HOURS)
+      hdt = hdt.plus(1, ChronoUnit.MINUTES)
+      hdt = hdt.plus(1, ChronoUnit.SECONDS)
+      hdt = hdt.plus(1, ChronoUnit.NANOS)
+    //val a2: ChronoLocalDateTime[_] = hzdt.toLocalDateTime
+    //val a3: ChronoLocalDate = a2.toLocalDate
+    //val a5: ChronoLocalDate = hzdt.toLocalDate
     }
   }
 
@@ -132,11 +129,10 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_badDates") {
-    data_badDates.foreach {
-      case (year, month, dom) =>
-        assertThrows[DateTimeException] {
-          MinguoChronology.INSTANCE.date(year, month, dom)
-        }
+    data_badDates.foreach { case (year, month, dom) =>
+      assertThrows[DateTimeException] {
+        MinguoChronology.INSTANCE.date(year, month, dom)
+      }
     }
   }
 
@@ -187,9 +183,8 @@ class TestMinguoChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_toString") {
-    data_toString.foreach {
-      case (minguo, expected) =>
-        assertEquals(minguo.toString, expected)
+    data_toString.foreach { case (minguo, expected) =>
+      assertEquals(minguo.toString, expected)
     }
   }
 

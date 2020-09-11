@@ -107,16 +107,14 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_toLocalDate") {
-    data_samples.foreach {
-      case (jdate, iso) =>
-        assertEquals(LocalDate.from(jdate), iso)
+    data_samples.foreach { case (jdate, iso) =>
+      assertEquals(LocalDate.from(jdate), iso)
     }
   }
 
   test("test_fromCalendrical") {
-    data_samples.foreach {
-      case (jdate, iso) =>
-        assertEquals(ThaiBuddhistChronology.INSTANCE.date(iso), jdate)
+    data_samples.foreach { case (jdate, iso) =>
+      assertEquals(ThaiBuddhistChronology.INSTANCE.date(iso), jdate)
     }
   }
 
@@ -135,11 +133,10 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_badDates") {
-    data_badDates.foreach {
-      case (year, month, dom) =>
-        assertThrows[DateTimeException] {
-          ThaiBuddhistChronology.INSTANCE.date(year, month, dom)
-        }
+    data_badDates.foreach { case (year, month, dom) =>
+      assertThrows[DateTimeException] {
+        ThaiBuddhistChronology.INSTANCE.date(year, month, dom)
+      }
     }
   }
 
@@ -220,9 +217,8 @@ class TestThaiBuddhistChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_toString") {
-    data_toString.foreach {
-      case (jdate, expected) =>
-        assertEquals(jdate.toString, expected)
+    data_toString.foreach { case (jdate, expected) =>
+      assertEquals(jdate.toString, expected)
     }
   }
 

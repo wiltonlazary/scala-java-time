@@ -225,10 +225,9 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     )
 
   test("factory_parse_success") {
-    provider_goodParseData.foreach {
-      case (text, expected) =>
-        val yearMonth: YearMonth = YearMonth.parse(text)
-        assertEquals(yearMonth, expected)
+    provider_goodParseData.foreach { case (text, expected) =>
+      val yearMonth: YearMonth = YearMonth.parse(text)
+      assertEquals(yearMonth, expected)
     }
   }
 
@@ -251,16 +250,15 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     )
 
   test("factory_parse_fail") {
-    provider_badParseData.foreach {
-      case (text, pos) =>
-        try {
-          YearMonth.parse(text)
-          fail(f"Parse should have failed for $text%s at position $pos%d")
-        } catch {
-          case ex: DateTimeParseException =>
-            assertEquals(ex.getParsedString, text)
-            assertEquals(ex.getErrorIndex, pos)
-        }
+    provider_badParseData.foreach { case (text, pos) =>
+      try {
+        YearMonth.parse(text)
+        fail(f"Parse should have failed for $text%s at position $pos%d")
+      } catch {
+        case ex: DateTimeParseException =>
+          assertEquals(ex.getParsedString, text)
+          assertEquals(ex.getErrorIndex, pos)
+      }
     }
   }
 
@@ -356,12 +354,11 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     List((2008, 1), (2008, 2), (-1, 3), (0, 12))
 
   test("test_hashCode") {
-    provider_sampleDates.foreach {
-      case (y, m) =>
-        val a: YearMonth = YearMonth.of(y, m)
-        assertEquals(a.hashCode, a.hashCode)
-        val b: YearMonth = YearMonth.of(y, m)
-        assertEquals(a.hashCode, b.hashCode)
+    provider_sampleDates.foreach { case (y, m) =>
+      val a: YearMonth = YearMonth.of(y, m)
+      assertEquals(a.hashCode, a.hashCode)
+      val b: YearMonth = YearMonth.of(y, m)
+      assertEquals(a.hashCode, b.hashCode)
     }
   }
 
@@ -900,11 +897,10 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     )
 
   test("test_toString") {
-    provider_sampleToString.foreach {
-      case (y, m, expected) =>
-        val test: YearMonth = YearMonth.of(y, m)
-        val str: String     = test.toString
-        assertEquals(str, expected)
+    provider_sampleToString.foreach { case (y, m, expected) =>
+      val test: YearMonth = YearMonth.of(y, m)
+      val str: String     = test.toString
+      assertEquals(str, expected)
     }
   }
 

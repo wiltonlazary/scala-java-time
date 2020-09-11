@@ -210,10 +210,9 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     )
 
   test("factory_parse_success") {
-    provider_goodParseData.foreach {
-      case (text, expected) =>
-        val monthDay: MonthDay = MonthDay.parse(text)
-        assertEquals(monthDay, expected)
+    provider_goodParseData.foreach { case (text, expected) =>
+      val monthDay: MonthDay = MonthDay.parse(text)
+      assertEquals(monthDay, expected)
     }
   }
 
@@ -221,16 +220,15 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     List(("", 0), ("-00", 0), ("--FEB-23", 2), ("--01-0", 5), ("--01-3A", 5))
 
   test("factory_parse_fail") {
-    provider_badParseData.foreach {
-      case (text, pos) =>
-        try {
-          MonthDay.parse(text)
-          fail(f"Parse should have failed for $text%s at position $pos%d")
-        } catch {
-          case ex: DateTimeParseException =>
-            assertEquals(ex.getParsedString, text)
-            assertEquals(ex.getErrorIndex, pos)
-        }
+    provider_badParseData.foreach { case (text, pos) =>
+      try {
+        MonthDay.parse(text)
+        fail(f"Parse should have failed for $text%s at position $pos%d")
+      } catch {
+        case ex: DateTimeParseException =>
+          assertEquals(ex.getParsedString, text)
+          assertEquals(ex.getErrorIndex, pos)
+      }
     }
   }
 
@@ -304,11 +302,10 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     List((1, 1), (1, 31), (2, 1), (2, 28), (2, 29), (7, 4), (7, 5))
 
   test("test_get") {
-    provider_sampleDates.foreach {
-      case (m, d) =>
-        val a: MonthDay = MonthDay.of(m, d)
-        assertEquals(a.getMonth, Month.of(m))
-        assertEquals(a.getDayOfMonth, d)
+    provider_sampleDates.foreach { case (m, d) =>
+      val a: MonthDay = MonthDay.of(m, d)
+      assertEquals(a.getMonth, Month.of(m))
+      assertEquals(a.getDayOfMonth, d)
     }
   }
 
@@ -573,12 +570,11 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("test_hashCode") {
-    provider_sampleDates.foreach {
-      case (m, d) =>
-        val a: MonthDay = MonthDay.of(m, d)
-        assertEquals(a.hashCode, a.hashCode)
-        val b: MonthDay = MonthDay.of(m, d)
-        assertEquals(a.hashCode, b.hashCode)
+    provider_sampleDates.foreach { case (m, d) =>
+      val a: MonthDay = MonthDay.of(m, d)
+      assertEquals(a.hashCode, a.hashCode)
+      val b: MonthDay = MonthDay.of(m, d)
+      assertEquals(a.hashCode, b.hashCode)
     }
   }
 
@@ -601,11 +597,10 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     List((7, 5, "--07-05"), (12, 31, "--12-31"), (1, 2, "--01-02"))
 
   test("test_toString") {
-    provider_sampleToString.foreach {
-      case (m, d, expected) =>
-        val test: MonthDay = MonthDay.of(m, d)
-        val str: String    = test.toString
-        assertEquals(str, expected)
+    provider_sampleToString.foreach { case (m, d, expected) =>
+      val test: MonthDay = MonthDay.of(m, d)
+      val str: String    = test.toString
+      assertEquals(str, expected)
     }
   }
 

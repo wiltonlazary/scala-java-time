@@ -97,18 +97,14 @@ class TestChronology extends AnyFunSuite with BeforeAndAfterEach with Assertions
 
   /** Compute the number of days from the Epoch and compute the date from the number of days. */
   test("test_epoch") {
-    data_of_calendars.foreach {
-      case (name, _, _) =>
-        val chrono: Chronology     = Chronology.of(name)
-        val date1: ChronoLocalDate = chrono.dateNow
-        val epoch1: Long           = date1.getLong(ChronoField.EPOCH_DAY)
-        val date2: ChronoLocalDate = date1.`with`(ChronoField.EPOCH_DAY, epoch1)
-        assertEquals(date1,
-                     date2,
-                     "Date from epoch day is not same date: " + date1 + " != " + date2
-        )
-        val epoch2: Long           = date1.getLong(ChronoField.EPOCH_DAY)
-        assertEquals(epoch1, epoch2, "Epoch day not the same: " + epoch1 + " != " + epoch2)
+    data_of_calendars.foreach { case (name, _, _) =>
+      val chrono: Chronology     = Chronology.of(name)
+      val date1: ChronoLocalDate = chrono.dateNow
+      val epoch1: Long           = date1.getLong(ChronoField.EPOCH_DAY)
+      val date2: ChronoLocalDate = date1.`with`(ChronoField.EPOCH_DAY, epoch1)
+      assertEquals(date1, date2, "Date from epoch day is not same date: " + date1 + " != " + date2)
+      val epoch2: Long           = date1.getLong(ChronoField.EPOCH_DAY)
+      assertEquals(epoch1, epoch2, "Epoch day not the same: " + epoch1 + " != " + epoch2)
     }
   }
 
@@ -122,9 +118,8 @@ class TestChronology extends AnyFunSuite with BeforeAndAfterEach with Assertions
     )
 
   test("test_getCalendarType") {
-    data_CalendarType.foreach {
-      case (chrono, calendarType) =>
-        assertEquals(chrono.getCalendarType, calendarType)
+    data_CalendarType.foreach { case (chrono, calendarType) =>
+      assertEquals(chrono.getCalendarType, calendarType)
     }
   }
 

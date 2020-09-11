@@ -82,16 +82,14 @@ class TestIsoChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_toLocalDate") {
-    data_samples.foreach {
-      case (isoDate, iso) =>
-        assertEquals(LocalDate.from(isoDate), iso)
+    data_samples.foreach { case (isoDate, iso) =>
+      assertEquals(LocalDate.from(isoDate), iso)
     }
   }
 
   test("test_fromCalendrical") {
-    data_samples.foreach {
-      case (isoDate, iso) =>
-        assertEquals(IsoChronology.INSTANCE.date(iso), isoDate)
+    data_samples.foreach { case (isoDate, iso) =>
+      assertEquals(IsoChronology.INSTANCE.date(iso), isoDate)
     }
   }
 
@@ -110,11 +108,10 @@ class TestIsoChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_badDates") {
-    data_badDates.foreach {
-      case (year, month, dom) =>
-        assertThrows[DateTimeException] {
-          IsoChronology.INSTANCE.date(year, month, dom)
-        }
+    data_badDates.foreach { case (year, month, dom) =>
+      assertThrows[DateTimeException] {
+        IsoChronology.INSTANCE.date(year, month, dom)
+      }
     }
   }
 
@@ -201,9 +198,8 @@ class TestIsoChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_isLeapYear") {
-    leapYearInformation.foreach {
-      case (year, isLeapYear) =>
-        assertEquals(IsoChronology.INSTANCE.isLeapYear(year), isLeapYear)
+    leapYearInformation.foreach { case (year, isLeapYear) =>
+      assertEquals(IsoChronology.INSTANCE.isLeapYear(year), isLeapYear)
     }
   }
 
@@ -221,9 +217,8 @@ class TestIsoChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_toString") {
-    data_toString.foreach {
-      case (isoDate, expected) =>
-        assertEquals(isoDate.toString, expected)
+    data_toString.foreach { case (isoDate, expected) =>
+      assertEquals(isoDate.toString, expected)
     }
   }
 

@@ -72,62 +72,56 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_yearsBetween") {
-    data_yearsBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(YEARS.between(start, end), expected)
+    data_yearsBetween.foreach { case (start, end, expected) =>
+      assertEquals(YEARS.between(start, end), expected)
     }
   }
 
   test("test_yearsBetweenReversed") {
-    data_yearsBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(YEARS.between(end, start), -expected)
+    data_yearsBetween.foreach { case (start, end, expected) =>
+      assertEquals(YEARS.between(end, start), -expected)
     }
   }
 
   test("test_yearsBetween_LocalDateTimeSameTime") {
-    data_yearsBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(YEARS.between(start.atTime(12, 30), end.atTime(12, 30)), expected)
+    data_yearsBetween.foreach { case (start, end, expected) =>
+      assertEquals(YEARS.between(start.atTime(12, 30), end.atTime(12, 30)), expected)
     }
   }
 
   test("test_yearsBetween_LocalDateTimeLaterTime") {
-    data_yearsBetween.foreach {
-      case (start, end, expected) =>
-        if (end.isAfter(start))
-          assertEquals(YEARS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
-        else
-          assertEquals(YEARS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
+    data_yearsBetween.foreach { case (start, end, expected) =>
+      if (end.isAfter(start))
+        assertEquals(YEARS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
+      else
+        assertEquals(YEARS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
     }
   }
 
   test("test_yearsBetween_ZonedDateSameOffset") {
-    data_yearsBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                   end.atStartOfDay(ZoneOffset.ofHours(2))
-                     ),
-                     expected
-        )
+    data_yearsBetween.foreach { case (start, end, expected) =>
+      assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
+                                 end.atStartOfDay(ZoneOffset.ofHours(2))
+                   ),
+                   expected
+      )
     }
   }
 
   test("test_yearsBetween_ZonedDateLaterOffset") {
-    data_yearsBetween.foreach {
-      case (start, end, expected) =>
-        if (end.isAfter(start))
-          assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                     end.atStartOfDay(ZoneOffset.ofHours(1))
-                       ),
-                       expected
-          )
-        else
-          assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
-                                     end.atStartOfDay(ZoneOffset.ofHours(2))
-                       ),
-                       expected
-          )
+    data_yearsBetween.foreach { case (start, end, expected) =>
+      if (end.isAfter(start))
+        assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
+                                   end.atStartOfDay(ZoneOffset.ofHours(1))
+                     ),
+                     expected
+        )
+      else
+        assertEquals(YEARS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
+                                   end.atStartOfDay(ZoneOffset.ofHours(2))
+                     ),
+                     expected
+        )
     }
   }
 
@@ -157,62 +151,56 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_monthsBetween") {
-    data_monthsBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(MONTHS.between(start, end), expected)
+    data_monthsBetween.foreach { case (start, end, expected) =>
+      assertEquals(MONTHS.between(start, end), expected)
     }
   }
 
   test("test_monthsBetweenReversed") {
-    data_monthsBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(MONTHS.between(end, start), -expected)
+    data_monthsBetween.foreach { case (start, end, expected) =>
+      assertEquals(MONTHS.between(end, start), -expected)
     }
   }
 
   test("test_monthsBetween_LocalDateTimeSameTime") {
-    data_monthsBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(MONTHS.between(start.atTime(12, 30), end.atTime(12, 30)), expected)
+    data_monthsBetween.foreach { case (start, end, expected) =>
+      assertEquals(MONTHS.between(start.atTime(12, 30), end.atTime(12, 30)), expected)
     }
   }
 
   test("test_monthsBetween_LocalDateTimeLaterTime") {
-    data_monthsBetween.foreach {
-      case (start, end, expected) =>
-        if (end.isAfter(start))
-          assertEquals(MONTHS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
-        else
-          assertEquals(MONTHS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
+    data_monthsBetween.foreach { case (start, end, expected) =>
+      if (end.isAfter(start))
+        assertEquals(MONTHS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
+      else
+        assertEquals(MONTHS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
     }
   }
 
   test("test_monthsBetween_ZonedDateSameOffset") {
-    data_monthsBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                    end.atStartOfDay(ZoneOffset.ofHours(2))
-                     ),
-                     expected
-        )
+    data_monthsBetween.foreach { case (start, end, expected) =>
+      assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
+                                  end.atStartOfDay(ZoneOffset.ofHours(2))
+                   ),
+                   expected
+      )
     }
   }
 
   test("test_monthsBetween_ZonedDateLaterOffset") {
-    data_monthsBetween.foreach {
-      case (start, end, expected) =>
-        if (end.isAfter(start))
-          assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                      end.atStartOfDay(ZoneOffset.ofHours(1))
-                       ),
-                       expected
-          )
-        else
-          assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
-                                      end.atStartOfDay(ZoneOffset.ofHours(2))
-                       ),
-                       expected
-          )
+    data_monthsBetween.foreach { case (start, end, expected) =>
+      if (end.isAfter(start))
+        assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
+                                    end.atStartOfDay(ZoneOffset.ofHours(1))
+                     ),
+                     expected
+        )
+      else
+        assertEquals(MONTHS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
+                                    end.atStartOfDay(ZoneOffset.ofHours(2))
+                     ),
+                     expected
+        )
     }
   }
 
@@ -240,16 +228,14 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_weeksBetween") {
-    data_weeksBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(WEEKS.between(start, end), expected)
+    data_weeksBetween.foreach { case (start, end, expected) =>
+      assertEquals(WEEKS.between(start, end), expected)
     }
   }
 
   test("test_weeksBetweenReversed") {
-    data_weeksBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(WEEKS.between(end, start), -expected)
+    data_weeksBetween.foreach { case (start, end, expected) =>
+      assertEquals(WEEKS.between(end, start), -expected)
     }
   }
 
@@ -279,62 +265,56 @@ class TestChronoUnit extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_daysBetween") {
-    data_daysBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(DAYS.between(start, end), expected)
+    data_daysBetween.foreach { case (start, end, expected) =>
+      assertEquals(DAYS.between(start, end), expected)
     }
   }
 
   test("test_daysBetweenReversed") {
-    data_daysBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(DAYS.between(end, start), -expected)
+    data_daysBetween.foreach { case (start, end, expected) =>
+      assertEquals(DAYS.between(end, start), -expected)
     }
   }
 
   test("test_daysBetween_LocalDateTimeSameTime") {
-    data_daysBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(DAYS.between(start.atTime(12, 30), end.atTime(12, 30)), expected)
+    data_daysBetween.foreach { case (start, end, expected) =>
+      assertEquals(DAYS.between(start.atTime(12, 30), end.atTime(12, 30)), expected)
     }
   }
 
   test("test_daysBetween_LocalDateTimeLaterTime") {
-    data_daysBetween.foreach {
-      case (start, end, expected) =>
-        if (end.isAfter(start))
-          assertEquals(DAYS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
-        else
-          assertEquals(DAYS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
+    data_daysBetween.foreach { case (start, end, expected) =>
+      if (end.isAfter(start))
+        assertEquals(DAYS.between(start.atTime(12, 30), end.atTime(12, 31)), expected)
+      else
+        assertEquals(DAYS.between(start.atTime(12, 31), end.atTime(12, 30)), expected)
     }
   }
 
   test("test_daysBetween_ZonedDateSameOffset") {
-    data_daysBetween.foreach {
-      case (start, end, expected) =>
-        assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                  end.atStartOfDay(ZoneOffset.ofHours(2))
-                     ),
-                     expected
-        )
+    data_daysBetween.foreach { case (start, end, expected) =>
+      assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
+                                end.atStartOfDay(ZoneOffset.ofHours(2))
+                   ),
+                   expected
+      )
     }
   }
 
   test("test_daysBetween_ZonedDateLaterOffset") {
-    data_daysBetween.foreach {
-      case (start, end, expected) =>
-        if (end.isAfter(start))
-          assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
-                                    end.atStartOfDay(ZoneOffset.ofHours(1))
-                       ),
-                       expected
-          )
-        else
-          assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
-                                    end.atStartOfDay(ZoneOffset.ofHours(2))
-                       ),
-                       expected
-          )
+    data_daysBetween.foreach { case (start, end, expected) =>
+      if (end.isAfter(start))
+        assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(2)),
+                                  end.atStartOfDay(ZoneOffset.ofHours(1))
+                     ),
+                     expected
+        )
+      else
+        assertEquals(DAYS.between(start.atStartOfDay(ZoneOffset.ofHours(1)),
+                                  end.atStartOfDay(ZoneOffset.ofHours(2))
+                     ),
+                     expected
+        )
     }
   }
 

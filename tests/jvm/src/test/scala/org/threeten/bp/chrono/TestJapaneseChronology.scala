@@ -60,16 +60,14 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_toLocalDate") {
-    data_samples.foreach {
-      case (jdate, iso) =>
-        assertEquals(LocalDate.from(jdate), iso)
+    data_samples.foreach { case (jdate, iso) =>
+      assertEquals(LocalDate.from(jdate), iso)
     }
   }
 
   test("test_fromCalendrical") {
-    data_samples.foreach {
-      case (jdate, iso) =>
-        assertEquals(JapaneseChronology.INSTANCE.date(iso), jdate)
+    data_samples.foreach { case (jdate, iso) =>
+      assertEquals(JapaneseChronology.INSTANCE.date(iso), jdate)
     }
   }
 
@@ -89,11 +87,10 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_badDates") {
-    data_badDates.foreach {
-      case (year, month, dom) =>
-        assertThrows[DateTimeException] {
-          JapaneseChronology.INSTANCE.date(year, month, dom)
-        }
+    data_badDates.foreach { case (year, month, dom) =>
+      assertThrows[DateTimeException] {
+        JapaneseChronology.INSTANCE.date(year, month, dom)
+      }
     }
   }
 
@@ -144,14 +141,13 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_Japanese_Eras") {
-    data_japansesEras.foreach {
-      case (era, eraValue, name) =>
-        assertEquals(era.getValue, eraValue, "EraValue")
-        assertEquals(era.toString, name, "Era Name")
-        assertEquals(era, JapaneseChronology.INSTANCE.eraOf(eraValue), "JapaneseChrono.eraOf()")
-        assertEquals(JapaneseEra.valueOf(name), era)
-        val eras: java.util.List[Era] = JapaneseChronology.INSTANCE.eras
-        assertTrue(eras.contains(era))
+    data_japansesEras.foreach { case (era, eraValue, name) =>
+      assertEquals(era.getValue, eraValue, "EraValue")
+      assertEquals(era.toString, name, "Era Name")
+      assertEquals(era, JapaneseChronology.INSTANCE.eraOf(eraValue), "JapaneseChrono.eraOf()")
+      assertEquals(JapaneseEra.valueOf(name), era)
+      val eras: java.util.List[Era] = JapaneseChronology.INSTANCE.eras
+      assertTrue(eras.contains(era))
     }
   }
 
@@ -212,9 +208,8 @@ class TestJapaneseChronology extends AnyFunSuite with AssertionsHelper {
     )
 
   test("test_toString") {
-    data_toString.foreach {
-      case (jdate, expected) =>
-        assertEquals(jdate.toString, expected)
+    data_toString.foreach { case (jdate, expected) =>
+      assertEquals(jdate.toString, expected)
     }
   }
 

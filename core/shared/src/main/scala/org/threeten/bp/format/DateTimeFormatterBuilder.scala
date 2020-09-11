@@ -719,8 +719,8 @@ final class DateTimeFormatterBuilder private (
     Objects.requireNonNull(field, "field")
     Objects.requireNonNull(textLookup, "textLookup")
     import scala.collection.JavaConverters._
-    val copy: Map[scala.Long, String]                     = textLookup.asScala.toMap.map {
-      case (x, i) => (x.toLong, i)
+    val copy: Map[scala.Long, String]                     = textLookup.asScala.toMap.map { case (x, i) =>
+      (x.toLong, i)
     }
     val map: Map[TextStyle, Map[scala.Long, String]]      = Map(TextStyle.FULL -> copy)
     val store: TTBPSimpleDateTimeTextProvider.LocaleStore =

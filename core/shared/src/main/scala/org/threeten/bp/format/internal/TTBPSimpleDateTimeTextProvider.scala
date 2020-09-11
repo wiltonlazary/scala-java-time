@@ -86,17 +86,16 @@ object TTBPSimpleDateTimeTextProvider {
     private val parsable: (List[(String, Long)], Map[TextStyle, List[(String, Long)]]) = {
       val u = valueTextMap.foldLeft(
         (List.empty[(String, Long)], Map.empty[TextStyle, List[(String, Long)]])
-      ) {
-        case ((all, map), (style, entries)) =>
-          val reverse =
-            entries.toList.sortBy(_._1).foldLeft((true, Map.empty[String, (String, Long)])) {
-              case (a @ (false, _), _)   => a
-              case ((true, acc), (k, v)) =>
-                val continue = !acc.contains(v)
-                (continue, acc + (v -> (v -> k)))
-            }
-          val list    = reverse._2.values.toList.sortBy(x => (-x._1.length))
-          (all ::: list, map + (style -> list))
+      ) { case ((all, map), (style, entries)) =>
+        val reverse =
+          entries.toList.sortBy(_._1).foldLeft((true, Map.empty[String, (String, Long)])) {
+            case (a @ (false, _), _)   => a
+            case ((true, acc), (k, v)) =>
+              val continue = !acc.contains(v)
+              (continue, acc + (v -> (v -> k)))
+          }
+        val list    = reverse._2.values.toList.sortBy(x => (-x._1.length))
+        (all ::: list, map + (style -> list))
       }
       (u._1.sortBy(x => (-x._1.length)), u._2)
     }

@@ -914,11 +914,10 @@ class TestZonedDateTime
     )
 
   test("parseWithZoneAndOffsetToInstant") {
-    data_parseOverlapToInstant.foreach {
-      case (z, i) =>
-        val zdt     = ZonedDateTime.parse(z)
-        val instant = Instant.parse(i)
-        assertEquals(zdt.toInstant, instant)
+    data_parseOverlapToInstant.foreach { case (z, i) =>
+      val zdt     = ZonedDateTime.parse(z)
+      val instant = Instant.parse(i)
+      assertEquals(zdt.toInstant, instant)
     }
   }
 

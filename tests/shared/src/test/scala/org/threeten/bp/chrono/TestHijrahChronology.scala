@@ -72,16 +72,14 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
     )
 
   test("test_toLocalDate") {
-    data_samples.foreach {
-      case (hijrahDate, iso) =>
-        assertEquals(LocalDate.from(hijrahDate), iso)
+    data_samples.foreach { case (hijrahDate, iso) =>
+      assertEquals(LocalDate.from(hijrahDate), iso)
     }
   }
 
   test("test_fromCalendrical") {
-    data_samples.foreach {
-      case (hijrahDate, iso) =>
-        assertEquals(HijrahChronology.INSTANCE.date(iso), hijrahDate)
+    data_samples.foreach { case (hijrahDate, iso) =>
+      assertEquals(HijrahChronology.INSTANCE.date(iso), hijrahDate)
     }
   }
 
@@ -100,11 +98,10 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
     )
 
   test("test_badDates") {
-    data_badDates.foreach {
-      case (year, month, dom) =>
-        assertThrows[DateTimeException] {
-          HijrahChronology.INSTANCE.date(year, month, dom)
-        }
+    data_badDates.foreach { case (year, month, dom) =>
+      assertThrows[DateTimeException] {
+        HijrahChronology.INSTANCE.date(year, month, dom)
+      }
     }
   }
 
@@ -166,9 +163,8 @@ class TestHijrahChronology extends AnyFunSuite with BeforeAndAfterEach with Asse
     )
 
   test("test_toString") {
-    data_toString.foreach {
-      case (hijrahDate, expected) =>
-        assertEquals(hijrahDate.toString, expected)
+    data_toString.foreach { case (hijrahDate, expected) =>
+      assertEquals(hijrahDate.toString, expected)
     }
   }
 

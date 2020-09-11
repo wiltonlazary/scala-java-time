@@ -1271,9 +1271,8 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
 
   test("test_print_isoWeekDate") {
     import scala.collection.JavaConverters._
-    weekDate.asScala.toList.foreach {
-      case (test, expected) =>
-        assertEquals(DateTimeFormatter.ISO_WEEK_DATE.format(test), expected)
+    weekDate.asScala.toList.foreach { case (test, expected) =>
+      assertEquals(DateTimeFormatter.ISO_WEEK_DATE.format(test), expected)
     }
   }
 

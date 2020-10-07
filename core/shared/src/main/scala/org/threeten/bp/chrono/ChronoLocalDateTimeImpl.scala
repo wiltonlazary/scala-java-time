@@ -84,12 +84,13 @@ private[chrono] object ChronoLocalDateTimeImpl {
   /** Nanos per day. */
   private val NANOS_PER_DAY: Long = NANOS_PER_HOUR * HOURS_PER_DAY
 
-  /** Obtains an instance of {@code ChronoLocalDateTime} from a date and time.
-    *
-    * @param date  the local date, not null
-    * @param time  the local time, not null
-    * @return the local date-time, not null
-    */
+  /**
+   * Obtains an instance of {@code ChronoLocalDateTime} from a date and time.
+   *
+   * @param date  the local date, not null
+   * @param time  the local time, not null
+   * @return the local date-time, not null
+   */
   private[chrono] def of[R <: ChronoLocalDate](
     date: R,
     time: LocalTime
@@ -98,25 +99,26 @@ private[chrono] object ChronoLocalDateTimeImpl {
 
 }
 
-/** A date-time without a time-zone for the calendar neutral API.
-  *
-  * {@code ChronoLocalDateTime} is an immutable date-time object that represents a date-time, often
-  * viewed as year-month-day-hour-minute-second. This object can also access other
-  * fields such as day-of-year, day-of-week and week-of-year.
-  *
-  * This class stores all date and time fields, to a precision of nanoseconds.
-  * It does not store or represent a time-zone. For example, the value
-  * "2nd October 2007 at 13:45.30.123456789" can be stored in an {@code ChronoLocalDateTime}.
-  *
-  * <h3>Specification for implementors</h3>
-  * This class is immutable and thread-safe.
-  *
-  * @tparam D the date type
-  *
-  * @constructor
-  * @param date  the date part of the date-time, not null
-  * @param time  the time part of the date-time, not null
-  */
+/**
+ * A date-time without a time-zone for the calendar neutral API.
+ *
+ * {@code ChronoLocalDateTime} is an immutable date-time object that represents a date-time, often
+ * viewed as year-month-day-hour-minute-second. This object can also access other
+ * fields such as day-of-year, day-of-week and week-of-year.
+ *
+ * This class stores all date and time fields, to a precision of nanoseconds.
+ * It does not store or represent a time-zone. For example, the value
+ * "2nd October 2007 at 13:45.30.123456789" can be stored in an {@code ChronoLocalDateTime}.
+ *
+ * <h3>Specification for implementors</h3>
+ * This class is immutable and thread-safe.
+ *
+ * @tparam D the date type
+ *
+ * @constructor
+ * @param date  the date part of the date-time, not null
+ * @param time  the time part of the date-time, not null
+ */
 @SerialVersionUID(4556003607393004514L)
 final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
   private val date: D,
@@ -128,13 +130,14 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
   Objects.requireNonNull(date, "date")
   Objects.requireNonNull(time, "time")
 
-  /** Returns a copy of this date-time with the new date and time, checking
-    * to see if a new object is in fact required.
-    *
-    * @param newDate  the date of the new date-time, not null
-    * @param newTime  the time of the new date-time, not null
-    * @return the date-time, not null
-    */
+  /**
+   * Returns a copy of this date-time with the new date and time, checking
+   * to see if a new object is in fact required.
+   *
+   * @param newDate  the date of the new date-time, not null
+   * @param newTime  the time of the new date-time, not null
+   * @return the date-time, not null
+   */
   private def `with`(newDate: Temporal, newTime: LocalTime): ChronoLocalDateTimeImpl[D] =
     if ((date eq newDate) && (time eq newTime))
       this

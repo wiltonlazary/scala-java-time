@@ -44,8 +44,9 @@ import org.threeten.bp.temporal.TemporalQueries
 import org.threeten.bp.temporal.TemporalUnit
 import org.threeten.bp.temporal.UnsupportedTemporalTypeException
 
-/** An implementation of {@code ChronoPeriod}.
-  */
+/**
+ * An implementation of {@code ChronoPeriod}.
+ */
 @SerialVersionUID(275618735781L)
 final class ChronoPeriodImpl(
   private val chronology: Chronology,

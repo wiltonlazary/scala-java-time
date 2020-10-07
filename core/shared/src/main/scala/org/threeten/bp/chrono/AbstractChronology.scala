@@ -31,11 +31,12 @@
  */
 package org.threeten.bp.chrono
 
-/** An abstract implementation of {@code Chronology}.
-  *
-  * <h3>Specification for implementors</h3>
-  * This class must be implemented with care to ensure other classes operate correctly.
-  * All implementations that can be instantiated must be final, immutable and thread-safe.
-  * Subclasses should be Serializable wherever possible.
-  */
+/**
+ * An abstract implementation of {@code Chronology}.
+ *
+ * <h3>Specification for implementors</h3>
+ * This class must be implemented with care to ensure other classes operate correctly.
+ * All implementations that can be instantiated must be final, immutable and thread-safe.
+ * Subclasses should be Serializable wherever possible.
+ */
 abstract class AbstractChronology extends Chronology

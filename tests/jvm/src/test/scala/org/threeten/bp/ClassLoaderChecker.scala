@@ -42,9 +42,10 @@ import java.util.regex.Pattern
 import java.util.zip.ZipInputStream
 import org.threeten.bp.temporal.TemporalAccessor
 
-/** Test Class loading.
-  * Use "-verbose:class".
-  */
+/**
+ * Test Class loading.
+ * Use "-verbose:class".
+ */
 object ClassLoaderChecker {
   def main(args: Array[String]): Unit = {
     var a: Any = new ConcurrentHashMap[AnyRef, AnyRef]

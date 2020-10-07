@@ -66,18 +66,19 @@ object TTBPSimpleDateTimeTextProvider {
     new TTBPSimpleDateTimeTextProvider.LocaleStore(tmp2)
   }
 
-  /** Stores the text for a single locale.
-    *
-    * Some fields have a textual representation, such as day-of-week or month-of-year.
-    * These textual representations can be captured in this class for printing
-    * and parsing.
-    *
-    * This class is immutable and thread-safe.
-    *
-    * @constructor
-    *
-    * @param valueTextMap  the map of values to text to store, assigned and not altered, not null
-    */
+  /**
+   * Stores the text for a single locale.
+   *
+   * Some fields have a textual representation, such as day-of-week or month-of-year.
+   * These textual representations can be captured in this class for printing
+   * and parsing.
+   *
+   * This class is immutable and thread-safe.
+   *
+   * @constructor
+   *
+   * @param valueTextMap  the map of values to text to store, assigned and not altered, not null
+   */
   private[format] final case class LocaleStore private[format] (
     private val valueTextMap: Map[TextStyle, Map[Long, String]]
   ) {
@@ -100,36 +101,39 @@ object TTBPSimpleDateTimeTextProvider {
       (u._1.sortBy(x => (-x._1.length)), u._2)
     }
 
-    /** Gets the text for the specified field value, locale and style
-      * for the purpose of printing.
-      *
-      * @param value  the value to get text for, not null
-      * @param style  the style to get text for, not null
-      * @return the text for the field value, null if no text found
-      */
+    /**
+     * Gets the text for the specified field value, locale and style
+     * for the purpose of printing.
+     *
+     * @param value  the value to get text for, not null
+     * @param style  the style to get text for, not null
+     * @return the text for the field value, null if no text found
+     */
     private[format] def getText(value: Long, style: TextStyle): String =
       valueTextMap.get(style).flatMap(_.get(value)).orNull
 
-    /** Gets an iterator of text to field for the specified style for the purpose of parsing.
-      *
-      * The iterator must be returned in order from the longest text to the shortest.
-      *
-      * @param style  the style to get text for, null for all parsable text
-      * @return the iterator of text to field pairs, in order from longest text to shortest text,
-      *         null if the style is not parsable
-      */
+    /**
+     * Gets an iterator of text to field for the specified style for the purpose of parsing.
+     *
+     * The iterator must be returned in order from the longest text to the shortest.
+     *
+     * @param style  the style to get text for, null for all parsable text
+     * @return the iterator of text to field pairs, in order from longest text to shortest text,
+     *         null if the style is not parsable
+     */
     private[format] def getTextIterator(style: TextStyle): Iterator[(String, Long)] =
       parsable._2.getOrElse(style, parsable._1).iterator
   }
 }
 
-/** The Service Provider Implementation to obtain date-time text for a field.
-  *
-  * This implementation is based on extraction of data from a {@link DateFormatSymbols}.
-  *
-  * <h3>Specification for implementors</h3>
-  * This class is immutable and thread-safe.
-  */
+/**
+ * The Service Provider Implementation to obtain date-time text for a field.
+ *
+ * This implementation is based on extraction of data from a {@link DateFormatSymbols}.
+ *
+ * <h3>Specification for implementors</h3>
+ * This class is immutable and thread-safe.
+ */
 final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
 
   /** Cache. */

@@ -48,51 +48,56 @@ object JapaneseEra {
   private[chrono] val ERA_NAMES: Array[String]         = Array("Meiji", "Taisho", "Showa", "Heisei")
   private[chrono] val ERA_ABBREVIATIONS: Array[String] = Array("M", "T", "S", "H")
 
-  /** The singleton instance for the 'Meiji' era (1868-09-08 - 1912-07-29)
-    * which has the value -1.
-    */
+  /**
+   * The singleton instance for the 'Meiji' era (1868-09-08 - 1912-07-29)
+   * which has the value -1.
+   */
   lazy val MEIJI: JapaneseEra = new JapaneseEra(-1, LocalDate.of(1868, 9, 8), "Meiji")
 
-  /** The singleton instance for the 'Taisho' era (1912-07-30 - 1926-12-24)
-    * which has the value 0.
-    */
+  /**
+   * The singleton instance for the 'Taisho' era (1912-07-30 - 1926-12-24)
+   * which has the value 0.
+   */
   lazy val TAISHO: JapaneseEra = new JapaneseEra(0, LocalDate.of(1912, 7, 30), "Taisho")
 
-  /** The singleton instance for the 'Showa' era (1926-12-25 - 1989-01-07)
-    * which has the value 1.
-    */
+  /**
+   * The singleton instance for the 'Showa' era (1926-12-25 - 1989-01-07)
+   * which has the value 1.
+   */
   lazy val SHOWA: JapaneseEra = new JapaneseEra(1, LocalDate.of(1926, 12, 25), "Showa")
 
-  /** The singleton instance for the 'Heisei' era (1989-01-08 - current)
-    * which has the value 2.
-    */
+  /**
+   * The singleton instance for the 'Heisei' era (1989-01-08 - current)
+   * which has the value 2.
+   */
   lazy val HEISEI: JapaneseEra = new JapaneseEra(2, LocalDate.of(1989, 1, 8), "Heisei")
 
   /**
-    * The singleton instance for the 'Reiwa' era (2019-05-01 - current)
-    * which has the value 3.
-    */
+   * The singleton instance for the 'Reiwa' era (2019-05-01 - current)
+   * which has the value 3.
+   */
   lazy val REIWA = new JapaneseEra(3, LocalDate.of(2019, 5, 1), "Reiwa")
 
   /**
-    * The value of the additional era.
-    */
+   * The value of the additional era.
+   */
   private[chrono] val ADDITIONAL_VALUE: Int = 4
 
   private[chrono] lazy val KNOWN_ERAS: AtomicReference[Array[JapaneseEra]] = new AtomicReference(
     Array(MEIJI, TAISHO, SHOWA, HEISEI, REIWA)
   )
 
-  /** Obtains an instance of {@code JapaneseEra} from an {@code int} value.
-    *
-    * The {@link #SHOWA} era that contains 1970-01-01 (ISO calendar system) has the value 1
-    * Later era is numbered 2 ({@link #HEISEI}). Earlier eras are numbered 0 ({@link #TAISHO}),
-    * -1 ({@link #MEIJI}), only Meiji and later eras are supported.
-    *
-    * @param japaneseEra  the era to represent
-    * @return the { @code JapaneseEra} singleton, not null
-    * @throws DateTimeException if the value is invalid
-    */
+  /**
+   * Obtains an instance of {@code JapaneseEra} from an {@code int} value.
+   *
+   * The {@link #SHOWA} era that contains 1970-01-01 (ISO calendar system) has the value 1
+   * Later era is numbered 2 ({@link #HEISEI}). Earlier eras are numbered 0 ({@link #TAISHO}),
+   * -1 ({@link #MEIJI}), only Meiji and later eras are supported.
+   *
+   * @param japaneseEra  the era to represent
+   * @return the { @code JapaneseEra} singleton, not null
+   * @throws DateTimeException if the value is invalid
+   */
   def of(japaneseEra: Int): JapaneseEra = {
     val known = KNOWN_ERAS.get
     if (japaneseEra < MEIJI.eraValue || japaneseEra > known(known.length - 1).eraValue)
@@ -100,15 +105,16 @@ object JapaneseEra {
     known(ordinal(japaneseEra))
   }
 
-  /** Returns the {@code JapaneseEra} with the name.
-    *
-    * The string must match exactly the name of the era.
-    * (Extraneous whitespace characters are not permitted.)
-    *
-    * @param japaneseEra  the japaneseEra name; non-null
-    * @return the { @code JapaneseEra} singleton, never null
-    * @throws IllegalArgumentException if there is not JapaneseEra with the specified name
-    */
+  /**
+   * Returns the {@code JapaneseEra} with the name.
+   *
+   * The string must match exactly the name of the era.
+   * (Extraneous whitespace characters are not permitted.)
+   *
+   * @param japaneseEra  the japaneseEra name; non-null
+   * @return the { @code JapaneseEra} singleton, never null
+   * @throws IllegalArgumentException if there is not JapaneseEra with the specified name
+   */
   def valueOf(japaneseEra: String): JapaneseEra = {
     Objects.requireNonNull(japaneseEra, "japaneseEra")
     for (era <- KNOWN_ERAS.get)
@@ -117,23 +123,25 @@ object JapaneseEra {
     throw new IllegalArgumentException(s"Era not found: $japaneseEra")
   }
 
-  /** Returns an array of JapaneseEras.
-    *
-    * This method may be used to iterate over the JapaneseEras as follows:
-    * <pre>
-    * for (JapaneseEra c : JapaneseEra.values())
-    * System.out.println(c);
-    * </pre>
-    *
-    * @return an array of JapaneseEras
-    */
+  /**
+   * Returns an array of JapaneseEras.
+   *
+   * This method may be used to iterate over the JapaneseEras as follows:
+   * <pre>
+   * for (JapaneseEra c : JapaneseEra.values())
+   * System.out.println(c);
+   * </pre>
+   *
+   * @return an array of JapaneseEras
+   */
   def values: Array[JapaneseEra] = Arrays.copyOf(KNOWN_ERAS.get, KNOWN_ERAS.get.length)
 
-  /** Obtains an instance of {@code JapaneseEra} from a date.
-    *
-    * @param date  the date, not null
-    * @return the Era singleton, never null
-    */
+  /**
+   * Obtains an instance of {@code JapaneseEra} from a date.
+   *
+   * @param date  the date, not null
+   * @return the Era singleton, never null
+   */
   private[chrono] def from(date: LocalDate): JapaneseEra = {
     if (date.isBefore(MEIJI.since))
       throw new DateTimeException(s"Date too early: $date")
@@ -147,33 +155,35 @@ object JapaneseEra {
     null
   }
 
-  /** Returns the index into the arrays from the Era value.
-    * the eraValue is a valid Era number, -999, -1..2.
-    * @param eraValue the era value to convert to the index
-    * @return the index of the current Era
-    */
+  /**
+   * Returns the index into the arrays from the Era value.
+   * the eraValue is a valid Era number, -999, -1..2.
+   * @param eraValue the era value to convert to the index
+   * @return the index of the current Era
+   */
   private def ordinal(eraValue: Int): Int = eraValue + 1
 
 }
 
-/** An era in the Japanese Imperial calendar system.
-  *
-  * This class defines the valid eras for the Japanese chronology.
-  * Japan introduced the Gregorian calendar starting with Meiji 6.
-  * Only Meiji and later eras are supported;
-  * dates before Meiji 6, January 1 are not supported.
-  * <p>
-  * The four supported eras are hard-coded.
-  * A single additional era may be registered using {@link #registerEra(LocalDate, String)}.
-  *
-  * <h3>Specification for implementors</h3>
-  * This class is immutable and thread-safe.
-  *
-  * @constructor Creates an instance.
-  *
-  * @param eraValue  the era value, validated
-  * @param since  the date representing the first date of the era, validated not null
-  */
+/**
+ * An era in the Japanese Imperial calendar system.
+ *
+ * This class defines the valid eras for the Japanese chronology.
+ * Japan introduced the Gregorian calendar starting with Meiji 6.
+ * Only Meiji and later eras are supported;
+ * dates before Meiji 6, January 1 are not supported.
+ * <p>
+ * The four supported eras are hard-coded.
+ * A single additional era may be registered using {@link #registerEra(LocalDate, String)}.
+ *
+ * <h3>Specification for implementors</h3>
+ * This class is immutable and thread-safe.
+ *
+ * @constructor Creates an instance.
+ *
+ * @param eraValue  the era value, validated
+ * @param since  the date representing the first date of the era, validated not null
+ */
 final class JapaneseEra private[chrono] (
   private val eraValue:                          Int,
   @(transient @field) private[chrono] val since: LocalDate,
@@ -181,14 +191,16 @@ final class JapaneseEra private[chrono] (
 ) extends Era
     with Serializable {
 
-  /** Returns the start date of the era.
-    * @return the start date
-    */
+  /**
+   * Returns the start date of the era.
+   * @return the start date
+   */
   private[chrono] def startDate: LocalDate = since
 
-  /** Returns the end date of the era.
-    * @return the end date
-    */
+  /**
+   * Returns the end date of the era.
+   * @return the end date
+   */
   private[chrono] def endDate: LocalDate = {
     val ordinal: Int             = JapaneseEra.ordinal(eraValue)
     val eras: Array[JapaneseEra] = JapaneseEra.values
@@ -196,14 +208,15 @@ final class JapaneseEra private[chrono] (
     else eras(ordinal + 1).startDate.minusDays(1)
   }
 
-  /** Returns the numeric value of this {@code JapaneseEra}.
-    *
-    * The {@link #SHOWA} era that contains 1970-01-01 (ISO calendar system) has the value 1.
-    * Later eras are numbered from 2 ({@link #HEISEI}).
-    * Earlier eras are numbered 0 ({@link #TAISHO}) and -1 ({@link #MEIJI}).
-    *
-    * @return the era value
-    */
+  /**
+   * Returns the numeric value of this {@code JapaneseEra}.
+   *
+   * The {@link #SHOWA} era that contains 1970-01-01 (ISO calendar system) has the value 1.
+   * Later eras are numbered from 2 ({@link #HEISEI}).
+   * Earlier eras are numbered 0 ({@link #TAISHO}) and -1 ({@link #MEIJI}).
+   *
+   * @return the era value
+   */
   def getValue: Int = eraValue
 
   override def range(field: TemporalField): ValueRange =

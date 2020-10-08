@@ -133,6 +133,9 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
   )
   .jsSettings(
     scalacOptions ++= {
+      if (scalaJSVersion06) Seq.empty else Seq("-P:scalajs:genStaticForwardersForNonTopLevelObjects")
+    },
+    scalacOptions ++= {
       val tagOrHash =
         if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
         else s"v${version.value}"

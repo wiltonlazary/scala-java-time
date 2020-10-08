@@ -34,8 +34,8 @@ package org.threeten.bp.zone
 import org.portablescala.reflect._
 
 /**
-  * Try to load time zone rules from implementations via reflefction
-  */
+ * Try to load time zone rules from implementations via reflefction
+ */
 class ServiceLoaderZoneRulesInitializer extends ZoneRulesInitializer {
 
   override def initializeProviders(): Unit = {

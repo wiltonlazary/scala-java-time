@@ -3,8 +3,8 @@ package org.threeten.bp.zone
 import org.threeten.bp.ZoneOffset
 
 /**
-  * Minimal provider for UTC
-  */
+ * Minimal provider for UTC
+ */
 final class DefaultTzdbZoneRulesProvider extends ZoneRulesProvider {
 
   override protected def provideZoneIds: java.util.Set[String] = {

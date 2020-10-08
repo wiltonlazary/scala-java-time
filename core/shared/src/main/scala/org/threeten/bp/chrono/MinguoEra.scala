@@ -35,27 +35,30 @@ import org.threeten.bp.DateTimeException
 
 object MinguoEra {
 
-  /** The singleton instance for the era BEFORE_ROC, 'Before Republic of China'.
-    * This has the numeric value of {@code 0}.
-    */
+  /**
+   * The singleton instance for the era BEFORE_ROC, 'Before Republic of China'.
+   * This has the numeric value of {@code 0}.
+   */
   lazy val BEFORE_ROC = new MinguoEra("BEFORE_ROC", 0)
 
-  /** The singleton instance for the era ROC, 'Republic of China'.
-    * This has the numeric value of {@code 1}.
-    */
+  /**
+   * The singleton instance for the era ROC, 'Republic of China'.
+   * This has the numeric value of {@code 1}.
+   */
   lazy val ROC = new MinguoEra("ROC", 1)
 
   lazy val values: Array[MinguoEra] = Array(BEFORE_ROC, ROC)
 
-  /** Obtains an instance of {@code MinguoEra} from an {@code int} value.
-    *
-    * {@code MinguoEra} is an enum representing the Minguo eras of BEFORE_ROC/ROC.
-    * This factory allows the enum to be obtained from the {@code int} value.
-    *
-    * @param era  the BEFORE_ROC/ROC value to represent, from 0 (BEFORE_ROC) to 1 (ROC)
-    * @return the era singleton, not null
-    * @throws DateTimeException if the value is invalid
-    */
+  /**
+   * Obtains an instance of {@code MinguoEra} from an {@code int} value.
+   *
+   * {@code MinguoEra} is an enum representing the Minguo eras of BEFORE_ROC/ROC.
+   * This factory allows the enum to be obtained from the {@code int} value.
+   *
+   * @param era  the BEFORE_ROC/ROC value to represent, from 0 (BEFORE_ROC) to 1 (ROC)
+   * @return the era singleton, not null
+   * @throws DateTimeException if the value is invalid
+   */
   def of(era: Int): MinguoEra =
     era match {
       case 0 => BEFORE_ROC
@@ -65,25 +68,27 @@ object MinguoEra {
 
 }
 
-/** An era in the Minguo calendar system.
-  *
-  * The Minguo calendar system has two eras.
-  * The date {@code 0001-01-01 (Minguo)} is equal to {@code 1912-01-01 (ISO)}.
-  *
-  * <b>Do not use {@code ordinal()} to obtain the numeric representation of {@code MinguoEra}.
-  * Use {@code getValue()} instead.</b>
-  *
-  * <h3>Specification for implementors</h3>
-  * This is an immutable and thread-safe enum.
-  */
+/**
+ * An era in the Minguo calendar system.
+ *
+ * The Minguo calendar system has two eras.
+ * The date {@code 0001-01-01 (Minguo)} is equal to {@code 1912-01-01 (ISO)}.
+ *
+ * <b>Do not use {@code ordinal()} to obtain the numeric representation of {@code MinguoEra}.
+ * Use {@code getValue()} instead.</b>
+ *
+ * <h3>Specification for implementors</h3>
+ * This is an immutable and thread-safe enum.
+ */
 final class MinguoEra(name: String, ordinal: Int) extends Enum[MinguoEra](name, ordinal) with Era {
 
-  /** Gets the numeric era {@code int} value.
-    *
-    * The era BEFORE_ROC has the value 0, while the era ROC has the value 1.
-    *
-    * @return the era value, from 0 (BEFORE_ROC) to 1 (ROC)
-    */
+  /**
+   * Gets the numeric era {@code int} value.
+   *
+   * The era BEFORE_ROC has the value 0, while the era ROC has the value 1.
+   *
+   * @return the era value, from 0 (BEFORE_ROC) to 1 (ROC)
+   */
   def getValue: Int = ordinal
 
 }

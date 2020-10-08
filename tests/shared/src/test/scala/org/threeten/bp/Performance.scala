@@ -71,10 +71,11 @@ object Performance {
   /** Count. */
   private var loop: Int = 0
 
-  /** Main.
-    *
-    * @param args  the arguments
-    */
+  /**
+   * Main.
+   *
+   * @param args  the arguments
+   */
   def main(args: Array[String]): Unit = {
     {
       loop = 0

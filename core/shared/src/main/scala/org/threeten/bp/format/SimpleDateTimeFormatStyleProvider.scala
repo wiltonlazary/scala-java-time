@@ -45,13 +45,14 @@ private object SimpleDateTimeFormatStyleProvider {
     new HashMap[String, AnyRef]()
 }
 
-/** The Service Provider Implementation to obtain date-time formatters for a style.
-  *
-  * This implementation is based on extraction of data from a {@link SimpleDateFormat}.
-  *
-  * <h3>Specification for implementors</h3>
-  * This class is immutable and thread-safe.
-  */
+/**
+ * The Service Provider Implementation to obtain date-time formatters for a style.
+ *
+ * This implementation is based on extraction of data from a {@link SimpleDateFormat}.
+ *
+ * <h3>Specification for implementors</h3>
+ * This class is immutable and thread-safe.
+ */
 final class SimpleDateTimeFormatStyleProvider extends DateTimeFormatStyleProvider {
   override def getAvailableLocales: Array[Locale] = DateFormat.getAvailableLocales
 
@@ -89,9 +90,10 @@ final class SimpleDateTimeFormatStyleProvider extends DateTimeFormatStyleProvide
       }
   }
 
-  /** Converts the enum style to the old format style.
-    * @param style  the enum style, not null
-    * @return the int style
-    */
+  /**
+   * Converts the enum style to the old format style.
+   * @param style  the enum style, not null
+   * @return the int style
+   */
   private def convertStyle(style: FormatStyle): Int = style.ordinal
 }

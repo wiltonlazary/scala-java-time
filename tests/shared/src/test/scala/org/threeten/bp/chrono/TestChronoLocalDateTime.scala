@@ -51,9 +51,10 @@ import org.threeten.bp.temporal.ValueRange
 /** Test assertions that must be true for all built-in chronologies. */
 object TestChronoLocalDateTime {
 
-  /** FixedAdjusted returns a fixed DateTime in all adjustments.
-    * Construct an adjuster with the DateTime that should be returned.
-    */
+  /**
+   * FixedAdjusted returns a fixed DateTime in all adjustments.
+   * Construct an adjuster with the DateTime that should be returned.
+   */
   private[chrono] class FixedAdjuster private[chrono] (private var datetime: Temporal)
       extends TemporalAdjuster
       with TemporalAmount {
@@ -71,9 +72,10 @@ object TestChronoLocalDateTime {
       throw new UnsupportedOperationException("Not supported yet.")
   }
 
-  /** FixedPeriodUnit returns a fixed DateTime in all adjustments.
-    * Construct an FixedPeriodUnit with the DateTime that should be returned.
-    */
+  /**
+   * FixedPeriodUnit returns a fixed DateTime in all adjustments.
+   * Construct an FixedPeriodUnit with the DateTime that should be returned.
+   */
   private[chrono] class FixedPeriodUnit private[chrono] (private var dateTime: Temporal)
       extends TemporalUnit {
 
@@ -102,9 +104,10 @@ object TestChronoLocalDateTime {
       throw new UnsupportedOperationException("Not supported yet.")
   }
 
-  /** FixedDateTimeField returns a fixed DateTime in all adjustments.
-    * Construct an FixedDateTimeField with the DateTime that should be returned from doSet.
-    */
+  /**
+   * FixedDateTimeField returns a fixed DateTime in all adjustments.
+   * Construct an FixedDateTimeField with the DateTime that should be returned from doSet.
+   */
   private[chrono] class FixedDateTimeField private[chrono] (private var dateTime: Temporal)
       extends TemporalField {
 

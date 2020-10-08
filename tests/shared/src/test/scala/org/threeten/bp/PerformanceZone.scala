@@ -35,8 +35,9 @@ import java.text.NumberFormat
 import java.util.{ Calendar, Date, GregorianCalendar, TimeZone }
 import org.threeten.bp.zone.ZoneRules
 
-/** Test Performance.
-  */
+/**
+ * Test Performance.
+ */
 object PerformanceZone {
 
   /** The year to test. */
@@ -52,9 +53,10 @@ object PerformanceZone {
   /** Size. */
   private val SIZE: Int = 200000
 
-  /** Main.
-    * @param args  the arguments
-    */
+  /**
+   * Main.
+   * @param args  the arguments
+   */
   def main(args: Array[String]): Unit = {
     val time: LocalTime = LocalTime.of(12, 30, 20)
     System.out.println(time)

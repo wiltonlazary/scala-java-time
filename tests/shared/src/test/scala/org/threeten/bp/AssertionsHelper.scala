@@ -5,8 +5,8 @@ import org.scalatest.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 
 /**
-  * Helper methods to avoid rewriting much of the TestNG tests
-  */
+ * Helper methods to avoid rewriting much of the TestNG tests
+ */
 trait AssertionsHelper { this: AnyFunSuite =>
   def isIsoLeap(year: Long): Boolean =
     if (year % 4 != 0)

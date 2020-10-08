@@ -37,22 +37,25 @@ import org.threeten.bp.temporal.{ TemporalAccessor, TemporalField, TemporalQuery
 /** Base test class for {@code DateTime}. */
 trait GenDateTimeTest extends AnyFunSuite with AssertionsHelper {
 
-  /** Sample {@code DateTime} objects.
-    *
-    * @return the objects, not null
-    */
+  /**
+   * Sample {@code DateTime} objects.
+   *
+   * @return the objects, not null
+   */
   protected def samples: List[TemporalAccessor]
 
-  /** List of valid supported fields.
-    *
-    * @return the fields, not null
-    */
+  /**
+   * List of valid supported fields.
+   *
+   * @return the fields, not null
+   */
   protected def validFields: List[TemporalField]
 
-  /** List of invalid unsupported fields.
-    *
-    * @return the fields, not null
-    */
+  /**
+   * List of invalid unsupported fields.
+   *
+   * @return the fields, not null
+   */
   protected def invalidFields: List[TemporalField]
 
   test("basicTest_isSupported_DateTimeField_supported") {

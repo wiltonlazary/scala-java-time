@@ -31,27 +31,29 @@
  */
 package org.threeten.bp
 
-/** Exception used to indicate a problem while calculating a date-time.
-  *
-  * This exception is used to indicate problems with creating, querying
-  * and manipulating date-time objects.
-  *
-  * <h3>Specification for implementors</h3>
-  * This class is intended for use in a single thread.
-  *
-  * Constructs a new date-time exception with the specified message and cause.
-  *
-  * @param message  the message to use for this exception, may be null
-  * @param cause  the cause of the exception, may be null
-  */
+/**
+ * Exception used to indicate a problem while calculating a date-time.
+ *
+ * This exception is used to indicate problems with creating, querying
+ * and manipulating date-time objects.
+ *
+ * <h3>Specification for implementors</h3>
+ * This class is intended for use in a single thread.
+ *
+ * Constructs a new date-time exception with the specified message and cause.
+ *
+ * @param message  the message to use for this exception, may be null
+ * @param cause  the cause of the exception, may be null
+ */
 @SerialVersionUID(-1632418723876261839L)
 class DateTimeException(message: String, cause: Throwable)
     extends RuntimeException(message, cause) {
 
-  /** Constructs a new date-time exception with the specified message.
-    *
-    * @param message  the message to use for this exception, may be null
-    */
+  /**
+   * Constructs a new date-time exception with the specified message.
+   *
+   * @param message  the message to use for this exception, may be null
+   */
   def this(message: String) {
     this(message, null)
   }

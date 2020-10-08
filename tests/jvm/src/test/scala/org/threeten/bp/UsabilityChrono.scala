@@ -98,8 +98,9 @@ object UsabilityChrono {
     System.out.println()
   }
 
-  /** Example code.
-    */
+  /**
+   * Example code.
+   */
   private[bp] def example1(): Unit = {
     System.out.printf("Available Calendars%n")
     val now1: ChronoLocalDate              = MinguoChronology.INSTANCE.dateNow
@@ -129,8 +130,9 @@ object UsabilityChrono {
     }
   }
 
-  /** Prints a Minguo calendar for the current month.
-    */
+  /**
+   * Prints a Minguo calendar for the current month.
+   */
   private def printMinguoCal(): Unit = {
     val chronoName: String     = "Minguo"
     val chrono: Chronology     = Chronology.of(chronoName)
@@ -138,10 +140,11 @@ object UsabilityChrono {
     printMonthCal(today, System.out)
   }
 
-  /** Print a month calendar with complete week rows.
-    * @param date A date in some calendar
-    * @param out a PrintStream
-    */
+  /**
+   * Print a month calendar with complete week rows.
+   * @param date A date in some calendar
+   * @param out a PrintStream
+   */
   private def printMonthCal(date: ChronoLocalDate, out: PrintStream): Unit = {
     val lengthOfMonth: Int     = date.lengthOfMonth.toInt
     var end: ChronoLocalDate   = date.`with`(ChronoField.DAY_OF_MONTH, lengthOfMonth)

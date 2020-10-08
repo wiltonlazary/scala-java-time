@@ -42,13 +42,15 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatterBuilder
 import org.threeten.bp.format.SignStyle
 
-/** Examples for this project.
-  */
+/**
+ * Examples for this project.
+ */
 object Examples {
 
-  /** Main method.
-    * @param args  no arguments needed
-    */
+  /**
+   * Main method.
+   * @param args  no arguments needed
+   */
   def main(args: Array[String]): Unit = {
     val clock: Clock              = Clock.systemDefaultZone
     val zdt: ZonedDateTime        = ZonedDateTime.now(clock)

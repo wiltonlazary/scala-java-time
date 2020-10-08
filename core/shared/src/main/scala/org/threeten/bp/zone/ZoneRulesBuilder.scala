@@ -45,60 +45,64 @@ import org.threeten.bp.ZoneOffset
 import org.threeten.bp.chrono.IsoChronology
 import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
-/** A mutable builder used to create all the rules for a historic time-zone.
-  *
-  * The rules of a time-zone describe how the offset changes over time.
-  * The rules are created by building windows on the time-line within which
-  * the different rules apply. The rules may be one of two kinds:
-  * <ul>
-  * <li>Fixed savings - A single fixed amount of savings from the standard offset will apply.</li>
-  * <li>Rules - A set of one or more rules describe how daylight savings changes during the window.</li>
-  * </ul><p>
-  *
-  * <h3>Specification for implementors</h3>
-  * This class is a mutable builder used to create zone instances.
-  * It must only be used from a single thread.
-  * The created instances are immutable and thread-safe.
-  *
-  * Constructs an instance of the builder that can be used to create zone rules.
-  *
-  * The builder is used by adding one or more windows representing portions
-  * of the time-line. The standard offset from UTC/Greenwich will be constant
-  * within a window, although two adjacent windows can have the same standard offset.
-  *
-  * Within each window, there can either be a
-  * {@link #setFixedSavingsToWindow fixed savings amount} or a
-  * {@link #addRuleToWindow list of rules}.
-  */
+/**
+ * A mutable builder used to create all the rules for a historic time-zone.
+ *
+ * The rules of a time-zone describe how the offset changes over time.
+ * The rules are created by building windows on the time-line within which
+ * the different rules apply. The rules may be one of two kinds:
+ * <ul>
+ * <li>Fixed savings - A single fixed amount of savings from the standard offset will apply.</li>
+ * <li>Rules - A set of one or more rules describe how daylight savings changes during the window.</li>
+ * </ul><p>
+ *
+ * <h3>Specification for implementors</h3>
+ * This class is a mutable builder used to create zone instances.
+ * It must only be used from a single thread.
+ * The created instances are immutable and thread-safe.
+ *
+ * Constructs an instance of the builder that can be used to create zone rules.
+ *
+ * The builder is used by adding one or more windows representing portions
+ * of the time-line. The standard offset from UTC/Greenwich will be constant
+ * within a window, although two adjacent windows can have the same standard offset.
+ *
+ * Within each window, there can either be a
+ * {@link #setFixedSavingsToWindow fixed savings amount} or a
+ * {@link #addRuleToWindow list of rules}.
+ */
 class ZoneRulesBuilder() {
 
-  /** The list of windows.
-    */
+  /**
+   * The list of windows.
+   */
   private val windowList: java.util.List[ZoneRulesBuilder#TZWindow] =
     new java.util.ArrayList[ZoneRulesBuilder#TZWindow]
 
-  /** A map for deduplicating the output.
-    */
+  /**
+   * A map for deduplicating the output.
+   */
   private var deduplicateMap: java.util.Map[AnyRef, AnyRef] = null
 
   private val ruleComparator = new TZRuleComparator()
 
-  /** Adds a window to the builder that can be used to filter a set of rules.
-    *
-    * This method defines and adds a window to the zone where the standard offset is specified.
-    * The window limits the effect of subsequent additions of transition rules
-    * or fixed savings. If neither rules or fixed savings are added to the window
-    * then the window will default to no savings.
-    *
-    * Each window must be added sequentially, as the start instant of the window
-    * is derived from the until instant of the previous window.
-    *
-    * @param standardOffset  the standard offset, not null
-    * @param until  the date-time that the offset applies until, not null
-    * @param untilDefinition  the time type for the until date-time, not null
-    * @return this, for chaining
-    * @throws IllegalStateException if the window order is invalid
-    */
+  /**
+   * Adds a window to the builder that can be used to filter a set of rules.
+   *
+   * This method defines and adds a window to the zone where the standard offset is specified.
+   * The window limits the effect of subsequent additions of transition rules
+   * or fixed savings. If neither rules or fixed savings are added to the window
+   * then the window will default to no savings.
+   *
+   * Each window must be added sequentially, as the start instant of the window
+   * is derived from the until instant of the previous window.
+   *
+   * @param standardOffset  the standard offset, not null
+   * @param until  the date-time that the offset applies until, not null
+   * @param untilDefinition  the time type for the until date-time, not null
+   * @return this, for chaining
+   * @throws IllegalStateException if the window order is invalid
+   */
   def addWindow(
     standardOffset:  ZoneOffset,
     until:           LocalDateTime,
@@ -116,37 +120,39 @@ class ZoneRulesBuilder() {
     this
   }
 
-  /** Adds a window that applies until the end of time to the builder that can be
-    * used to filter a set of rules.
-    *
-    * This method defines and adds a window to the zone where the standard offset is specified.
-    * The window limits the effect of subsequent additions of transition rules
-    * or fixed savings. If neither rules or fixed savings are added to the window
-    * then the window will default to no savings.
-    *
-    * This must be added after all other windows.
-    * No more windows can be added after this one.
-    *
-    * @param standardOffset  the standard offset, not null
-    * @return this, for chaining
-    * @throws IllegalStateException if a forever window has already been added
-    */
+  /**
+   * Adds a window that applies until the end of time to the builder that can be
+   * used to filter a set of rules.
+   *
+   * This method defines and adds a window to the zone where the standard offset is specified.
+   * The window limits the effect of subsequent additions of transition rules
+   * or fixed savings. If neither rules or fixed savings are added to the window
+   * then the window will default to no savings.
+   *
+   * This must be added after all other windows.
+   * No more windows can be added after this one.
+   *
+   * @param standardOffset  the standard offset, not null
+   * @return this, for chaining
+   * @throws IllegalStateException if a forever window has already been added
+   */
   def addWindowForever(standardOffset: ZoneOffset): ZoneRulesBuilder =
     addWindow(standardOffset, LocalDateTime.MAX, TimeDefinition.WALL)
 
-  /** Sets the previously added window to have fixed savings.
-    *
-    * Setting a window to have fixed savings simply means that a single daylight
-    * savings amount applies throughout the window. The window could be small,
-    * such as a single summer, or large, such as a multi-year daylight savings.
-    *
-    * A window can either have fixed savings or rules but not both.
-    *
-    * @param fixedSavingAmountSecs  the amount of saving to use for the whole window, not null
-    * @return this, for chaining
-    * @throws IllegalStateException if no window has yet been added
-    * @throws IllegalStateException if the window already has rules
-    */
+  /**
+   * Sets the previously added window to have fixed savings.
+   *
+   * Setting a window to have fixed savings simply means that a single daylight
+   * savings amount applies throughout the window. The window could be small,
+   * such as a single summer, or large, such as a multi-year daylight savings.
+   *
+   * A window can either have fixed savings or rules but not both.
+   *
+   * @param fixedSavingAmountSecs  the amount of saving to use for the whole window, not null
+   * @return this, for chaining
+   * @throws IllegalStateException if no window has yet been added
+   * @throws IllegalStateException if the window already has rules
+   */
   def setFixedSavingsToWindow(fixedSavingAmountSecs: Int): ZoneRulesBuilder = {
     if (windowList.isEmpty)
       throw new IllegalStateException("Must add a window before setting the fixed savings")
@@ -155,19 +161,20 @@ class ZoneRulesBuilder() {
     this
   }
 
-  /** Adds a single transition rule to the current window.
-    *
-    * This adds a rule such that the offset, expressed as a daylight savings amount,
-    * changes at the specified date-time.
-    *
-    * @param transitionDateTime  the date-time that the transition occurs as defined by timeDefintion, not null
-    * @param timeDefinition  the definition of how to convert local to actual time, not null
-    * @param savingAmountSecs  the amount of saving from the standard offset after the transition in seconds
-    * @return this, for chaining
-    * @throws IllegalStateException if no window has yet been added
-    * @throws IllegalStateException if the window already has fixed savings
-    * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
-    */
+  /**
+   * Adds a single transition rule to the current window.
+   *
+   * This adds a rule such that the offset, expressed as a daylight savings amount,
+   * changes at the specified date-time.
+   *
+   * @param transitionDateTime  the date-time that the transition occurs as defined by timeDefintion, not null
+   * @param timeDefinition  the definition of how to convert local to actual time, not null
+   * @param savingAmountSecs  the amount of saving from the standard offset after the transition in seconds
+   * @return this, for chaining
+   * @throws IllegalStateException if no window has yet been added
+   * @throws IllegalStateException if the window already has fixed savings
+   * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
+   */
   def addRuleToWindow(
     transitionDateTime: LocalDateTime,
     timeDefinition:     ZoneOffsetTransitionRule.TimeDefinition,
@@ -187,25 +194,26 @@ class ZoneRulesBuilder() {
     )
   }
 
-  /** Adds a single transition rule to the current window.
-    *
-    * This adds a rule such that the offset, expressed as a daylight savings amount,
-    * changes at the specified date-time.
-    *
-    * @param year  the year of the transition, from MIN_VALUE to MAX_VALUE
-    * @param month  the month of the transition, not null
-    * @param dayOfMonthIndicator  the day-of-month of the transition, adjusted by dayOfWeek,
-    *                             from 1 to 31 adjusted later, or -1 to -28 adjusted earlier from the last day of the month
-    * @param time  the time that the transition occurs as defined by timeDefintion, not null
-    * @param timeEndOfDay  whether midnight is at the end of day
-    * @param timeDefinition  the definition of how to convert local to actual time, not null
-    * @param savingAmountSecs  the amount of saving from the standard offset after the transition in seconds
-    * @return this, for chaining
-    * @throws DateTimeException if a date-time field is out of range
-    * @throws IllegalStateException if no window has yet been added
-    * @throws IllegalStateException if the window already has fixed savings
-    * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
-    */
+  /**
+   * Adds a single transition rule to the current window.
+   *
+   * This adds a rule such that the offset, expressed as a daylight savings amount,
+   * changes at the specified date-time.
+   *
+   * @param year  the year of the transition, from MIN_VALUE to MAX_VALUE
+   * @param month  the month of the transition, not null
+   * @param dayOfMonthIndicator  the day-of-month of the transition, adjusted by dayOfWeek,
+   *                             from 1 to 31 adjusted later, or -1 to -28 adjusted earlier from the last day of the month
+   * @param time  the time that the transition occurs as defined by timeDefintion, not null
+   * @param timeEndOfDay  whether midnight is at the end of day
+   * @param timeDefinition  the definition of how to convert local to actual time, not null
+   * @param savingAmountSecs  the amount of saving from the standard offset after the transition in seconds
+   * @return this, for chaining
+   * @throws DateTimeException if a date-time field is out of range
+   * @throws IllegalStateException if no window has yet been added
+   * @throws IllegalStateException if the window already has fixed savings
+   * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
+   */
   def addRuleToWindow(
     year:                Int,
     month:               Month,
@@ -226,29 +234,30 @@ class ZoneRulesBuilder() {
                     savingAmountSecs
     )
 
-  /** Adds a multi-year transition rule to the current window.
-    *
-    * This adds a rule such that the offset, expressed as a daylight savings amount,
-    * changes at the specified date-time for each year in the range.
-    *
-    * @param startYear  the start year of the rule, from MIN_VALUE to MAX_VALUE
-    * @param endYear  the end year of the rule, from MIN_VALUE to MAX_VALUE
-    * @param month  the month of the transition, not null
-    * @param dayOfMonthIndicator  the day-of-month of the transition, adjusted by dayOfWeek,
-    *                             from 1 to 31 adjusted later, or -1 to -28 adjusted earlier from the last day of the month
-    * @param dayOfWeek  the day-of-week to adjust to, null if day-of-month should not be adjusted
-    * @param time  the time that the transition occurs as defined by timeDefintion, not null
-    * @param timeEndOfDay  whether midnight is at the end of day
-    * @param timeDefinition  the definition of how to convert local to actual time, not null
-    * @param savingAmountSecs  the amount of saving from the standard offset after the transition in seconds
-    * @return this, for chaining
-    * @throws DateTimeException if a date-time field is out of range
-    * @throws IllegalArgumentException if the day of month indicator is invalid
-    * @throws IllegalArgumentException if the end of day midnight flag does not match the time
-    * @throws IllegalStateException if no window has yet been added
-    * @throws IllegalStateException if the window already has fixed savings
-    * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
-    */
+  /**
+   * Adds a multi-year transition rule to the current window.
+   *
+   * This adds a rule such that the offset, expressed as a daylight savings amount,
+   * changes at the specified date-time for each year in the range.
+   *
+   * @param startYear  the start year of the rule, from MIN_VALUE to MAX_VALUE
+   * @param endYear  the end year of the rule, from MIN_VALUE to MAX_VALUE
+   * @param month  the month of the transition, not null
+   * @param dayOfMonthIndicator  the day-of-month of the transition, adjusted by dayOfWeek,
+   *                             from 1 to 31 adjusted later, or -1 to -28 adjusted earlier from the last day of the month
+   * @param dayOfWeek  the day-of-week to adjust to, null if day-of-month should not be adjusted
+   * @param time  the time that the transition occurs as defined by timeDefintion, not null
+   * @param timeEndOfDay  whether midnight is at the end of day
+   * @param timeDefinition  the definition of how to convert local to actual time, not null
+   * @param savingAmountSecs  the amount of saving from the standard offset after the transition in seconds
+   * @return this, for chaining
+   * @throws DateTimeException if a date-time field is out of range
+   * @throws IllegalArgumentException if the day of month indicator is invalid
+   * @throws IllegalArgumentException if the end of day midnight flag does not match the time
+   * @throws IllegalStateException if no window has yet been added
+   * @throws IllegalStateException if the window already has fixed savings
+   * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
+   */
   def addRuleToWindow(
     startYear:           Int,
     endYear:             Int,
@@ -287,29 +296,31 @@ class ZoneRulesBuilder() {
     this
   }
 
-  /** Completes the build converting the builder to a set of time-zone rules.
-    *
-    * Calling this method alters the state of the builder.
-    * Further rules should not be added to this builder once this method is called.
-    *
-    * @param zoneId  the time-zone ID, not null
-    * @return the zone rules, not null
-    * @throws IllegalStateException if no windows have been added
-    * @throws IllegalStateException if there is only one rule defined as being forever for any given window
-    */
+  /**
+   * Completes the build converting the builder to a set of time-zone rules.
+   *
+   * Calling this method alters the state of the builder.
+   * Further rules should not be added to this builder once this method is called.
+   *
+   * @param zoneId  the time-zone ID, not null
+   * @return the zone rules, not null
+   * @throws IllegalStateException if no windows have been added
+   * @throws IllegalStateException if there is only one rule defined as being forever for any given window
+   */
   def toRules(zoneId: String): ZoneRules = toRules(zoneId, new java.util.HashMap[AnyRef, AnyRef])
 
-  /** Completes the build converting the builder to a set of time-zone rules.
-    *
-    * Calling this method alters the state of the builder.
-    * Further rules should not be added to this builder once this method is called.
-    *
-    * @param zoneId  the time-zone ID, not null
-    * @param deduplicateMap  a map for deduplicating the values, not null
-    * @return the zone rules, not null
-    * @throws IllegalStateException if no windows have been added
-    * @throws IllegalStateException if there is only one rule defined as being forever for any given window
-    */
+  /**
+   * Completes the build converting the builder to a set of time-zone rules.
+   *
+   * Calling this method alters the state of the builder.
+   * Further rules should not be added to this builder once this method is called.
+   *
+   * @param zoneId  the time-zone ID, not null
+   * @param deduplicateMap  a map for deduplicating the values, not null
+   * @return the zone rules, not null
+   * @throws IllegalStateException if no windows have been added
+   * @throws IllegalStateException if there is only one rule defined as being forever for any given window
+   */
   private[zone] def toRules(
     zoneId:         String,
     deduplicateMap: java.util.Map[AnyRef, AnyRef]
@@ -418,28 +429,30 @@ class ZoneRulesBuilder() {
     )
   }
 
-  /** Deduplicates an object instance.
-    *
-    * @tparam T the generic type
-    * @param object  the object to deduplicate
-    * @return the deduplicated object
-    */
+  /**
+   * Deduplicates an object instance.
+   *
+   * @tparam T the generic type
+   * @param object  the object to deduplicate
+   * @return the deduplicated object
+   */
   private[zone] def deduplicate[T <: AnyRef](`object`: T): T = {
     if (!deduplicateMap.containsKey(`object`))
       deduplicateMap.put(`object`, `object`)
     deduplicateMap.get(`object`).asInstanceOf[T]
   }
 
-  /** A definition of a window in the time-line.
-    * The window will have one standard offset and will either have a
-    * fixed DST savings or a set of rules.
-    *
-    * @constructor
-    *
-    * @param standardOffset  the standard offset applicable during the window, not null
-    * @param windowEnd  the end of the window, relative to the time definition, null if forever
-    * @param timeDefinition  the time definition for calculating the true end, not null
-    */
+  /**
+   * A definition of a window in the time-line.
+   * The window will have one standard offset and will either have a
+   * fixed DST savings or a set of rules.
+   *
+   * @constructor
+   *
+   * @param standardOffset  the standard offset applicable during the window, not null
+   * @param windowEnd  the end of the window, relative to the time definition, null if forever
+   * @param timeDefinition  the time definition for calculating the true end, not null
+   */
   private[zone] class TZWindow private[zone] (
     private[zone] val standardOffset: ZoneOffset,
     private val windowEnd:            LocalDateTime,
@@ -460,32 +473,34 @@ class ZoneRulesBuilder() {
     private[zone] var lastRuleList: java.util.List[ZoneRulesBuilder#TZRule] =
       new java.util.ArrayList[ZoneRulesBuilder#TZRule]
 
-    /** Sets the fixed savings amount for the window.
-      *
-      * @param fixedSavingAmount  the amount of daylight saving to apply throughout the window, may be null
-      * @throws IllegalStateException if the window already has rules
-      */
+    /**
+     * Sets the fixed savings amount for the window.
+     *
+     * @param fixedSavingAmount  the amount of daylight saving to apply throughout the window, may be null
+     * @throws IllegalStateException if the window already has rules
+     */
     private[zone] def setFixedSavings(fixedSavingAmount: Int): Unit =
       if (ruleList.size > 0 || lastRuleList.size > 0)
         throw new IllegalStateException("Window has DST rules, so cannot have fixed savings")
       else
         this.fixedSavingAmountSecs = fixedSavingAmount
 
-    /** Adds a rule to the current window.
-      *
-      * @param startYear  the start year of the rule, from MIN_VALUE to MAX_VALUE
-      * @param endYear  the end year of the rule, from MIN_VALUE to MAX_VALUE
-      * @param month  the month of the transition, not null
-      * @param dayOfMonthIndicator  the day-of-month of the transition, adjusted by dayOfWeek,
-      *                             from 1 to 31 adjusted later, or -1 to -28 adjusted earlier from the last day of the month
-      * @param dayOfWeek  the day-of-week to adjust to, null if day-of-month should not be adjusted
-      * @param time  the time that the transition occurs as defined by timeDefintion, not null
-      * @param timeEndOfDay  whether midnight is at the end of day
-      * @param timeDefinition  the definition of how to convert local to actual time, not null
-      * @param savingAmountSecs  the amount of saving from the standard offset in seconds
-      * @throws IllegalStateException if the window already has fixed savings
-      * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
-      */
+    /**
+     * Adds a rule to the current window.
+     *
+     * @param startYear  the start year of the rule, from MIN_VALUE to MAX_VALUE
+     * @param endYear  the end year of the rule, from MIN_VALUE to MAX_VALUE
+     * @param month  the month of the transition, not null
+     * @param dayOfMonthIndicator  the day-of-month of the transition, adjusted by dayOfWeek,
+     *                             from 1 to 31 adjusted later, or -1 to -28 adjusted earlier from the last day of the month
+     * @param dayOfWeek  the day-of-week to adjust to, null if day-of-month should not be adjusted
+     * @param time  the time that the transition occurs as defined by timeDefintion, not null
+     * @param timeEndOfDay  whether midnight is at the end of day
+     * @param timeDefinition  the definition of how to convert local to actual time, not null
+     * @param savingAmountSecs  the amount of saving from the standard offset in seconds
+     * @throws IllegalStateException if the window already has fixed savings
+     * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
+     */
     private[zone] def addRule(
       startYear:           Int,
       endYear:             Int,
@@ -527,23 +542,25 @@ class ZoneRulesBuilder() {
       }
     }
 
-    /** Validates that this window is after the previous one.
-      *
-      * @param previous  the previous window, not null
-      * @throws IllegalStateException if the window order is invalid
-      */
+    /**
+     * Validates that this window is after the previous one.
+     *
+     * @param previous  the previous window, not null
+     * @throws IllegalStateException if the window order is invalid
+     */
     private[zone] def validateWindowOrder(previous: ZoneRulesBuilder#TZWindow): Unit =
       if (windowEnd.isBefore(previous.windowEnd))
         throw new IllegalStateException(
           s"Windows must be added in date-time order: $windowEnd < ${previous.windowEnd}"
         )
 
-    /** Adds rules to make the last rules all start from the same year.
-      * Also add one more year to avoid weird case where penultimate year has odd offset.
-      *
-      * @param windowStartYear  the window start year
-      * @throws IllegalStateException if there is only one rule defined as being forever
-      */
+    /**
+     * Adds rules to make the last rules all start from the same year.
+     * Also add one more year to avoid weird case where penultimate year has odd offset.
+     *
+     * @param windowStartYear  the window start year
+     * @throws IllegalStateException if there is only one rule defined as being forever
+     */
     private[zone] def tidy(windowStartYear: Int): Unit = {
       if (lastRuleList.size == 1)
         throw new IllegalStateException("Cannot have only one rule defined as being forever")
@@ -595,26 +612,29 @@ class ZoneRulesBuilder() {
         fixedSavingAmountSecs = 0
     }
 
-    /** Checks if the window is empty.
-      *
-      * @return true if the window is only a standard offset
-      */
+    /**
+     * Checks if the window is empty.
+     *
+     * @return true if the window is only a standard offset
+     */
     private[zone] def isSingleWindowStandardOffset: Boolean =
       (windowEnd == LocalDateTime.MAX) && (timeDefinition eq TimeDefinition.WALL) && fixedSavingAmountSecs == null && lastRuleList.isEmpty && ruleList.isEmpty
 
-    /** Creates the wall offset for the local date-time at the end of the window.
-      *
-      * @param savingsSecs  the amount of savings in use in seconds
-      * @return the created date-time epoch second in the wall offset, not null
-      */
+    /**
+     * Creates the wall offset for the local date-time at the end of the window.
+     *
+     * @param savingsSecs  the amount of savings in use in seconds
+     * @return the created date-time epoch second in the wall offset, not null
+     */
     private[zone] def createWallOffset(savingsSecs: Int): ZoneOffset =
       ZoneOffset.ofTotalSeconds(standardOffset.getTotalSeconds + savingsSecs)
 
-    /** Creates the offset date-time for the local date-time at the end of the window.
-      *
-      * @param savingsSecs  the amount of savings in use in seconds
-      * @return the created date-time epoch second in the wall offset, not null
-      */
+    /**
+     * Creates the offset date-time for the local date-time at the end of the window.
+     *
+     * @param savingsSecs  the amount of savings in use in seconds
+     * @return the created date-time epoch second in the wall offset, not null
+     */
     private[zone] def createDateTimeEpochSecond(savingsSecs: Int): Long = {
       val wallOffset: ZoneOffset = createWallOffset(savingsSecs)
       val ldt: LocalDateTime     = timeDefinition.createDateTime(windowEnd, standardOffset, wallOffset)
@@ -622,20 +642,21 @@ class ZoneRulesBuilder() {
     }
   }
 
-  /** A definition of the way a local time can be converted to an offset time.
-    *
-    * @constructor
-    *
-    * @param year  the year
-    * @param month  the month, not null
-    * @param dayOfMonthIndicator  the day-of-month of the transition, adjusted by dayOfWeek,
-    *                             from 1 to 31 adjusted later, or -1 to -28 adjusted earlier from the last day of the month
-    * @param dayOfWeek  the day-of-week, null if day-of-month is exact
-    * @param time  the time, not null
-    * @param timeEndOfDay  whether midnight is at the end of day
-    * @param timeDefinition  the time definition, not null
-    * @param savingAmountSecs  the savings amount in seconds
-    */
+  /**
+   * A definition of the way a local time can be converted to an offset time.
+   *
+   * @constructor
+   *
+   * @param year  the year
+   * @param month  the month, not null
+   * @param dayOfMonthIndicator  the day-of-month of the transition, adjusted by dayOfWeek,
+   *                             from 1 to 31 adjusted later, or -1 to -28 adjusted earlier from the last day of the month
+   * @param dayOfWeek  the day-of-week, null if day-of-month is exact
+   * @param time  the time, not null
+   * @param timeEndOfDay  whether midnight is at the end of day
+   * @param timeDefinition  the time definition, not null
+   * @param savingAmountSecs  the savings amount in seconds
+   */
   protected[zone] class TZRule private[zone] (
     private[zone] var year:                Int,
     private[zone] var month:               Month,
@@ -647,12 +668,13 @@ class ZoneRulesBuilder() {
     private[zone] var savingAmountSecs:    Int
   ) {
 
-    /** Converts this to a transition.
-      *
-      * @param standardOffset  the active standard offset, not null
-      * @param savingsBeforeSecs  the active savings in seconds
-      * @return the transition, not null
-      */
+    /**
+     * Converts this to a transition.
+     *
+     * @param standardOffset  the active standard offset, not null
+     * @param savingsBeforeSecs  the active savings in seconds
+     * @return the transition, not null
+     */
     private[zone] def toTransition(
       standardOffset:    ZoneOffset,
       savingsBeforeSecs: Int
@@ -672,12 +694,13 @@ class ZoneRulesBuilder() {
       new ZoneOffsetTransition(dt, wallOffset, offsetAfter)
     }
 
-    /** Converts this to a transition rule.
-      *
-      * @param standardOffset  the active standard offset, not null
-      * @param savingsBeforeSecs  the active savings before the transition in seconds
-      * @return the transition, not null
-      */
+    /**
+     * Converts this to a transition rule.
+     *
+     * @param standardOffset  the active standard offset, not null
+     * @param savingsBeforeSecs  the active savings before the transition in seconds
+     * @return the transition, not null
+     */
     private[zone] def toTransitionRule(
       standardOffset:    ZoneOffset,
       savingsBeforeSecs: Int

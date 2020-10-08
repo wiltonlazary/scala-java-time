@@ -33,23 +33,25 @@ package org.threeten.bp.temporal
 
 import org.threeten.bp.DateTimeException
 
-/** An exception that indicates a type is unsupported.
-  *
-  * <h3>Specification for implementors</h3>
-  * This class is intended for use in a single thread.
-  *
-  * Constructs a new date-time exception with the specified message and cause.
-  *
-  * @param message  the message to use for this exception, may be null
-  * @param cause  the cause of the exception, may be null
-  */
+/**
+ * An exception that indicates a type is unsupported.
+ *
+ * <h3>Specification for implementors</h3>
+ * This class is intended for use in a single thread.
+ *
+ * Constructs a new date-time exception with the specified message and cause.
+ *
+ * @param message  the message to use for this exception, may be null
+ * @param cause  the cause of the exception, may be null
+ */
 class UnsupportedTemporalTypeException(message: String, cause: Throwable)
     extends DateTimeException(message, cause) {
 
-  /** Constructs a new date-time exception with the specified message.
-    *
-    * @param message  the message to use for this exception, may be null
-    */
+  /**
+   * Constructs a new date-time exception with the specified message.
+   *
+   * @param message  the message to use for this exception, may be null
+   */
   def this(message: String) {
     this(message, null)
   }

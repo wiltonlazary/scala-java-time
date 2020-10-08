@@ -52,61 +52,70 @@ import org.threeten.bp.temporal.TemporalField
 import org.threeten.bp.temporal.TemporalQueries
 import org.threeten.bp.temporal.TemporalQuery
 
-/** Builder that can holds date and time fields and related date and time objects.
-  *
-  * The builder is used to hold onto different elements of date and time.
-  * It is designed as two separate maps:
-  * <ul>
-  * <li>from {@link TemporalField} to {@code long} value, where the value may be
-  * outside the valid range for the field
-  * <li>from {@code Class} to {@link TemporalAccessor}, holding larger scale objects
-  * like {@code LocalDateTime}.
-  * </ul><p>
-  *
-  * <h3>Specification for implementors</h3>
-  * This class is mutable and not thread-safe.
-  * It should only be used from a single thread.
-  *
-  * Creates an empty instance of the builder.
-  */
+/**
+ * Builder that can holds date and time fields and related date and time objects.
+ *
+ * The builder is used to hold onto different elements of date and time.
+ * It is designed as two separate maps:
+ * <ul>
+ * <li>from {@link TemporalField} to {@code long} value, where the value may be
+ * outside the valid range for the field
+ * <li>from {@code Class} to {@link TemporalAccessor}, holding larger scale objects
+ * like {@code LocalDateTime}.
+ * </ul><p>
+ *
+ * <h3>Specification for implementors</h3>
+ * This class is mutable and not thread-safe.
+ * It should only be used from a single thread.
+ *
+ * Creates an empty instance of the builder.
+ */
 final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
 
-  /** The map of other fields.
-    */
+  /**
+   * The map of other fields.
+   */
   private[format] val fieldValues: java.util.Map[TemporalField, java.lang.Long] =
     new java.util.HashMap[TemporalField, java.lang.Long]
 
-  /** The chronology.
-    */
+  /**
+   * The chronology.
+   */
   private[format] var chrono: Chronology = null
 
-  /** The zone.
-    */
+  /**
+   * The zone.
+   */
   private[format] var zone: ZoneId = null
 
-  /** The date.
-    */
+  /**
+   * The date.
+   */
   private[format] var date: ChronoLocalDate = null
 
-  /** The time.
-    */
+  /**
+   * The time.
+   */
   private[format] var time: LocalTime = null
 
-  /** The leap second flag.
-    */
+  /**
+   * The leap second flag.
+   */
   private[format] var leapSecond: Boolean = false
 
-  /** The excess days.
-    */
+  /**
+   * The excess days.
+   */
   private[format] var excessDays: Period = null
 
-  /** Creates a new instance of the builder with a single field-value.
-    *
-    * This is equivalent to using {@link #addFieldValue(TemporalField, long)} on an empty builder.
-    *
-    * @param field  the field to add, not null
-    * @param value  the value to add, not null
-    */
+  /**
+   * Creates a new instance of the builder with a single field-value.
+   *
+   * This is equivalent to using {@link #addFieldValue(TemporalField, long)} on an empty builder.
+   *
+   * @param field  the field to add, not null
+   * @param value  the value to add, not null
+   */
   def this(field: TemporalField, value: Long) {
     this()
     addFieldValue(field, value)
@@ -115,19 +124,20 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
   private def getFieldValue0(field: TemporalField): java.lang.Long =
     fieldValues.get(field)
 
-  /** Adds a field-value pair to the builder.
-    *
-    * This adds a field to the builder.
-    * If the field is not already present, then the field-value pair is added to the map.
-    * If the field is already present and it has the same value as that specified, no action occurs.
-    * If the field is already present and it has a different value to that specified, then
-    * an exception is thrown.
-    *
-    * @param field  the field to add, not null
-    * @param value  the value to add, not null
-    * @return { @code this}, for method chaining
-    * @throws DateTimeException if the field is already present with a different value
-    */
+  /**
+   * Adds a field-value pair to the builder.
+   *
+   * This adds a field to the builder.
+   * If the field is not already present, then the field-value pair is added to the map.
+   * If the field is already present and it has the same value as that specified, no action occurs.
+   * If the field is already present and it has a different value to that specified, then
+   * an exception is thrown.
+   *
+   * @param field  the field to add, not null
+   * @param value  the value to add, not null
+   * @return { @code this}, for method chaining
+   * @throws DateTimeException if the field is already present with a different value
+   */
   private[format] def addFieldValue(field: TemporalField, value: Long): DateTimeBuilder = {
     Objects.requireNonNull(field, "field")
     val old: java.lang.Long = getFieldValue0(field)
@@ -146,15 +156,16 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
 
   private[format] def addObject(time: LocalTime): Unit = this.time = time
 
-  /** Resolves the builder, evaluating the date and time.
-    *
-    * This examines the contents of the builder and resolves it to produce the best
-    * available date and time, throwing an exception if a problem occurs.
-    * Calling this method changes the state of the builder.
-    *
-    * @param resolverStyle how to resolve
-    * @return { @code this}, for method chaining
-    */
+  /**
+   * Resolves the builder, evaluating the date and time.
+   *
+   * This examines the contents of the builder and resolves it to produce the best
+   * available date and time, throwing an exception if a problem occurs.
+   * Calling this method changes the state of the builder.
+   *
+   * @param resolverStyle how to resolve
+   * @return { @code this}, for method chaining
+   */
   def resolve(
     resolverStyle:  ResolverStyle,
     resolverFields: java.util.Set[TemporalField]
@@ -532,16 +543,17 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
       ()
     }
 
-  /** Builds the specified type from the values in this builder.
-    *
-    * This attempts to build the specified type from this builder.
-    * If the builder cannot return the type, an exception is thrown.
-    *
-    * @tparam R  the type to return
-    * @param type  the type to invoke { @code from} on, not null
-    * @return the extracted value, not null
-    * @throws DateTimeException if an error occurs
-    */
+  /**
+   * Builds the specified type from the values in this builder.
+   *
+   * This attempts to build the specified type from this builder.
+   * If the builder cannot return the type, an exception is thrown.
+   *
+   * @tparam R  the type to return
+   * @param type  the type to invoke { @code from} on, not null
+   * @return the extracted value, not null
+   * @throws DateTimeException if an error occurs
+   */
   def build[R](tpe: TemporalQuery[R]): R = tpe.queryFrom(this)
 
   def isSupported(field: TemporalField): Boolean =

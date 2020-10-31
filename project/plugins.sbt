@@ -11,7 +11,7 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % scalaJSVersion)
 
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.0.0")
 
-addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "1.0.0")
+addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "1.0.1")
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.2")
 

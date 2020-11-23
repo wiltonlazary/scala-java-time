@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 14
-        uses: olafurpg/setup-scala@v7
+        uses: olafurpg/setup-scala@v10
         with:
           java-version: adopt@1.14
       - name: Cache Coursier

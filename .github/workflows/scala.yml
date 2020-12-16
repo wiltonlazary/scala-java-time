@@ -24,9 +24,6 @@ jobs:
           key: sbt-${{ hashFiles('**/build.sbt') }}
       - name: Checking your code format
         run: |
-          java -version
           csbt scalafmtCheckAll
       - name: Run test
         run: csbt clean +scalajavatimeTestsJVM/test +scalajavatimeTestsJS/test demo/run
-      - name: Run test 0.6
-        run: SCALAJS_VERSION=0.6.33 csbt clean +scalajavatimeTestsJS/fastOptJS

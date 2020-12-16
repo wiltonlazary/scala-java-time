@@ -2,13 +2,11 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer    = "2.13.3"
+val scalaVer    = "2.13.4"
 val tzdbVersion = "2019c"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Global / resolvers += Resolver.sonatypeRepo("public")
-
-val scalaJSVersion06 = Option(System.getenv("SCALAJS_VERSION")).exists(_.startsWith("0.6"))
 
 lazy val downloadFromZip: TaskKey[Unit] =
   taskKey[Unit]("Download the tzdb tarball and extract it")
@@ -25,7 +23,8 @@ inThisBuild(
       Developer("cquiroz",
                 "Carlos Quiroz",
                 "carlos.m.quiroz@gmail.com",
-                url("https://github.com/cquiroz"))
+                url("https://github.com/cquiroz")
+      )
     ),
     scmInfo := Some(
       ScmInfo(
@@ -39,7 +38,7 @@ inThisBuild(
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
   scalaVersion := scalaVer,
-  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.3"),
+  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.4"),
   // Don't include threeten on the binaries
   mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter {
     case (f, s) => !s.contains("threeten")
@@ -48,7 +47,7 @@ lazy val commonSettings = Seq(
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, scalaMajor)) if scalaMajor >= 11 =>
         Seq("-deprecation:false")
-      case Some((2, 10)) =>
+      case Some((2, 10))                             =>
         Seq.empty
     }
   },
@@ -75,11 +74,12 @@ lazy val root = project
              scalajavatimeTZDBJS,
              scalajavatimeTests.jvm,
              scalajavatimeTests.js,
-             demo)
+             demo
+  )
 
 /**
-  * Copy source files and translate them to the java.time package
-  */
+ * Copy source files and translate them to the java.time package
+ */
 def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
   // Copy a directory and return the list of files
   def copyDirectory(
@@ -91,9 +91,10 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
     IO.copy(PathFinder(source).allPaths.pair(Path.rebase(source, target)).toTraversable,
             overwrite,
             preserveLastModified,
-            false)
+            false
+    )
 
-  val onlyScalaDirs = srcDirs.filter(_.getName.endsWith("scala"))
+  val onlyScalaDirs                      = srcDirs.filter(_.getName.endsWith("scala"))
   // Copy the source files from the base project, exclude classes on java.util and dirs
   val generatedFiles: List[java.io.File] = onlyScalaDirs
     .foldLeft(Set.empty[File]) { (files, sourceDir) =>
@@ -132,8 +133,12 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
     libraryDependencies += "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0"
   )
   .jsSettings(
+    // scalacOptions ++= {
+    //   if (scalaJSVersion06) Seq.empty else Seq("-P:scalajs:genStaticForwardersForNonTopLevelObjects")
+    // },
     scalacOptions ++= {
-      if (scalaJSVersion06) Seq.empty else Seq("-P:scalajs:genStaticForwardersForNonTopLevelObjects")
+      // if (isDotty.value) Seq("-scalajs-genStaticForwardersForNonTopLevelObjects")
+      Seq("-P:scalajs:genStaticForwardersForNonTopLevelObjects")
     },
     scalacOptions ++= {
       val tagOrHash =
@@ -155,9 +160,6 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       "io.github.cquiroz" %%% "scala-java-locales" % "1.0.0"
     )
   )
-  .jvmSettings(
-    skip.in(publish) := scalaJSVersion06
-  )
 
 lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)
@@ -177,8 +179,7 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   )
   .jvmSettings(
     includeTTBP := true,
-    jsOptimized := false,
-    skip.in(publish) := scalaJSVersion06
+    jsOptimized := false
   )
   .dependsOn(scalajavatime)
 
@@ -211,7 +212,8 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     // https://docs.oracle.com/javase/8/docs/technotes/guides/intl/enhancements.8.html#cldr
     javaOptions in Test ++= Seq("-Duser.language=en",
                                 "-Duser.country=US",
-                                "-Djava.locale.providers=CLDR")
+                                "-Djava.locale.providers=CLDR"
+    )
   )
   .jsSettings(
     parallelExecution in Test := false,

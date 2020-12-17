@@ -49,6 +49,7 @@ import org.threeten.bp.temporal.TemporalQuery
 import org.threeten.bp.format.internal.TTBPDateTimeTextProvider
 import org.threeten.bp.format.internal.TTBPSimpleDateTimeTextProvider
 import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
+import org.threeten.bp.format.internal.DateTimePrinterParser
 
 object DateTimeFormatterBuilder {
 
@@ -175,16 +176,14 @@ final class DateTimeFormatterBuilder private (
 ) {
 
   /** Constructs a new instance of the builder. */
-  def this() {
-    this(null, false)
-  }
+  def this() = this(null, false)
 
   /** The currently active builder, used by the outermost builder. */
   private var active: DateTimeFormatterBuilder = this
 
   /** The list of printers that will be used. */
-  private val printerParsers: java.util.List[TTBPDateTimeFormatterBuilder.DateTimePrinterParser] =
-    new java.util.ArrayList[TTBPDateTimeFormatterBuilder.DateTimePrinterParser]
+  private val printerParsers: java.util.List[DateTimePrinterParser] =
+    new java.util.ArrayList[DateTimePrinterParser]
 
   /** The width to pad the next field to. */
   private var padNextWidth: Int = 0
@@ -1776,7 +1775,7 @@ final class DateTimeFormatterBuilder private (
    * @param pp  the printer-parser to add, not null
    * @return the index into the active parsers list
    */
-  private def appendInternal(pp: TTBPDateTimeFormatterBuilder.DateTimePrinterParser): Int = {
+  private def appendInternal(pp: DateTimePrinterParser): Int = {
     var _pp = pp
     Objects.requireNonNull(_pp, "pp")
     if (active.padNextWidth > 0) {

@@ -235,7 +235,7 @@ final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private (
   override def toString: String = {
     var str: String = toLocalDateTime.toString + getOffset.toString
     if (getOffset ne getZone)
-      str += '[' + getZone.toString + ']'
+      str += s"[$getZone]"
     str
   }
 }

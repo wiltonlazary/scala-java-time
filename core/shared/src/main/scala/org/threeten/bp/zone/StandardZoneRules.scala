@@ -178,7 +178,7 @@ final class StandardZoneRules private (
     savingsInstantTransitions: Array[Long],
     wallOffsets:               Array[ZoneOffset],
     lastRules:                 Array[ZoneOffsetTransitionRule]
-  ) {
+  ) = {
     this(standardTransitions,
          standardOffsets,
          savingsInstantTransitions,

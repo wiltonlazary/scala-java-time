@@ -116,7 +116,7 @@ final class DateTimeBuilder() extends TemporalAccessor with Cloneable {
    * @param field  the field to add, not null
    * @param value  the value to add, not null
    */
-  def this(field: TemporalField, value: Long) {
+  def this(field: TemporalField, value: Long) = {
     this()
     addFieldValue(field, value)
   }

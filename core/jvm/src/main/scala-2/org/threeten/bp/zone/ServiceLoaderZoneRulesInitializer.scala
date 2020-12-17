@@ -43,8 +43,6 @@ class ServiceLoaderZoneRulesInitializer extends ZoneRulesInitializer {
     // find the package name dynamically to support both org.threeten.bp and java.time packages
     val packageName  = this.getClass.getName.split("\\.").init.mkString(".")
     val optClassData = Reflect.lookupInstantiatableClass(s"$packageName.TzdbZoneRulesProvider")
-    println(packageName)
-    println(optClassData)
     optClassData
       .fold(List[ZoneRulesProvider](new DefaultTzdbZoneRulesProvider())) { c =>
         val instance = c.newInstance().asInstanceOf[ZoneRulesProvider]

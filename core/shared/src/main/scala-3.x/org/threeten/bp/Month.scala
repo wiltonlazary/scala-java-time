@@ -74,97 +74,6 @@ import org.threeten.bp.temporal.ValueRange
 object Month {
 
   /**
-   * The singleton instance for the month of January with 31 days.
-   * This has the numeric value of {@code 1}.
-   */
-  lazy val JANUARY = new Month("JANUARY", 0)
-
-  /**
-   * The singleton instance for the month of February with 28 days, or 29 in a leap year.
-   * This has the numeric value of {@code 2}.
-   */
-  lazy val FEBRUARY = new Month("FEBRUARY", 1)
-
-  /**
-   * The singleton instance for the month of March with 31 days.
-   * This has the numeric value of {@code 3}.
-   */
-  lazy val MARCH = new Month("MARCH", 2)
-
-  /**
-   * The singleton instance for the month of April with 30 days.
-   * This has the numeric value of {@code 4}.
-   */
-  lazy val APRIL = new Month("APRIL", 3)
-
-  /**
-   * The singleton instance for the month of May with 31 days.
-   * This has the numeric value of {@code 5}.
-   */
-  lazy val MAY = new Month("MAY", 4)
-
-  /**
-   * The singleton instance for the month of June with 30 days.
-   * This has the numeric value of {@code 6}.
-   */
-  lazy val JUNE = new Month("JUNE", 5)
-
-  /**
-   * The singleton instance for the month of July with 31 days.
-   * This has the numeric value of {@code 7}.
-   */
-  lazy val JULY = new Month("JULY", 6)
-
-  /**
-   * The singleton instance for the month of August with 31 days.
-   * This has the numeric value of {@code 8}.
-   */
-  lazy val AUGUST = new Month("AUGUST", 7)
-
-  /**
-   * The singleton instance for the month of September with 30 days.
-   * This has the numeric value of {@code 9}.
-   */
-  lazy val SEPTEMBER = new Month("SEPTEMBER", 8)
-
-  /**
-   * The singleton instance for the month of October with 31 days.
-   * This has the numeric value of {@code 10}.
-   */
-  lazy val OCTOBER = new Month("OCTOBER", 9)
-
-  /**
-   * The singleton instance for the month of November with 30 days.
-   * This has the numeric value of {@code 11}.
-   */
-  val NOVEMBER = new Month("NOVEMBER", 10)
-
-  /**
-   * The singleton instance for the month of December with 31 days.
-   * This has the numeric value of {@code 12}.
-   */
-  lazy val DECEMBER = new Month("DECEMBER", 11)
-
-  lazy val values: Array[Month] = Array(JANUARY,
-                                        FEBRUARY,
-                                        MARCH,
-                                        APRIL,
-                                        MAY,
-                                        JUNE,
-                                        JULY,
-                                        AUGUST,
-                                        SEPTEMBER,
-                                        OCTOBER,
-                                        NOVEMBER,
-                                        DECEMBER
-  )
-  def valueOf(enum: String): Month =
-    values.find(_.name() == enum) match {
-      case Some(month) => month
-      case _           => throw new IllegalArgumentException(s"Unrecognized month name: $enum")
-    }
-
-  /**
    * Private cache of all the constants.
    */
   private lazy val ENUMS: Array[Month] = Month.values
@@ -223,10 +132,82 @@ object Month {
   }
 }
 
-final class Month private (name: String, ordinal: Int)
-    extends Enum[Month](name, ordinal)
+enum Month private (name: String, ordinal: Int)
+    extends java.lang.Enum[Month]
     with TemporalAccessor
     with TemporalAdjuster {
+  /**
+   * The singleton instance for the month of January with 31 days.
+   * This has the numeric value of {@code 1}.
+   */
+  case JANUARY extends Month("JANUARY", 0)
+
+  /**
+   * The singleton instance for the month of February with 28 days, or 29 in a leap year.
+   * This has the numeric value of {@code 2}.
+   */
+  case FEBRUARY extends Month("FEBRUARY", 1)
+
+  /**
+   * The singleton instance for the month of March with 31 days.
+   * This has the numeric value of {@code 3}.
+   */
+  case MARCH extends Month("MARCH", 2)
+
+  /**
+   * The singleton instance for the month of April with 30 days.
+   * This has the numeric value of {@code 4}.
+   */
+  case APRIL extends Month("APRIL", 3)
+
+  /**
+   * The singleton instance for the month of May with 31 days.
+   * This has the numeric value of {@code 5}.
+   */
+  case MAY extends Month("MAY", 4)
+
+  /**
+   * The singleton instance for the month of June with 30 days.
+   * This has the numeric value of {@code 6}.
+   */
+  case JUNE extends Month("JUNE", 5)
+
+  /**
+   * The singleton instance for the month of July with 31 days.
+   * This has the numeric value of {@code 7}.
+   */
+  case JULY extends Month("JULY", 6)
+
+  /**
+   * The singleton instance for the month of August with 31 days.
+   * This has the numeric value of {@code 8}.
+   */
+  case AUGUST extends Month("AUGUST", 7)
+
+  /**
+   * The singleton instance for the month of September with 30 days.
+   * This has the numeric value of {@code 9}.
+   */
+  case SEPTEMBER extends Month("SEPTEMBER", 8)
+
+  /**
+   * The singleton instance for the month of October with 31 days.
+   * This has the numeric value of {@code 10}.
+   */
+  case OCTOBER extends Month("OCTOBER", 9)
+
+  /**
+   * The singleton instance for the month of November with 30 days.
+   * This has the numeric value of {@code 11}.
+   */
+  case NOVEMBER extends Month("NOVEMBER", 10)
+
+  /**
+   * The singleton instance for the month of December with 31 days.
+   * This has the numeric value of {@code 12}.
+   */
+  case DECEMBER extends Month("DECEMBER", 11)
+
   import Month._
 
   /**

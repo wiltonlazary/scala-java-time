@@ -110,9 +110,8 @@ final class ZoneOffsetTransition private[zone] (
    * @param offsetBefore  the offset before the transition, not null
    * @param offsetAfter  the offset at and after the transition, not null
    */
-  private[zone] def this(epochSecond: Long, offsetBefore: ZoneOffset, offsetAfter: ZoneOffset) {
+  private[zone] def this(epochSecond: Long, offsetBefore: ZoneOffset, offsetAfter: ZoneOffset) =
     this(LocalDateTime.ofEpochSecond(epochSecond, 0, offsetBefore), offsetBefore, offsetAfter)
-  }
 
   /**
    * Gets the transition instant.

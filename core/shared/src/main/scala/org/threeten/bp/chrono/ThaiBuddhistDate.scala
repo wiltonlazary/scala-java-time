@@ -217,6 +217,7 @@ final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
                 return `with`(isoDate.withYear(nvalue - YEARS_DIFFERENCE))
               case ERA         =>
                 return `with`(isoDate.withYear((1 - getProlepticYear) - YEARS_DIFFERENCE))
+              case _           => throw new UnsupportedOperationException()
             }
           case _                        =>
             return `with`(isoDate.`with`(field, newValue))

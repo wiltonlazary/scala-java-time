@@ -33,40 +33,41 @@ package org.threeten.bp.format
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.AssertionsHelper
-import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder
+import org.threeten.bp.format.internal.TTBPDateTimeFormatterBuilder._
+import org.threeten.bp.format.internal.DateTimePrinterParser
 import org.threeten.bp.temporal.TemporalQueries
 
 /** Test CharLiteralPrinterParser. */
 class TestCharLiteralParser extends AnyFunSuite with GenTestPrinterParser with AssertionsHelper {
   val data_success: List[List[Any]] =
     List(
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "a", 0, 1),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "aOTHER", 0, 1),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+      List(new CharLiteralPrinterParser('a'), true, "a", 0, 1),
+      List(new CharLiteralPrinterParser('a'), true, "aOTHER", 0, 1),
+      List(new CharLiteralPrinterParser('a'),
            true,
            "OTHERaOTHER",
            5,
            6
       ),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERa", 5, 6),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "", 0, ~0),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "a", 1, ~1),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "A", 0, ~0),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "b", 0, ~0),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+      List(new CharLiteralPrinterParser('a'), true, "OTHERa", 5, 6),
+      List(new CharLiteralPrinterParser('a'), true, "", 0, ~0),
+      List(new CharLiteralPrinterParser('a'), true, "a", 1, ~1),
+      List(new CharLiteralPrinterParser('a'), true, "A", 0, ~0),
+      List(new CharLiteralPrinterParser('a'), true, "b", 0, ~0),
+      List(new CharLiteralPrinterParser('a'),
            true,
            "OTHERbOTHER",
            5,
            ~5
       ),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), true, "OTHERb", 5, ~5),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), false, "a", 0, 1),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'), false, "A", 0, 1)
+      List(new CharLiteralPrinterParser('a'), true, "OTHERb", 5, ~5),
+      List(new CharLiteralPrinterParser('a'), false, "a", 0, 1),
+      List(new CharLiteralPrinterParser('a'), false, "A", 0, 1)
     )
 
   test("parse_success") {
     data_success.foreach {
-      case (pp: TTBPDateTimeFormatterBuilder.DateTimePrinterParser) :: (caseSensitive: Boolean) :: (text: String) :: (pos: Int) :: (expectedPos: Int) :: Nil =>
+      case (pp: DateTimePrinterParser) :: (caseSensitive: Boolean) :: (text: String) :: (pos: Int) :: (expectedPos: Int) :: Nil =>
         parseContext.setCaseSensitive(caseSensitive)
         val result: Int = pp.parse(parseContext, text, pos)
         assertEquals(result, expectedPos)
@@ -79,12 +80,12 @@ class TestCharLiteralParser extends AnyFunSuite with GenTestPrinterParser with A
 
   val data_error: List[List[Any]] =
     List[List[Any]](
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+      List(new CharLiteralPrinterParser('a'),
            "a",
            -1,
            classOf[IndexOutOfBoundsException]
       ),
-      List(new TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser('a'),
+      List(new CharLiteralPrinterParser('a'),
            "a",
            2,
            classOf[IndexOutOfBoundsException]
@@ -93,7 +94,7 @@ class TestCharLiteralParser extends AnyFunSuite with GenTestPrinterParser with A
 
   test("parse_error") {
     data_error.foreach {
-      case (pp: TTBPDateTimeFormatterBuilder.CharLiteralPrinterParser) :: (text: String) :: (pos: Int) :: (expected: Class[
+      case (pp: CharLiteralPrinterParser) :: (text: String) :: (pos: Int) :: (expected: Class[
             _
           ]) :: Nil                 =>
         try pp.parse(parseContext, text, pos)

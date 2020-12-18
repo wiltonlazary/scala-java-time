@@ -253,7 +253,7 @@ final class JapaneseDate private[chrono] (
    *
    * @param isoDate  the standard local date, validated not null
    */
-  private[chrono] def this(isoDate: LocalDate) {
+  private[chrono] def this(isoDate: LocalDate) = {
     // !!!! FIXME: JapaneseEra.from(isoDate) is called twice, because this call must be first ...
     this(JapaneseEra.from(isoDate),
          isoDate.getYear - (JapaneseEra.from(isoDate).startDate.getYear - 1),
@@ -373,6 +373,7 @@ final class JapaneseDate private[chrono] (
               case DAY_OF_YEAR => `with`(isoDate.plusDays(nvalue - getDayOfYear))
               case YEAR_OF_ERA => this.withYear(nvalue)
               case ERA         => this.withYear(JapaneseEra.of(nvalue), yearOfEra)
+              case _           => throw new UnsupportedOperationException()
             }
           case _                               => `with`(isoDate.`with`(field, newValue))
         }

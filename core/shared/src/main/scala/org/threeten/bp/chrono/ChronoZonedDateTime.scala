@@ -492,7 +492,7 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate]
   override def toString: String = {
     var str: String = toLocalDateTime.toString + getOffset.toString
     if (getOffset ne getZone)
-      str += '[' + getZone.toString + ']'
+      str += s"[${getZone}]"
     str
   }
 }

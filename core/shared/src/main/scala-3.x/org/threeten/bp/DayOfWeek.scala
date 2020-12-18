@@ -75,57 +75,6 @@ import org.threeten.bp.temporal.ValueRange
 object DayOfWeek {
 
   /**
-   * The singleton instance for the day-of-week of Monday.
-   * This has the numeric value of {@code 1}.
-   */
-  lazy val MONDAY = new DayOfWeek("MONDAY", 0)
-
-  /**
-   * The singleton instance for the day-of-week of Tuesday.
-   * This has the numeric value of {@code 2}.
-   */
-  lazy val TUESDAY = new DayOfWeek("TUESDAY", 1)
-
-  /**
-   * The singleton instance for the day-of-week of Wednesday.
-   * This has the numeric value of {@code 3}.
-   */
-  lazy val WEDNESDAY = new DayOfWeek("WEDNESDAY", 2)
-
-  /**
-   * The singleton instance for the day-of-week of Thursday.
-   * This has the numeric value of {@code 4}.
-   */
-  lazy val THURSDAY = new DayOfWeek("THURSDAY", 3)
-
-  /**
-   * The singleton instance for the day-of-week of Friday.
-   * This has the numeric value of {@code 5}.
-   */
-  lazy val FRIDAY = new DayOfWeek("FRIDAY", 4)
-
-  /**
-   * The singleton instance for the day-of-week of Saturday.
-   * This has the numeric value of {@code 6}.
-   */
-  lazy val SATURDAY = new DayOfWeek("SATURDAY", 5)
-
-  /**
-   * The singleton instance for the day-of-week of Sunday.
-   * This has the numeric value of {@code 7}.
-   */
-  lazy val SUNDAY = new DayOfWeek("SUNDAY", 6)
-
-  lazy val values: Array[DayOfWeek] =
-    Array(MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY)
-  def valueOf(enum: String): DayOfWeek =
-    values.find(_.name() == enum) match {
-      case Some(dayOfWeek) => dayOfWeek
-      case _               =>
-        throw new IllegalArgumentException(s"Unrecognized day of week name: $enum")
-    }
-
-  /**
    * Private cache of all the constants.
    */
   private lazy val ENUMS: Array[DayOfWeek] = DayOfWeek.values
@@ -178,10 +127,52 @@ object DayOfWeek {
   }
 }
 
-final class DayOfWeek(name: String, ordinal: Int)
-    extends Enum[DayOfWeek](name, ordinal)
+enum DayOfWeek(name: String, ordinal: Int)
+    extends java.lang.Enum[DayOfWeek]
     with TemporalAccessor
     with TemporalAdjuster {
+  /**
+   * The singleton instance for the day-of-week of Monday.
+   * This has the numeric value of {@code 1}.
+   */
+  case MONDAY extends DayOfWeek("MONDAY", 0)
+
+  /**
+   * The singleton instance for the day-of-week of Tuesday.
+   * This has the numeric value of {@code 2}.
+   */
+  case TUESDAY extends DayOfWeek("TUESDAY", 1)
+
+  /**
+   * The singleton instance for the day-of-week of Wednesday.
+   * This has the numeric value of {@code 3}.
+   */
+  case WEDNESDAY extends DayOfWeek("WEDNESDAY", 2)
+
+  /**
+   * The singleton instance for the day-of-week of Thursday.
+   * This has the numeric value of {@code 4}.
+   */
+  case THURSDAY extends DayOfWeek("THURSDAY", 3)
+
+  /**
+   * The singleton instance for the day-of-week of Friday.
+   * This has the numeric value of {@code 5}.
+   */
+  case FRIDAY extends DayOfWeek("FRIDAY", 4)
+
+  /**
+   * The singleton instance for the day-of-week of Saturday.
+   * This has the numeric value of {@code 6}.
+   */
+  case SATURDAY extends DayOfWeek("SATURDAY", 5)
+
+  /**
+   * The singleton instance for the day-of-week of Sunday.
+   * This has the numeric value of {@code 7}.
+   */
+  case SUNDAY extends DayOfWeek("SUNDAY", 6)
+
 
   /**
    * Gets the day-of-week {@code int} value.

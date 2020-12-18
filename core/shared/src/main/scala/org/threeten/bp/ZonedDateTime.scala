@@ -1870,7 +1870,7 @@ final class ZonedDateTime(
   override def toString: String = {
     var str: String = dateTime.toString + offset.toString
     if (offset ne zone)
-      str += '[' + zone.toString + ']'
+      str += s"[${zone}]"
     str
   }
 

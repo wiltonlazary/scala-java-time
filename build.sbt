@@ -1,8 +1,9 @@
+import org.scalajs.linker.interface.ModuleSplitStyle
 import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer    = "2.13.4"
+val scalaVer    = "3.0.0-M2"
 val tzdbVersion = "2019c"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
@@ -35,13 +36,32 @@ inThisBuild(
   )
 )
 
+def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
+  def extraDirs(suffix: String) =
+    List(CrossType.Pure, CrossType.Full)
+      .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((2, y))     => extraDirs("-2.x") ++ (if (y >= 13) extraDirs("-2.13+") else Nil)
+    case Some((0 | 3, _)) => extraDirs("-2.13+") ++ extraDirs("-3.x")
+    case _                => Nil
+  }
+}
+
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
   scalaVersion := scalaVer,
-  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.4"),
+  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.4", "3.0.0-M2"),
   // Don't include threeten on the binaries
   mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter {
     case (f, s) => !s.contains("threeten")
+  },
+  scalacOptions in Compile ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, scalaMajor)) if scalaMajor == 13 =>
+        Seq("-deprecation:false")
+      case _                                         =>
+        Seq.empty
+    }
   },
   scalacOptions in (Compile, doc) := {
     CrossVersion.partialVersion(scalaVersion.value) match {
@@ -51,7 +71,16 @@ lazy val commonSettings = Seq(
         Seq.empty
     }
   },
-  scalacOptions ++= Seq("-target:jvm-1.8", "-deprecation:false"),
+  Compile / doc / sources := { if (isDotty.value) Seq() else (Compile / doc / sources).value },
+  Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main",
+                                                                       baseDirectory.value,
+                                                                       scalaVersion.value
+  ),
+  Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test",
+                                                                    baseDirectory.value,
+                                                                    scalaVersion.value
+  ),
+  scalacOptions ++= Seq("-target:jvm-1.8"),
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
   autoAPIMappings := true
 )
@@ -94,7 +123,7 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
             false
     )
 
-  val onlyScalaDirs                      = srcDirs.filter(_.getName.endsWith("scala"))
+  val onlyScalaDirs                      = srcDirs.filter(_.getName.matches(".*scala(-\\d\\.x)?"))
   // Copy the source files from the base project, exclude classes on java.util and dirs
   val generatedFiles: List[java.io.File] = onlyScalaDirs
     .foldLeft(Set.empty[File]) { (files, sourceDir) =>
@@ -130,25 +159,27 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
   .settings(commonSettings: _*)
   .settings(
     name := "scala-java-time",
-    libraryDependencies += "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0"
+    libraryDependencies += ("org.portable-scala" %%% "portable-scala-reflect" % "1.0.0")
+      .withDottyCompat(scalaVersion.value)
   )
   .jsSettings(
-    // scalacOptions ++= {
-    //   if (scalaJSVersion06) Seq.empty else Seq("-P:scalajs:genStaticForwardersForNonTopLevelObjects")
-    // },
     scalacOptions ++= {
-      // if (isDotty.value) Seq("-scalajs-genStaticForwardersForNonTopLevelObjects")
-      Seq("-P:scalajs:genStaticForwardersForNonTopLevelObjects")
+      if (isDotty.value) Seq("-scalajs-genStaticForwardersForNonTopLevelObjects")
+      else Seq("-P:scalajs:genStaticForwardersForNonTopLevelObjects")
     },
     scalacOptions ++= {
-      val tagOrHash =
-        if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
-        else s"v${version.value}"
-      (sourceDirectories in Compile).value.map { f =>
-        val a = f.toURI.toString
-        val g =
-          "https://raw.githubusercontent.com/cquiroz/scala-java-time/" + tagOrHash + "/shared/src/main/scala/"
-        s"-P:scalajs:mapSourceURI:$a->$g/"
+
+      if (isDotty.value) Seq.empty
+      else {
+        val tagOrHash =
+          if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+          else s"v${version.value}"
+        (sourceDirectories in Compile).value.map { f =>
+          val a = f.toURI.toString
+          val g =
+            "https://raw.githubusercontent.com/cquiroz/scala-java-time/" + tagOrHash + "/shared/src/main/scala/"
+          s"-P:scalajs:mapSourceURI:$a->$g/"
+        }
       }
     },
     sourceGenerators in Compile += Def.task {
@@ -157,7 +188,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "1.0.0"
+      "io.github.cquiroz" %%% "scala-java-locales" % "1.0.0+99-707aebc3-SNAPSHOT"
     )
   )
 
@@ -198,8 +229,9 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     publishLocal := {},
     publishArtifact := false,
     Keys.`package` := file(""),
+    skip.in(compile) := isDotty.value,
     libraryDependencies +=
-      "org.scalatest" %%% "scalatest" % "3.2.3" % "test",
+      ("org.scalatest" %%% "scalatest" % "3.2.3" % "test").withDottyCompat(scalaVersion.value),
     scalacOptions ~= (_.filterNot(
       Set("-Wnumeric-widen", "-Ywarn-numeric-widen", "-Ywarn-value-discard", "-Wvalue-discard")
     ))
@@ -223,7 +255,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "locales-full-db" % "1.0.0"
+      "io.github.cquiroz" %%% "locales-full-db" % "1.0.0+99-707aebc3-SNAPSHOT"
     )
   )
   .dependsOn(scalajavatime, scalajavatimeTZDB)
@@ -244,6 +276,8 @@ lazy val demo = project
     publishLocal := {},
     publishArtifact := false,
     Keys.`package` := file(""),
+    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
+    scalaJSLinkerConfig ~= (_.withModuleSplitStyle(ModuleSplitStyle.SmallestModules)),
     scalaJSUseMainModuleInitializer := true,
     zonesFilter := zonesFilterFn
   )

@@ -17,76 +17,14 @@ import scala.annotation.tailrec
 
 object TTBPDateTimeFormatterBuilder {
 
-  /**
-   * Strategy for printing/parsing date-time information.
-   *
-   * The printer may print any part, or the whole, of the input date-time object.
-   * Typically, a complete print is constructed from a number of smaller
-   * units, each outputting a single field.
-   *
-   * The parser may parse any piece of text from the input, storing the result
-   * in the context. Typically, each individual parser will just parse one
-   * field, such as the day-of-month, storing the value in the context.
-   * Once the parse is complete, the caller will then convert the context
-   * to a {@link DateTimeBuilder} to merge the parsed values to create the
-   * desired object, such as a {@code LocalDate}.
-   *
-   * The parse position will be updated during the parse. Parsing will start at
-   * the specified index and the return value specifies the new parse position
-   * for the next parser. If an error occurs, the returned index will be negative
-   * and will have the error position encoded using the complement operator.
-   *
-   * <h3>Specification for implementors</h3>
-   * This interface must be implemented with care to ensure other classes operate correctly.
-   * All implementations that can be instantiated must be final, immutable and thread-safe.
-   *
-   * The context is not a thread-safe object and a new instance will be created
-   * for each print that occurs. The context must not be stored in an instance
-   * variable or shared with any other threads.
-   */
-  private[format] trait DateTimePrinterParser {
-
-    /**
-     * Prints the date-time object to the buffer.
-     *
-     * The context holds information to use during the print.
-     * It also contains the date-time information to be printed.
-     *
-     * The buffer must not be mutated beyond the content controlled by the implementation.
-     *
-     * @param context  the context to print using, not null
-     * @param buf  the buffer to append to, not null
-     * @return false if unable to query the value from the date-time, true otherwise
-     * @throws DateTimeException if the date-time cannot be printed successfully
-     */
-    def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean
-
-    /**
-     * Parses text into date-time information.
-     *
-     * The context holds information to use during the parse.
-     * It is also used to store the parsed date-time information.
-     *
-     * @param context  the context to use and parse into, not null
-     * @param text  the input text to parse, not null
-     * @param position  the position to start parsing at, from 0 to the text length
-     * @return the new parse position, where negative means an error with the
-     *         error position encoded using the complement ~ operator
-     * @throws NullPointerException if the context or text is null
-     * @throws IndexOutOfBoundsException if the position is invalid
-     */
-    def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int
-  }
-
   /** Composite printer and parser. */
   private[format] final class CompositePrinterParser private[format] (
     private val printerParsers: Array[DateTimePrinterParser],
     private val optional:       Boolean
   ) extends DateTimePrinterParser {
 
-    private[format] def this(printerParsers: List[DateTimePrinterParser], optional: Boolean) {
+    private[format] def this(printerParsers: List[DateTimePrinterParser], optional: Boolean) =
       this(printerParsers.toArray(new Array[DateTimePrinterParser](printerParsers.size)), optional)
-    }
 
     /**
      * Returns a copy of this printer-parser with the optional flag changed.
@@ -355,9 +293,7 @@ object TTBPDateTimeFormatterBuilder {
       minWidth:  Int,
       maxWidth:  Int,
       signStyle: SignStyle
-    ) {
-      this(field, minWidth, maxWidth, signStyle, 0)
-    }
+    ) = this(field, minWidth, maxWidth, signStyle, 0)
 
     /**
      * Returns a new instance with fixed width flag set.
@@ -620,9 +556,7 @@ object TTBPDateTimeFormatterBuilder {
       maxWidth:  Int,
       baseValue: Int,
       baseDate:  ChronoLocalDate
-    ) {
-      this(field, minWidth, maxWidth, baseValue, baseDate, 0)
-    }
+    ) = this(field, minWidth, maxWidth, baseValue, baseDate, 0)
 
     protected[format] override def getValue(
       context: TTBPDateTimePrintContext,
@@ -655,7 +589,7 @@ object TTBPDateTimeFormatterBuilder {
       }
       val parseLen: Int  = successPos - errorPos
       if (parseLen == minWidth && _value >= 0) {
-        val range: Long    = NumberPrinterParser.EXCEED_POINTS(minWidth)
+        val range: Long    = NumberPrinterParser.EXCEED_POINTS(minWidth).toLong
         val lastPart: Long = baseValue % range
         val basePart: Long = baseValue - lastPart
         if (baseValue > 0)
@@ -889,7 +823,7 @@ object TTBPDateTimeFormatterBuilder {
       val it               = provider.getTextIterator(field, style, context.getLocale)
       if (it != null) {
         while (it.hasNext) {
-          val entry          = it.next
+          val entry          = it.next()
           val itText: String = entry._1
           if (context.subSequenceEquals(itText, 0, parseText, position, itText.length))
             return context.setParsedField(field, entry._2, position, position + itText.length)
@@ -1479,7 +1413,7 @@ object TTBPDateTimeFormatterBuilder {
       private val substringMapCI: java.util.Map[String, SubstringTree] =
         new java.util.HashMap[String, SubstringTree]
 
-      private[format] def get(substring2: CharSequence, caseSensitive: Boolean): SubstringTree =
+      def get(substring2: CharSequence, caseSensitive: Boolean): SubstringTree =
         if (caseSensitive) substringMap.get(substring2)
         else
           substringMapCI.get(CasePlatformHelper.toLocaleIndependentLowerCase(substring2.toString))

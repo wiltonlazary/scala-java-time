@@ -128,77 +128,72 @@ object ZoneOffsetTransitionRule {
    */
   @throws[IOException]
   private[zone] def readExternal(in: DataInput): ZoneOffsetTransitionRule = {
-    val data: Int                                     = in.readInt
-    val month: Month                                  = Month.of(data >>> 28)
-    val dom: Int                                      = ((data & (63 << 22)) >>> 22) - 32
-    val dowByte: Int                                  = (data & (7 << 19)) >>> 19
-    val dow: DayOfWeek                                = if (dowByte == 0) null else DayOfWeek.of(dowByte)
-    val timeByte: Int                                 = (data & (31 << 14)) >>> 14
+    val data: Int            = in.readInt
+    val month: Month         = Month.of(data >>> 28)
+    val dom: Int             = ((data & (63 << 22)) >>> 22) - 32
+    val dowByte: Int         = (data & (7 << 19)) >>> 19
+    val dow: DayOfWeek       = if (dowByte == 0) null else DayOfWeek.of(dowByte)
+    val timeByte: Int        = (data & (31 << 14)) >>> 14
     val defn: ZoneOffsetTransitionRule.TimeDefinition =
-      TimeDefinition.values((data & (3 << 12)) >>> 12)
-    val stdByte: Int                                  = (data & (255 << 4)) >>> 4
-    val beforeByte: Int                               = (data & (3 << 2)) >>> 2
-    val afterByte: Int                                = data & 3
-    val time: LocalTime                               =
+      ZoneOffsetTransitionRule.TimeDefinition.values((data & (3 << 12)) >>> 12)
+    val stdByte: Int         = (data & (255 << 4)) >>> 4
+    val beforeByte: Int      = (data & (3 << 2)) >>> 2
+    val afterByte: Int       = data & 3
+    val time: LocalTime      =
       if (timeByte == 31) LocalTime.ofSecondOfDay(in.readInt.toLong)
       else LocalTime.of(timeByte % 24, 0)
-    val std: ZoneOffset                               =
+    val std: ZoneOffset      =
       if (stdByte == 255) ZoneOffset.ofTotalSeconds(in.readInt)
       else ZoneOffset.ofTotalSeconds((stdByte - 128) * 900)
-    val before: ZoneOffset                            =
+    val before: ZoneOffset   =
       if (beforeByte == 3) ZoneOffset.ofTotalSeconds(in.readInt)
       else ZoneOffset.ofTotalSeconds(std.getTotalSeconds + beforeByte * 1800)
-    val after: ZoneOffset                             =
+    val after: ZoneOffset    =
       if (afterByte == 3) ZoneOffset.ofTotalSeconds(in.readInt)
       else ZoneOffset.ofTotalSeconds(std.getTotalSeconds + afterByte * 1800)
     ZoneOffsetTransitionRule.of(month, dom, dow, time, timeByte == 24, defn, std, before, after)
   }
 
   /**
-   * A definition of the way a local time can be converted to the actual
-   * transition date-time.
-   *
-   * Time zone rules are expressed in one of three ways:
-   * <ul>
-   * <li>Relative to UTC</li>
-   * <li>Relative to the standard offset in force</li>
-   * <li>Relative to the wall offset (what you would see on a clock on the wall)</li>
-   * </ul><p>
-   */
-  object TimeDefinition {
+    * A definition of the way a local time can be converted to the actual
+    * transition date-time.
+    *
+    * Time zone rules are expressed in one of three ways:
+    * <ul>
+    * <li>Relative to UTC</li>
+    * <li>Relative to the standard offset in force</li>
+    * <li>Relative to the wall offset (what you would see on a clock on the wall)</li>
+    * </ul><p>
+    */
+  enum TimeDefinition(name: String, ordinal: Int)
+      extends java.lang.Enum[TimeDefinition] {
 
     /** The local date-time is expressed in terms of the UTC offset. */
-    lazy val UTC = new TimeDefinition("UTC", 0)
+    case UTC extends TimeDefinition("UTC", 0)
 
     /** The local date-time is expressed in terms of the wall offset. */
-    lazy val WALL = new TimeDefinition("WALL", 1)
+    case WALL extends TimeDefinition("WALL", 1)
 
     /** The local date-time is expressed in terms of the standard offset. */
-    lazy val STANDARD = new TimeDefinition("STANDARD", 2)
-
-    lazy val values: Array[TimeDefinition] = Array(UTC, WALL, STANDARD)
-  }
-
-  final class TimeDefinition(name: String, ordinal: Int)
-      extends Enum[TimeDefinition](name, ordinal) {
+    case STANDARD extends TimeDefinition("STANDARD", 2)
 
     /**
-     * Converts the specified local date-time to the local date-time actually
-     * seen on a wall clock.
-     *
-     * This method converts using the type of this enum.
-     * The output is defined relative to the 'before' offset of the transition.
-     *
-     * The UTC type uses the UTC offset.
-     * The STANDARD type uses the standard offset.
-     * The WALL type returns the input date-time.
-     * The result is intended for use with the wall-offset.
-     *
-     * @param dateTime  the local date-time, not null
-     * @param standardOffset  the standard offset, not null
-     * @param wallOffset  the wall offset, not null
-     * @return the date-time relative to the wall/before offset, not null
-     */
+      * Converts the specified local date-time to the local date-time actually
+      * seen on a wall clock.
+      *
+      * This method converts using the type of this enum.
+      * The output is defined relative to the 'before' offset of the transition.
+      *
+      * The UTC type uses the UTC offset.
+      * The STANDARD type uses the standard offset.
+      * The WALL type returns the input date-time.
+      * The result is intended for use with the wall-offset.
+      *
+      * @param dateTime  the local date-time, not null
+      * @param standardOffset  the standard offset, not null
+      * @param wallOffset  the wall offset, not null
+      * @return the date-time relative to the wall/before offset, not null
+      */
     def createDateTime(
       dateTime:       LocalDateTime,
       standardOffset: ZoneOffset,

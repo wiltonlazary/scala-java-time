@@ -3,8 +3,10 @@ package demo
 import java.time._
 import java.time.zone.ZoneRulesProvider
 import java.time.format._
+import scala.scalajs.js.annotation.JSExportTopLevel
 // import java.util.Locale
 
+@JSExportTopLevel("DemoApp")
 object DemoApp {
   def main(args: Array[String]): Unit = {
     val fixedClock = Clock.fixed(Instant.ofEpochSecond(1234567890L), ZoneOffset.ofHours(0))

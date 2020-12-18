@@ -279,6 +279,7 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
           case HOURS     =>
             amount = Math.multiplyExact(amount, ChronoLocalDateTimeImpl.HOURS_PER_DAY.toLong)
           case HALF_DAYS => amount = Math.multiplyExact(amount, 2)
+          case _         => throw new UnsupportedOperationException()
         }
         return Math.addExact(amount, time.until(end.toLocalTime, unit))
       }

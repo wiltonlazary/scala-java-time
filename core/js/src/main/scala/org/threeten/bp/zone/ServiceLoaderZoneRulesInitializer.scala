@@ -1,5 +1,4 @@
-/*
- * Copyright (c) 2007-present, Stephen Colebourne & Michael Nascimento Santos
+/* Copyright (c) 2007-present, Stephen Colebourne & Michael Nascimento Santos
  *
  * All rights reserved.
  *
@@ -31,7 +30,7 @@
  */
 package org.threeten.bp.zone
 
-import scala.scalajs.reflect._
+import org.portablescala.reflect._
 
 /**
  * Try to load time zone rules from implementations via reflefction

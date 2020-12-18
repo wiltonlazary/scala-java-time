@@ -101,15 +101,13 @@ final class TTBPDateTimeParseContext(
    *
    * @param formatter  the formatter controlling the parse, not null
    */
-  def this(formatter: DateTimeFormatter) {
+  def this(formatter: DateTimeFormatter) =
     this(formatter.getLocale, formatter.getDecimalStyle, formatter.getChronology, formatter.getZone)
-  }
 
-  def this(locale: Locale, symbols: DecimalStyle, chronology: Chronology) {
+  def this(locale: Locale, symbols: DecimalStyle, chronology: Chronology) =
     this(locale, symbols, chronology, null)
-  }
 
-  def this(other: TTBPDateTimeParseContext) {
+  def this(other: TTBPDateTimeParseContext) = {
     this(other.locale,
          other.symbols,
          other.overrideChronology,

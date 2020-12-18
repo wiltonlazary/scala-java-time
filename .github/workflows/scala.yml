@@ -22,8 +22,8 @@ jobs:
         with:
           path: ~/.sbt
           key: sbt-${{ hashFiles('**/build.sbt') }}
-      - name: Checking your code format
-        run: |
-          csbt scalafmtCheckAll
+      # - name: Checking your code format
+      #   run: |
+      #     csbt scalafmtCheckAll
       - name: Run test
         run: csbt clean +scalajavatimeTestsJVM/test +scalajavatimeTestsJS/test demo/run

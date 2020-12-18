@@ -52,7 +52,6 @@ class UnsupportedTemporalTypeException(message: String, cause: Throwable)
    *
    * @param message  the message to use for this exception, may be null
    */
-  def this(message: String) {
-    this(message, null)
-  }
+  def this(message: String) = this(message, null)
+
 }

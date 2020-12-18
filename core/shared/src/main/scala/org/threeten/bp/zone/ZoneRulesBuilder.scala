@@ -43,7 +43,6 @@ import org.threeten.bp.Month
 import org.threeten.bp.Year
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.chrono.IsoChronology
-import org.threeten.bp.zone.ZoneOffsetTransitionRule.TimeDefinition
 
 /**
  * A mutable builder used to create all the rules for a historic time-zone.
@@ -103,7 +102,7 @@ class ZoneRulesBuilder() {
    * @return this, for chaining
    * @throws IllegalStateException if the window order is invalid
    */
-  def addWindow(
+  private[zone] def addWindow(
     standardOffset:  ZoneOffset,
     until:           LocalDateTime,
     untilDefinition: ZoneOffsetTransitionRule.TimeDefinition
@@ -137,7 +136,7 @@ class ZoneRulesBuilder() {
    * @throws IllegalStateException if a forever window has already been added
    */
   def addWindowForever(standardOffset: ZoneOffset): ZoneRulesBuilder =
-    addWindow(standardOffset, LocalDateTime.MAX, TimeDefinition.WALL)
+    addWindow(standardOffset, LocalDateTime.MAX, ZoneOffsetTransitionRule.TimeDefinition.WALL)
 
   /**
    * Sets the previously added window to have fixed savings.
@@ -175,7 +174,7 @@ class ZoneRulesBuilder() {
    * @throws IllegalStateException if the window already has fixed savings
    * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
    */
-  def addRuleToWindow(
+  private[zone] def addRuleToWindow(
     transitionDateTime: LocalDateTime,
     timeDefinition:     ZoneOffsetTransitionRule.TimeDefinition,
     savingAmountSecs:   Int
@@ -214,7 +213,7 @@ class ZoneRulesBuilder() {
    * @throws IllegalStateException if the window already has fixed savings
    * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
    */
-  def addRuleToWindow(
+  private[zone] def addRuleToWindow(
     year:                Int,
     month:               Month,
     dayOfMonthIndicator: Int,
@@ -258,7 +257,7 @@ class ZoneRulesBuilder() {
    * @throws IllegalStateException if the window already has fixed savings
    * @throws IllegalStateException if the window has reached the maximum capacity of 2000 rules
    */
-  def addRuleToWindow(
+  private[zone] def addRuleToWindow(
     startYear:           Int,
     endYear:             Int,
     month:               Month,
@@ -618,7 +617,7 @@ class ZoneRulesBuilder() {
      * @return true if the window is only a standard offset
      */
     private[zone] def isSingleWindowStandardOffset: Boolean =
-      (windowEnd == LocalDateTime.MAX) && (timeDefinition eq TimeDefinition.WALL) && fixedSavingAmountSecs == null && lastRuleList.isEmpty && ruleList.isEmpty
+      (windowEnd == LocalDateTime.MAX) && (timeDefinition eq ZoneOffsetTransitionRule.TimeDefinition.WALL) && fixedSavingAmountSecs == null && lastRuleList.isEmpty && ruleList.isEmpty
 
     /**
      * Creates the wall offset for the local date-time at the end of the window.

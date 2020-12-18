@@ -67,11 +67,10 @@ lazy val commonSettings = Seq(
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, scalaMajor)) if scalaMajor >= 11 =>
         Seq("-deprecation:false")
-      case Some((2, 10))                             =>
+      case _                              =>
         Seq.empty
     }
   },
-  Compile / doc / sources := { if (isDotty.value) Seq() else (Compile / doc / sources).value },
   Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main",
                                                                        baseDirectory.value,
                                                                        scalaVersion.value
@@ -82,7 +81,8 @@ lazy val commonSettings = Seq(
   ),
   scalacOptions ++= Seq("-target:jvm-1.8"),
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
-  autoAPIMappings := true
+  autoAPIMappings := true,
+  Compile / doc / sources := { if (isDotty.value) Seq() else (Compile / doc / sources).value }
 )
 
 lazy val root = project
@@ -276,8 +276,8 @@ lazy val demo = project
     publishLocal := {},
     publishArtifact := false,
     Keys.`package` := file(""),
-    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
-    scalaJSLinkerConfig ~= (_.withModuleSplitStyle(ModuleSplitStyle.SmallestModules)),
+    // scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
+    // scalaJSLinkerConfig ~= (_.withModuleSplitStyle(ModuleSplitStyle.SmallestModules)),
     scalaJSUseMainModuleInitializer := true,
     zonesFilter := zonesFilterFn
   )

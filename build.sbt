@@ -188,7 +188,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "1.0.0+99-707aebc3-SNAPSHOT"
+      "io.github.cquiroz" %%% "scala-java-locales" % "1.1.0"
     )
   )
 
@@ -255,7 +255,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "locales-full-db" % "1.0.0+99-707aebc3-SNAPSHOT"
+      "io.github.cquiroz" %%% "locales-full-db" % "1.1.0"
     )
   )
   .dependsOn(scalajavatime, scalajavatimeTZDB)

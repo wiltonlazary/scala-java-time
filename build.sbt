@@ -36,6 +36,8 @@ inThisBuild(
   )
 )
 
+skip in publish := true
+
 def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
   def extraDirs(suffix: String) =
     List(CrossType.Pure, CrossType.Full)
@@ -50,7 +52,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
   scalaVersion := scalaVer,
-  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.4", "3.0.0-M2"),
+  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.4", "3.0.0-M2", "3.0.0-M3"),
   // Don't include threeten on the binaries
   mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter {
     case (f, s) => !s.contains("threeten")
@@ -79,32 +81,11 @@ lazy val commonSettings = Seq(
                                                                     baseDirectory.value,
                                                                     scalaVersion.value
   ),
-  scalacOptions ++= Seq("-target:jvm-1.8"),
+  scalacOptions ++= {if (isDotty.value) Seq.empty else Seq("-target:jvm-1.8")},
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
   autoAPIMappings := true,
   Compile / doc / sources := { if (isDotty.value) Seq() else (Compile / doc / sources).value }
 )
-
-lazy val root = project
-  .in(file("."))
-  .settings(
-    name := "scala-java-time-root",
-    // No, SBT, we don't want any artifacts for root.
-    // No, not even an empty jar.
-    publish := {},
-    publishLocal := {},
-    publishArtifact := false,
-    Keys.`package` := file("")
-  )
-  .settings(commonSettings: _*)
-  .aggregate(scalajavatime.jvm,
-             scalajavatime.js,
-             scalajavatimeTZDBJVM,
-             scalajavatimeTZDBJS,
-             scalajavatimeTests.jvm,
-             scalajavatimeTests.js,
-             demo
-  )
 
 /**
  * Copy source files and translate them to the java.time package

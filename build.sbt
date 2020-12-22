@@ -263,20 +263,20 @@ lazy val demo = project
     zonesFilter := zonesFilterFn
   )
 
-lazy val docs = project
-  .in(file("docs"))
-  .dependsOn(scalajavatime.jvm, scalajavatime.js)
-  .settings(commonSettings)
-  .settings(name := "docs")
-  .enablePlugins(MicrositesPlugin)
-  .settings(
-    micrositeName := "scala-java-time",
-    micrositeAuthor := "Carlos Quiroz",
-    micrositeGithubOwner := "cquiroz",
-    micrositeGithubRepo := "scala-java-time",
-    micrositeBaseUrl := "/scala-java-time",
-    micrositePushSiteWith := GitHub4s,
-    //micrositeDocumentationUrl := "/scala-java-time/docs/",
-    micrositeHighlightTheme := "color-brewer",
-    micrositeGithubToken := Option(System.getProperty("GH_TOKEN"))
-  )
+// lazy val docs = project
+//   .in(file("docs"))
+//   .dependsOn(scalajavatime.jvm, scalajavatime.js)
+//   .settings(commonSettings)
+//   .settings(name := "docs")
+//   .enablePlugins(MicrositesPlugin)
+//   .settings(
+//     micrositeName := "scala-java-time",
+//     micrositeAuthor := "Carlos Quiroz",
+//     micrositeGithubOwner := "cquiroz",
+//     micrositeGithubRepo := "scala-java-time",
+//     micrositeBaseUrl := "/scala-java-time",
+//     micrositePushSiteWith := GitHub4s,
+//     //micrositeDocumentationUrl := "/scala-java-time/docs/",
+//     micrositeHighlightTheme := "color-brewer",
+//     micrositeGithubToken := Option(System.getProperty("GH_TOKEN"))
+//   )

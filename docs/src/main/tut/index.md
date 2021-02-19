@@ -78,7 +78,9 @@ and either:
 
 #### No timezones
 
-If you don't need to use timezones in your application you can just stop here. By default `UTC` will always be available but otherwise the library will work fine and produce the smallest possible js file
+If you don't need to use timezones in your application you should remember to use `UTC`. By default `UTC` will always be available but otherwise the library will work fine and produce the smallest possible js file.
+
+Example: `LocalDateTime.now(ZoneId.of("UTC"))`
 
 #### Time-zone data (JS) alternative I (All timezones)
 

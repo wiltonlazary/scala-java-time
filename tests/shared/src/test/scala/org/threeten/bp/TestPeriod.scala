@@ -175,7 +175,7 @@ class TestPeriod extends AnyFunSuite with AssertionsHelper {
   }
 
   test("factory_between_LocalDate_nullFirst") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       Period.between(null.asInstanceOf[LocalDate], LocalDate.of(2010, 1, 1))
     }
   }

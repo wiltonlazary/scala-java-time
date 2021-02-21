@@ -386,7 +386,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("test_with_Year_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       val test: YearMonth = YearMonth.of(2008, 6)
       test.`with`(null.asInstanceOf[Year])
     }
@@ -403,7 +403,7 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
   }
 
   test("test_with_Month_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       val test: YearMonth = YearMonth.of(2008, 6)
       test.`with`(null.asInstanceOf[Month])
     }

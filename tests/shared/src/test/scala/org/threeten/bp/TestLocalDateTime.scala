@@ -1262,7 +1262,7 @@ class TestLocalDateTime
   }
 
   test("test_plus_adjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_2007_07_15_12_30_40_987654321.plus(null)
     }
   }
@@ -1280,7 +1280,7 @@ class TestLocalDateTime
   }
 
   test("test_plus_Period_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_2007_07_15_12_30_40_987654321.plus(null.asInstanceOf[MockSimplePeriod])
     }
   }
@@ -1938,7 +1938,7 @@ class TestLocalDateTime
   }
 
   test("test_minus_adjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_2007_07_15_12_30_40_987654321.minus(null)
     }
   }
@@ -1956,7 +1956,7 @@ class TestLocalDateTime
   }
 
   test("test_minus_Period_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_2007_07_15_12_30_40_987654321.minus(null.asInstanceOf[MockSimplePeriod])
     }
   }

@@ -2102,7 +2102,7 @@ class TestZonedDateTime
   }
 
   test("test_plus_adjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_DATE_TIME.plus(null)
     }
   }
@@ -2309,7 +2309,7 @@ class TestZonedDateTime
   }
 
   test("test_minus_adjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_DATE_TIME.minus(null)
     }
   }

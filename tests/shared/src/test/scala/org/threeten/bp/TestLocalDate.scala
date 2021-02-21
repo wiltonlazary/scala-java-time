@@ -889,7 +889,7 @@ class TestLocalDate
   }
 
   test("plus_Period_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_2007_07_15.plus(null.asInstanceOf[MockSimplePeriod])
     }
   }
@@ -1228,7 +1228,7 @@ class TestLocalDate
   }
 
   test("minus_Period_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_2007_07_15.minus(null.asInstanceOf[MockSimplePeriod])
     }
   }

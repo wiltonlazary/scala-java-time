@@ -676,7 +676,7 @@ class TestOffsetTime
   }
 
   test("test_plus_PlusAdjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_11_30_59_500_PONE.plus(null)
     }
   }
@@ -746,7 +746,7 @@ class TestOffsetTime
   }
 
   test("test_minus_MinusAdjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_11_30_59_500_PONE.minus(null)
     }
   }

@@ -215,7 +215,7 @@ class TestDayOfWeek extends AnyFunSuite with GenDateTimeTest with AssertionsHelp
   }
 
   test("adjustInto_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       DayOfWeek.MONDAY.adjustInto(null.asInstanceOf[Temporal])
     }
   }

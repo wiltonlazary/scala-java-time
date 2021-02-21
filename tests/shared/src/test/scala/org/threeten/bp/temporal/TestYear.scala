@@ -495,7 +495,7 @@ class TestYear extends GenDateTimeTest {
   }
 
   test("test_atMonthDay_nullMonthDay") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       val test: Year = Year.of(2008)
       test.atMonthDay(null.asInstanceOf[MonthDay])
     }

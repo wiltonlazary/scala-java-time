@@ -995,7 +995,7 @@ class TestLocalTime
   }
 
   test("test_plus_Adjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_12_30_40_987654321.plus(null.asInstanceOf[TemporalAmount])
     }
   }
@@ -1061,7 +1061,7 @@ class TestLocalTime
   }
 
   test("test_plus_adjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_12_30_40_987654321.plus(null.asInstanceOf[TemporalAmount])
     }
   }
@@ -1463,7 +1463,7 @@ class TestLocalTime
   }
 
   test("test_minus_Adjuster_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_12_30_40_987654321.minus(null.asInstanceOf[TemporalAmount])
     }
   }

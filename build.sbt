@@ -3,8 +3,9 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer    = "3.0.0-M2"
+val scalaVer    = "3.0.0-RC1"
 val tzdbVersion = "2019c"
+val scalajavaLocalesVersion = "1.1.1"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Global / resolvers += Resolver.sonatypeRepo("public")
@@ -52,7 +53,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
   scalaVersion := scalaVer,
-  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.4", "3.0.0-M2", "3.0.0-M3"),
+  crossScalaVersions := Seq("2.11.12", "2.12.12", "2.13.4", "3.0.0-M3", "3.0.0-RC1"),
   // Don't include threeten on the binaries
   mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter {
     case (f, s) => !s.contains("threeten")
@@ -169,7 +170,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-locales" % "1.1.0"
+      "io.github.cquiroz" %%% "scala-java-locales" % scalajavaLocalesVersion
     )
   )
 
@@ -236,7 +237,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "locales-full-db" % "1.1.0"
+      "io.github.cquiroz" %%% "locales-full-db" % scalajavaLocalesVersion
     )
   )
   .dependsOn(scalajavatime, scalajavatimeTZDB)

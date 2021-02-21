@@ -870,7 +870,7 @@ class TestOffsetDateTime
   }
 
   test("test_plus_Duration_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_2008_6_30_11_30_59_000000500.plus(null.asInstanceOf[Duration])
     }
   }
@@ -1015,7 +1015,7 @@ class TestOffsetDateTime
   }
 
   test("test_minus_Duration_null") {
-    assertThrows[NullPointerException] {
+    assertThrows[Platform.NPE] {
       TEST_2008_6_30_11_30_59_000000500.minus(null.asInstanceOf[Duration])
     }
   }

@@ -213,7 +213,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     Keys.`package` := file(""),
     skip.in(compile) := isDotty.value,
     libraryDependencies +=
-      ("org.scalatest" %%% "scalatest" % "3.2.6" % "test").withDottyCompat(scalaVersion.value),
+      ("org.scalatest" %%% "scalatest" % "3.2.7" % "test").withDottyCompat(scalaVersion.value),
     scalacOptions ~= (_.filterNot(
       Set("-Wnumeric-widen", "-Ywarn-numeric-widen", "-Ywarn-value-discard", "-Wvalue-discard")
     ))

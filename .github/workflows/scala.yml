@@ -26,4 +26,4 @@ jobs:
       #   run: |
       #     csbt scalafmtCheckAll
       - name: Run test
-        run: csbt clean +scalajavatimeTestsJVM/test +scalajavatimeTestsJS/test +demo/run
+        run: sbt clean +scalajavatimeTestsJVM/test +scalajavatimeTestsJS/test +demo/run

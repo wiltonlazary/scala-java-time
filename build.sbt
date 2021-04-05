@@ -37,7 +37,7 @@ inThisBuild(
   )
 )
 
-skip in publish := true
+publish / skip := true
 
 def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
   def extraDirs(suffix: String) =
@@ -55,10 +55,10 @@ lazy val commonSettings = Seq(
   scalaVersion := scalaVer,
   crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.5", "3.0.0-RC1", "3.0.0-RC2"),
   // Don't include threeten on the binaries
-  mappings in (Compile, packageBin) := (mappings in (Compile, packageBin)).value.filter {
+  Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter {
     case (f, s) => !s.contains("threeten")
   },
-  scalacOptions in Compile ++= {
+  Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, scalaMajor)) if scalaMajor == 13 =>
         Seq("-deprecation:false")
@@ -66,7 +66,7 @@ lazy val commonSettings = Seq(
         Seq.empty
     }
   },
-  scalacOptions in (Compile, doc) := {
+  Compile / doc / scalacOptions := {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, scalaMajor)) if scalaMajor >= 11 =>
         Seq("-deprecation:false")
@@ -156,7 +156,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
         val tagOrHash =
           if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
           else s"v${version.value}"
-        (sourceDirectories in Compile).value.map { f =>
+        (Compile / sourceDirectories).value.map { f =>
           val a = f.toURI.toString
           val g =
             "https://raw.githubusercontent.com/cquiroz/scala-java-time/" + tagOrHash + "/shared/src/main/scala/"
@@ -164,9 +164,9 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
         }
       }
     },
-    sourceGenerators in Compile += Def.task {
-      val srcDirs        = (sourceDirectories in Compile).value
-      val destinationDir = (sourceManaged in Compile).value
+    Compile / sourceGenerators += Def.task {
+      val srcDirs        = (Compile / sourceDirectories).value
+      val destinationDir = (Compile / sourceManaged).value
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(
@@ -184,9 +184,9 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   .jsSettings(
     dbVersion := TzdbPlugin.Version(tzdbVersion),
     includeTTBP := true,
-    sourceGenerators in Compile += Def.task {
-      val srcDirs        = (sourceManaged in Compile).value
-      val destinationDir = (sourceManaged in Compile).value
+    Compile / sourceGenerators += Def.task {
+      val srcDirs        = (Compile / sourceManaged).value
+      val destinationDir = (Compile / sourceManaged).value
       copyAndReplace(Seq(srcDirs), destinationDir)
     }.taskValue
   )
@@ -211,7 +211,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     publishLocal := {},
     publishArtifact := false,
     Keys.`package` := file(""),
-    skip.in(compile) := isDotty.value,
+    Compile / skip := isDotty.value,
     libraryDependencies +=
       ("org.scalatest" %%% "scalatest" % "3.2.7" % "test").withDottyCompat(scalaVersion.value),
     scalacOptions ~= (_.filterNot(
@@ -220,20 +220,20 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
   )
   .jvmSettings(
     // Fork the JVM test to ensure that the custom flags are set
-    fork in Test := true,
-    baseDirectory in Test := baseDirectory.value.getParentFile,
+    Test / fork := true,
+    Test / baseDirectory := baseDirectory.value.getParentFile,
     // Use CLDR provider for locales
     // https://docs.oracle.com/javase/8/docs/technotes/guides/intl/enhancements.8.html#cldr
-    javaOptions in Test ++= Seq("-Duser.language=en",
+    Test / javaOptions ++= Seq("-Duser.language=en",
                                 "-Duser.country=US",
                                 "-Djava.locale.providers=CLDR"
     )
   )
   .jsSettings(
-    parallelExecution in Test := false,
-    sourceGenerators in Test += Def.task {
-      val srcDirs        = (sourceDirectories in Test).value
-      val destinationDir = (sourceManaged in Test).value
+    Test / parallelExecution := false,
+    Test / sourceGenerators += Def.task {
+      val srcDirs        = (Test / sourceDirectories).value
+      val destinationDir = (Test / sourceManaged).value
       copyAndReplace(srcDirs, destinationDir)
     }.taskValue,
     libraryDependencies ++= Seq(

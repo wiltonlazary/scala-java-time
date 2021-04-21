@@ -3,9 +3,9 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer    = "3.0.0-RC2"
+val scalaVer    = "3.0.0-RC3"
 val tzdbVersion = "2019c"
-val scalajavaLocalesVersion = "1.1.2"
+val scalajavaLocalesVersion = "1.1.3"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Global / resolvers += Resolver.sonatypeRepo("public")
@@ -53,7 +53,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
   scalaVersion := scalaVer,
-  crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.5", "3.0.0-RC1", "3.0.0-RC2"),
+  crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.5", "3.0.0-RC2", "3.0.0-RC3"),
   // Don't include threeten on the binaries
   Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter {
     case (f, s) => !s.contains("threeten")

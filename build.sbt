@@ -3,7 +3,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer    = "3.0.0-RC3"
+val scalaVer    = "3.0.0"
 val tzdbVersion = "2019c"
 val scalajavaLocalesVersion = "1.1.3"
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -213,7 +213,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     Keys.`package` := file(""),
     Compile / skip := isDotty.value,
     libraryDependencies +=
-      ("org.scalatest" %%% "scalatest" % "3.2.9" % "test").withDottyCompat(scalaVersion.value),
+      "org.scalatest" %%% "scalatest" % "3.2.9" % "test",
     scalacOptions ~= (_.filterNot(
       Set("-Wnumeric-widen", "-Ywarn-numeric-widen", "-Ywarn-value-discard", "-Wvalue-discard")
     ))

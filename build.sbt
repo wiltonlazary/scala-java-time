@@ -5,7 +5,7 @@ import sbt.io.Using
 
 val scalaVer    = "3.0.0"
 val tzdbVersion = "2019c"
-val scalajavaLocalesVersion = "1.1.3"
+val scalajavaLocalesVersion = "1.2.0"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Global / resolvers += Resolver.sonatypeRepo("public")
@@ -53,7 +53,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 lazy val commonSettings = Seq(
   description := "java.time API implementation in Scala and Scala.js",
   scalaVersion := scalaVer,
-  crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.5", "3.0.0-RC2", "3.0.0-RC3"),
+  crossScalaVersions := Seq("2.11.12", "2.12.13", "2.13.5", "3.0.0"),
   // Don't include threeten on the binaries
   Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter {
     case (f, s) => !s.contains("threeten")
@@ -142,7 +142,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
   .settings(
     name := "scala-java-time",
     libraryDependencies += ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1")
-      .withDottyCompat(scalaVersion.value)
+      .cross(CrossVersion.for3Use2_13)
   )
   .jsSettings(
     scalacOptions ++= {

@@ -5,7 +5,7 @@ import sbt.io.Using
 
 val scalaVer    = "3.0.1"
 val tzdbVersion = "2019c"
-val scalajavaLocalesVersion = "1.2.0"
+val scalajavaLocalesVersion = "1.2.1"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Global / resolvers += Resolver.sonatypeRepo("public")

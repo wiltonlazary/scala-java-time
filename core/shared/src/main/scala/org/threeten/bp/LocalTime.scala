@@ -678,31 +678,33 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * the specified nano-of-second. The hour, minute and second will be unchanged. <li>{@code
    * NANO_OF_DAY} - Returns a {@code LocalTime} with the specified nano-of-day. This completely
    * replaces the time and is equivalent to {@link #ofNanoOfDay(long)}. <li>{@code MICRO_OF_SECOND}
-   * - Returns a {@code LocalTime} with the nano-of-second replaced by the specified micro-of-second
-   * multiplied by 1,000. The hour, minute and second will be unchanged. <li>{@code MICRO_OF_DAY} -
-   * Returns a {@code LocalTime} with the specified micro-of-day. This completely replaces the time
-   * and is equivalent to using {@link #ofNanoOfDay(long)} with the micro-of-day multiplied by
-   * 1,000. <li>{@code MILLI_OF_SECOND} - Returns a {@code LocalTime} with the nano-of-second
-   * replaced by the specified milli-of-second multiplied by 1,000,000. The hour, minute and second
-   * will be unchanged. <li>{@code MILLI_OF_DAY} - Returns a {@code LocalTime} with the specified
-   * milli-of-day. This completely replaces the time and is equivalent to using {@link
-   * #ofNanoOfDay(long)} with the milli-of-day multiplied by 1,000,000. <li>{@code SECOND_OF_MINUTE}
-   * - Returns a {@code LocalTime} with the specified second-of-minute. The hour, minute and
-   * nano-of-second will be unchanged. <li>{@code SECOND_OF_DAY} - Returns a {@code LocalTime} with
-   * the specified second-of-day. The nano-of-second will be unchanged. <li>{@code MINUTE_OF_HOUR} -
-   * Returns a {@code LocalTime} with the specified minute-of-hour. The hour, second-of-minute and
-   * nano-of-second will be unchanged. <li>{@code MINUTE_OF_DAY} - Returns a {@code LocalTime} with
-   * the specified minute-of-day. The second-of-minute and nano-of-second will be unchanged.
-   * <li>{@code HOUR_OF_AMPM} - Returns a {@code LocalTime} with the specified hour-of-am-pm. The
-   * AM/PM, minute-of-hour, second-of-minute and nano-of-second will be unchanged. <li>{@code
-   * CLOCK_HOUR_OF_AMPM} - Returns a {@code LocalTime} with the specified clock-hour-of-am-pm. The
-   * AM/PM, minute-of-hour, second-of-minute and nano-of-second will be unchanged. <li>{@code
-   * HOUR_OF_DAY} - Returns a {@code LocalTime} with the specified hour-of-day. The minute-of-hour,
-   * second-of-minute and nano-of-second will be unchanged. <li>{@code CLOCK_HOUR_OF_DAY} - Returns
-   * a {@code LocalTime} with the specified clock-hour-of-day. The minute-of-hour, second-of-minute
-   * and nano-of-second will be unchanged. <li>{@code AMPM_OF_DAY} - Returns a {@code LocalTime}
-   * with the specified AM/PM. The hour-of-am-pm, minute-of-hour, second-of-minute and
-   * nano-of-second will be unchanged. </ul>
+   *   - Returns a {@code LocalTime} with the nano-of-second replaced by the specified
+   *     micro-of-second multiplied by 1,000. The hour, minute and second will be unchanged.
+   *     <li>{@code MICRO_OF_DAY} - Returns a {@code LocalTime} with the specified micro-of-day.
+   *     This completely replaces the time and is equivalent to using {@link #ofNanoOfDay(long)}
+   *     with the micro-of-day multiplied by 1,000. <li>{@code MILLI_OF_SECOND} - Returns a {@code
+   *     LocalTime} with the nano-of-second replaced by the specified milli-of-second multiplied by
+   *     1,000,000. The hour, minute and second will be unchanged. <li>{@code MILLI_OF_DAY} -
+   *     Returns a {@code LocalTime} with the specified milli-of-day. This completely replaces the
+   *     time and is equivalent to using {@link #ofNanoOfDay(long)} with the milli-of-day multiplied
+   *     by 1,000,000. <li>{@code SECOND_OF_MINUTE}
+   *   - Returns a {@code LocalTime} with the specified second-of-minute. The hour, minute and
+   *     nano-of-second will be unchanged. <li>{@code SECOND_OF_DAY} - Returns a {@code LocalTime}
+   *     with the specified second-of-day. The nano-of-second will be unchanged. <li>{@code
+   *     MINUTE_OF_HOUR} - Returns a {@code LocalTime} with the specified minute-of-hour. The hour,
+   *     second-of-minute and nano-of-second will be unchanged. <li>{@code MINUTE_OF_DAY} - Returns
+   *     a {@code LocalTime} with the specified minute-of-day. The second-of-minute and
+   *     nano-of-second will be unchanged. <li>{@code HOUR_OF_AMPM} - Returns a {@code LocalTime}
+   *     with the specified hour-of-am-pm. The AM/PM, minute-of-hour, second-of-minute and
+   *     nano-of-second will be unchanged. <li>{@code CLOCK_HOUR_OF_AMPM} - Returns a {@code
+   *     LocalTime} with the specified clock-hour-of-am-pm. The AM/PM, minute-of-hour,
+   *     second-of-minute and nano-of-second will be unchanged. <li>{@code HOUR_OF_DAY} - Returns a
+   *     {@code LocalTime} with the specified hour-of-day. The minute-of-hour, second-of-minute and
+   *     nano-of-second will be unchanged. <li>{@code CLOCK_HOUR_OF_DAY} - Returns a {@code
+   *     LocalTime} with the specified clock-hour-of-day. The minute-of-hour, second-of-minute and
+   *     nano-of-second will be unchanged. <li>{@code AMPM_OF_DAY} - Returns a {@code LocalTime}
+   *     with the specified AM/PM. The hour-of-am-pm, minute-of-hour, second-of-minute and
+   *     nano-of-second will be unchanged. </ul>
    *
    * In all cases, if the new value is outside the valid range of values for the field then a {@code
    * DateTimeException} will be thrown.

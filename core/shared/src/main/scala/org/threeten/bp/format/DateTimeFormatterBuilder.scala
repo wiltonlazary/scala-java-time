@@ -153,11 +153,11 @@ object DateTimeFormatterBuilder {
  * <li>Fraction - a fractional value including the decimal place. Always use this when outputting
  * fractions to ensure that the fraction is parsed correctly</li> <li>Text - the textual equivalent
  * for the value</li> <li>OffsetId/Offset - the {@linkplain ZoneOffset zone offset}</li> <li>ZoneId
- * - the {@linkplain ZoneId time-zone} id</li> <li>ZoneText - the name of the time-zone</li>
- * <li>Literal - a text literal</li> <li>Nested and Optional - formats can be nested or made
- * optional</li> <li>Other - the printer and parser interfaces can be used to add user supplied
- * formatting</li> </ul><p> In addition, any of the elements may be decorated by padding, either
- * with spaces or any other character.
+ *   - the {@linkplain ZoneId time-zone} id</li> <li>ZoneText - the name of the time-zone</li>
+ *     <li>Literal - a text literal</li> <li>Nested and Optional - formats can be nested or made
+ *     optional</li> <li>Other - the printer and parser interfaces can be used to add user supplied
+ *     formatting</li> </ul><p> In addition, any of the elements may be decorated by padding, either
+ *     with spaces or any other character.
  *
  * Finally, a shorthand pattern, mostly compatible with {@code java.text.SimpleDateFormat
  * SimpleDateFormat} can be used, see {@link #appendPattern(String)}. In practice, this simply

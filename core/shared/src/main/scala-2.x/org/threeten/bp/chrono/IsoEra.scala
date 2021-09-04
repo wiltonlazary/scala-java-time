@@ -76,8 +76,8 @@ object IsoEra {
  * An era in the ISO calendar system.
  *
  * The ISO-8601 standard does not define eras. A definition has therefore been created with two eras
- * - 'Current era' (CE) for years from 0001-01-01 (ISO) and 'Before current era' (BCE) for years
- * before that.
+ *   - 'Current era' (CE) for years from 0001-01-01 (ISO) and 'Before current era' (BCE) for years
+ *     before that.
  *
  * <b>Do not use {@code ordinal()} to obtain the numeric representation of {@code IsoEra}. Use
  * {@code getValue()} instead.</b>

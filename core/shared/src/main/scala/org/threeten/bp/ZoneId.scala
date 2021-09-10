@@ -66,7 +66,7 @@ object ZoneId {
    *   - Pacific/Apia</li> <li>NET - Asia/Yerevan</li> <li>NST - Pacific/Auckland</li> <li>PLT -
    *     Asia/Karachi</li> <li>PNT - America/Phoenix</li> <li>PRT - America/Puerto_Rico</li> <li>PST
    *     - America/Los_Angeles</li> <li>SST - Pacific/Guadalcanal</li> <li>VST -
-   *     Asia/Ho_Chi_Minh</li> </ul><p> The map is unmodifiable.
+   *       Asia/Ho_Chi_Minh</li> </ul><p> The map is unmodifiable.
    */
   lazy val SHORT_IDS: java.util.Map[String, String] = ShortIds.asJava
 

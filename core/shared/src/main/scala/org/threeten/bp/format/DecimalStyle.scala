@@ -90,7 +90,7 @@ object DecimalStyle {
    * @return
    *   the info, not null
    */
-  def of(locale: Locale): DecimalStyle = {
+  def of(locale: Locale): DecimalStyle             = {
     Objects.requireNonNull(locale, "locale")
     // Size reduced
     if (CACHE.get(locale) == null)

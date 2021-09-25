@@ -41,7 +41,7 @@ object TestZoneRulesProvider {
   private[zone] class MockTempProvider extends ZoneRulesProvider {
     private[zone] final val rules: ZoneRules = ZoneOffset.of("+01:45").getRules
 
-    def provideZoneIds: java.util.Set[String] =
+    def provideZoneIds: java.util.Set[String]                                                =
       new java.util.HashSet[String](Collections.singleton("FooLocation"))
 
     protected def provideVersions(zoneId: String): java.util.NavigableMap[String, ZoneRules] = {
@@ -50,7 +50,7 @@ object TestZoneRulesProvider {
       result
     }
 
-    protected def provideRules(zoneId: String, forCaching: Boolean): ZoneRules = {
+    protected def provideRules(zoneId: String, forCaching: Boolean): ZoneRules               = {
       if (zoneId == "FooLocation")
         return rules
       throw new ZoneRulesException("Invalid")

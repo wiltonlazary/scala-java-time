@@ -100,7 +100,7 @@ trait Era extends TemporalAccessor with TemporalAdjuster {
     if (field.isInstanceOf[ChronoField]) field eq ERA
     else field != null && field.isSupportedBy(this)
 
-  override def get(field: TemporalField): Int =
+  override def get(field: TemporalField): Int    =
     if (field eq ERA) getValue
     else range(field).checkValidIntValue(getLong(field), field)
 

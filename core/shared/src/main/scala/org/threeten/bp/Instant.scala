@@ -725,7 +725,7 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
    * @throws ArithmeticException
    *   if numeric overflow occurs
    */
-  def plusNanos(nanosToAdd:   Long): Instant = plus(0, nanosToAdd)
+  def plusNanos(nanosToAdd: Long): Instant = plus(0, nanosToAdd)
 
   /**
    * Returns a copy of this instant with the specified duration added.
@@ -964,13 +964,13 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
     unit.between(this, end)
   }
 
-  private def nanosUntil(end: Instant): Long = {
+  private def nanosUntil(end: Instant): Long                  = {
     val secsDiff: Long   = Math.subtractExact(end.seconds, seconds)
     val totalNanos: Long = Math.multiplyExact(secsDiff, Instant.NANOS_PER_SECOND.toLong)
     Math.addExact(totalNanos, end.nanos.toLong - nanos.toLong)
   }
 
-  private def secondsUntil(end: Instant): Long = {
+  private def secondsUntil(end: Instant): Long                = {
     val secsDiff: Long  = Math.subtractExact(end.seconds, seconds)
     val nanosDiff: Long = end.nanos.toLong - nanos.toLong
     if (secsDiff > 0 && nanosDiff < 0)
@@ -1063,7 +1063,7 @@ final class Instant private (private val seconds: Long, private val nanos: Int)
    * @throws NullPointerException
    *   if otherInstant is null
    */
-  def compare(otherInstant: Instant): Int = {
+  def compare(otherInstant: Instant): Int     = {
     val cmp: Int = java.lang.Long.compare(seconds, otherInstant.seconds)
     if (cmp != 0) cmp
     else nanos - otherInstant.nanos

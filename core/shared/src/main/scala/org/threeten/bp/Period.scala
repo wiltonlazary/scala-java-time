@@ -231,7 +231,7 @@ object Period {
    * @throws DateTimeParseException
    *   if the text cannot be parsed to a period
    */
-  def parse(text: CharSequence): Period = {
+  def parse(text: CharSequence): Period                                      = {
     Objects.requireNonNull(text, "text")
     val matcher: Matcher = PATTERN.matcher(text)
     if (matcher.matches) {

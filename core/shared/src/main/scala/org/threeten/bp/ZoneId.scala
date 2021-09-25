@@ -156,7 +156,7 @@ object ZoneId {
   def of(zoneId: String, aliasMap: java.util.Map[String, String]): ZoneId =
     of2(zoneId, aliasMap.asScala.toMap)
 
-  private def of2(zoneId: String, aliasMap: Map[String, String]): ZoneId =
+  private def of2(zoneId: String, aliasMap: Map[String, String]): ZoneId  =
     of(aliasMap.get(zoneId).getOrElse(zoneId))
 
   /**
@@ -407,10 +407,10 @@ abstract class ZoneId private[bp] () extends Serializable {
       .appendZoneText(style)
       .toFormatter(locale)
       .format(new TemporalAccessor() {
-        def isSupported(field:       TemporalField): Boolean = false
-        def getLong(field:           TemporalField): Long    =
+        def isSupported(field: TemporalField): Boolean    = false
+        def getLong(field: TemporalField): Long           =
           throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
-        override def query[R](query: TemporalQuery[R]): R    =
+        override def query[R](query: TemporalQuery[R]): R =
           if (query eq TemporalQueries.zoneId)
             ZoneId.this.asInstanceOf[R]
           else

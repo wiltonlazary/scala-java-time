@@ -46,10 +46,10 @@ object TestMonth {
 }
 
 class TestMonth extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
-  protected def samples: List[TemporalAccessor] =
+  protected def samples: List[TemporalAccessor]    =
     List(JANUARY, JUNE, DECEMBER)
 
-  protected def validFields: List[TemporalField] =
+  protected def validFields: List[TemporalField]   =
     List(MONTH_OF_YEAR)
 
   protected def invalidFields: List[TemporalField] = {

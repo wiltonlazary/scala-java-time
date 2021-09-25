@@ -70,7 +70,7 @@ object TestDateTimeFormatters {
       new java.util.HashMap[TemporalField, java.lang.Long]
     private[format] var zoneId: ZoneId                                       = null
 
-    private[format] def setFields(dt: LocalDate): Unit =
+    private[format] def setFields(dt: LocalDate): Unit     =
       if (dt != null) {
         fields.put(YEAR, dt.getYear.toLong)
         fields.put(MONTH_OF_YEAR, dt.getMonthValue.toLong)
@@ -96,17 +96,17 @@ object TestDateTimeFormatters {
         fields.put(NANO_OF_SECOND, dt.getNano.toLong)
       }
 
-    private[format] def setOffset(offsetId: String): Unit =
+    private[format] def setOffset(offsetId: String): Unit  =
       if (offsetId != null)
         this.fields.put(OFFSET_SECONDS, ZoneOffset.of(offsetId).getTotalSeconds.toLong)
 
-    private[format] def setZone(zoneId: String): Unit =
+    private[format] def setZone(zoneId: String): Unit      =
       if (zoneId != null)
         this.zoneId = ZoneId.of(zoneId)
 
     def isSupported(field: TemporalField): Boolean = fields.containsKey(field)
 
-    def getLong(field: TemporalField): Long = {
+    def getLong(field: TemporalField): Long                                                 = {
       val long: java.lang.Long = fields.get(field)
       if (long == null)
         throw new DateTimeException(s"Field missing: $field")
@@ -120,10 +120,10 @@ object TestDateTimeFormatters {
       else
         null.asInstanceOf[R]
 
-    override def get(field: TemporalField): scala.Int =
+    override def get(field: TemporalField): scala.Int                                       =
       range(field).checkValidIntValue(getLong(field), field)
 
-    override def range(field: TemporalField): ValueRange = field.range
+    override def range(field: TemporalField): ValueRange                                    = field.range
 
     override def toString: String = fields + (if (zoneId != null) " " + zoneId else "")
   }
@@ -1135,7 +1135,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     val test: TemporalAccessor = new TemporalAccessor() {
       def isSupported(field: TemporalField): Boolean = (field eq YEAR) || (field eq DAY_OF_YEAR)
 
-      def getLong(field: TemporalField): Long = {
+      def getLong(field: TemporalField): Long           = {
         if (field eq YEAR)
           return 2008
         if (field eq DAY_OF_YEAR)
@@ -1145,7 +1145,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
 
       override def query[R](query: TemporalQuery[R]): R = null.asInstanceOf[R]
 
-      override def get(field: TemporalField): Int =
+      override def get(field: TemporalField): Int          =
         range(field).checkValidIntValue(getLong(field), field)
 
       override def range(field: TemporalField): ValueRange = field.range
@@ -1265,7 +1265,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         ret
       }
 
-      override def remove(): Unit =
+      override def remove(): Unit          =
         throw new UnsupportedOperationException
     }
 

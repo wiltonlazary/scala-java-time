@@ -321,7 +321,7 @@ trait ChronoLocalDate extends Temporal with TemporalAdjuster with Ordered[Chrono
     if (field.isInstanceOf[ChronoField]) field.isDateBased
     else field != null && field.isSupportedBy(this)
 
-  def isSupported(unit: TemporalUnit): Boolean =
+  def isSupported(unit: TemporalUnit): Boolean                     =
     if (unit.isInstanceOf[ChronoUnit]) unit.isDateBased
     else unit != null && unit.isSupportedBy(this)
 
@@ -335,13 +335,13 @@ trait ChronoLocalDate extends Temporal with TemporalAdjuster with Ordered[Chrono
 
   def plus(amountToAdd: Long, unit: TemporalUnit): ChronoLocalDate
 
-  override def minus(amount: TemporalAmount): ChronoLocalDate =
+  override def minus(amount: TemporalAmount): ChronoLocalDate                     =
     getChronology.ensureChronoLocalDate(super.minus(amount))
 
   override def minus(amountToSubtract: Long, unit: TemporalUnit): ChronoLocalDate =
     getChronology.ensureChronoLocalDate(super.minus(amountToSubtract, unit))
 
-  override def query[R](query: TemporalQuery[R]): R =
+  override def query[R](query: TemporalQuery[R]): R                               =
     query match {
       case TemporalQueries.chronology => getChronology.asInstanceOf[R]
       case TemporalQueries.precision  => ChronoUnit.DAYS.asInstanceOf[R]

@@ -106,7 +106,7 @@ object Performance {
     }
   }
 
-  def process(): Unit = {
+  def process(): Unit                                                            = {
     val time: LocalTime                          = LocalTime.of(12, 30, 20)
     System.out.println(time)
     val ldt: java.util.List[LocalDateTime]       = setupDateTime
@@ -141,7 +141,7 @@ object Performance {
     deriveDateTime(ldt)
   }
 
-  private def setupDateTime: java.util.List[LocalDateTime] = {
+  private def setupDateTime: java.util.List[LocalDateTime]                       = {
     val random: Random                      = new Random(47658758756875687L)
     val list: java.util.List[LocalDateTime] = new java.util.ArrayList[LocalDateTime](SIZE)
     val start: Long                         = System.nanoTime
@@ -163,7 +163,7 @@ object Performance {
     list
   }
 
-  private def sortListDateTime(list: java.util.List[LocalDateTime]): Unit = {
+  private def sortListDateTime(list: java.util.List[LocalDateTime]): Unit        = {
     val start: Long = System.nanoTime
     Collections.sort(list)
     val end: Long   = System.nanoTime
@@ -171,7 +171,7 @@ object Performance {
     result("LocalDT-S", end - start)
   }
 
-  private def queryListDateTime(list: java.util.List[LocalDateTime]): Unit = {
+  private def queryListDateTime(list: java.util.List[LocalDateTime]): Unit       = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (dt <- list.asScala) {
@@ -187,7 +187,7 @@ object Performance {
     result("LocalDT-Q", end - start)
   }
 
-  private def formatListDateTime(list: java.util.List[LocalDateTime]): Unit = {
+  private def formatListDateTime(list: java.util.List[LocalDateTime]): Unit      = {
     val buf: StringBuilder        = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_DATE.withLocale(Locale.ENGLISH)
     val start: Long               = System.nanoTime
@@ -200,7 +200,7 @@ object Performance {
     result("LocalDT-P", end - start)
   }
 
-  private def deriveDateTime(list: java.util.List[LocalDateTime]): Unit = {
+  private def deriveDateTime(list: java.util.List[LocalDateTime]): Unit          = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (dt <- list.asScala) {
@@ -215,7 +215,7 @@ object Performance {
     result("LocalDT-V", end - start)
   }
 
-  private def setupLocalDate: java.util.List[LocalDate] = {
+  private def setupLocalDate: java.util.List[LocalDate]                          = {
     val random: Random                  = new Random(47658758756875687L)
     val list: java.util.List[LocalDate] = new java.util.ArrayList[LocalDate](SIZE)
     val start: Long                     = System.nanoTime
@@ -232,7 +232,7 @@ object Performance {
     list
   }
 
-  private def sortListLocalDate(list: java.util.List[LocalDate]): Unit = {
+  private def sortListLocalDate(list: java.util.List[LocalDate]): Unit           = {
     val start: Long = System.nanoTime
     Collections.sort(list)
     val end: Long   = System.nanoTime
@@ -240,7 +240,7 @@ object Performance {
     result("LocalD-S", end - start)
   }
 
-  private def queryListLocalDate(list: java.util.List[LocalDate]): Unit = {
+  private def queryListLocalDate(list: java.util.List[LocalDate]): Unit          = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (dt <- list.asScala) {
@@ -253,7 +253,7 @@ object Performance {
     result("LocalD-Q", end - start)
   }
 
-  private def formatListLocalDate(list: java.util.List[LocalDate]): Unit = {
+  private def formatListLocalDate(list: java.util.List[LocalDate]): Unit         = {
     val buf: StringBuilder        = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_DATE.withLocale(Locale.ENGLISH)
     val start: Long               = System.nanoTime
@@ -266,7 +266,7 @@ object Performance {
     result("LocalD-P", end - start)
   }
 
-  private def setupTime: java.util.List[LocalTime] = {
+  private def setupTime: java.util.List[LocalTime]                               = {
     val random: Random                  = new Random(47658758756875687L)
     val list: java.util.List[LocalTime] = new java.util.ArrayList[LocalTime](SIZE)
     val start: Long                     = System.nanoTime
@@ -286,7 +286,7 @@ object Performance {
     list
   }
 
-  private def sortListTime(list: java.util.List[LocalTime]): Unit = {
+  private def sortListTime(list: java.util.List[LocalTime]): Unit                = {
     val start: Long = System.nanoTime
     Collections.sort(list)
     val end: Long   = System.nanoTime
@@ -294,7 +294,7 @@ object Performance {
     result("LocalT-S", end - start)
   }
 
-  private def queryListTime(list: java.util.List[LocalTime]): Unit = {
+  private def queryListTime(list: java.util.List[LocalTime]): Unit               = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (dt <- list.asScala) {
@@ -308,7 +308,7 @@ object Performance {
     result("LocalT-Q", end - start)
   }
 
-  private def formatListTime(list: java.util.List[LocalTime]): Unit = {
+  private def formatListTime(list: java.util.List[LocalTime]): Unit              = {
     val buf: StringBuilder        = new StringBuilder
     val format: DateTimeFormatter = DateTimeFormatter.ISO_TIME.withLocale(Locale.ENGLISH)
     val start: Long               = System.nanoTime
@@ -321,7 +321,7 @@ object Performance {
     result("LocalT-P", end - start)
   }
 
-  private def deriveTime(list: java.util.List[LocalTime]): Unit = {
+  private def deriveTime(list: java.util.List[LocalTime]): Unit                  = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (dt <- list.asScala) {
@@ -335,7 +335,7 @@ object Performance {
     result("LocalT-V", end - start)
   }
 
-  private def setupZonedDateTime: java.util.List[ZonedDateTime] = {
+  private def setupZonedDateTime: java.util.List[ZonedDateTime]                  = {
     val tz: ZoneId                          = ZoneId.of("Europe/London")
     val random: Random                      = new Random(47658758756875687L)
     val list: java.util.List[ZonedDateTime] = new java.util.ArrayList[ZonedDateTime](SIZE)
@@ -361,7 +361,7 @@ object Performance {
     list
   }
 
-  private def sortListZonedDateTime(list: java.util.List[ZonedDateTime]): Unit = {
+  private def sortListZonedDateTime(list: java.util.List[ZonedDateTime]): Unit   = {
     val start: Long = System.nanoTime
     Collections.sort(list)
     val end: Long   = System.nanoTime
@@ -369,7 +369,7 @@ object Performance {
     result("ZonedDT-S", end - start)
   }
 
-  private def queryListZonedDateTime(list: java.util.List[ZonedDateTime]): Unit = {
+  private def queryListZonedDateTime(list: java.util.List[ZonedDateTime]): Unit  = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (dt <- list.asScala) {
@@ -398,7 +398,7 @@ object Performance {
     result("ZonedDT-P", end - start)
   }
 
-  private def setupInstant: java.util.List[Instant] = {
+  private def setupInstant: java.util.List[Instant]                              = {
     val random: Random                = new Random(47658758756875687L)
     val list: java.util.List[Instant] = new java.util.ArrayList[Instant](SIZE)
     val start: Long                   = System.nanoTime
@@ -414,7 +414,7 @@ object Performance {
     list
   }
 
-  private def sortListInstant(list: java.util.List[Instant]): Unit = {
+  private def sortListInstant(list: java.util.List[Instant]): Unit               = {
     val start: Long = System.nanoTime
     Collections.sort(list)
     val end: Long   = System.nanoTime
@@ -422,7 +422,7 @@ object Performance {
     result("Instant-S", end - start)
   }
 
-  private def queryListInstant(list: java.util.List[Instant]): Unit = {
+  private def queryListInstant(list: java.util.List[Instant]): Unit              = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (dt <- list.asScala) {
@@ -434,7 +434,7 @@ object Performance {
     result("Instant-Q", end - start)
   }
 
-  private def formatListInstant(list: java.util.List[Instant]): Unit = {
+  private def formatListInstant(list: java.util.List[Instant]): Unit             = {
     val buf: StringBuilder = new StringBuilder
     val start: Long        = System.nanoTime
     for (dt <- list.asScala) {
@@ -446,7 +446,7 @@ object Performance {
     result("Instant-P", end - start)
   }
 
-  private def setupDate: java.util.List[Date] = {
+  private def setupDate: java.util.List[Date]                                    = {
     val random: Random             = new Random(47658758756875687L)
     val list: java.util.List[Date] = new java.util.ArrayList[Date](SIZE)
     val start: Long                = System.nanoTime
@@ -462,7 +462,7 @@ object Performance {
     list
   }
 
-  private def sortListDate(list: java.util.List[Date]): Unit = {
+  private def sortListDate(list: java.util.List[Date]): Unit                     = {
     val start: Long = System.nanoTime
     Collections.sort(list)
     val end: Long   = System.nanoTime
@@ -470,7 +470,7 @@ object Performance {
     result("JUDate-S", end - start)
   }
 
-  private def queryListDate(list: java.util.List[Date]): Unit = {
+  private def queryListDate(list: java.util.List[Date]): Unit                    = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (dt <- list.asScala)
@@ -480,7 +480,7 @@ object Performance {
     result("JUDate-Q", end - start)
   }
 
-  private def formatListDate(list: java.util.List[Date]): Unit = {
+  private def formatListDate(list: java.util.List[Date]): Unit                   = {
     val buf: StringBuilder = new StringBuilder
     val start: Long        = System.nanoTime
     for (dt <- list.asScala) {
@@ -492,7 +492,7 @@ object Performance {
     result("JUDate-P", end - start)
   }
 
-  private def setupGCal: java.util.List[GregorianCalendar] = {
+  private def setupGCal: java.util.List[GregorianCalendar]                       = {
     val tz: java.util.TimeZone                  = java.util.TimeZone.getTimeZone("Europe/London")
     val random: Random                          = new Random(47658758756875687L)
     val list: java.util.List[GregorianCalendar] = new java.util.ArrayList[GregorianCalendar](SIZE)
@@ -517,7 +517,7 @@ object Performance {
     list
   }
 
-  private def sortListGCal(list: java.util.List[GregorianCalendar]): Unit = {
+  private def sortListGCal(list: java.util.List[GregorianCalendar]): Unit        = {
     val start: Long = System.nanoTime
     Collections.sort(list)
     val end: Long   = System.nanoTime
@@ -525,7 +525,7 @@ object Performance {
     result("GregCal-S", end - start)
   }
 
-  private def queryListGCal(list: java.util.List[GregorianCalendar]): Unit = {
+  private def queryListGCal(list: java.util.List[GregorianCalendar]): Unit       = {
     var total: Long = 0
     val start: Long = System.nanoTime
     for (gcal <- list.asScala) {
@@ -542,7 +542,7 @@ object Performance {
     result("GregCal-Q", end - start)
   }
 
-  private def formatListGCal(list: java.util.List[GregorianCalendar]): Unit = {
+  private def formatListGCal(list: java.util.List[GregorianCalendar]): Unit      = {
     val buf: StringBuilder       = new StringBuilder
     val format: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
     val start: Long              = System.nanoTime
@@ -555,7 +555,7 @@ object Performance {
     result("GregCal-P", end - start)
   }
 
-  private def result(name: String, result: Long): Unit = {
+  private def result(name: String, result: Long): Unit                           = {
     var values: Array[Long] = RESULTS.get(name)
     if (values == null) {
       values = new Array[Long](7)

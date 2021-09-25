@@ -46,10 +46,10 @@ object TestYear {
 }
 
 class TestYear extends GenDateTimeTest {
-  protected def samples: List[TemporalAccessor] =
+  protected def samples: List[TemporalAccessor]    =
     List(TestYear.TEST_2008)
 
-  protected def validFields: List[TemporalField] =
+  protected def validFields: List[TemporalField]   =
     List(YEAR_OF_ERA, YEAR, ERA)
 
   protected def invalidFields: List[TemporalField] = {

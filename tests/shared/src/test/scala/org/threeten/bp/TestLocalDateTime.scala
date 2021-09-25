@@ -110,10 +110,10 @@ class TestLocalDateTime
     MIN_INSTANT = MIN_DATE_TIME.atZone(ZoneOffset.UTC).toInstant
   }
 
-  override protected def samples: List[TemporalAccessor] =
+  override protected def samples: List[TemporalAccessor]                         =
     List(TEST_2007_07_15_12_30_40_987654321, LocalDateTime.MAX, LocalDateTime.MIN)
 
-  override protected def validFields: List[TemporalField] =
+  override protected def validFields: List[TemporalField]                        =
     List(
       NANO_OF_SECOND,
       NANO_OF_DAY,
@@ -148,7 +148,7 @@ class TestLocalDateTime
       JulianFields.RATA_DIE
     )
 
-  override protected def invalidFields: List[TemporalField] = {
+  override protected def invalidFields: List[TemporalField]                      = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
     list.filterNot(validFields.contains)
   }
@@ -1795,7 +1795,7 @@ class TestLocalDateTime
 
       def hasNext: Boolean = i <= 3660
 
-      def next: List[Any] = {
+      def next: List[Any]         = {
         i += delta
         sec += delta
         if (sec >= 60) {
@@ -1885,7 +1885,7 @@ class TestLocalDateTime
 
       def hasNext: Boolean = i <= 3660 * 1000000000L
 
-      def next: List[Any] = {
+      def next: List[Any]         = {
         i += delta
         nanos += delta
         if (nanos >= 1000000000L) {
@@ -2475,7 +2475,7 @@ class TestLocalDateTime
 
       def hasNext: Boolean = i >= -3660
 
-      def next: List[Any] = {
+      def next: List[Any]         = {
         i -= delta
         sec += delta
         if (sec >= 60) {
@@ -2557,7 +2557,7 @@ class TestLocalDateTime
 
       def hasNext: Boolean = i >= -3660 * 1000000000L
 
-      def next: List[Any] = {
+      def next: List[Any]         = {
         i -= delta
         nanos += delta
         if (nanos >= 1000000000L) {
@@ -2745,7 +2745,7 @@ class TestLocalDateTime
     )
   }
 
-  private def test_comparisons_LocalDateTime(localDates: LocalDate*): Unit =
+  private def test_comparisons_LocalDateTime(localDates: LocalDate*): Unit                 =
     test_comparisons_LocalDateTime(
       localDates.toArray,
       LocalTime.MIDNIGHT,

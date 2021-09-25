@@ -1352,13 +1352,13 @@ final class DateTimeFormatterBuilder private (
    * @throws IllegalArgumentException
    *   if the pattern is invalid
    */
-  def appendPattern(pattern: String): DateTimeFormatterBuilder = {
+  def appendPattern(pattern: String): DateTimeFormatterBuilder              = {
     Objects.requireNonNull(pattern, "pattern")
     parsePattern(pattern)
     this
   }
 
-  private def parsePattern(pattern: String): Unit = {
+  private def parsePattern(pattern: String): Unit                           = {
     var pos: Int = 0
     while (pos < pattern.length) {
       var cur: Char = pattern.charAt(pos)
@@ -1783,7 +1783,7 @@ final class DateTimeFormatterBuilder private (
    * @return
    *   the created formatter, not null
    */
-  def toFormatter(locale: Locale): DateTimeFormatter = {
+  def toFormatter(locale: Locale): DateTimeFormatter                       = {
     Objects.requireNonNull(locale, "locale")
     while (active.parent != null) optionalEnd()
     val pp: TTBPDateTimeFormatterBuilder.CompositePrinterParser =

@@ -211,11 +211,11 @@ object WeekFields {
                                         WEEK_BASED_YEAR_RANGE
       )
 
-    private def DAY_OF_WEEK_RANGE: ValueRange             = ValueRange.of(1, 7)
-    private def WEEK_OF_MONTH_RANGE: ValueRange           = ValueRange.of(0, 1, 4, 6)
-    private def WEEK_OF_YEAR_RANGE: ValueRange            = ValueRange.of(0, 1, 52, 54)
-    private def WEEK_OF_WEEK_BASED_YEAR_RANGE: ValueRange = ValueRange.of(1, 52, 53)
-    private def WEEK_BASED_YEAR_RANGE: ValueRange         = YEAR.range
+    private def DAY_OF_WEEK_RANGE: ValueRange                                                      = ValueRange.of(1, 7)
+    private def WEEK_OF_MONTH_RANGE: ValueRange                                                    = ValueRange.of(0, 1, 4, 6)
+    private def WEEK_OF_YEAR_RANGE: ValueRange                                                     = ValueRange.of(0, 1, 52, 54)
+    private def WEEK_OF_WEEK_BASED_YEAR_RANGE: ValueRange                                          = ValueRange.of(1, 52, 53)
+    private def WEEK_BASED_YEAR_RANGE: ValueRange                                                  = YEAR.range
   }
 
   private[temporal] class ComputedDayOfField(
@@ -226,7 +226,7 @@ object WeekFields {
     val range:     ValueRange
   ) extends TemporalField {
 
-    def getFrom(temporal: TemporalAccessor): Long = {
+    def getFrom(temporal: TemporalAccessor): Long                                = {
       val sow: Int    = weekDef.getFirstDayOfWeek.getValue
       val isoDow: Int = temporal.get(ChronoField.DAY_OF_WEEK)
       val dow: Int    = Math.floorMod(isoDow - sow, 7) + 1
@@ -248,7 +248,7 @@ object WeekFields {
         throw new IllegalStateException("unreachable")
     }
 
-    private def localizedDayOfWeek(temporal: TemporalAccessor, sow: Int): Int = {
+    private def localizedDayOfWeek(temporal: TemporalAccessor, sow: Int): Int    = {
       val isoDow: Int = temporal.get(DAY_OF_WEEK)
       Math.floorMod(isoDow - sow, 7) + 1
     }
@@ -259,13 +259,13 @@ object WeekFields {
       computeWeek(offset, dom).toLong
     }
 
-    private def localizedWeekOfYear(temporal: TemporalAccessor, dow: Int): Long = {
+    private def localizedWeekOfYear(temporal: TemporalAccessor, dow: Int): Long  = {
       val doy: Int    = temporal.get(DAY_OF_YEAR)
       val offset: Int = startOfWeekOffset(doy, dow)
       computeWeek(offset, doy).toLong
     }
 
-    private def localizedWOWBY(temporal: TemporalAccessor): Int = {
+    private def localizedWOWBY(temporal: TemporalAccessor): Int                  = {
       val sow: Int    = weekDef.getFirstDayOfWeek.getValue
       val isoDow: Int = temporal.get(DAY_OF_WEEK)
       val dow: Int    = Math.floorMod(isoDow - sow, 7) + 1
@@ -286,7 +286,7 @@ object WeekFields {
       woy.toInt
     }
 
-    private def localizedWBY(temporal: TemporalAccessor): Int = {
+    private def localizedWBY(temporal: TemporalAccessor): Int                    = {
       val sow: Int                          = weekDef.getFirstDayOfWeek.getValue
       val isoDow: Int                       = temporal.get(DAY_OF_WEEK)
       val dow: Int                          = Math.floorMod(isoDow - sow, 7) + 1
@@ -498,7 +498,7 @@ object WeekFields {
       else
         false
 
-    def rangeRefinedBy(temporal: TemporalAccessor): ValueRange = {
+    def rangeRefinedBy(temporal: TemporalAccessor): ValueRange     = {
       if (rangeUnit eq ChronoUnit.WEEKS)
         return range
       var field: TemporalField   = null
@@ -545,7 +545,7 @@ object WeekFields {
       else toString
     }
 
-    override def toString: String = s"$name[${weekDef.toString}]"
+    override def toString: String              = s"$name[${weekDef.toString}]"
   }
 
 }

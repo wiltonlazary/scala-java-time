@@ -144,17 +144,17 @@ final class ChronoPeriodImpl(
     _temporal
   }
 
-  override def equals(obj: Any): Boolean =
+  override def equals(obj: Any): Boolean         =
     obj match {
       case other: ChronoPeriodImpl =>
         (this eq other) || (years == other.years && months == other.months && days == other.days && (chronology == other.chronology))
       case _                       => false
     }
 
-  override def hashCode: Int =
+  override def hashCode: Int                     =
     chronology.hashCode + Integer.rotateLeft(years, 16) + Integer.rotateLeft(months, 8) + days
 
-  override def toString: String =
+  override def toString: String                  =
     if (isZero) s"$chronology P0D"
     else {
       val buf: StringBuilder = new StringBuilder

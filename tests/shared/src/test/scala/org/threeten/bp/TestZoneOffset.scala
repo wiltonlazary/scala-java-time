@@ -39,10 +39,10 @@ import org.threeten.bp.temporal._
 
 /** Test ZoneOffset. */
 class TestZoneOffset extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
-  protected def samples: List[TemporalAccessor] =
+  protected def samples: List[TemporalAccessor]    =
     List(ZoneOffset.ofHours(1), ZoneOffset.ofHoursMinutesSeconds(-5, -6, -30))
 
-  protected def validFields: List[TemporalField] =
+  protected def validFields: List[TemporalField]   =
     List(OFFSET_SECONDS)
 
   protected def invalidFields: List[TemporalField] = {

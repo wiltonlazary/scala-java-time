@@ -20,12 +20,12 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
 
   override def descendingMap(): java.util.NavigableMap[K, V] = new ZoneMap[K, V](map)
 
-  override def firstEntry(): java.util.Map.Entry[K, V] = {
+  override def firstEntry(): java.util.Map.Entry[K, V]         = {
     val fk = firstKey()
     map.get(fk).map(new SimpleEntry(fk, _)).getOrElse(null.asInstanceOf[java.util.Map.Entry[K, V]])
   }
 
-  override def higherEntry(key: K): java.util.Map.Entry[K, V] = {
+  override def higherEntry(key: K): java.util.Map.Entry[K, V]  = {
     val k = map.filterKeys(x => ordering.compare(x, key) > 0)
     if (k.isEmpty) null.asInstanceOf[java.util.Map.Entry[K, V]]
     else new SimpleEntry(k.head._1, k.head._2)
@@ -37,7 +37,7 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
     else new SimpleEntry(k.head._1, k.head._2)
   }
 
-  override def pollFirstEntry(): java.util.Map.Entry[K, V] = {
+  override def pollFirstEntry(): java.util.Map.Entry[K, V]     = {
     val fk    = firstKey()
     val entry = map
       .get(fk)
@@ -47,19 +47,19 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
     entry
   }
 
-  override def floorEntry(key: K): java.util.Map.Entry[K, V] = {
+  override def floorEntry(key: K): java.util.Map.Entry[K, V]   = {
     val k = map.filterKeys(x => ordering.compare(x, key) <= 0)
     if (k.isEmpty) null.asInstanceOf[java.util.Map.Entry[K, V]]
     else new SimpleEntry(k.last._1, k.last._2)
   }
 
-  override def lowerEntry(key: K): java.util.Map.Entry[K, V] = {
+  override def lowerEntry(key: K): java.util.Map.Entry[K, V]   = {
     val k = map.filterKeys(x => ordering.compare(x, key) < 0)
     if (k.isEmpty) null.asInstanceOf[java.util.Map.Entry[K, V]]
     else new SimpleEntry(k.last._1, k.last._2)
   }
 
-  override def pollLastEntry(): java.util.Map.Entry[K, V] = {
+  override def pollLastEntry(): java.util.Map.Entry[K, V]      = {
     val lk    = lastKey()
     val entry = map
       .get(lk)
@@ -69,7 +69,7 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
     entry
   }
 
-  override def lastEntry(): java.util.Map.Entry[K, V] = {
+  override def lastEntry(): java.util.Map.Entry[K, V]          = {
     val lk = lastKey()
     map.get(lk).map(new SimpleEntry(lk, _)).getOrElse(null.asInstanceOf[java.util.Map.Entry[K, V]])
   }
@@ -90,7 +90,7 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
     new ZoneMap(immutable.TreeMap(intersect.toSeq: _*))
   }
 
-  override def subMap(fromKey: K, toKey: K) = subMap(fromKey, true, toKey, false)
+  override def subMap(fromKey: K, toKey: K)                                               = subMap(fromKey, true, toKey, false)
 
   override def headMap(toKey: K, inclusive: Boolean): java.util.NavigableMap[K, V] = {
     val k =
@@ -100,14 +100,14 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
     if (k.isEmpty) new ZoneMap(immutable.TreeMap()) else new ZoneMap(immutable.TreeMap(k.toSeq: _*))
   }
 
-  override def headMap(toKey: K): JSortedMap[K, V] = headMap(toKey, false)
+  override def headMap(toKey: K): JSortedMap[K, V]                                 = headMap(toKey, false)
 
   override def ceilingKey(key: K): K = {
     val k = map.filterKeys(x => ordering.compare(x, key) >= 0)
     if (k.isEmpty) null.asInstanceOf[K] else k.head._1
   }
 
-  override def floorKey(key: K): K = {
+  override def floorKey(key: K): K   = {
     val k = map.filterKeys(x => ordering.compare(x, key) <= 0)
     if (k.isEmpty) null.asInstanceOf[K] else k.last._1
   }
@@ -123,19 +123,19 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
     if (k.isEmpty) new ZoneMap(immutable.TreeMap()) else new ZoneMap(immutable.TreeMap(k.toSeq: _*))
   }
 
-  override def tailMap(fromKey: K): JSortedMap[K, V] = tailMap(fromKey, true)
+  override def tailMap(fromKey: K): JSortedMap[K, V]                                 = tailMap(fromKey, true)
 
   override def lowerKey(key: K): K = {
     val k = map.filterKeys(x => ordering.compare(x, key) < 0)
     if (k.isEmpty) null.asInstanceOf[K] else k.last._1
   }
 
-  override def higherKey(key: K) = {
+  override def higherKey(key: K)   = {
     val k = map.filterKeys(x => ordering.compare(x, key) > 0)
     if (k.isEmpty) null.asInstanceOf[K] else k.head._1
   }
 
-  override def firstKey(): K = map.firstKey
+  override def firstKey(): K       = map.firstKey
 
   override def comparator(): Comparator[K] = map.ordering
 
@@ -143,13 +143,13 @@ private[bp] class ZoneMap[K: ClassTag, V] private[bp] (var map: immutable.TreeMa
 
   override def values(): JCollection[V] = map.values.asJavaCollection
 
-  override def put(key: K, value: V): V = {
+  override def put(key: K, value: V): V           = {
     val prev: Option[V] = map.get(key)
     map += ((key, value))
     prev.getOrElse(null.asInstanceOf[V])
   }
 
-  override def clear(): Unit =
+  override def clear(): Unit                      =
     map = immutable.TreeMap()
 
   override def entrySet(): JSet[JMap.Entry[K, V]] =

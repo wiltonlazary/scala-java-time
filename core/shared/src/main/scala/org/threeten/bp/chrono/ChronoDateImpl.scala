@@ -278,7 +278,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def minusDays(daysToSubtract: Long): ChronoDateImpl[D] =
+  private[chrono] def minusDays(daysToSubtract: Long): ChronoDateImpl[D]               =
     if (daysToSubtract == Long.MinValue) plusDays(Long.MaxValue).plusDays(1)
     else plusDays(-daysToSubtract)
 

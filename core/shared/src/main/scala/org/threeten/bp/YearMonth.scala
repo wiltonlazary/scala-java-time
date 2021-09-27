@@ -411,7 +411,7 @@ final class YearMonth private (private val year: Int, private val month: Int)
       case _               => field.getFrom(this)
     }
 
-  private def getProlepticMonth: Long = (year * 12L) + (month - 1)
+  private def getProlepticMonth: Long     = (year * 12L) + (month - 1)
 
   /**
    * Gets the year field.
@@ -948,7 +948,7 @@ final class YearMonth private (private val year: Int, private val month: Int)
    * @return
    *   the comparator value, negative if less, positive if greater
    */
-  def compare(other: YearMonth): Int = {
+  def compare(other: YearMonth): Int            = {
     var cmp: Int = year - other.year
     if (cmp == 0)
       cmp = month - other.month

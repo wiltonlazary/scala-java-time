@@ -237,13 +237,13 @@ final class ChronoZonedDateTimeImpl[D <: ChronoLocalDate] private (
       unit.between(this, end)
   }
 
-  override def equals(obj: Any): Boolean =
+  override def equals(obj: Any): Boolean                      =
     obj match {
       case other: ChronoZonedDateTime[_] => (this eq other) || (compareTo(other) == 0)
       case _                             => false
     }
 
-  override def hashCode: Int =
+  override def hashCode: Int                                  =
     toLocalDateTime.hashCode ^ getOffset.hashCode ^ Integer.rotateLeft(getZone.hashCode, 3)
 
   override def toString: String = {

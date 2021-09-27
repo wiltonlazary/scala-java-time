@@ -171,13 +171,13 @@ abstract class ChronoLocalDateTime[D <: ChronoLocalDate]
 
   def plus(amountToAdd: Long, unit: TemporalUnit): ChronoLocalDateTime[D]
 
-  override def minus(amount: TemporalAmount): ChronoLocalDateTime[D] =
+  override def minus(amount: TemporalAmount): ChronoLocalDateTime[D]                     =
     toLocalDate.getChronology.ensureChronoLocalDateTime(super.minus(amount))
 
   override def minus(amountToSubtract: Long, unit: TemporalUnit): ChronoLocalDateTime[D] =
     toLocalDate.getChronology.ensureChronoLocalDateTime(super.minus(amountToSubtract, unit))
 
-  override def query[R](query: TemporalQuery[R]): R =
+  override def query[R](query: TemporalQuery[R]): R                                      =
     query match {
       case TemporalQueries.chronology                                             => getChronology.asInstanceOf[R]
       case TemporalQueries.precision                                              => NANOS.asInstanceOf[R]

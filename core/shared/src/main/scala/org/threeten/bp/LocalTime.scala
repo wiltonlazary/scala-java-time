@@ -570,7 +570,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @throws ArithmeticException
    *   if numeric overflow occurs
    */
-  def getLong(field: TemporalField): Long =
+  def getLong(field: TemporalField): Long      =
     if (field.isInstanceOf[ChronoField]) {
       if (field eq NANO_OF_DAY)
         return toNanoOfDay
@@ -963,8 +963,8 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
   def plusMinutes(minutesToAdd: Long): LocalTime = {
     if (minutesToAdd == 0)
       return this
-    val mofd: Int      = hour * LocalTime.MINUTES_PER_HOUR + minute
-    val newMofd: Int   =
+    val mofd: Int    = hour * LocalTime.MINUTES_PER_HOUR + minute
+    val newMofd: Int =
       ((minutesToAdd % LocalTime.MINUTES_PER_DAY).toInt + mofd + LocalTime.MINUTES_PER_DAY) % LocalTime.MINUTES_PER_DAY
     if (mofd == newMofd)
       return this
@@ -989,9 +989,9 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
   def plusSeconds(secondstoAdd: Long): LocalTime = {
     if (secondstoAdd == 0)
       return this
-    val sofd: Int      =
+    val sofd: Int    =
       hour * LocalTime.SECONDS_PER_HOUR + minute * LocalTime.SECONDS_PER_MINUTE + second
-    val newSofd: Int   =
+    val newSofd: Int =
       ((secondstoAdd % LocalTime.SECONDS_PER_DAY).toInt + sofd + LocalTime.SECONDS_PER_DAY) % LocalTime.SECONDS_PER_DAY
     if (sofd == newSofd)
       return this
@@ -1088,7 +1088,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @return
    *   a { @code LocalTime} based on this time with the hours subtracted, not null
    */
-  def minusHours(hoursToSubtract:     Long): LocalTime     =
+  def minusHours(hoursToSubtract: Long): LocalTime =
     plusHours(-(hoursToSubtract % LocalTime.HOURS_PER_DAY))
 
   /**
@@ -1104,7 +1104,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @return
    *   a { @code LocalTime} based on this time with the minutes subtracted, not null
    */
-  def minusMinutes(minutesToSubtract: Long): LocalTime     =
+  def minusMinutes(minutesToSubtract: Long): LocalTime =
     plusMinutes(-(minutesToSubtract % LocalTime.MINUTES_PER_DAY))
 
   /**
@@ -1120,7 +1120,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @return
    *   a { @code LocalTime} based on this time with the seconds subtracted, not null
    */
-  def minusSeconds(secondsToSubtract: Long): LocalTime     =
+  def minusSeconds(secondsToSubtract: Long): LocalTime =
     plusSeconds(-(secondsToSubtract % LocalTime.SECONDS_PER_DAY))
 
   /**
@@ -1136,7 +1136,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @return
    *   a { @code LocalTime} based on this time with the nanoseconds subtracted, not null
    */
-  def minusNanos(nanosToSubtract:     Long): LocalTime     =
+  def minusNanos(nanosToSubtract: Long): LocalTime =
     plusNanos(-(nanosToSubtract % LocalTime.NANOS_PER_DAY))
 
   /**
@@ -1161,7 +1161,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @throws ArithmeticException
    *   if numeric overflow occurs (defined by the query)
    */
-  override def query[R](query:        TemporalQuery[R]): R =
+  override def query[R](query: TemporalQuery[R]): R =
     query match {
       case TemporalQueries.precision => ChronoUnit.NANOS.asInstanceOf[R]
       case TemporalQueries.localTime => this.asInstanceOf[R]
@@ -1325,7 +1325,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @throws NullPointerException
    *   if { @code other} is null
    */
-  def compare(other: LocalTime): Int = {
+  def compare(other: LocalTime): Int            = {
     var cmp: Int = Integer.compare(hour.toInt, other.hour.toInt)
     if (cmp == 0) {
       cmp = Integer.compare(minute.toInt, other.minute.toInt)

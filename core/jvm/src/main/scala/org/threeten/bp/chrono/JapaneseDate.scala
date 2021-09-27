@@ -325,7 +325,7 @@ final class JapaneseDate private[chrono] (
       case _ => super.isSupported(field)
     }
 
-  override def range(field: TemporalField): ValueRange =
+  override def range(field: TemporalField): ValueRange    =
     field match {
       case f: ChronoField =>
         if (isSupported(field))
@@ -349,7 +349,7 @@ final class JapaneseDate private[chrono] (
     )
   }
 
-  def getLong(field: TemporalField): Long =
+  def getLong(field: TemporalField): Long                       =
     field match {
       case f: ChronoField =>
         f match {
@@ -365,7 +365,7 @@ final class JapaneseDate private[chrono] (
         field.getFrom(this)
     }
 
-  private def getDayOfYear: Long =
+  private def getDayOfYear: Long                                =
     if (yearOfEra == 1)
       isoDate.getDayOfYear.toLong - era.startDate.getDayOfYear.toLong + 1L
     else
@@ -374,7 +374,7 @@ final class JapaneseDate private[chrono] (
   override def `with`(adjuster: TemporalAdjuster): JapaneseDate =
     super.`with`(adjuster).asInstanceOf[JapaneseDate]
 
-  def `with`(field: TemporalField, newValue: Long): JapaneseDate =
+  def `with`(field: TemporalField, newValue: Long): JapaneseDate          =
     field match {
       case f: ChronoField =>
         if (getLong(f) == newValue)
@@ -394,13 +394,13 @@ final class JapaneseDate private[chrono] (
         field.adjustInto(this, newValue)
     }
 
-  override def plus(amount: TemporalAmount): JapaneseDate =
+  override def plus(amount: TemporalAmount): JapaneseDate                 =
     super.plus(amount).asInstanceOf[JapaneseDate]
 
-  override def plus(amountToAdd: Long, unit: TemporalUnit): JapaneseDate =
+  override def plus(amountToAdd: Long, unit: TemporalUnit): JapaneseDate  =
     super.plus(amountToAdd, unit).asInstanceOf[JapaneseDate]
 
-  override def minus(amount: TemporalAmount): JapaneseDate =
+  override def minus(amount: TemporalAmount): JapaneseDate                =
     super.minus(amount).asInstanceOf[JapaneseDate]
 
   override def minus(amountToAdd: Long, unit: TemporalUnit): JapaneseDate =
@@ -451,18 +451,18 @@ final class JapaneseDate private[chrono] (
 
   private[chrono] def plusDays(days: Long): JapaneseDate = `with`(isoDate.plusDays(days))
 
-  private def `with`(newDate: LocalDate): JapaneseDate =
+  private def `with`(newDate: LocalDate): JapaneseDate                         =
     if (newDate == isoDate) this else new JapaneseDate(newDate)
 
   override def atTime(localTime: LocalTime): ChronoLocalDateTime[JapaneseDate] =
     super.atTime(localTime).asInstanceOf[ChronoLocalDateTime[JapaneseDate]]
 
-  override def until(endDate: ChronoLocalDate): ChronoPeriod = {
+  override def until(endDate: ChronoLocalDate): ChronoPeriod                   = {
     val period: Period = isoDate.until(endDate)
     getChronology.period(period.getYears, period.getMonths, period.getDays)
   }
 
-  override def toEpochDay: Long = isoDate.toEpochDay
+  override def toEpochDay: Long                                                = isoDate.toEpochDay
 
   override def equals(obj: Any): Boolean =
     obj match {
@@ -470,6 +470,6 @@ final class JapaneseDate private[chrono] (
       case _                       => false
     }
 
-  override def hashCode: Int = getChronology.getId.hashCode ^ isoDate.hashCode
+  override def hashCode: Int             = getChronology.getId.hashCode ^ isoDate.hashCode
 
 }

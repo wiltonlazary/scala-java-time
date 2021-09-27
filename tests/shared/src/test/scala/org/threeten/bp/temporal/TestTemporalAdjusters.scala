@@ -585,6 +585,6 @@ class TestTemporalAdjusters extends AnyFunSuite with AssertionsHelper {
   private def date(year: Int, month: Month, day: Int): LocalDate =
     LocalDate.of(year, month, day)
 
-  private def date(year: Int, month: Int, day: Int): LocalDate =
+  private def date(year: Int, month: Int, day: Int): LocalDate   =
     LocalDate.of(year, month, day)
 }

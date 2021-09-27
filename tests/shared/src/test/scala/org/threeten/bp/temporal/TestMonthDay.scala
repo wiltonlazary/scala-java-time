@@ -48,13 +48,13 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
     TEST_07_15 = MonthDay.of(7, 15)
   }
 
-  override protected def samples: List[TemporalAccessor] =
+  override protected def samples: List[TemporalAccessor]  =
     List(TEST_07_15)
 
   override protected def validFields: List[TemporalField] =
     List(DAY_OF_MONTH, MONTH_OF_YEAR)
 
-  protected def invalidFields: List[TemporalField] = {
+  protected def invalidFields: List[TemporalField]        = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
     (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
       .filterNot(validFields.contains)

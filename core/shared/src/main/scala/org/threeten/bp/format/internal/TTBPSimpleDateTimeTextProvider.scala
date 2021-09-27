@@ -140,7 +140,7 @@ object TTBPSimpleDateTimeTextProvider {
 final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
 
   /** Cache. */
-  private val cache: JMap[(TemporalField, Locale), AnyRef] =
+  private val cache: JMap[(TemporalField, Locale), AnyRef]              =
     new HashMap[(TemporalField, Locale), AnyRef]()
 
   override def getText(
@@ -164,7 +164,7 @@ final class TTBPSimpleDateTimeTextProvider extends TTBPDateTimeTextProvider {
       case _                                                 => null
     }
 
-  private def findStore(field: TemporalField, locale: Locale): AnyRef = {
+  private def findStore(field: TemporalField, locale: Locale): AnyRef   = {
     val key           = (field, locale)
     var store: AnyRef = cache.get(key)
     if (store == null) {

@@ -346,7 +346,7 @@ object ZoneOffset {
     } else
       new ZoneOffset(totalSeconds)
 
-  private def buildId(totalSeconds: Int): String =
+  private def buildId(totalSeconds: Int): String    =
     if (totalSeconds == 0)
       "Z"
     else {

@@ -331,7 +331,7 @@ object Duration {
    * @throws DateTimeParseException
    *   if the text cannot be parsed to a duration
    */
-  def parse(text: CharSequence): Duration = {
+  def parse(text: CharSequence): Duration                                         = {
     Objects.requireNonNull(text, "text")
     val matcher: Matcher = PATTERN.matcher(text)
     if (matcher.matches)
@@ -743,7 +743,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
    * @throws ArithmeticException
    *   if numeric overflow occurs
    */
-  def plusNanos(nanosToAdd:   Long): Duration = plus(0, nanosToAdd)
+  def plusNanos(nanosToAdd: Long): Duration = plus(0, nanosToAdd)
 
   /**
    * Returns a copy of this duration with the specified duration added.
@@ -1138,7 +1138,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
    * @return
    *   the comparator value, negative if less, positive if greater
    */
-  def compare(otherDuration: Duration): Int = {
+  def compare(otherDuration: Duration): Int    = {
     val cmp: Int = java.lang.Long.compare(seconds, otherDuration.seconds)
     if (cmp != 0) cmp
     else nanos - otherDuration.nanos

@@ -77,7 +77,7 @@ object TTBPDateTimeFormatterBuilder {
         }
     }
 
-    override def toString: String = {
+    override def toString: String                                                        = {
       // Doing this with mkString produces a bigger output
       // Option(printerParsers).map(_.mkString(if (optional) "[" else "(", "", if (optional) "]" else ")")).getOrElse("")
       val buf: StringBuilder = new StringBuilder
@@ -153,7 +153,7 @@ object TTBPDateTimeFormatterBuilder {
       resultPos
     }
 
-    override def toString: String =
+    override def toString: String                                                        =
       s"Pad($printerParser,$padWidth${if (padChar == ' ') ")" else ",'" + padChar + "')"}"
   }
 
@@ -167,7 +167,7 @@ object TTBPDateTimeFormatterBuilder {
 
   private[format] final class SettingsParser private (name: String, ordinal: Int)
       extends Enum[SettingsParser](name, ordinal)
-      with DateTimePrinterParser {
+      with DateTimePrinterParser        {
     def print(context: TTBPDateTimePrintContext, buf: StringBuilder): Boolean = true
 
     def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int = {
@@ -180,7 +180,7 @@ object TTBPDateTimeFormatterBuilder {
       position
     }
 
-    override def toString: String =
+    override def toString: String                                                        =
       ordinal match {
         case 0 => "ParseCaseSensitive(true)"
         case 1 => "ParseCaseSensitive(false)"
@@ -228,7 +228,7 @@ object TTBPDateTimeFormatterBuilder {
       position + 1
     }
 
-    override def toString: String =
+    override def toString: String                                                        =
       if (literal == '\'') "''"
       else s"'$literal'"
   }
@@ -253,7 +253,7 @@ object TTBPDateTimeFormatterBuilder {
         position + literal.length
     }
 
-    override def toString: String = {
+    override def toString: String                                                        = {
       val converted: String = literal.replace("'", "''")
       s"'$converted'"
     }
@@ -395,7 +395,7 @@ object TTBPDateTimeFormatterBuilder {
     protected[format] def getValue(context: TTBPDateTimePrintContext, value: Long): Long =
       if (context != null) value else value
 
-    protected[format] def isFixedWidth(context: TTBPDateTimeParseContext): Boolean =
+    protected[format] def isFixedWidth(context: TTBPDateTimeParseContext): Boolean       =
       if (context != null)
         subsequentWidth == -1 || (subsequentWidth > 0 && minWidth == maxWidth && (signStyle eq SignStyle.NOT_NEGATIVE))
       else
@@ -647,13 +647,13 @@ object TTBPDateTimeFormatterBuilder {
                                this.subsequentWidth + subsequentWidth
       )
 
-    protected[format] override def isFixedWidth(context: TTBPDateTimeParseContext): Boolean =
+    protected[format] override def isFixedWidth(context: TTBPDateTimeParseContext): Boolean      =
       if (!context.isStrict)
         false
       else
         super.isFixedWidth(context)
 
-    override def toString: String =
+    override def toString: String                                                                =
       s"ReducedValue($field,$minWidth,$maxWidth,${if (baseDate != null) baseDate else baseValue})"
   }
 
@@ -815,7 +815,7 @@ object TTBPDateTimeFormatterBuilder {
       fraction.multiply(rangeBD).setScale(0, RoundingMode.FLOOR).add(minBD).longValueExact
     }
 
-    override def toString: String = {
+    override def toString: String                               = {
       val decimal: String = if (decimalPoint) ",DecimalPoint" else ""
       s"Fraction($field,$minWidth,$maxWidth$decimal)"
     }
@@ -886,7 +886,7 @@ object TTBPDateTimeFormatterBuilder {
       _numberPrinterParser
     }
 
-    override def toString: String =
+    override def toString: String                        =
       if (textStyle eq TextStyle.FULL)
         s"Text($field)"
       else
@@ -1029,7 +1029,7 @@ object TTBPDateTimeFormatterBuilder {
       context.setParsedField(ChronoField.NANO_OF_SECOND, nano.toLong, position, successPos)
     }
 
-    override def toString: String = "Instant()"
+    override def toString: String                                                        = "Instant()"
   }
 
   /** Prints or parses an offset ID. */
@@ -1416,7 +1416,7 @@ object TTBPDateTimeFormatterBuilder {
       ~position
     }
 
-    override def toString: String = s"ZoneText($textStyle)"
+    override def toString: String                                                        = s"ZoneText($textStyle)"
   }
 
   /** Prints or parses a zone ID. */
@@ -1652,7 +1652,7 @@ object TTBPDateTimeFormatterBuilder {
       endPos
     }
 
-    override def toString: String = description
+    override def toString: String                                                        = description
   }
 
   /**
@@ -1748,7 +1748,7 @@ object TTBPDateTimeFormatterBuilder {
     private def formatter(locale: Locale, chrono: Chronology): DateTimeFormatter =
       DateTimeFormatStyleProvider.getInstance.getFormatter(dateStyle, timeStyle, chrono, locale)
 
-    override def toString: String =
+    override def toString: String                                                =
       s"Localized(${if (dateStyle != null) dateStyle else ""},${if (timeStyle != null) timeStyle
       else ""})"
   }
@@ -1765,7 +1765,7 @@ object TTBPDateTimeFormatterBuilder {
     def parse(context: TTBPDateTimeParseContext, text: CharSequence, position: Int): Int =
       evaluate(WeekFields.of(context.getLocale)).parse(context, text, position)
 
-    private def evaluate(weekFields: WeekFields): DateTimePrinterParser =
+    private def evaluate(weekFields: WeekFields): DateTimePrinterParser                  =
       letter match {
         case 'e' =>
           new NumberPrinterParser(weekFields.dayOfWeek, count, 2, SignStyle.NOT_NEGATIVE)
@@ -1792,7 +1792,7 @@ object TTBPDateTimeFormatterBuilder {
             )
       }
 
-    override def toString: String = {
+    override def toString: String                                                        = {
       val sb: StringBuilder = new StringBuilder(30)
       sb.append("Localized(")
       if (letter == 'Y')

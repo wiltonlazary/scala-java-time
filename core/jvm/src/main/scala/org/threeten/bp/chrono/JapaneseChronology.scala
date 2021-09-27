@@ -224,22 +224,22 @@ final class JapaneseChronology private () extends Chronology with Serializable {
 
   def dateEpochDay(epochDay: Long): JapaneseDate = new JapaneseDate(LocalDate.ofEpochDay(epochDay))
 
-  def date(temporal: TemporalAccessor): JapaneseDate =
+  def date(temporal: TemporalAccessor): JapaneseDate                                            =
     temporal match {
       case date: JapaneseDate => date
       case _                  => new JapaneseDate(LocalDate.from(temporal))
     }
 
-  override def localDateTime(temporal: TemporalAccessor): ChronoLocalDateTime[JapaneseDate] =
+  override def localDateTime(temporal: TemporalAccessor): ChronoLocalDateTime[JapaneseDate]     =
     super.localDateTime(temporal).asInstanceOf[ChronoLocalDateTime[JapaneseDate]]
 
-  override def zonedDateTime(temporal: TemporalAccessor): ChronoZonedDateTime[JapaneseDate] =
+  override def zonedDateTime(temporal: TemporalAccessor): ChronoZonedDateTime[JapaneseDate]     =
     super.zonedDateTime(temporal).asInstanceOf[ChronoZonedDateTime[JapaneseDate]]
 
   override def zonedDateTime(instant: Instant, zone: ZoneId): ChronoZonedDateTime[JapaneseDate] =
     super.zonedDateTime(instant, zone).asInstanceOf[ChronoZonedDateTime[JapaneseDate]]
 
-  override def dateNow: JapaneseDate = super.dateNow.asInstanceOf[JapaneseDate]
+  override def dateNow: JapaneseDate                                                            = super.dateNow.asInstanceOf[JapaneseDate]
 
   override def dateNow(zone: ZoneId): JapaneseDate = super.dateNow(zone).asInstanceOf[JapaneseDate]
 

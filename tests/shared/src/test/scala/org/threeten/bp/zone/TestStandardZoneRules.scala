@@ -1297,10 +1297,10 @@ class TestStandardZoneRules extends AnyFunSuite with AssertionsHelper {
   ): Instant =
     LocalDateTime.of(year, month, day, hour, min, sec, nano).toInstant(offset)
 
-  private def createZDT(year: Int, month: Int, day: Int, zone: ZoneId): ZonedDateTime =
+  private def createZDT(year: Int, month: Int, day: Int, zone: ZoneId): ZonedDateTime     =
     LocalDateTime.of(year, month, day, 0, 0).atZone(zone)
 
-  private def createLDT(year: Int, month: Int, day: Int): LocalDateTime =
+  private def createLDT(year: Int, month: Int, day: Int): LocalDateTime                   =
     LocalDateTime.of(year, month, day, 0, 0)
 
   private def checkOffset(

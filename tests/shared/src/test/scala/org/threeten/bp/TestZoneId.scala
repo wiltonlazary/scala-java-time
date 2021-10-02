@@ -1281,7 +1281,7 @@ class TestZoneId extends AnyFunSuite with AssertionsHelper {
   ): ZonedDateTime =
     LocalDateTime.of(year, month, day, hour, min, sec, nano).atZone(zone)
 
-  private def createLDT(year: Int, month: Int, day: Int): LocalDateTime                   =
+  private def createLDT(year: Int, month: Int, day: Int): LocalDateTime =
     LocalDateTime.of(year, month, day, 0, 0)
 
   private def checkOffset(

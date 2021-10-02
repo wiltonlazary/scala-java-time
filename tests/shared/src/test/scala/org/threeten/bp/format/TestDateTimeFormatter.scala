@@ -68,7 +68,7 @@ class TestDateTimeFormatter
       override def queryFrom(temporal: TemporalAccessor): T = f(temporal)
     }
 
-  override def beforeEach(): Unit                                    =
+  override def beforeEach(): Unit =
     fmt = new DateTimeFormatterBuilder()
       .appendLiteral("ONE")
       .appendValue(DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE)

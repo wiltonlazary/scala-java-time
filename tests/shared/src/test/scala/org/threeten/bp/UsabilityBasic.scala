@@ -42,7 +42,7 @@ import org.threeten.bp.temporal.TemporalField
 
 /** Usability class for package. */
 class UsabilityBasic {
-  def main(): Unit                                                          = {
+  def main(): Unit = {
     simpleCalendar()
     System.out.println("------")
     lookup()
@@ -54,7 +54,7 @@ class UsabilityBasic {
     print2()
   }
 
-  private def simpleCalendar(): Unit                                        = {
+  private def simpleCalendar(): Unit = {
     var date: LocalDate = LocalDate.now
     System.out.println(date)
     date = date.withDayOfMonth(1)
@@ -82,7 +82,7 @@ class UsabilityBasic {
     }
   }
 
-  private def lookup(): Unit                                                = {
+  private def lookup(): Unit = {
     val date: LocalDate         = LocalDate.now
     val time: LocalTime         = LocalTime.now
     val dateTime: LocalDateTime = LocalDateTime.now
@@ -96,16 +96,16 @@ class UsabilityBasic {
     System.out.println("DoM: " + cal.get(DAY_OF_MONTH))
   }
 
-  protected def output(date: LocalDate, field: TemporalField): Unit         =
+  protected def output(date: LocalDate, field: TemporalField): Unit =
     System.out.println(field + " " + date.getLong(field))
 
   protected def output(dateTime: LocalDateTime, field: TemporalField): Unit =
     System.out.println(field + " " + dateTime.getLong(field))
 
-  protected def output(time: LocalTime, field: TemporalField): Unit         =
+  protected def output(time: LocalTime, field: TemporalField): Unit =
     System.out.println(field + " " + time.getLong(field))
 
-  private def period(): Unit                                                = {
+  private def period(): Unit = {
     var date1: LocalDate = LocalDate.now
     var date2: LocalDate = LocalDate.now.plusDays(25367)
     System.out.println(ChronoUnit.DAYS.between(date1, date2))
@@ -127,7 +127,7 @@ class UsabilityBasic {
     System.out.println("3 days later " + date3)
   }
 
-  private def print1(): Unit                                                = {
+  private def print1(): Unit = {
     val f: DateTimeFormatter = new DateTimeFormatterBuilder()
       .appendText(ChronoField.AMPM_OF_DAY)
       .appendLiteral(' ')
@@ -137,7 +137,7 @@ class UsabilityBasic {
     System.out.println(f.format(ZonedDateTime.now))
   }
 
-  private def print2(): Unit                                                = {
+  private def print2(): Unit = {
     val f: DateTimeFormatter = new DateTimeFormatterBuilder()
       .appendText(ChronoField.MONTH_OF_YEAR)
       .appendLiteral(' ')

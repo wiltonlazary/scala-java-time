@@ -48,13 +48,13 @@ final class MockFieldValue(private val field: TemporalField, private val value: 
     else
       field.rangeRefinedBy(this)
 
-  def getLong(field: TemporalField): Long        =
+  def getLong(field: TemporalField): Long =
     if (this.field == field)
       value
     else
       throw new DateTimeException("Unsupported field: " + field)
 
-  override def get(field: TemporalField): Int    =
+  override def get(field: TemporalField): Int =
     range(field).checkValidIntValue(getLong(field), field)
 
   override def query[R](query: TemporalQuery[R]) =

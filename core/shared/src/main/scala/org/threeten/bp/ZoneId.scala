@@ -156,7 +156,7 @@ object ZoneId {
   def of(zoneId: String, aliasMap: java.util.Map[String, String]): ZoneId =
     of2(zoneId, aliasMap.asScala.toMap)
 
-  private def of2(zoneId: String, aliasMap: Map[String, String]): ZoneId  =
+  private def of2(zoneId: String, aliasMap: Map[String, String]): ZoneId =
     of(aliasMap.get(zoneId).getOrElse(zoneId))
 
   /**

@@ -513,7 +513,7 @@ object ChronoField {
    * This field is strictly defined to have the same meaning in all calendar systems. This is
    * necessary to ensure interoperation between calendars.
    */
-  lazy val OFFSET_SECONDS             =
+  lazy val OFFSET_SECONDS =
     new ChronoField("OffsetSeconds", 29, SECONDS, FOREVER, ValueRange.of(-18 * 3600, 18 * 3600))
 
   lazy val values: Array[ChronoField] = Array(
@@ -656,5 +656,5 @@ final class ChronoField private (
   ): TemporalAccessor =
     null
 
-  override def toString: String              = name
+  override def toString: String = name
 }

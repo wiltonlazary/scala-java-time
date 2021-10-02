@@ -44,7 +44,7 @@ object MockFieldNoValue {
 
 final class MockFieldNoValue(name: String, ordinal: Int)
     extends Enum[MockFieldNoValue](name, ordinal)
-    with TemporalField  {
+    with TemporalField {
   override def toString: String                                 = null
   def getBaseUnit: TemporalUnit                                 = WEEKS
   def getRangeUnit: TemporalUnit                                = MONTHS

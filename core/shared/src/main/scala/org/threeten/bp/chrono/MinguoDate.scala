@@ -203,14 +203,14 @@ final class MinguoDate private[chrono] (private val isoDate: LocalDate)
     else
       field.getFrom(this)
 
-  private def getProlepticMonth: Long     = getProlepticYear * 12L + isoDate.getMonthValue - 1
+  private def getProlepticMonth: Long = getProlepticYear * 12L + isoDate.getMonthValue - 1
 
   private def getProlepticYear: Int = isoDate.getYear - YEARS_DIFFERENCE
 
   override def `with`(adjuster: TemporalAdjuster): MinguoDate =
     super.`with`(adjuster).asInstanceOf[MinguoDate]
 
-  def `with`(field: TemporalField, newValue: Long): MinguoDate          =
+  def `with`(field: TemporalField, newValue: Long): MinguoDate =
     if (field.isInstanceOf[ChronoField]) {
       val f: ChronoField = field.asInstanceOf[ChronoField]
       if (getLong(f) == newValue)
@@ -239,36 +239,36 @@ final class MinguoDate private[chrono] (private val isoDate: LocalDate)
     } else
       field.adjustInto(this, newValue)
 
-  override def plus(amount: TemporalAmount): MinguoDate                 =
+  override def plus(amount: TemporalAmount): MinguoDate =
     super.plus(amount).asInstanceOf[MinguoDate]
 
-  override def plus(amountToAdd: Long, unit: TemporalUnit): MinguoDate  =
+  override def plus(amountToAdd: Long, unit: TemporalUnit): MinguoDate =
     super.plus(amountToAdd, unit).asInstanceOf[MinguoDate]
 
-  override def minus(amount: TemporalAmount): MinguoDate                =
+  override def minus(amount: TemporalAmount): MinguoDate =
     super.minus(amount).asInstanceOf[MinguoDate]
 
   override def minus(amountToAdd: Long, unit: TemporalUnit): MinguoDate =
     super.minus(amountToAdd, unit).asInstanceOf[MinguoDate]
 
-  private[chrono] def plusYears(years: Long): MinguoDate                = `with`(isoDate.plusYears(years))
+  private[chrono] def plusYears(years: Long): MinguoDate = `with`(isoDate.plusYears(years))
 
   private[chrono] def plusMonths(months: Long): MinguoDate = `with`(isoDate.plusMonths(months))
 
   private[chrono] def plusDays(days: Long): MinguoDate = `with`(isoDate.plusDays(days))
 
-  private def `with`(newDate: LocalDate): MinguoDate                         =
+  private def `with`(newDate: LocalDate): MinguoDate =
     if (newDate == isoDate) this else new MinguoDate(newDate)
 
   override def atTime(localTime: LocalTime): ChronoLocalDateTime[MinguoDate] =
     super.atTime(localTime).asInstanceOf[ChronoLocalDateTime[MinguoDate]]
 
-  override def until(endDate: ChronoLocalDate): ChronoPeriod                 = {
+  override def until(endDate: ChronoLocalDate): ChronoPeriod = {
     val period: Period = isoDate.until(endDate)
     getChronology.period(period.getYears, period.getMonths, period.getDays)
   }
 
-  override def toEpochDay: Long                                              = isoDate.toEpochDay
+  override def toEpochDay: Long = isoDate.toEpochDay
 
   override def equals(obj: Any): Boolean =
     obj match {
@@ -276,6 +276,6 @@ final class MinguoDate private[chrono] (private val isoDate: LocalDate)
       case _                     => false
     }
 
-  override def hashCode: Int             = getChronology.getId.hashCode ^ isoDate.hashCode
+  override def hashCode: Int = getChronology.getId.hashCode ^ isoDate.hashCode
 
 }

@@ -203,14 +203,14 @@ final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
       case _               => field.getFrom(this)
     }
 
-  private def getProlepticMonth: Long     = getProlepticYear * 12L + isoDate.getMonthValue - 1
+  private def getProlepticMonth: Long = getProlepticYear * 12L + isoDate.getMonthValue - 1
 
   private def getProlepticYear: Int = isoDate.getYear + YEARS_DIFFERENCE
 
   override def `with`(adjuster: TemporalAdjuster): ThaiBuddhistDate =
     super.`with`(adjuster).asInstanceOf[ThaiBuddhistDate]
 
-  def `with`(field: TemporalField, newValue: Long): ThaiBuddhistDate          = {
+  def `with`(field: TemporalField, newValue: Long): ThaiBuddhistDate = {
     field match {
       case f: ChronoField =>
         if (getLong(f) == newValue)
@@ -242,38 +242,38 @@ final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
     field.adjustInto(this, newValue)
   }
 
-  override def plus(amount: TemporalAmount): ThaiBuddhistDate                 =
+  override def plus(amount: TemporalAmount): ThaiBuddhistDate =
     super.plus(amount).asInstanceOf[ThaiBuddhistDate]
 
-  override def plus(amountToAdd: Long, unit: TemporalUnit): ThaiBuddhistDate  =
+  override def plus(amountToAdd: Long, unit: TemporalUnit): ThaiBuddhistDate =
     super.plus(amountToAdd, unit).asInstanceOf[ThaiBuddhistDate]
 
-  override def minus(amount: TemporalAmount): ThaiBuddhistDate                =
+  override def minus(amount: TemporalAmount): ThaiBuddhistDate =
     super.minus(amount).asInstanceOf[ThaiBuddhistDate]
 
   override def minus(amountToAdd: Long, unit: TemporalUnit): ThaiBuddhistDate =
     super.minus(amountToAdd, unit).asInstanceOf[ThaiBuddhistDate]
 
-  private[chrono] def plusYears(years: Long): ThaiBuddhistDate                = `with`(isoDate.plusYears(years))
+  private[chrono] def plusYears(years: Long): ThaiBuddhistDate = `with`(isoDate.plusYears(years))
 
   private[chrono] def plusMonths(months: Long): ThaiBuddhistDate =
     `with`(isoDate.plusMonths(months))
 
-  private[chrono] def plusDays(days: Long): ThaiBuddhistDate     = `with`(isoDate.plusDays(days))
+  private[chrono] def plusDays(days: Long): ThaiBuddhistDate = `with`(isoDate.plusDays(days))
 
-  private def `with`(newDate: LocalDate): ThaiBuddhistDate                         =
+  private def `with`(newDate: LocalDate): ThaiBuddhistDate =
     if (newDate == isoDate) this
     else new ThaiBuddhistDate(newDate)
 
   override def atTime(localTime: LocalTime): ChronoLocalDateTime[ThaiBuddhistDate] =
     super.atTime(localTime).asInstanceOf[ChronoLocalDateTime[ThaiBuddhistDate]]
 
-  override def until(endDate: ChronoLocalDate): ChronoPeriod                       = {
+  override def until(endDate: ChronoLocalDate): ChronoPeriod = {
     val period: Period = isoDate.until(endDate)
     getChronology.period(period.getYears, period.getMonths, period.getDays)
   }
 
-  override def toEpochDay: Long                                                    = isoDate.toEpochDay
+  override def toEpochDay: Long = isoDate.toEpochDay
 
   override def equals(obj: Any): Boolean =
     obj match {
@@ -281,6 +281,6 @@ final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
       case _                           => false
     }
 
-  override def hashCode: Int             = getChronology.getId.hashCode ^ isoDate.hashCode
+  override def hashCode: Int = getChronology.getId.hashCode ^ isoDate.hashCode
 
 }

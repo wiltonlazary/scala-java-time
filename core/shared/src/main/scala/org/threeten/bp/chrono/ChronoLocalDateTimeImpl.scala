@@ -162,7 +162,7 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
     if (field.isInstanceOf[ChronoField]) field.isDateBased || field.isTimeBased
     else field != null && field.isSupportedBy(this)
 
-  def isSupported(unit: TemporalUnit): Boolean         =
+  def isSupported(unit: TemporalUnit): Boolean =
     if (unit.isInstanceOf[ChronoUnit]) unit.isDateBased || unit.isTimeBased
     else unit != null && unit.isSupportedBy(this)
 
@@ -173,14 +173,14 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
     else
       field.rangeRefinedBy(this)
 
-  override def get(field: TemporalField): Int          =
+  override def get(field: TemporalField): Int =
     if (field.isInstanceOf[ChronoField])
       if (field.isTimeBased) time.get(field)
       else date.get(field)
     else
       range(field).checkValidIntValue(getLong(field), field)
 
-  def getLong(field: TemporalField): Long                                     =
+  def getLong(field: TemporalField): Long =
     if (field.isInstanceOf[ChronoField])
       if (field.isTimeBased) time.getLong(field)
       else date.getLong(field)
@@ -229,19 +229,19 @@ final class ChronoLocalDateTimeImpl[D <: ChronoLocalDate] private (
     } else
       date.getChronology.ensureChronoLocalDateTime(unit.addTo(this, amountToAdd))
 
-  private def plusDays(days: Long): ChronoLocalDateTimeImpl[D]                =
+  private def plusDays(days: Long): ChronoLocalDateTimeImpl[D] =
     `with`(date.plus(days, ChronoUnit.DAYS), time)
 
-  private def plusHours(hours: Long): ChronoLocalDateTimeImpl[D]              =
+  private def plusHours(hours: Long): ChronoLocalDateTimeImpl[D] =
     plusWithOverflow(date, hours, 0, 0, 0)
 
-  private def plusMinutes(minutes: Long): ChronoLocalDateTimeImpl[D]          =
+  private def plusMinutes(minutes: Long): ChronoLocalDateTimeImpl[D] =
     plusWithOverflow(date, 0, minutes, 0, 0)
 
-  private[chrono] def plusSeconds(seconds: Long): ChronoLocalDateTimeImpl[D]  =
+  private[chrono] def plusSeconds(seconds: Long): ChronoLocalDateTimeImpl[D] =
     plusWithOverflow(date, 0, 0, seconds, 0)
 
-  private def plusNanos(nanos: Long): ChronoLocalDateTimeImpl[D]              =
+  private def plusNanos(nanos: Long): ChronoLocalDateTimeImpl[D] =
     plusWithOverflow(date, 0, 0, 0, nanos)
 
   private def plusWithOverflow(

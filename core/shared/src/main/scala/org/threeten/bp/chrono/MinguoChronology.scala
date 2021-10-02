@@ -129,13 +129,13 @@ final class MinguoChronology private () extends Chronology with Serializable {
    * @see
    *   #getId()
    */
-  def getCalendarType: String                                                          =
+  def getCalendarType: String =
     "roc"
 
   override def date(era: Era, yearOfEra: Int, month: Int, dayOfMonth: Int): MinguoDate =
     super.date(era, yearOfEra, month, dayOfMonth).asInstanceOf[MinguoDate]
 
-  def date(prolepticYear: Int, month: Int, dayOfMonth: Int): MinguoDate          =
+  def date(prolepticYear: Int, month: Int, dayOfMonth: Int): MinguoDate =
     new MinguoDate(
       LocalDate.of(prolepticYear + MinguoChronology.YEARS_DIFFERENCE, month, dayOfMonth)
     )
@@ -150,22 +150,22 @@ final class MinguoChronology private () extends Chronology with Serializable {
 
   def dateEpochDay(epochDay: Long): MinguoDate = new MinguoDate(LocalDate.ofEpochDay(epochDay))
 
-  def date(temporal: TemporalAccessor): MinguoDate                                            =
+  def date(temporal: TemporalAccessor): MinguoDate =
     if (temporal.isInstanceOf[MinguoDate])
       temporal.asInstanceOf[MinguoDate]
     else
       new MinguoDate(LocalDate.from(temporal))
 
-  override def localDateTime(temporal: TemporalAccessor): ChronoLocalDateTime[MinguoDate]     =
+  override def localDateTime(temporal: TemporalAccessor): ChronoLocalDateTime[MinguoDate] =
     super.localDateTime(temporal).asInstanceOf[ChronoLocalDateTime[MinguoDate]]
 
-  override def zonedDateTime(temporal: TemporalAccessor): ChronoZonedDateTime[MinguoDate]     =
+  override def zonedDateTime(temporal: TemporalAccessor): ChronoZonedDateTime[MinguoDate] =
     super.zonedDateTime(temporal).asInstanceOf[ChronoZonedDateTime[MinguoDate]]
 
   override def zonedDateTime(instant: Instant, zone: ZoneId): ChronoZonedDateTime[MinguoDate] =
     super.zonedDateTime(instant, zone).asInstanceOf[ChronoZonedDateTime[MinguoDate]]
 
-  override def dateNow: MinguoDate                                                            = super.dateNow.asInstanceOf[MinguoDate]
+  override def dateNow: MinguoDate = super.dateNow.asInstanceOf[MinguoDate]
 
   override def dateNow(zone: ZoneId): MinguoDate = super.dateNow(zone).asInstanceOf[MinguoDate]
 

@@ -155,7 +155,7 @@ object ZoneRules {
     def getTransitionRules: java.util.List[ZoneOffsetTransitionRule] =
       Collections.emptyList[ZoneOffsetTransitionRule]
 
-    override def equals(obj: Any): Boolean                           =
+    override def equals(obj: Any): Boolean =
       obj match {
         case fixed: Fixed             => (this eq fixed) || offset == fixed.offset
         case rules: StandardZoneRules =>
@@ -163,7 +163,7 @@ object ZoneRules {
         case _                        => false
       }
 
-    override def hashCode: Int                                       = 1 ^ (31 + offset.hashCode) ^ 1 ^ (31 + offset.hashCode) ^ 1
+    override def hashCode: Int = 1 ^ (31 + offset.hashCode) ^ 1 ^ (31 + offset.hashCode) ^ 1
 
     override def toString: String = s"FixedRules:$offset"
   }

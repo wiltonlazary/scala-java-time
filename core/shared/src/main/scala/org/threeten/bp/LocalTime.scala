@@ -570,7 +570,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @throws ArithmeticException
    *   if numeric overflow occurs
    */
-  def getLong(field: TemporalField): Long      =
+  def getLong(field: TemporalField): Long =
     if (field.isInstanceOf[ChronoField]) {
       if (field eq NANO_OF_DAY)
         return toNanoOfDay
@@ -1325,7 +1325,7 @@ final class LocalTime(_hour: Int, _minute: Int, _second: Int, private val nano: 
    * @throws NullPointerException
    *   if { @code other} is null
    */
-  def compare(other: LocalTime): Int            = {
+  def compare(other: LocalTime): Int = {
     var cmp: Int = Integer.compare(hour.toInt, other.hour.toInt)
     if (cmp == 0) {
       cmp = Integer.compare(minute.toInt, other.minute.toInt)

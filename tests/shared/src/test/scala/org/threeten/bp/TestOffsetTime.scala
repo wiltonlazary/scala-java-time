@@ -81,10 +81,10 @@ class TestOffsetTime
       OffsetTime.of(LocalTime.of(11, 30, 59, 500), TestOffsetTime.OFFSET_PONE)
   }
 
-  protected def samples: List[TemporalAccessor]    =
+  protected def samples: List[TemporalAccessor] =
     List(TEST_11_30_59_500_PONE, OffsetTime.MIN, OffsetTime.MAX)
 
-  protected def validFields: List[TemporalField]   =
+  protected def validFields: List[TemporalField] =
     List(
       NANO_OF_SECOND,
       NANO_OF_DAY,

@@ -228,6 +228,6 @@ final class JapaneseEra private[chrono] (
     if (field eq ChronoField.ERA) JapaneseChronology.INSTANCE.range(ChronoField.ERA)
     else super.range(field)
 
-  override def toString: String                        = name
+  override def toString: String = name
 
 }

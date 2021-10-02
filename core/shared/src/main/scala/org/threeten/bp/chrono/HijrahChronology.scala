@@ -166,7 +166,7 @@ final class HijrahChronology private () extends Chronology with Serializable {
   override def date(era: Era, yearOfEra: Int, month: Int, dayOfMonth: Int): HijrahDate =
     super.date(era, yearOfEra, month, dayOfMonth).asInstanceOf[HijrahDate]
 
-  def date(prolepticYear: Int, month: Int, dayOfMonth: Int): HijrahDate          =
+  def date(prolepticYear: Int, month: Int, dayOfMonth: Int): HijrahDate =
     HijrahDate.of(prolepticYear, month, dayOfMonth)
 
   override def dateYearDay(era: Era, yearOfEra: Int, dayOfYear: Int): HijrahDate =
@@ -177,22 +177,22 @@ final class HijrahChronology private () extends Chronology with Serializable {
 
   def dateEpochDay(epochDay: Long): HijrahDate = HijrahDate.of(LocalDate.ofEpochDay(epochDay))
 
-  def date(temporal: TemporalAccessor): HijrahDate                                            =
+  def date(temporal: TemporalAccessor): HijrahDate =
     temporal match {
       case date: HijrahDate => date
       case _                => HijrahDate.ofEpochDay(temporal.getLong(EPOCH_DAY))
     }
 
-  override def localDateTime(temporal: TemporalAccessor): ChronoLocalDateTime[HijrahDate]     =
+  override def localDateTime(temporal: TemporalAccessor): ChronoLocalDateTime[HijrahDate] =
     super.localDateTime(temporal).asInstanceOf[ChronoLocalDateTime[HijrahDate]]
 
-  override def zonedDateTime(temporal: TemporalAccessor): ChronoZonedDateTime[HijrahDate]     =
+  override def zonedDateTime(temporal: TemporalAccessor): ChronoZonedDateTime[HijrahDate] =
     super.zonedDateTime(temporal).asInstanceOf[ChronoZonedDateTime[HijrahDate]]
 
   override def zonedDateTime(instant: Instant, zone: ZoneId): ChronoZonedDateTime[HijrahDate] =
     super.zonedDateTime(instant, zone).asInstanceOf[ChronoZonedDateTime[HijrahDate]]
 
-  override def dateNow: HijrahDate                                                            = super.dateNow.asInstanceOf[HijrahDate]
+  override def dateNow: HijrahDate = super.dateNow.asInstanceOf[HijrahDate]
 
   override def dateNow(zone: ZoneId): HijrahDate = super.dateNow(zone).asInstanceOf[HijrahDate]
 

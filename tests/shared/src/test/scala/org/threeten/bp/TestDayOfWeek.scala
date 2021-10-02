@@ -42,10 +42,10 @@ import org.threeten.bp.temporal._
 /** Test DayOfWeek. */
 class TestDayOfWeek extends AnyFunSuite with GenDateTimeTest with AssertionsHelper {
 
-  protected def samples: List[TemporalAccessor]    =
+  protected def samples: List[TemporalAccessor] =
     List(MONDAY, WEDNESDAY, SUNDAY)
 
-  protected def validFields: List[TemporalField]   =
+  protected def validFields: List[TemporalField] =
     List(DAY_OF_WEEK)
 
   protected def invalidFields: List[TemporalField] = {

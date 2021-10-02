@@ -269,7 +269,7 @@ final class StandardZoneRules private (
       case _                                => null
     }
 
-  private def getOffsetInfo(dt: LocalDateTime): AnyRef                  = {
+  private def getOffsetInfo(dt: LocalDateTime): AnyRef = {
     if (
       lastRules.length > 0 && dt.isAfter(
         savingsLocalTransitions(savingsLocalTransitions.length - 1)
@@ -413,7 +413,7 @@ final class StandardZoneRules private (
     )
   }
 
-  def previousTransition(instant: Instant): ZoneOffsetTransition   = {
+  def previousTransition(instant: Instant): ZoneOffsetTransition = {
     if (savingsInstantTransitions.length == 0)
       return null
     var epochSec: Long     = instant.getEpochSecond
@@ -471,7 +471,7 @@ final class StandardZoneRules private (
   def getTransitionRules: java.util.List[ZoneOffsetTransitionRule] =
     Collections.unmodifiableList(Arrays.asList(lastRules: _*))
 
-  override def equals(obj: Any): Boolean                           =
+  override def equals(obj: Any): Boolean =
     obj match {
       case other: StandardZoneRules =>
         (this eq other) || (Arrays.equals(standardTransitions, other.standardTransitions) && Arrays
@@ -493,7 +493,7 @@ final class StandardZoneRules private (
       case _                        => false
     }
 
-  override def hashCode: Int                                       =
+  override def hashCode: Int =
     Arrays.hashCode(standardTransitions) ^ Arrays.hashCode(
       standardOffsets.asInstanceOf[Array[AnyRef]]
     )                                    ^ Arrays.hashCode(savingsInstantTransitions) ^ Arrays.hashCode(

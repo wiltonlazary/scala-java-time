@@ -784,7 +784,7 @@ final class ZonedDateTime(
    * @return
    *   a { @code ZonedDateTime} based on this date-time with the later offset, not null
    */
-  def withLaterOffsetAtOverlap: ZonedDateTime                = {
+  def withLaterOffsetAtOverlap: ZonedDateTime = {
     val trans: ZoneOffsetTransition = getZone.getRules.getTransition(toLocalDateTime)
     if (trans != null) {
       val laterOffset: ZoneOffset = trans.getOffsetAfter

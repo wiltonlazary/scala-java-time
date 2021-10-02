@@ -1613,7 +1613,7 @@ final class OffsetDateTime private (
    * @return
    *   the comparator value, negative if less, positive if greater
    */
-  def compare(other: OffsetDateTime): Int            = {
+  def compare(other: OffsetDateTime): Int = {
     if (getOffset == other.getOffset)
       return toLocalDateTime.compareTo(other.toLocalDateTime)
     var cmp: Int = java.lang.Long.compare(toEpochSecond, other.toEpochSecond)

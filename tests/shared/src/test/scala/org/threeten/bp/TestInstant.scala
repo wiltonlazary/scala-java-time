@@ -60,13 +60,13 @@ class TestInstant
     TEST_12345_123456789 = Instant.ofEpochSecond(12345, 123456789)
   }
 
-  protected def samples: List[TemporalAccessor]                        =
+  protected def samples: List[TemporalAccessor] =
     List(TEST_12345_123456789, Instant.MIN, Instant.MAX, Instant.EPOCH)
 
-  protected def validFields: List[TemporalField]                       =
+  protected def validFields: List[TemporalField] =
     List(NANO_OF_SECOND, MICRO_OF_SECOND, MILLI_OF_SECOND, INSTANT_SECONDS)
 
-  protected def invalidFields: List[TemporalField]                     = {
+  protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
     (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
       .filterNot(validFields.contains)

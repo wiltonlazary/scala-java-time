@@ -102,10 +102,10 @@ class TestOffsetDateTime
     )
   }
 
-  protected def samples: List[TemporalAccessor]    =
+  protected def samples: List[TemporalAccessor] =
     List(TEST_2008_6_30_11_30_59_000000500, OffsetDateTime.MIN, OffsetDateTime.MAX)
 
-  protected def validFields: List[TemporalField]   =
+  protected def validFields: List[TemporalField] =
     List(
       NANO_OF_SECOND,
       NANO_OF_DAY,

@@ -167,7 +167,7 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate]
       case _                                => field.rangeRefinedBy(this)
     }
 
-  override def get(field: TemporalField): Int          =
+  override def get(field: TemporalField): Int =
     field match {
       case INSTANT_SECONDS =>
         throw new UnsupportedTemporalTypeException(s"Field too large for an int: $field")
@@ -337,13 +337,13 @@ trait ChronoZonedDateTime[D <: ChronoLocalDate]
 
   def plus(amountToAdd: Long, unit: TemporalUnit): ChronoZonedDateTime[D]
 
-  override def minus(amount: TemporalAmount): ChronoZonedDateTime[D]                     =
+  override def minus(amount: TemporalAmount): ChronoZonedDateTime[D] =
     toLocalDate.getChronology.ensureChronoZonedDateTime(super.minus(amount))
 
   override def minus(amountToSubtract: Long, unit: TemporalUnit): ChronoZonedDateTime[D] =
     toLocalDate.getChronology.ensureChronoZonedDateTime(super.minus(amountToSubtract, unit))
 
-  override def query[R](query: TemporalQuery[R]): R                                      =
+  override def query[R](query: TemporalQuery[R]): R =
     query match {
       case TemporalQueries.zoneId | TemporalQueries.zone => getZone.asInstanceOf[R]
       case TemporalQueries.chronology                    => toLocalDate.getChronology.asInstanceOf[R]

@@ -609,7 +609,7 @@ final class MonthDay private (private val month: Int, private val day: Int)
    * @return
    *   the comparator value, negative if less, positive if greater
    */
-  def compare(other: MonthDay): Int            = {
+  def compare(other: MonthDay): Int = {
     var cmp: Int = month - other.month
     if (cmp == 0)
       cmp = day - other.day

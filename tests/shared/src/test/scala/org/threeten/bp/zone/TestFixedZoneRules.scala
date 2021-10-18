@@ -45,7 +45,7 @@ object TestFixedZoneRules {
 }
 
 class TestFixedZoneRules extends AnyFunSuite with AssertionsHelper {
-  private def make(offset: ZoneOffset): ZoneRules             =
+  private def make(offset: ZoneOffset): ZoneRules =
     offset.getRules
 
   private[zone] def data_rules: List[(ZoneRules, ZoneOffset)] =

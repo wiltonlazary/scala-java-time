@@ -1090,7 +1090,7 @@ final class OffsetTime(private val time: LocalTime, private val offset: ZoneOffs
    * @throws NullPointerException
    *   if { @code other} is null
    */
-  def compare(other: OffsetTime): Int            =
+  def compare(other: OffsetTime): Int =
     if (offset == other.offset)
       time.compareTo(other.time)
     else {

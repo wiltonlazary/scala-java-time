@@ -155,10 +155,10 @@ class TestZonedDateTime
     TEST_PARIS_GAP_2008_03_30_02_30 = LocalDateTime.of(2008, 3, 30, 2, 30)
   }
 
-  protected def samples: List[TemporalAccessor]    =
+  protected def samples: List[TemporalAccessor] =
     List(TEST_DATE_TIME)
 
-  protected def validFields: List[TemporalField]   =
+  protected def validFields: List[TemporalField] =
     List(
       NANO_OF_SECOND,
       NANO_OF_DAY,
@@ -749,7 +749,7 @@ class TestZonedDateTime
         def isSupported(field: TemporalField): Boolean =
           TEST_DATE_TIME_PARIS.toLocalDateTime.isSupported(field)
 
-        def getLong(field: TemporalField): Long                                                 =
+        def getLong(field: TemporalField): Long =
           TEST_DATE_TIME_PARIS.toLocalDateTime.getLong(field)
 
         @SuppressWarnings(Array("unchecked")) override def query[R](query: TemporalQuery[R]): R = {
@@ -758,10 +758,10 @@ class TestZonedDateTime
           query.queryFrom(this)
         }
 
-        override def get(field: TemporalField): Int                                             =
+        override def get(field: TemporalField): Int =
           range(field).checkValidIntValue(getLong(field), field)
 
-        override def range(field: TemporalField): ValueRange                                    =
+        override def range(field: TemporalField): ValueRange =
           if (field.isInstanceOf[ChronoField])
             if (isSupported(field)) field.range
             else throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
@@ -779,7 +779,7 @@ class TestZonedDateTime
         def isSupported(field: TemporalField): Boolean =
           (field eq INSTANT_SECONDS) || (field eq NANO_OF_SECOND)
 
-        def getLong(field: TemporalField): Long                                                 =
+        def getLong(field: TemporalField): Long =
           TEST_DATE_TIME_PARIS.toInstant.getLong(field)
 
         @SuppressWarnings(Array("unchecked")) override def query[R](query: TemporalQuery[R]): R = {
@@ -788,10 +788,10 @@ class TestZonedDateTime
           query.queryFrom(this)
         }
 
-        override def get(field: TemporalField): Int                                             =
+        override def get(field: TemporalField): Int =
           range(field).checkValidIntValue(getLong(field), field)
 
-        override def range(field: TemporalField): ValueRange                                    =
+        override def range(field: TemporalField): ValueRange =
           if (field.isInstanceOf[ChronoField])
             if (isSupported(field)) field.range
             else throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")

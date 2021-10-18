@@ -434,7 +434,7 @@ final class TTBPDateTimeParseContext(
       cloned
     }
 
-    override def toString: String                               = s"${fieldValues.toString},$chrono,$zone"
+    override def toString: String = s"${fieldValues.toString},$chrono,$zone"
 
     def isSupported(field: TemporalField): Boolean = fieldValues.containsKey(field)
 
@@ -445,7 +445,7 @@ final class TTBPDateTimeParseContext(
       Math.toIntExact(value)
     }
 
-    def getLong(field: TemporalField): Long           =
+    def getLong(field: TemporalField): Long =
       if (!fieldValues.containsKey(field))
         throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
       else

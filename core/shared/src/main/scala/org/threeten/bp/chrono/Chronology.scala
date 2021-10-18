@@ -189,7 +189,7 @@ object Chronology {
     new java.util.HashSet[Chronology](CHRONOS_BY_ID.values)
   }
 
-  private def init(): Unit                                =
+  private def init(): Unit =
     if (CHRONOS_BY_ID.isEmpty) {
       register(IsoChronology.INSTANCE)
       register(ThaiBuddhistChronology.INSTANCE)
@@ -209,7 +209,7 @@ object Chronology {
       }
     }
 
-  private def register(chrono: Chronology): Unit          = {
+  private def register(chrono: Chronology): Unit = {
     CHRONOS_BY_ID.put(chrono.getId, chrono)
     val `type`: String = chrono.getCalendarType
     if (`type` != null)
@@ -760,7 +760,7 @@ trait Chronology extends Ordered[Chronology] {
       .format(new TemporalAccessor() {
         def isSupported(field: TemporalField): Boolean = false
 
-        def getLong(field: TemporalField): Long           =
+        def getLong(field: TemporalField): Long =
           throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
 
         override def query[R](query: TemporalQuery[R]): R =

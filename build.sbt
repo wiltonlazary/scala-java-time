@@ -50,7 +50,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
   }
 }
 
-lazy val commonSettings                                                                          = Seq(
+lazy val commonSettings = Seq(
   description                     := "java.time API implementation in Scala and Scala.js",
   scalaVersion                    := scalaVer,
   crossScalaVersions              := Seq("2.11.12", "2.12.14", "2.13.6", "3.1.0"),
@@ -135,7 +135,7 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
   generatedFiles
 }
 
-lazy val scalajavatime                                                  = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)
   .in(file("core"))
   .settings(commonSettings: _*)
@@ -174,7 +174,7 @@ lazy val scalajavatime                                                  = crossP
     )
   )
 
-lazy val scalajavatimeTZDB                                              = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)
   .in(file("tzdb"))
   .settings(commonSettings)
@@ -196,8 +196,8 @@ lazy val scalajavatimeTZDB                                              = crossP
   )
   .dependsOn(scalajavatime)
 
-lazy val scalajavatimeTZDBJVM                                           = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
-lazy val scalajavatimeTZDBJS                                            = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBJVM = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBJS  = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
 
 lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)

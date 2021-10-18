@@ -202,6 +202,6 @@ object JulianFields {
       chrono.dateEpochDay(Math.subtractExact(value, offset))
     }
 
-    override def toString: String              = name
+    override def toString: String = name
   }
 }

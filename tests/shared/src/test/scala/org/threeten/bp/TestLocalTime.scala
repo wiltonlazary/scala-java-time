@@ -99,10 +99,10 @@ class TestLocalTime
     TEST_12_30_40_987654321 = LocalTime.of(12, 30, 40, 987654321)
   }
 
-  override protected def samples: List[TemporalAccessor]                   =
+  override protected def samples: List[TemporalAccessor] =
     List(TEST_12_30_40_987654321, LocalTime.MIN, LocalTime.MAX, LocalTime.MIDNIGHT, LocalTime.NOON)
 
-  override protected def validFields: List[TemporalField]                  =
+  override protected def validFields: List[TemporalField] =
     List(
       NANO_OF_SECOND,
       NANO_OF_DAY,
@@ -121,7 +121,7 @@ class TestLocalTime
       AMPM_OF_DAY
     )
 
-  override protected def invalidFields: List[TemporalField]                = {
+  override protected def invalidFields: List[TemporalField] = {
     val list: List[TemporalField] = List(ChronoField.values: _*)
     (list :+ JulianFields.JULIAN_DAY :+ JulianFields.MODIFIED_JULIAN_DAY :+ JulianFields.RATA_DIE)
       .filterNot(validFields.contains)
@@ -874,7 +874,7 @@ class TestLocalTime
     def isDateBased: Boolean =
       false
 
-    def isTimeBased: Boolean                                =
+    def isTimeBased: Boolean =
       true
 
     override def isSupportedBy(temporal: Temporal): Boolean =
@@ -899,7 +899,7 @@ class TestLocalTime
     def isDateBased: Boolean =
       false
 
-    def isTimeBased: Boolean                                =
+    def isTimeBased: Boolean =
       true
 
     override def isSupportedBy(temporal: Temporal): Boolean =
@@ -1265,7 +1265,7 @@ class TestLocalTime
 
       def hasNext: Boolean = i <= 3660
 
-      def next: List[Int]         = {
+      def next: List[Int] = {
         i += delta
         sec += delta
         if (sec >= 60) {
@@ -1358,7 +1358,7 @@ class TestLocalTime
 
       def hasNext: Boolean = i <= 3660 * 1000000000L
 
-      def next: List[Any]         = {
+      def next: List[Any] = {
         i += delta
         nanos += delta
         if (nanos >= 1000000000L) {
@@ -1702,7 +1702,7 @@ class TestLocalTime
 
       def hasNext: Boolean = i >= -3660
 
-      def next: List[Int]         = {
+      def next: List[Int] = {
         i -= delta
         sec += delta
         if (sec >= 60) {
@@ -1808,7 +1808,7 @@ class TestLocalTime
 
       def hasNext: Boolean = i >= -3660 * 1000000000L
 
-      def next: List[Any]         = {
+      def next: List[Any] = {
         i -= delta
         nanos += delta
         if (nanos >= 1000000000L) {

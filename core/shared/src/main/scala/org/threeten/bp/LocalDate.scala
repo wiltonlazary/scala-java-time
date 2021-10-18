@@ -536,7 +536,7 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
    * @throws ArithmeticException
    *   if numeric overflow occurs
    */
-  def getLong(field: TemporalField): Long      =
+  def getLong(field: TemporalField): Long =
     if (field.isInstanceOf[ChronoField]) {
       if (field eq EPOCH_DAY)
         return toEpochDay
@@ -564,7 +564,7 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
       case _                            => throw new UnsupportedTemporalTypeException(s"Unsupported field: $field")
     }
 
-  private def getProlepticMonth: Long          = (year * 12L) + (month - 1)
+  private def getProlepticMonth: Long = (year * 12L) + (month - 1)
 
   /**
    * Gets the chronology of this date, which is the ISO calendar system.
@@ -1353,7 +1353,7 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
       unit.between(this, end)
   }
 
-  private[bp] def daysUntil(end: LocalDate): Long             = end.toEpochDay - toEpochDay
+  private[bp] def daysUntil(end: LocalDate): Long = end.toEpochDay - toEpochDay
 
   private def monthsUntil(end: LocalDate): Long = {
     val packed1: Long = getProlepticMonth * 32L + getDayOfMonth
@@ -1545,7 +1545,7 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
     ZonedDateTime.of(ldt, zone)
   }
 
-  override def toEpochDay: Long                 = {
+  override def toEpochDay: Long = {
     val y: Long     = year.toLong
     val m: Long     = month.toLong
     var total: Long = 0
@@ -1579,7 +1579,7 @@ final class LocalDate private (private val year: Int, monthOfYear: Int, dayOfMon
    * @return
    *   the comparator value, negative if less, positive if greater
    */
-  override def compareTo(other: ChronoLocalDate): Int   =
+  override def compareTo(other: ChronoLocalDate): Int =
     if (other.isInstanceOf[LocalDate]) compareTo0(other.asInstanceOf[LocalDate])
     else super.compareTo(other)
 

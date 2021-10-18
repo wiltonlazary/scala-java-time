@@ -91,7 +91,7 @@ object TestChronoLocalDateTime {
     def isDateBased: Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
 
-    def isTimeBased: Boolean =
+    def isTimeBased: Boolean                                =
       throw new UnsupportedOperationException("Not supported yet.")
 
     override def isSupportedBy(dateTime: Temporal): Boolean =
@@ -135,7 +135,7 @@ object TestChronoLocalDateTime {
     def rangeRefinedBy(dateTime: TemporalAccessor): ValueRange =
       throw new UnsupportedOperationException("Not supported yet.")
 
-    def getFrom(dateTime: TemporalAccessor): Long =
+    def getFrom(dateTime: TemporalAccessor): Long       =
       throw new UnsupportedOperationException("Not supported yet.")
 
     @SuppressWarnings(Array("unchecked")) def adjustInto[R <: Temporal](

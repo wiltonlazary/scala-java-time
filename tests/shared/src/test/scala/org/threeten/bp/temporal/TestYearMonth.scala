@@ -50,10 +50,10 @@ class TestYearMonth extends GenDateTimeTest with BeforeAndAfter {
     TEST_2008_06 = YearMonth.of(2008, 6)
   }
 
-  protected def samples: List[TemporalAccessor] =
+  protected def samples: List[TemporalAccessor]    =
     List(TEST_2008_06)
 
-  protected def validFields: List[TemporalField] =
+  protected def validFields: List[TemporalField]   =
     List(MONTH_OF_YEAR, PROLEPTIC_MONTH, YEAR_OF_ERA, YEAR, ERA)
 
   protected def invalidFields: List[TemporalField] = {

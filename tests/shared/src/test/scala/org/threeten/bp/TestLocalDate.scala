@@ -71,10 +71,10 @@ class TestLocalDate
     MIN_INSTANT = min.atStartOfDay(ZoneOffset.UTC).toInstant
   }
 
-  protected def samples: List[TemporalAccessor] =
+  protected def samples: List[TemporalAccessor]                               =
     List(TEST_2007_07_15, LocalDate.MAX, LocalDate.MIN)
 
-  protected def validFields: List[TemporalField] =
+  protected def validFields: List[TemporalField]                              =
     List(
       DAY_OF_WEEK,
       ALIGNED_DAY_OF_WEEK_IN_MONTH,
@@ -94,7 +94,7 @@ class TestLocalDate
       JulianFields.RATA_DIE
     )
 
-  protected def invalidFields: List[TemporalField] =
+  protected def invalidFields: List[TemporalField]                            =
     List(ChronoField.values: _*).filterNot(validFields.contains)
 
   private def check(test_2008_02_29: LocalDate, y: Int, m: Int, d: Int): Unit = {
@@ -389,7 +389,7 @@ class TestLocalDate
     }
   }
 
-  private def next(date: LocalDate): LocalDate = {
+  private def next(date: LocalDate): LocalDate     = {
     var _date              = date
     val newDayOfMonth: Int = _date.getDayOfMonth + 1
     if (newDayOfMonth <= _date.getMonth.length(isIsoLeap(_date.getYear)))

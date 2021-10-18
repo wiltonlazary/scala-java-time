@@ -58,7 +58,7 @@ object PerformanceZone {
    * @param args
    *   the arguments
    */
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit          = {
     val time: LocalTime = LocalTime.of(12, 30, 20)
     System.out.println(time)
 
@@ -82,7 +82,7 @@ object PerformanceZone {
     }
   }
 
-  private def jsrLocalGetOffset(): Unit = {
+  private def jsrLocalGetOffset(): Unit        = {
     val dt: LocalDateTime       = LocalDateTime.of(YEAR, 6, 1, 12, 0)
     val tz: ZoneId              = ZoneId.of("Europe/London")
     val list: Array[ZoneOffset] = new Array[ZoneOffset](SIZE)
@@ -104,7 +104,7 @@ object PerformanceZone {
     System.out.println("JSR-Loc: Setup:  " + NF.format(end - start) + " ns" + list(0))
   }
 
-  private def jsrInstantGetOffset(): Unit = {
+  private def jsrInstantGetOffset(): Unit      = {
     val instant: Instant        = LocalDateTime.of(YEAR, 6, 1, 12, 0).toInstant(ZoneOffset.ofHours(1))
     val tz: ZoneId              = ZoneId.of("Europe/London")
     val list: Array[ZoneOffset] = new Array[ZoneOffset](SIZE)
@@ -126,7 +126,7 @@ object PerformanceZone {
     System.out.println("JSR-Ins: Setup:  " + NF.format(end - start) + " ns" + list(0))
   }
 
-  private def jsrRulesLocalGetOffset(): Unit = {
+  private def jsrRulesLocalGetOffset(): Unit   = {
     val dt: LocalDateTime       = LocalDateTime.of(YEAR, 6, 1, 12, 0)
     val tz: ZoneRules           = ZoneId.of("Europe/London").getRules
     val list: Array[ZoneOffset] = new Array[ZoneOffset](SIZE)
@@ -170,7 +170,7 @@ object PerformanceZone {
     System.out.println("JSR-InR: Setup:  " + NF.format(end - start) + " ns" + list(0))
   }
 
-  private def jdkLocalGetOffset(): Unit = {
+  private def jdkLocalGetOffset(): Unit        = {
     val tz: TimeZone     = java.util.TimeZone.getTimeZone("Europe/London")
     val list: Array[Int] = new Array[Int](SIZE)
     val start: Long      = System.nanoTime
@@ -191,7 +191,7 @@ object PerformanceZone {
     System.out.println("GCalLoc: Setup:  " + NF.format(end - start) + " ns" + list(0))
   }
 
-  private def jdkInstantGetOffset(): Unit = {
+  private def jdkInstantGetOffset(): Unit      = {
     val tz: TimeZone          = java.util.TimeZone.getTimeZone("Europe/London")
     val dt: GregorianCalendar = new GregorianCalendar(tz)
     dt.setGregorianChange(new Date(Long.MinValue))

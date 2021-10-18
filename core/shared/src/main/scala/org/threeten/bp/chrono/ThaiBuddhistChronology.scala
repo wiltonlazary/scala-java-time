@@ -164,7 +164,7 @@ final class ThaiBuddhistChronology private () extends Chronology with Serializab
   override def date(era: Era, yearOfEra: Int, month: Int, dayOfMonth: Int): ThaiBuddhistDate =
     super.date(era, yearOfEra, month, dayOfMonth).asInstanceOf[ThaiBuddhistDate]
 
-  def date(prolepticYear: Int, month: Int, dayOfMonth: Int): ThaiBuddhistDate =
+  def date(prolepticYear: Int, month: Int, dayOfMonth: Int): ThaiBuddhistDate          =
     new ThaiBuddhistDate(
       LocalDate.of(prolepticYear - ThaiBuddhistChronology.YEARS_DIFFERENCE, month, dayOfMonth)
     )
@@ -180,7 +180,7 @@ final class ThaiBuddhistChronology private () extends Chronology with Serializab
   def dateEpochDay(epochDay: Long): ThaiBuddhistDate =
     new ThaiBuddhistDate(LocalDate.ofEpochDay(epochDay))
 
-  def date(temporal: TemporalAccessor): ThaiBuddhistDate =
+  def date(temporal: TemporalAccessor): ThaiBuddhistDate                                        =
     temporal match {
       case date: ThaiBuddhistDate => date
       case _                      => new ThaiBuddhistDate(LocalDate.from(temporal))
@@ -198,7 +198,7 @@ final class ThaiBuddhistChronology private () extends Chronology with Serializab
   ): ChronoZonedDateTime[ThaiBuddhistDate] =
     super.zonedDateTime(instant, zone).asInstanceOf[ChronoZonedDateTime[ThaiBuddhistDate]]
 
-  override def dateNow: ThaiBuddhistDate = super.dateNow.asInstanceOf[ThaiBuddhistDate]
+  override def dateNow: ThaiBuddhistDate                                                        = super.dateNow.asInstanceOf[ThaiBuddhistDate]
 
   override def dateNow(zone: ZoneId): ThaiBuddhistDate =
     super.dateNow(zone).asInstanceOf[ThaiBuddhistDate]

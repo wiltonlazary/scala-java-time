@@ -38,7 +38,7 @@ class TestStandardZoneRulesNegative extends AnyFunSuite with AssertionsHelper {
   private def createZDT(year: Int, month: Int, day: Int, zone: ZoneId): ZonedDateTime =
     LocalDateTime.of(year, month, day, 0, 0).atZone(zone)
 
-  private def europeDublin: ZoneRules =
+  private def europeDublin: ZoneRules                                                 =
     ZoneId.of("Europe/Dublin").getRules
 
   test("Dublin_getStandardOffset") {

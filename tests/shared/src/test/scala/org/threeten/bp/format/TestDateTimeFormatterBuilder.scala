@@ -52,9 +52,9 @@ class TestDateTimeFormatterBuilder
     with AssertionsHelper
     with BeforeAndAfterEach {
   // We need these ugly converters to fit the signatures in everycase
-  implicit def convLongMap(al:  Map[Long, String]): java.util.Map[java.lang.Long, String] =
+  implicit def convLongMap(al: Map[Long, String]): java.util.Map[java.lang.Long, String] =
     al.map(k => (Long.box(k._1), k._2)).asJava
-  implicit def convSLongMap(al: Map[Long, String]): java.util.Map[Long, String]           =
+  implicit def convSLongMap(al: Map[Long, String]): java.util.Map[Long, String]          =
     al.map(k => (k._1, k._2)).asJava
 
   private var builder: DateTimeFormatterBuilder = null

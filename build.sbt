@@ -3,7 +3,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer                = "3.0.2"
+val scalaVer                = "3.1.0"
 val tzdbVersion             = "2019c"
 val scalajavaLocalesVersion = "1.2.1"
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -50,10 +50,10 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
   }
 }
 
-lazy val commonSettings = Seq(
+lazy val commonSettings                                                                          = Seq(
   description                     := "java.time API implementation in Scala and Scala.js",
   scalaVersion                    := scalaVer,
-  crossScalaVersions              := Seq("2.11.12", "2.12.15", "2.13.6", "3.0.2"),
+  crossScalaVersions              := Seq("2.11.12", "2.12.14", "2.13.6", "3.1.0"),
   // Don't include threeten on the binaries
   Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter { case (f, s) =>
     !s.contains("threeten")
@@ -135,7 +135,7 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
   generatedFiles
 }
 
-lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatime                                                  = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)
   .in(file("core"))
   .settings(commonSettings: _*)
@@ -174,7 +174,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
     )
   )
 
-lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatimeTZDB                                              = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)
   .in(file("tzdb"))
   .settings(commonSettings)
@@ -196,8 +196,8 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
   )
   .dependsOn(scalajavatime)
 
-lazy val scalajavatimeTZDBJVM = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
-lazy val scalajavatimeTZDBJS  = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBJVM                                           = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBJS                                            = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
 
 lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
   .crossType(CrossType.Full)
@@ -213,7 +213,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     Keys.`package`     := file(""),
     Compile / skip     := isDotty.value,
     libraryDependencies +=
-      "org.scalatest" %%% "scalatest" % "3.2.9" % "test",
+      "org.scalatest" %%% "scalatest" % "3.2.10" % "test",
     scalacOptions ~= (_.filterNot(
       Set("-Wnumeric-widen", "-Ywarn-numeric-widen", "-Ywarn-value-discard", "-Wvalue-discard")
     ))

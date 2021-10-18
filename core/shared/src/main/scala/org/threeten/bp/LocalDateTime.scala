@@ -1727,7 +1727,7 @@ final class LocalDateTime private (private val date: LocalDate, private val time
       case _                => super.compareTo(other)
     }
 
-  private def compareTo0(other: LocalDateTime): Int = {
+  private def compareTo0(other: LocalDateTime): Int          = {
     var cmp: Int = date.compareTo0(other.toLocalDate)
     if (cmp == 0)
       cmp = time.compareTo(other.toLocalTime)

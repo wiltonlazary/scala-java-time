@@ -278,7 +278,7 @@ final class ZoneOffsetTransition private[zone] (
    * @return
    *   the comparator value, negative if less, positive if greater
    */
-  def compare(transition: ZoneOffsetTransition): Int =
+  def compare(transition: ZoneOffsetTransition): Int       =
     this.getInstant.compareTo(transition.getInstant)
 
   override def compareTo(other: ZoneOffsetTransition): Int = compare(other)

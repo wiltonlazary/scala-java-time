@@ -257,7 +257,7 @@ object Clock {
       if (zone == this.zone) this
       else new Clock.SystemClock(zone)
 
-    override def millis: Long = System.currentTimeMillis
+    override def millis: Long         = System.currentTimeMillis
 
     def instant: Instant = Instant.ofEpochMilli(millis)
 
@@ -267,7 +267,7 @@ object Clock {
         case _                  => false
       }
 
-    override def hashCode: Int = zone.hashCode + 1
+    override def hashCode: Int             = zone.hashCode + 1
 
     override def toString: String = s"SystemClock[$zone]"
   }
@@ -288,7 +288,7 @@ object Clock {
       if (zone == this.zone) this
       else new Clock.FixedClock(instant, zone)
 
-    override def millis: Long = instant.toEpochMilli
+    override def millis: Long         = instant.toEpochMilli
 
     override def equals(obj: Any): Boolean =
       obj match {
@@ -296,7 +296,7 @@ object Clock {
         case _                 => false
       }
 
-    override def hashCode: Int = instant.hashCode ^ zone.hashCode
+    override def hashCode: Int             = instant.hashCode ^ zone.hashCode
 
     override def toString: String = s"FixedClock[$instant,$zone]"
   }
@@ -315,7 +315,7 @@ object Clock {
       if (zone == baseClock.getZone) this
       else new Clock.OffsetClock(baseClock.withZone(zone), offset)
 
-    override def millis: Long = Math.addExact(baseClock.millis, offset.toMillis)
+    override def millis: Long         = Math.addExact(baseClock.millis, offset.toMillis)
 
     def instant: Instant = baseClock.instant.plus(offset)
 
@@ -325,7 +325,7 @@ object Clock {
         case _                  => false
       }
 
-    override def hashCode: Int = baseClock.hashCode ^ offset.hashCode
+    override def hashCode: Int             = baseClock.hashCode ^ offset.hashCode
 
     override def toString: String = s"OffsetClock[$baseClock,$offset]"
   }
@@ -344,12 +344,12 @@ object Clock {
       if (zone == baseClock.getZone) this
       else new Clock.TickClock(baseClock.withZone(zone), tickNanos)
 
-    override def millis: Long = {
+    override def millis: Long         = {
       val millis: Long = baseClock.millis
       millis - Math.floorMod(millis, tickNanos / 1000000L)
     }
 
-    def instant: Instant = {
+    def instant: Instant                   = {
       if ((tickNanos % 1000000) == 0) {
         val millis: Long = baseClock.millis
         return Instant.ofEpochMilli(millis - Math.floorMod(millis, tickNanos / 1000000L))
@@ -366,7 +366,7 @@ object Clock {
         case _                => false
       }
 
-    override def hashCode: Int = baseClock.hashCode ^ (tickNanos ^ (tickNanos >>> 32)).toInt
+    override def hashCode: Int             = baseClock.hashCode ^ (tickNanos ^ (tickNanos >>> 32)).toInt
 
     override def toString: String = s"TickClock[$baseClock,${Duration.ofNanos(tickNanos)}]"
   }

@@ -95,7 +95,7 @@ object TestChronoZonedDateTime {
     def isDateBased: Boolean =
       throw new UnsupportedOperationException("Not supported yet.")
 
-    def isTimeBased: Boolean =
+    def isTimeBased: Boolean                                =
       throw new UnsupportedOperationException("Not supported yet.")
 
     override def isSupportedBy(dateTime: Temporal): Boolean =
@@ -145,7 +145,7 @@ object TestChronoZonedDateTime {
     def adjustInto[R <: Temporal](dateTime: R, newValue: Long): R =
       this.dateTime.asInstanceOf[R]
 
-    override def getDisplayName(locale: Locale): String =
+    override def getDisplayName(locale: Locale): String           =
       throw new UnsupportedOperationException("Not supported yet.")
 
     override def resolve(

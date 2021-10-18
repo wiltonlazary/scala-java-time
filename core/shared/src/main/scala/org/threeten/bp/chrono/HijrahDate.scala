@@ -116,7 +116,7 @@ object HijrahDate {
   /** Zero-based start date of cycle year. */
   private lazy val CYCLEYEAR_START_DATE: Array[Int] =
     Array(0, 354, 709, 1063, 1417, 1772, 2126, 2481, 2835, 3189, 3544, 3898, 4252, 4607, 4961, 5315,
-      5670, 6024, 6379, 6733, 7087, 7442, 7796, 8150, 8505, 8859, 9214, 9568, 9922, 10277)
+          5670, 6024, 6379, 6733, 7087, 7442, 7796, 8150, 8505, 8859, 9214, 9568, 9922, 10277)
 
   /** number of 30-year cycles to hold the deviation data. */
   private val MAX_ADJUSTED_CYCLE: Int = 334
@@ -367,15 +367,15 @@ object HijrahDate {
    * @param yearOfEra
    *   the year to check
    */
-  private def checkValidYearOfEra(yearOfEra: Int): Unit =
+  private def checkValidYearOfEra(yearOfEra: Int): Unit   =
     if (yearOfEra < MIN_VALUE_OF_ERA || yearOfEra > MAX_VALUE_OF_ERA)
       throw new DateTimeException("Invalid year of Hijrah Era")
 
-  private def checkValidDayOfYear(dayOfYear: Int): Unit =
+  private def checkValidDayOfYear(dayOfYear: Int): Unit   =
     if (dayOfYear < 1 || dayOfYear > getMaximumDayOfYear)
       throw new DateTimeException("Invalid day of year of Hijrah date")
 
-  private def checkValidMonth(month: Int): Unit =
+  private def checkValidMonth(month: Int): Unit           =
     if (month < 1 || month > 12)
       throw new DateTimeException("Invalid month of Hijrah date")
 
@@ -395,7 +395,7 @@ object HijrahDate {
    * @throws DateTimeException
    *   if the year is invalid
    */
-  private[chrono] def of(date: LocalDate): HijrahDate = {
+  private[chrono] def of(date: LocalDate): HijrahDate        = {
     val gregorianDays: Long = date.toEpochDay
     new HijrahDate(gregorianDays)
   }
@@ -1261,7 +1261,7 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
     else
       field.rangeRefinedBy(this)
 
-  def getLong(field: TemporalField): Long =
+  def getLong(field: TemporalField): Long                     =
     field match {
       case chronoField: ChronoField =>
         chronoField match {
@@ -1285,7 +1285,7 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
   override def `with`(adjuster: TemporalAdjuster): HijrahDate =
     super.`with`(adjuster).asInstanceOf[HijrahDate]
 
-  def `with`(field: TemporalField, newValue: Long): HijrahDate =
+  def `with`(field: TemporalField, newValue: Long): HijrahDate               =
     if (field.isInstanceOf[ChronoField]) {
       val f: ChronoField = field.asInstanceOf[ChronoField]
       f.checkValidValue(newValue)
@@ -1318,22 +1318,22 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
     } else
       field.adjustInto(this, newValue)
 
-  override def plus(amount: TemporalAmount): HijrahDate =
+  override def plus(amount: TemporalAmount): HijrahDate                      =
     super.plus(amount).asInstanceOf[HijrahDate]
 
-  override def plus(amountToAdd: Long, unit: TemporalUnit): HijrahDate =
+  override def plus(amountToAdd: Long, unit: TemporalUnit): HijrahDate       =
     super.plus(amountToAdd, unit).asInstanceOf[HijrahDate]
 
-  override def minus(amount: TemporalAmount): HijrahDate =
+  override def minus(amount: TemporalAmount): HijrahDate                     =
     super.minus(amount).asInstanceOf[HijrahDate]
 
-  override def minus(amountToAdd: Long, unit: TemporalUnit): HijrahDate =
+  override def minus(amountToAdd: Long, unit: TemporalUnit): HijrahDate      =
     super.minus(amountToAdd, unit).asInstanceOf[HijrahDate]
 
   override def atTime(localTime: LocalTime): ChronoLocalDateTime[HijrahDate] =
     super.atTime(localTime).asInstanceOf[ChronoLocalDateTime[HijrahDate]]
 
-  override def toEpochDay: Long =
+  override def toEpochDay: Long                                              =
     HijrahDate.getGregorianEpochDay(yearOfEra, monthOfYear, dayOfMonth)
 
   /**
@@ -1344,7 +1344,7 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
    */
   override def isLeapYear: Boolean = this._isLeapYear
 
-  private[chrono] def plusYears(years: Long): HijrahDate =
+  private[chrono] def plusYears(years: Long): HijrahDate   =
     if (years == 0)
       this
     else {
@@ -1367,7 +1367,7 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
     HijrahDate.of(this.era, newYear, newMonth + 1, this.dayOfMonth)
   }
 
-  private[chrono] def plusDays(days: Long): HijrahDate =
+  private[chrono] def plusDays(days: Long): HijrahDate     =
     new HijrahDate(this.gregorianEpochDay + days)
 
   def lengthOfMonth: Int = HijrahDate.getMonthLength(monthOfYear - 1, yearOfEra)

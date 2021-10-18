@@ -48,7 +48,7 @@ import org.threeten.bp.temporal.JulianFields
 
 /** Usability class for package. */
 object UsabilityChrono {
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit         = {
     System.out.println("------")
     newPackagePluggable()
     System.out.println("------")
@@ -59,7 +59,7 @@ object UsabilityChrono {
     example1()
   }
 
-  private def newPackagePluggable(): Unit = {
+  private def newPackagePluggable(): Unit     = {
     val chrono: Chronology    = MinguoChronology.INSTANCE
     var date: ChronoLocalDate = chrono.dateNow
     System.out.printf("now: %s%n", date)
@@ -80,7 +80,7 @@ object UsabilityChrono {
     }
   }
 
-  private def epochDays(): Unit = {
+  private def epochDays(): Unit               = {
     output(LocalDate.now)
     output(LocalDate.of(1945, 11, 12))
     output(LocalDate.of(-4713, 11, 24))
@@ -147,7 +147,7 @@ object UsabilityChrono {
    * @param out
    *   a PrintStream
    */
-  private def printMonthCal(date: ChronoLocalDate, out: PrintStream): Unit = {
+  private def printMonthCal(date: ChronoLocalDate, out: PrintStream): Unit               = {
     val lengthOfMonth: Int     = date.lengthOfMonth.toInt
     var end: ChronoLocalDate   = date.`with`(ChronoField.DAY_OF_MONTH, lengthOfMonth)
     end = end.plus(7 - end.get(ChronoField.DAY_OF_WEEK), ChronoUnit.DAYS)

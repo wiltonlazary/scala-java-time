@@ -193,7 +193,7 @@ final class StandardZoneRules private (
     savingsInstantTransitions: Array[Long],
     wallOffsets:               Array[ZoneOffset],
     lastRules:                 Array[ZoneOffsetTransitionRule]
-  ) = {
+  ) =
     this(standardTransitions,
          standardOffsets,
          savingsInstantTransitions,
@@ -219,7 +219,6 @@ final class StandardZoneRules private (
            localTransitionList.toArray(new Array[LocalDateTime](localTransitionList.size))
          }
     )
-  }
 
   def isFixedOffset: Boolean = savingsInstantTransitions.length == 0
 

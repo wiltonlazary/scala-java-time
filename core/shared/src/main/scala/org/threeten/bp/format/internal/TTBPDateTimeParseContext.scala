@@ -110,7 +110,7 @@ final class TTBPDateTimeParseContext(
   def this(locale: Locale, symbols: DecimalStyle, chronology: Chronology) =
     this(locale, symbols, chronology, null)
 
-  def this(other: TTBPDateTimeParseContext) = {
+  def this(other: TTBPDateTimeParseContext) =
     this(other.locale,
          other.symbols,
          other.overrideChronology,
@@ -118,7 +118,6 @@ final class TTBPDateTimeParseContext(
          other.caseSensitive,
          other.strict
     )
-  }
 
   /**
    * Creates a copy of this context.

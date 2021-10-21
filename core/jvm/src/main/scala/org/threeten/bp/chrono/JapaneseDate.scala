@@ -274,13 +274,12 @@ final class JapaneseDate private[chrono] (
    * @param isoDate
    *   the standard local date, validated not null
    */
-  private[chrono] def this(isoDate: LocalDate) = {
+  private[chrono] def this(isoDate: LocalDate) =
     // !!!! FIXME: JapaneseEra.from(isoDate) is called twice, because this call must be first ...
     this(JapaneseEra.from(isoDate),
          isoDate.getYear - (JapaneseEra.from(isoDate).startDate.getYear - 1),
          isoDate
     )
-  }
 
   def getChronology: JapaneseChronology = JapaneseChronology.INSTANCE
 

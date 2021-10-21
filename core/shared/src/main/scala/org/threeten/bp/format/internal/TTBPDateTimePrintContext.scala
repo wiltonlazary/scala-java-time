@@ -159,12 +159,11 @@ final class TTBPDateTimePrintContext(
    * @param formatter
    *   the formatter controlling the print, not null
    */
-  def this(temporal: TemporalAccessor, formatter: DateTimeFormatter) = {
+  def this(temporal: TemporalAccessor, formatter: DateTimeFormatter) =
     this(TTBPDateTimePrintContext.adjust(temporal, formatter),
          formatter.getLocale,
          formatter.getDecimalStyle
     )
-  }
 
   /**
    * Gets the temporal object being output.

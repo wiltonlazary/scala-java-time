@@ -453,7 +453,7 @@ object IsoFields {
     lazy val QUARTER_YEARS    = new Unit("QuarterYears", 1, Duration.ofSeconds(31556952L / 4))
   }
 
-  /// !!! FIXME: Passing of name to the Enum constructor is not quite right.
+  // / !!! FIXME: Passing of name to the Enum constructor is not quite right.
   //             We should have a look at the compiled code to figure out what's happening exactly in the Java version.
   private final class Unit(name: String, ordinal: Int, private val duration: Duration)
       extends Enum[Unit](name, ordinal)

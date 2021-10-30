@@ -61,8 +61,8 @@ class TestMonthDay extends GenDateTimeTest with BeforeAndAfter {
   }
 
   ignore("test_immutable") {
-    //"private constructor shows up public due to companion object"
-    //AbstractTest.assertImmutable(classOf[YearMonth])
+    // "private constructor shows up public due to companion object"
+    // AbstractTest.assertImmutable(classOf[YearMonth])
   }
 
   private[temporal] def check(test: MonthDay, m: Int, d: Int): Unit = {

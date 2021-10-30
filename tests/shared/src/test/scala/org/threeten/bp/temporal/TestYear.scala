@@ -59,8 +59,8 @@ class TestYear extends GenDateTimeTest {
   }
 
   ignore("test_immutable") {
-    //throw new SkipException("private constructor shows up public due to companion object")
-    //AbstractTest.assertImmutable(classOf[Year])
+    // throw new SkipException("private constructor shows up public due to companion object")
+    // AbstractTest.assertImmutable(classOf[Year])
   }
 
   /*

@@ -164,7 +164,7 @@ class TestClock_Tick extends AnyFunSuite with AssertionsHelper {
     assertEquals(test.getZone, TestClock_Tick.PARIS)
     assertEquals(test.instant.getNano, 0)
     // Sleep is not available in scala.js
-    //Thread.sleep(100)
+    // Thread.sleep(100)
     assertEquals(test.instant.getNano, 0)
   }
 

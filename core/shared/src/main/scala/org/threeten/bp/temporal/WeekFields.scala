@@ -98,7 +98,7 @@ object WeekFields {
     // val newLocale = new Locale(locale.getLanguage, locale.getCountry)
     // val gcal: GregorianCalendar = new GregorianCalendar(newLocale)
     // val calDow: Int = 1 // gcal.getFirstDayOfWeek Calendar.SUNDAY in GregorianCalendar
-    val dow: DayOfWeek = DayOfWeek.SUNDAY //.plus(calDow - 1)
+    val dow: DayOfWeek = DayOfWeek.SUNDAY // .plus(calDow - 1)
     val minDays: Int   = 1                // gcal.getMinimalDaysInFirstWeek
     WeekFields.of(dow, minDays)
   }

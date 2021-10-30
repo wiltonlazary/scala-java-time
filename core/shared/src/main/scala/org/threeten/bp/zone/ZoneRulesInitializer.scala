@@ -68,7 +68,7 @@ object ZoneRulesInitializer {
   private lazy val INITIALIZER: AtomicReference[ZoneRulesInitializer] =
     new AtomicReference[ZoneRulesInitializer]()
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   // initialize the providers
   def initialize(): Unit = {
     if (INITIALIZED.getAndSet(true))
@@ -96,7 +96,7 @@ object ZoneRulesInitializer {
       )
   }
 
-  //-----------------------------------------------------------------------
+  // -----------------------------------------------------------------------
   /**
    * Implementation that does nothing.
    */

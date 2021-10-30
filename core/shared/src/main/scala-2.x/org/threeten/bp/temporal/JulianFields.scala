@@ -153,7 +153,7 @@ object JulianFields {
     def RATA_DIE = new Field("RataDie", 2, DAYS, FOREVER, 719163L)
   }
 
-  /// !!! FIXME: Passing of name to the Enum constructor is not quite right.
+  // / !!! FIXME: Passing of name to the Enum constructor is not quite right.
   //             We should have a look at the compiled code to figure out what's happening exactly in the Java version.
   private final class Field private (
     name:                  String,

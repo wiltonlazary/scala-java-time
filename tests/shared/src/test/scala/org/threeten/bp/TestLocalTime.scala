@@ -80,8 +80,8 @@ import scala.collection.JavaConverters._
 /** Test LocalTime. */
 object TestLocalTime {
   private val INVALID_UNITS: Array[TemporalUnit] =
-    //val set: java.util.EnumSet[ChronoUnit] = EnumSet.range(WEEKS, FOREVER)
-    //set.toArray(new Array[TemporalUnit](set.size)).asInstanceOf[Array[TemporalUnit]]
+    // val set: java.util.EnumSet[ChronoUnit] = EnumSet.range(WEEKS, FOREVER)
+    // set.toArray(new Array[TemporalUnit](set.size)).asInstanceOf[Array[TemporalUnit]]
     // We can't use the code above, because ChronoUnit is not an enum (yet), because we can't define enums in Scala (yet).
     ChronoUnit.values
       .filter(unit => unit.ordinal >= WEEKS.ordinal && unit.ordinal <= FOREVER.ordinal)

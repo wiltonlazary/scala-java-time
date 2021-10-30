@@ -69,7 +69,7 @@ class TestZoneIdParser extends AnyFunSuite with GenTestPrinterParser with Assert
         try pp.parse(parseContext, text, pos)
         catch {
           case _: Throwable =>
-            //assertTrue(expected.isInstance(ex))
+            // assertTrue(expected.isInstance(ex))
             assertEquals(parseContext.toParsed.fieldValues.size, 0)
         }
       case _ =>

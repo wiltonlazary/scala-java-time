@@ -1218,7 +1218,7 @@ final class HijrahDate private (private val gregorianEpochDay: Long)
   @transient
   private var _isLeapYear: Boolean = false
 
-  { /// FIXME
+  { // / FIXME
     val dateInfo: Array[Int] = HijrahDate.getHijrahDateInfo(gregorianEpochDay)
     HijrahDate.checkValidYearOfEra(dateInfo(1))
     HijrahDate.checkValidMonth(dateInfo(2))

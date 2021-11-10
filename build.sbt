@@ -53,7 +53,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 lazy val commonSettings = Seq(
   description                     := "java.time API implementation in Scala and Scala.js",
   scalaVersion                    := scalaVer,
-  crossScalaVersions              := Seq("2.11.12", "2.12.15", "2.13.6", "3.1.0"),
+  crossScalaVersions              := Seq("2.11.12", "2.12.15", "2.13.7", "3.1.0"),
   // Don't include threeten on the binaries
   Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter { case (f, s) =>
     !s.contains("threeten")

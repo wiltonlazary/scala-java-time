@@ -3,7 +3,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
-val scalaVer                = "3.1.0"
+val scalaVer                = "2.13.8"
 val tzdbVersion             = "2019c"
 val scalajavaLocalesVersion = "1.3.0"
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -135,7 +135,7 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
   generatedFiles
 }
 
-lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("core"))
   .settings(commonSettings: _*)
@@ -173,8 +173,19 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       "io.github.cquiroz" %%% "scala-java-locales" % scalajavaLocalesVersion
     )
   )
+  .nativeSettings(
+    crossScalaVersions -= "3.1.0",
+    Compile / sourceGenerators += Def.task {
+      val srcDirs        = (Compile / sourceDirectories).value
+      val destinationDir = (Compile / sourceManaged).value
+      copyAndReplace(srcDirs, destinationDir)
+    }.taskValue,
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "scala-java-locales" % scalajavaLocalesVersion
+    )
+  )
 
-lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("tzdb"))
   .settings(commonSettings)
@@ -190,16 +201,28 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(Seq(srcDirs), destinationDir)
     }.taskValue
   )
+  .nativeSettings(
+    crossScalaVersions -= "3.1.0",
+    dbVersion   := TzdbPlugin.Version(tzdbVersion),
+    includeTTBP := true,
+    jsOptimized := false,
+    Compile / sourceGenerators += Def.task {
+      val srcDirs        = (Compile / sourceManaged).value
+      val destinationDir = (Compile / sourceManaged).value
+      copyAndReplace(Seq(srcDirs), destinationDir)
+    }.taskValue
+  )
   .jvmSettings(
     includeTTBP := true,
     jsOptimized := false
   )
   .dependsOn(scalajavatime)
 
-lazy val scalajavatimeTZDBJVM = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
-lazy val scalajavatimeTZDBJS  = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBJVM    = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBJS     = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBNative = scalajavatimeTZDB.native.enablePlugins(TzdbPlugin)
 
-lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("tests"))
   .settings(commonSettings: _*)
@@ -230,6 +253,18 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
     )
   )
   .jsSettings(
+    Test / parallelExecution := false,
+    Test / sourceGenerators += Def.task {
+      val srcDirs        = (Test / sourceDirectories).value
+      val destinationDir = (Test / sourceManaged).value
+      copyAndReplace(srcDirs, destinationDir)
+    }.taskValue,
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "locales-full-db" % scalajavaLocalesVersion
+    )
+  )
+  .nativeSettings(
+    crossScalaVersions -= "3.1.0",
     Test / parallelExecution := false,
     Test / sourceGenerators += Def.task {
       val srcDirs        = (Test / sourceDirectories).value

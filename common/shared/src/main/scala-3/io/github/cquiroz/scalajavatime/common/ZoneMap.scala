@@ -150,4 +150,4 @@ private[common] class ZoneMap[K: ClassTag: Ordering, V] private[common] (var map
 
 object ZoneMap:
   def apply[K: ClassTag: Ordering, V](map: immutable.TreeMap[K, V]): java.util.NavigableMap[K, V] = new ZoneMap[K, V](map)
-  def apply[K: ClassTag: Ordering, V]: java.util.NavigableMap[K, V] = new ZoneMap[K, V](immutable.TreeMap[K, V]())
+  def apply[K: ClassTag: Ordering, V]: java.util.NavigableMap[K, V] = new ZoneMap[K, V]()

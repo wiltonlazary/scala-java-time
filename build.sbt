@@ -142,6 +142,9 @@ lazy val scalajavatimeCommon = crossProject(JVMPlatform, JSPlatform, NativePlatf
   .settings(
     name := "scala-java-time-common"
   )
+  .nativeSettings(
+    crossScalaVersions -= "3.1.0"
+  )
 
 lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)

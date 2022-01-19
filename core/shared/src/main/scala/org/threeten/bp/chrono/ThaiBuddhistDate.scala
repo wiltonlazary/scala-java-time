@@ -161,7 +161,7 @@ object ThaiBuddhistDate {
  *   the standard local date, validated not null
  */
 final class ThaiBuddhistDate private[chrono] (private val isoDate: LocalDate)
-    extends ChronoDateImpl[ThaiBuddhistDate]
+    extends ChronoLocalDateImpl[ThaiBuddhistDate]
     with Serializable {
   Objects.requireNonNull(isoDate, "date")
 

@@ -1,4 +1,4 @@
-package org.threeten.bp.zone
+package io.github.cquiroz.scalajavatime.common
 
 import java.util.{ Collection => JCollection, Map => JMap, SortedMap => JSortedMap, Set => JSet }
 import java.util.AbstractMap
@@ -11,7 +11,7 @@ import scala.collection.immutable
 
 // TreeMap is not available in Scala.js however it is needed for Time Zone support
 // This is a simple implementation of NavigableMap, performance is likely terrible
-private[bp] class ZoneMap[K: ClassTag: Ordering, V] private[bp] (var map: immutable.TreeMap[K, V]) extends AbstractMap[K, V]
+private[common] class ZoneMap[K: ClassTag: Ordering, V] private[common] (var map: immutable.TreeMap[K, V]) extends AbstractMap[K, V]
     with java.util.NavigableMap[K, V] {
   def this() =
     this(immutable.TreeMap[K, V]())
@@ -150,3 +150,4 @@ private[bp] class ZoneMap[K: ClassTag: Ordering, V] private[bp] (var map: immuta
 
 object ZoneMap:
   def apply[K: ClassTag: Ordering, V](map: immutable.TreeMap[K, V]): java.util.NavigableMap[K, V] = new ZoneMap[K, V](map)
+  def apply[K: ClassTag: Ordering, V]: java.util.NavigableMap[K, V] = new ZoneMap[K, V](immutable.TreeMap[K, V]())

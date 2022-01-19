@@ -1,7 +1,8 @@
 package org.threeten.bp
 
 import java.util.NavigableMap
-import org.threeten.bp.zone.ZoneMap
+
+import io.github.cquiroz.scalajavatime.common.ZoneMap
 
 object Platform {
   type NPE = NullPointerException

@@ -658,9 +658,9 @@ final class YearMonth private (private val year: Int, private val month: Int)
       unit.asInstanceOf[ChronoUnit] match {
         case MONTHS    => plusMonths(amountToAdd)
         case YEARS     => plusYears(amountToAdd)
-        case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10))
-        case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100))
-        case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000))
+        case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10.toLong))
+        case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100.toLong))
+        case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000.toLong))
         case ERAS      => `with`(ERA, Math.addExact(getLong(ERA), amountToAdd))
         case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
       }
@@ -704,8 +704,8 @@ final class YearMonth private (private val year: Int, private val month: Int)
       return this
     val monthCount: Long = year * 12L + (month - 1)
     val calcMonths: Long = monthCount + monthsToAdd
-    val newYear: Int     = YEAR.checkValidIntValue(Math.floorDiv(calcMonths, 12))
-    val newMonth: Int    = Math.floorMod(calcMonths, 12).toInt + 1
+    val newYear: Int     = YEAR.checkValidIntValue(Math.floorDiv(calcMonths, 12.toLong))
+    val newMonth: Int    = Math.floorMod(calcMonths, 12.toLong).toInt + 1
     `with`(newYear, newMonth)
   }
 

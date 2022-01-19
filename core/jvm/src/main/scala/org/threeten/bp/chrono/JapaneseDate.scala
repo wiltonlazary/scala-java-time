@@ -263,7 +263,7 @@ final class JapaneseDate private[chrono] (
   @transient private var era:       JapaneseEra,
   @transient private var yearOfEra: Int,
   private val isoDate:              LocalDate
-) extends ChronoDateImpl[JapaneseDate]
+) extends ChronoLocalDateImpl[JapaneseDate]
     with Serializable {
   if (isoDate.isBefore(JapaneseDate.MIN_DATE))
     throw new DateTimeException("Minimum supported date is January 1st Meiji 6")

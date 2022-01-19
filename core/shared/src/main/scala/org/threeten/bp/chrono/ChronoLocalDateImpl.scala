@@ -91,31 +91,31 @@ import org.threeten.bp.temporal.TemporalUnit
  *   the date type
  */
 @SerialVersionUID(6282433883239719096L)
-abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
+abstract class ChronoLocalDateImpl[D <: ChronoLocalDate] private[chrono] ()
     extends ChronoLocalDate
     with Temporal
     with TemporalAdjuster
     with Serializable {
 
-  def plus(amountToAdd: Long, unit: TemporalUnit): ChronoDateImpl[D] = {
+  def plus(amountToAdd: Long, unit: TemporalUnit): ChronoLocalDateImpl[D] = {
     import ChronoUnit._
     unit match {
       case f: ChronoUnit =>
         f match {
           case DAYS      => plusDays(amountToAdd)
-          case WEEKS     => plusDays(Math.multiplyExact(amountToAdd, 7))
+          case WEEKS     => plusDays(Math.multiplyExact(amountToAdd, 7.toLong))
           case MONTHS    => plusMonths(amountToAdd)
           case YEARS     => plusYears(amountToAdd)
-          case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10))
-          case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100))
-          case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000))
+          case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10.toLong))
+          case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100.toLong))
+          case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000.toLong))
           case _         =>
             throw new DateTimeException(s"$unit not valid for chronology ${getChronology.getId}")
         }
       case _             =>
         getChronology
           .ensureChronoLocalDate(unit.addTo(this, amountToAdd))
-      // .asInstanceOf[ChronoDateImpl[D]]
+      // .asInstanceOf[ChronoLocalDateImpl[D]]
     }
   }
 
@@ -136,7 +136,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def plusYears(yearsToAdd: Long): ChronoDateImpl[D]
+  private[chrono] def plusYears(yearsToAdd: Long): ChronoLocalDateImpl[D]
 
   /**
    * Returns a copy of this date with the specified period in months added.
@@ -155,7 +155,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def plusMonths(monthsToAdd: Long): ChronoDateImpl[D]
+  private[chrono] def plusMonths(monthsToAdd: Long): ChronoLocalDateImpl[D]
 
   /**
    * Returns a copy of this date with the specified period in weeks added.
@@ -175,7 +175,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def plusWeeks(weeksToAdd: Long): ChronoDateImpl[D] =
+  private[chrono] def plusWeeks(weeksToAdd: Long): ChronoLocalDateImpl[D] =
     plusDays(Math.multiplyExact(weeksToAdd, 7))
 
   /**
@@ -192,7 +192,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def plusDays(daysToAdd: Long): ChronoDateImpl[D]
+  private[chrono] def plusDays(daysToAdd: Long): ChronoLocalDateImpl[D]
 
   /**
    * Returns a copy of this date with the specified period in years subtracted.
@@ -213,7 +213,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def minusYears(yearsToSubtract: Long): ChronoDateImpl[D] =
+  private[chrono] def minusYears(yearsToSubtract: Long): ChronoLocalDateImpl[D] =
     if (yearsToSubtract == Long.MinValue) plusYears(Long.MaxValue).plusYears(1)
     else plusYears(-yearsToSubtract)
 
@@ -236,7 +236,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def minusMonths(monthsToSubtract: Long): ChronoDateImpl[D] =
+  private[chrono] def minusMonths(monthsToSubtract: Long): ChronoLocalDateImpl[D] =
     if (monthsToSubtract == Long.MinValue) plusMonths(Long.MaxValue).plusMonths(1)
     else plusMonths(-monthsToSubtract)
 
@@ -258,7 +258,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def minusWeeks(weeksToSubtract: Long): ChronoDateImpl[D] =
+  private[chrono] def minusWeeks(weeksToSubtract: Long): ChronoLocalDateImpl[D] =
     if (weeksToSubtract == Long.MinValue) plusWeeks(Long.MaxValue).plusWeeks(1)
     else plusWeeks(-weeksToSubtract)
 
@@ -278,7 +278,7 @@ abstract class ChronoDateImpl[D <: ChronoLocalDate] private[chrono] ()
    * @throws DateTimeException
    *   if the result exceeds the supported date range
    */
-  private[chrono] def minusDays(daysToSubtract: Long): ChronoDateImpl[D] =
+  private[chrono] def minusDays(daysToSubtract: Long): ChronoLocalDateImpl[D] =
     if (daysToSubtract == Long.MinValue) plusDays(Long.MaxValue).plusDays(1)
     else plusDays(-daysToSubtract)
 

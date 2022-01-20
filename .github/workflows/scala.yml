@@ -41,7 +41,7 @@ jobs:
       - name: Run tests
         run: sbt ++${{ matrix.scala }}! scalajavatimeTests${{ matrix.platform }}/test
       - name: Run demo
-        if: ${{  matrix.scala == 'JS') }}
+        if: ${{  matrix.scala == 'JS' }}
         run: sbt ++${{ matrix.scala }}! demo/run
 
   ci:

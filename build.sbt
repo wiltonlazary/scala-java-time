@@ -4,6 +4,7 @@ import sbt._
 import sbt.io.Using
 
 val scalaVer                = "2.13.8"
+val scala3Ver               = "3.1.0"
 val tzdbVersion             = "2019c"
 val scalajavaLocalesVersion = "1.3.0"
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -53,7 +54,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 lazy val commonSettings = Seq(
   description                     := "java.time API implementation in Scala and Scala.js",
   scalaVersion                    := scalaVer,
-  crossScalaVersions              := Seq("2.11.12", "2.12.15", "2.13.8", "3.1.0"),
+  crossScalaVersions              := Seq("2.11.12", "2.12.15", scalaVer, scala3Ver),
   // Don't include threeten on the binaries
   Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter { case (f, s) =>
     !s.contains("threeten")
@@ -174,7 +175,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     )
   )
   .nativeSettings(
-    crossScalaVersions -= "3.1.0",
+    crossScalaVersions -= scala3Ver,
     Compile / sourceGenerators += Def.task {
       val srcDirs        = (Compile / sourceDirectories).value
       val destinationDir = (Compile / sourceManaged).value
@@ -202,7 +203,7 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform, NativePlatfor
     }.taskValue
   )
   .nativeSettings(
-    crossScalaVersions -= "3.1.0",
+    crossScalaVersions -= scala3Ver,
     dbVersion    := TzdbPlugin.Version(tzdbVersion),
     includeTTBP  := true,
     tzdbPlatform := TzdbPlugin.Platform.Native,
@@ -264,7 +265,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatfo
     )
   )
   .nativeSettings(
-    crossScalaVersions -= "3.1.0",
+    crossScalaVersions -= scala3Ver,
     Test / parallelExecution := false,
     Test / sourceGenerators += Def.task {
       val srcDirs        = (Test / sourceDirectories).value

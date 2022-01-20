@@ -103,12 +103,12 @@ abstract class ChronoLocalDateImpl[D <: ChronoLocalDate] private[chrono] ()
       case f: ChronoUnit =>
         f match {
           case DAYS      => plusDays(amountToAdd)
-          case WEEKS     => plusDays(Math.multiplyExact(amountToAdd, 7.toLong))
+          case WEEKS     => plusDays(Math.multiplyExact(amountToAdd, 7L))
           case MONTHS    => plusMonths(amountToAdd)
           case YEARS     => plusYears(amountToAdd)
-          case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10.toLong))
-          case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100.toLong))
-          case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000.toLong))
+          case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10L))
+          case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100L))
+          case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000L))
           case _         =>
             throw new DateTimeException(s"$unit not valid for chronology ${getChronology.getId}")
         }

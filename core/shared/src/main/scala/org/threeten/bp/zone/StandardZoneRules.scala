@@ -451,7 +451,7 @@ final class StandardZoneRules private (
 
   private def findYear(epochSecond: Long, offset: ZoneOffset): Int = {
     val localSecond: Long   = epochSecond + offset.getTotalSeconds
-    val localEpochDay: Long = Math.floorDiv(localSecond, 86400.toLong)
+    val localEpochDay: Long = Math.floorDiv(localSecond, 86400L)
     LocalDate.ofEpochDay(localEpochDay).getYear
   }
 

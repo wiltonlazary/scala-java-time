@@ -360,8 +360,8 @@ final class IsoChronology private () extends Chronology with Serializable {
     if (prolepticMonth != null) {
       if (resolverStyle ne ResolverStyle.LENIENT)
         PROLEPTIC_MONTH.checkValidValue(prolepticMonth)
-      updateResolveMap(fieldValues, MONTH_OF_YEAR, Math.floorMod(prolepticMonth, 12.toLong) + 1L)
-      updateResolveMap(fieldValues, YEAR, Math.floorDiv(prolepticMonth, 12.toLong))
+      updateResolveMap(fieldValues, MONTH_OF_YEAR, Math.floorMod(prolepticMonth, 12L) + 1L)
+      updateResolveMap(fieldValues, YEAR, Math.floorDiv(prolepticMonth, 12L))
     }
     val yoeLong: java.lang.Long        = fieldValues.remove(YEAR_OF_ERA)
     if (yoeLong != null) {

@@ -166,5 +166,4 @@ object ZoneMap {
   def apply[K: ClassTag, V](map: immutable.TreeMap[K, V])(implicit
     ordering:                    Ordering[K]
   ): java.util.NavigableMap[K, V] = new ZoneMap[K, V](map)
-
 }

@@ -45,8 +45,7 @@ object TestClock {
 
     def getZone: ZoneId = zone
 
-    override def withZone(timeZone: ZoneId): Clock =
-      new TestClock.MockInstantClock(millis, timeZone)
+    override def withZone(timeZone: ZoneId): Clock = new TestClock.MockInstantClock(millis, timeZone)
 
     override def equals(obj: Any): Boolean = false
 

@@ -19,7 +19,7 @@ jobs:
       #   run: |
       #     csbt scalafmtCheckAll
       - name: publishLocal
-        run: sbt publishLocal
+        run: sbt +publishLocal
 
   test:
     runs-on: ubuntu-20.04

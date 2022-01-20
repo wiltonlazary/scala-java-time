@@ -3,27 +3,52 @@ name: build
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
 
+  lint:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2.4.0
-      - name: Set up JDK 14
+      - name: Set up JDK 17
         uses: olafurpg/setup-scala@v13
         with:
-          java-version: adopt@1.14
-      - name: Cache Coursier
-        uses: actions/cache@v2.1.7
-        with:
-          path: ~/.cache/coursier
-          key: sbt-coursier-cache
-      - name: Cache SBT
-        uses: actions/cache@v2.1.7
-        with:
-          path: ~/.sbt
-          key: sbt-${{ hashFiles('**/build.sbt') }}
+          java-version: 17
+      - name: Cache scala dependencies
+        uses: coursier/cache-action@v6
       # - name: Checking your code format
       #   run: |
       #     csbt scalafmtCheckAll
-      - name: Run test
-        run: sbt clean +scalajavatimeTestsJVM/test +scalajavatimeTestsJS/test +demo/run
+      - name: publishLocal
+        run: sbt +publishLocal
+
+  test:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        scala: [ '2.11.12', '2.12.15', '2.13.8', '3.1.0' ]
+        platform: [ 'JVM', 'JS' ]
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 0
+      - name: Setup Scala and Java
+        uses: olafurpg/setup-scala@v13
+        with:
+          java-version: 17
+      - name: Cache scala dependencies
+        uses: coursier/cache-action@v6
+      - name: Run tests
+        run: sbt ++${{ matrix.scala }}! scalajavatimeTests${{ matrix.platform }}/test
+      - name: Run demo
+        if: ${{  matrix.scala == 'JS' }}
+        run: sbt ++${{ matrix.scala }}! demo/run
+
+  build:
+    runs-on: ubuntu-20.04
+    needs: [ lint, test ]
+    steps:
+      - name: Aggregate of lint, and all tests
+        run: echo "ci passed"

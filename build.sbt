@@ -1,9 +1,22 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
-import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
+import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 import sbt._
 import sbt.io.Using
 
-val scalaVer                = "3.1.0"
+val versions: Map[String, String] = {
+  import org.snakeyaml.engine.v2.api.{Load, LoadSettings}
+  import java.util.{List => JList, Map => JMap}
+  import scala.jdk.CollectionConverters._
+  val doc = new Load(LoadSettings.builder().build())
+    .loadFromReader(scala.io.Source.fromFile(".github/workflows/scala.yml").bufferedReader())
+  val yaml = doc.asInstanceOf[JMap[String, JMap[String, JMap[String, JMap[String, JMap[String, JList[String]]]]]]]
+  val list = yaml.get("jobs").get("test").get("strategy").get("matrix").get("scala").asScala
+  list.map { v =>
+    val vs = v.split('.'); val init = vs.take(vs(0) match { case "2" => 2; case _ => 1 }); (init.mkString("."), v)
+  }.toMap
+}
+
+val scalaVer                = versions("3")
 val tzdbVersion             = "2019c"
 val scalajavaLocalesVersion = "1.3.0"
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -53,7 +66,7 @@ def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scala
 lazy val commonSettings = Seq(
   description                     := "java.time API implementation in Scala and Scala.js",
   scalaVersion                    := scalaVer,
-  crossScalaVersions              := Seq("2.11.12", "2.12.15", "2.13.8", "3.1.0"),
+  crossScalaVersions              := versions.toList.map(_._2),
   // Don't include threeten on the binaries
   Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter { case (f, s) =>
     !s.contains("threeten")

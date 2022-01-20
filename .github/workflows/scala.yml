@@ -9,10 +9,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2.4.0
-      - name: Set up JDK 17
+      - name: Set up JDK 8
         uses: olafurpg/setup-scala@v13
         with:
-          java-version: 17
+          java-version: 1.8
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
       # - name: Checking your code format
@@ -37,11 +37,11 @@ jobs:
       - name: Setup Scala and Java
         uses: olafurpg/setup-scala@v13
         with:
-          java-version: 17
+          java-version: 1.8
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
       - name: Run tests
-        if: ${{  matrix.scala != 'Native' || !startsWith(matrix.scala, '3.')  }}
+        if: ${{  matrix.platform != 'Native' || !startsWith(matrix.scala, '3.')  }}
         run: sbt ++${{ matrix.scala }}! scalajavatimeTests${{ matrix.platform }}/test
       - name: Run demo
         if: ${{  matrix.scala == 'JS' }}

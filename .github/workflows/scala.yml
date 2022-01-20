@@ -46,7 +46,7 @@ jobs:
         if: ${{  matrix.scala == 'JS' }}
         run: sbt ++${{ matrix.scala }}! demo/run
 
-  ci:
+  build:
     runs-on: ubuntu-20.04
     needs: [ lint, test ]
     steps:

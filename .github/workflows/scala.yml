@@ -44,7 +44,7 @@ jobs:
         if: ${{  matrix.platform != 'Native' || !startsWith(matrix.scala, '3.')  }}
         run: sbt ++${{ matrix.scala }}! scalajavatimeTests${{ matrix.platform }}/test
       - name: Run demo
-        if: ${{  matrix.scala == 'JS' }}
+        if: ${{  matrix.platform == 'JS' }}
         run: sbt ++${{ matrix.scala }}! demo/run
 
   build:

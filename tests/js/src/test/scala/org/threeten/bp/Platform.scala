@@ -1,8 +1,7 @@
 package org.threeten.bp
 
-import io.github.cquiroz.scalajavatime.common.ZoneMap
-
 import java.util.NavigableMap
+import org.threeten.bp.zone.ZoneMap
 
 object Platform {
   type NPE = scala.scalajs.js.JavaScriptException

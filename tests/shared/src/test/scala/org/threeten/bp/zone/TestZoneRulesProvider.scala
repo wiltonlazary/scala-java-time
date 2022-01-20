@@ -33,7 +33,6 @@ package org.threeten.bp.zone
 
 import java.util.Collections
 
-import io.github.cquiroz.scalajavatime.common.ZoneMap
 import org.scalatest.funsuite.AnyFunSuite
 import org.threeten.bp.{ AssertionsHelper, ZoneOffset }
 
@@ -46,7 +45,7 @@ object TestZoneRulesProvider {
       new java.util.HashSet[String](Collections.singleton("FooLocation"))
 
     protected def provideVersions(zoneId: String): java.util.NavigableMap[String, ZoneRules] = {
-      val result: java.util.NavigableMap[String, ZoneRules] = ZoneMap[String, ZoneRules]
+      val result: java.util.NavigableMap[String, ZoneRules] = new ZoneMap[String, ZoneRules]()
       result.put("BarVersion", rules)
       result
     }

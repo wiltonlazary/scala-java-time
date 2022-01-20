@@ -9,10 +9,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2.4.0
-      - name: Set up JDK 14
+      - name: Set up JDK 17
         uses: olafurpg/setup-scala@v13
         with:
-          java-version: adopt@1.14
+          java-version: 17
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
       # - name: Checking your code format
@@ -36,6 +36,8 @@ jobs:
           fetch-depth: 0
       - name: Setup Scala and Java
         uses: olafurpg/setup-scala@v13
+        with:
+          java-version: 17
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
       - name: Run tests

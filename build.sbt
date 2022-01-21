@@ -296,23 +296,34 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatfo
 
 val zonesFilterFn = (x: String) => x == "Europe/Helsinki" || x == "America/Santiago"
 
-lazy val demo = project
+lazy val demo = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("demo"))
-  .dependsOn(scalajavatime.js)
-  .enablePlugins(ScalaJSPlugin)
+  .dependsOn(scalajavatime)
   .enablePlugins(TzdbPlugin)
   .settings(
-    scalaVersion                    := scalaVer,
-    name                            := "demo",
-    publish                         := {},
-    publishLocal                    := {},
-    publishArtifact                 := false,
-    Keys.`package`                  := file(""),
+    scalaVersion    := scalaVer,
+    name            := "demo",
+    publish         := {},
+    publishLocal    := {},
+    publishArtifact := false,
+    Keys.`package`  := file(""),
+    zonesFilter     := zonesFilterFn
+  )
+  .jsSettings(
     // scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
     // scalaJSLinkerConfig ~= (_.withModuleSplitStyle(ModuleSplitStyle.SmallestModules)),
-    scalaJSUseMainModuleInitializer := true,
-    zonesFilter                     := zonesFilterFn
+    scalaJSUseMainModuleInitializer := true
   )
+  .jvmSettings(
+    tzdbPlatform := TzdbPlugin.Platform.Jvm
+  )
+  .nativeSettings(
+    tzdbPlatform := TzdbPlugin.Platform.Native
+  )
+
+lazy val demoJS     = demo.js
+lazy val demoJVM    = demo.jvm
+lazy val demoNative = demo.native
 
 // lazy val docs = project
 //   .in(file("docs"))

@@ -316,14 +316,14 @@ lazy val demo = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   )
   .jvmSettings(
     tzdbPlatform := TzdbPlugin.Platform.Jvm,
-    Compile / scalacOptions += "-Wconf:cat=deprecation:ws"
+    Compile / scalacOptions -= "-Xfatal-warnings"
   )
   .nativeSettings(
     tzdbPlatform := TzdbPlugin.Platform.Native,
     // demo/native/target/scala-2.13/src_managed/main/tzdb/tzdb_java.scala:21:30: object JavaConverters in package collection is deprecated (since 2.13.0): Use `scala.jdk.CollectionConverters` instead
     //    ZoneRules.of(bso, bwo, standardTransitions asJava, transitionList asJava, lastRules asJava)
     //                           ^
-    Compile / scalacOptions += "-Wconf:cat=deprecation:ws"
+    Compile / scalacOptions -= "-Xfatal-warnings"
   )
 
 lazy val demoJS     = demo.js

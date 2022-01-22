@@ -439,8 +439,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     )
 
   test("test_print_isoLocalTime") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_sample_isoLocalTime.foreach {
       case (hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
@@ -503,8 +501,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     )
 
   test("test_print_isoOffsetTime") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_sample_isoOffsetTime.foreach {
       case (hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
@@ -568,8 +564,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     )
 
   test("test_print_isoTime") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_sample_isoTime.foreach {
       case (hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
@@ -664,8 +658,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     )
 
   test("test_print_isoLocalDateTime") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_sample_isoLocalDateTime.foreach {
       case (year, month, day, hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
@@ -782,8 +774,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     )
 
   test("test_print_isoOffsetDateTime") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_sample_isoOffsetDateTime.foreach {
       case (year, month, day, hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
@@ -938,8 +928,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     )
 
   test("test_print_isoZonedDateTime") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_sample_isoZonedDateTime.foreach {
       case (year, month, day, hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =
@@ -1082,8 +1070,6 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
     )
 
   test("test_print_isoDateTime") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_sample_isoDateTime.foreach {
       case (year, month, day, hour, min, sec, nano, offsetId, zoneId, expected, expectedEx) =>
         val test: TemporalAccessor =

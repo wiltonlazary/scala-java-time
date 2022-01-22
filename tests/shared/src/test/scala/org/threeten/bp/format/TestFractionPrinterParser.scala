@@ -53,8 +53,6 @@ class TestFractionPrinterParser
   }
 
   test("test_print_append") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     printContext.setDateTime(LocalTime.of(12, 30, 40, 3))
     val pp: TTBPDateTimeFormatterBuilder.FractionPrinterParser =
       new TTBPDateTimeFormatterBuilder.FractionPrinterParser(NANO_OF_SECOND, 0, 9, true)
@@ -135,8 +133,6 @@ class TestFractionPrinterParser
     )
 
   test("test_print_nanos") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_nanos.foreach {
       case (minWidth: Int) :: (maxWidth: Int) :: (value: Int) :: (result: String) :: Nil =>
         super.beforeEach()
@@ -156,8 +152,6 @@ class TestFractionPrinterParser
   }
 
   test("test_print_nanos_noDecimalPoint") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_nanos.foreach {
       case (minWidth: Int) :: (maxWidth: Int) :: (value: Int) :: (result: String) :: Nil =>
         super.beforeEach()
@@ -197,8 +191,6 @@ class TestFractionPrinterParser
     )
 
   test("test_print_seconds") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_seconds.foreach {
       case (minWidth: Int) :: (maxWidth: Int) :: (value: Int) :: (result: String) :: Nil =>
         super.beforeEach()
@@ -218,8 +210,6 @@ class TestFractionPrinterParser
   }
 
   test("test_print_seconds_noDecimalPoint") {
-    // TODO: https://github.com/scala-native/scala-native/issues/2533
-    assume(sys.props("java.vm.name") != "Scala Native")
     provider_seconds.foreach {
       case (minWidth: Int) :: (maxWidth: Int) :: (value: Int) :: (result: String) :: Nil =>
         super.beforeEach()

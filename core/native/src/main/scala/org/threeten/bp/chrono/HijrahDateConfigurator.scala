@@ -7,6 +7,6 @@ object HijrahDateConfigurator {
   @throws[IOException]
   @throws[ParseException]
   private[chrono] def readDeviationConfig(): Unit = {
-    // The Javascript side doesn't support the deviation configuration
+    // The Native side doesn't support the deviation configuration
   }
 }

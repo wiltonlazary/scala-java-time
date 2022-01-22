@@ -1,10 +1,8 @@
 package java.util
 
 import java.text.DateFormatSymbols
-
 import java.time.{ Instant, ZoneId }
 import java.time.zone.ZoneRulesProvider
-
 import scala.collection.JavaConverters._
 //import scala.util.Try
 
@@ -21,28 +19,7 @@ object TimeZone {
   final val LONG  = 1
 
   private var default: TimeZone =
-//    // This is supported since EcmaScript 1
-//    def offsetInMillis: Int = {
-//      val browserDate = new scalajs.js.Date()
-//      browserDate.getTimezoneOffset().toInt * 60 * 1000
-//    }
-//
-//    def timeZone: String = {
-//      def browserTZ: Try[String] =
-//        Try {
-//          val browserDate = new scalajs.js.Date()
-//          browserDate.toTimeString().split(' ')(1).takeWhile(e => e != ' ')
-//        }
-//
-//      Try {
-//        // First try with the intl API
-//        new DateTimeFormat().resolvedOptions().timeZone.getOrElse(browserTZ.getOrElse("UTC"))
-//      }.orElse {
-//        // If it fails try to parse it from the date string
-//        browserTZ
-//      }.getOrElse("UTC") // Fallback to UTC
-//    }
-
+    // TODO: implement this functionality, perhaps using https://github.com/scala-native/scala-native/blob/master/posixlib/src/main/scala/scala/scalanative/posix/time.scala
     new SimpleTimeZone(0, "UTC")
 
   def getDefault: TimeZone                 = default

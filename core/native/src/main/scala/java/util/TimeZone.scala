@@ -4,7 +4,6 @@ import java.text.DateFormatSymbols
 import java.time.{ Instant, ZoneId }
 import java.time.zone.ZoneRulesProvider
 import scala.collection.JavaConverters._
-import scala.scalanative.unsafe.Ptr
 
 object TimeZone {
   final val SHORT = 0

@@ -186,8 +186,8 @@ object Instant {
    *   if the instant exceeds the maximum or minimum instant
    */
   def ofEpochMilli(epochMilli: Long): Instant = {
-    val secs: Long = Math.floorDiv(epochMilli, 1000)
-    val mos: Int   = Math.floorMod(epochMilli, 1000).toInt
+    val secs: Long = Math.floorDiv(epochMilli, 1000L)
+    val mos: Int   = Math.floorMod(epochMilli, 1000L).toInt
     create(secs, mos * NANOS_PER_MILLI)
   }
 

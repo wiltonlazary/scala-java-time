@@ -1173,7 +1173,7 @@ object HijrahDate {
  */
 @SerialVersionUID(-5207853542612002020L)
 final class HijrahDate private (private val gregorianEpochDay: Long)
-    extends ChronoDateImpl[HijrahDate]
+    extends ChronoLocalDateImpl[HijrahDate]
     with Serializable {
 
   /**

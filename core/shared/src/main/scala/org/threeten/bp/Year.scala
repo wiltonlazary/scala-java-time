@@ -556,9 +556,9 @@ final class Year private (private val year: Int)
       case u: ChronoUnit =>
         u match {
           case YEARS     => plusYears(amountToAdd)
-          case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10))
-          case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100))
-          case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000))
+          case DECADES   => plusYears(Math.multiplyExact(amountToAdd, 10L))
+          case CENTURIES => plusYears(Math.multiplyExact(amountToAdd, 100L))
+          case MILLENNIA => plusYears(Math.multiplyExact(amountToAdd, 1000L))
           case ERAS      => `with`(ERA, Math.addExact(getLong(ERA), amountToAdd))
           case _         => throw new UnsupportedTemporalTypeException(s"Unsupported unit: $unit")
         }

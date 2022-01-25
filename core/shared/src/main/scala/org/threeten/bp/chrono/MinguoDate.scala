@@ -160,7 +160,7 @@ object MinguoDate {
  *   the standard local date, validated not null
  */
 final class MinguoDate private[chrono] (private val isoDate: LocalDate)
-    extends ChronoDateImpl[MinguoDate]
+    extends ChronoLocalDateImpl[MinguoDate]
     with Serializable {
   Objects.requireNonNull(isoDate, "date")
 

@@ -89,7 +89,7 @@ object Duration {
    * @throws ArithmeticException
    *   if the input days exceeds the capacity of { @code Duration}
    */
-  def ofDays(days: Long): Duration = create(Math.multiplyExact(days, 86400), 0)
+  def ofDays(days: Long): Duration = create(Math.multiplyExact(days, 86400L), 0)
 
   /**
    * Obtains an instance of {@code Duration} from a number of standard length hours.
@@ -104,7 +104,7 @@ object Duration {
    * @throws ArithmeticException
    *   if the input hours exceeds the capacity of { @code Duration}
    */
-  def ofHours(hours: Long): Duration = create(Math.multiplyExact(hours, 3600), 0)
+  def ofHours(hours: Long): Duration = create(Math.multiplyExact(hours, 3600L), 0)
 
   /**
    * Obtains an instance of {@code Duration} from a number of standard length minutes.
@@ -119,7 +119,7 @@ object Duration {
    * @throws ArithmeticException
    *   if the input minutes exceeds the capacity of { @code Duration}
    */
-  def ofMinutes(minutes: Long): Duration = create(Math.multiplyExact(minutes, 60), 0)
+  def ofMinutes(minutes: Long): Duration = create(Math.multiplyExact(minutes, 60L), 0)
 
   /**
    * Obtains an instance of {@code Duration} from a number of seconds.
@@ -1107,7 +1107,7 @@ final class Duration private (private val seconds: Long, private val nanos: Int)
    *   if numeric overflow occurs
    */
   def toMillis: Long = {
-    val result: Long = Math.multiplyExact(seconds, 1000)
+    val result: Long = Math.multiplyExact(seconds, 1000L)
     Math.addExact(result, nanos.toLong / Duration.NANOS_PER_MILLI)
   }
 

@@ -9,10 +9,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2.4.0
-      - name: Set up JDK 17
+      - name: Set up JDK 8
         uses: olafurpg/setup-scala@v13
         with:
-          java-version: 17
+          java-version: 1.8
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
       # - name: Checking your code format
@@ -28,7 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         scala: [ '2.11.12', '2.12.15', '2.13.8', '3.1.0' ]
-        platform: [ 'JVM', 'JS' ]
+        platform: [ 'JVM', 'JS', 'Native' ]
     steps:
       - name: Checkout current branch
         uses: actions/checkout@v2.4.0
@@ -37,14 +37,15 @@ jobs:
       - name: Setup Scala and Java
         uses: olafurpg/setup-scala@v13
         with:
-          java-version: 17
+          java-version: 1.8
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
       - name: Run tests
+        if: ${{  matrix.platform != 'Native' || !startsWith(matrix.scala, '3.')  }}
         run: sbt ++${{ matrix.scala }}! scalajavatimeTests${{ matrix.platform }}/test
       - name: Run demo
-        if: ${{  matrix.scala == 'JS' }}
-        run: sbt ++${{ matrix.scala }}! demo/run
+        if: ${{  matrix.platform != 'Native' || !startsWith(matrix.scala, '3.')  }}
+        run: sbt ++${{ matrix.scala }}! demo${{ matrix.platform }}/run
 
   build:
     runs-on: ubuntu-20.04

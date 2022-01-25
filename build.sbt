@@ -1,22 +1,26 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
-import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
+import sbtcrossproject.CrossPlugin.autoImport.{ CrossType, crossProject }
 import sbt._
 import sbt.io.Using
 
 val versions: Map[String, String] = {
-  import org.snakeyaml.engine.v2.api.{Load, LoadSettings}
-  import java.util.{List => JList, Map => JMap}
+  import org.snakeyaml.engine.v2.api.{ Load, LoadSettings }
+  import java.util.{ List => JList, Map => JMap }
   import scala.jdk.CollectionConverters._
-  val doc = new Load(LoadSettings.builder().build())
+  val doc  = new Load(LoadSettings.builder().build())
     .loadFromReader(scala.io.Source.fromFile(".github/workflows/scala.yml").bufferedReader())
-  val yaml = doc.asInstanceOf[JMap[String, JMap[String, JMap[String, JMap[String, JMap[String, JList[String]]]]]]]
+  val yaml = doc.asInstanceOf[
+    JMap[String, JMap[String, JMap[String, JMap[String, JMap[String, JList[String]]]]]]
+  ]
   val list = yaml.get("jobs").get("test").get("strategy").get("matrix").get("scala").asScala
   list.map { v =>
-    val vs = v.split('.'); val init = vs.take(vs(0) match { case "2" => 2; case _ => 1 }); (init.mkString("."), v)
+    val vs = v.split('.'); val init = vs.take(vs(0) match { case "2" => 2; case _ => 1 });
+    (init.mkString("."), v)
   }.toMap
 }
 
-val scalaVer                = versions("3")
+val scalaVer                = versions("2.13")
+val scala3Ver               = versions("3")
 val tzdbVersion             = "2019c"
 val scalajavaLocalesVersion = "1.3.0"
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -148,7 +152,7 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
   generatedFiles
 }
 
-lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("core"))
   .settings(commonSettings: _*)
@@ -186,8 +190,19 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform)
       "io.github.cquiroz" %%% "scala-java-locales" % scalajavaLocalesVersion
     )
   )
+  .nativeSettings(
+    crossScalaVersions -= scala3Ver,
+    Compile / sourceGenerators += Def.task {
+      val srcDirs        = (Compile / sourceDirectories).value
+      val destinationDir = (Compile / sourceManaged).value
+      copyAndReplace(srcDirs, destinationDir)
+    }.taskValue,
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "scala-java-locales" % scalajavaLocalesVersion
+    )
+  )
 
-lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("tzdb"))
   .settings(commonSettings)
@@ -203,16 +218,28 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform)
       copyAndReplace(Seq(srcDirs), destinationDir)
     }.taskValue
   )
+  .nativeSettings(
+    crossScalaVersions -= scala3Ver,
+    dbVersion    := TzdbPlugin.Version(tzdbVersion),
+    includeTTBP  := true,
+    tzdbPlatform := TzdbPlugin.Platform.Native,
+    Compile / sourceGenerators += Def.task {
+      val srcDirs        = (Compile / sourceManaged).value
+      val destinationDir = (Compile / sourceManaged).value
+      copyAndReplace(Seq(srcDirs), destinationDir)
+    }.taskValue
+  )
   .jvmSettings(
-    includeTTBP := true,
-    jsOptimized := false
+    includeTTBP  := true,
+    tzdbPlatform := TzdbPlugin.Platform.Jvm
   )
   .dependsOn(scalajavatime)
 
-lazy val scalajavatimeTZDBJVM = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
-lazy val scalajavatimeTZDBJS  = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBJVM    = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBJS     = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
+lazy val scalajavatimeTZDBNative = scalajavatimeTZDB.native.enablePlugins(TzdbPlugin)
 
-lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
+lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("tests"))
   .settings(commonSettings: _*)
@@ -253,27 +280,55 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform)
       "io.github.cquiroz" %%% "locales-full-db" % scalajavaLocalesVersion
     )
   )
+  .nativeSettings(
+    crossScalaVersions -= scala3Ver,
+    Test / parallelExecution := false,
+    Test / sourceGenerators += Def.task {
+      val srcDirs        = (Test / sourceDirectories).value
+      val destinationDir = (Test / sourceManaged).value
+      copyAndReplace(srcDirs, destinationDir)
+    }.taskValue,
+    libraryDependencies ++= Seq(
+      "io.github.cquiroz" %%% "locales-full-db" % scalajavaLocalesVersion
+    )
+  )
   .dependsOn(scalajavatime, scalajavatimeTZDB)
 
 val zonesFilterFn = (x: String) => x == "Europe/Helsinki" || x == "America/Santiago"
 
-lazy val demo = project
+lazy val demo = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("demo"))
-  .dependsOn(scalajavatime.js)
-  .enablePlugins(ScalaJSPlugin)
+  .dependsOn(scalajavatime)
   .enablePlugins(TzdbPlugin)
   .settings(
-    scalaVersion                    := scalaVer,
-    name                            := "demo",
-    publish                         := {},
-    publishLocal                    := {},
-    publishArtifact                 := false,
-    Keys.`package`                  := file(""),
+    scalaVersion    := scalaVer,
+    name            := "demo",
+    publish         := {},
+    publishLocal    := {},
+    publishArtifact := false,
+    Keys.`package`  := file(""),
+    zonesFilter     := zonesFilterFn
+  )
+  .jsSettings(
     // scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
     // scalaJSLinkerConfig ~= (_.withModuleSplitStyle(ModuleSplitStyle.SmallestModules)),
-    scalaJSUseMainModuleInitializer := true,
-    zonesFilter                     := zonesFilterFn
+    scalaJSUseMainModuleInitializer := true
   )
+  .jvmSettings(
+    tzdbPlatform := TzdbPlugin.Platform.Jvm,
+    Compile / scalacOptions -= "-Xfatal-warnings"
+  )
+  .nativeSettings(
+    tzdbPlatform := TzdbPlugin.Platform.Native,
+    // demo/native/target/scala-2.13/src_managed/main/tzdb/tzdb_java.scala:21:30: object JavaConverters in package collection is deprecated (since 2.13.0): Use `scala.jdk.CollectionConverters` instead
+    //    ZoneRules.of(bso, bwo, standardTransitions asJava, transitionList asJava, lastRules asJava)
+    //                           ^
+    Compile / scalacOptions -= "-Xfatal-warnings"
+  )
+
+lazy val demoJS     = demo.js
+lazy val demoJVM    = demo.jvm
+lazy val demoNative = demo.native
 
 // lazy val docs = project
 //   .in(file("docs"))

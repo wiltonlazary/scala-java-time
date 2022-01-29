@@ -2831,12 +2831,11 @@ class TestLocalDateTime
     }
   }
 
-  val provider_sampleDateTimes: List[List[Int]] = {
+  val provider_sampleDateTimes: List[List[Int]] =
     for {
       d <- provider_sampleDates
       h <- provider_sampleTimes
     } yield d ::: h
-  }
 
   test("test_equals_true") {
     provider_sampleDateTimes.foreach {

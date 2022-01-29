@@ -173,9 +173,8 @@ class TestDateTimeFormatter
 
   test("test_parse_Class_String_parseError") {
     assertThrows[DateTimeParseException] {
-      try TestDateTimeFormatter.DATE_FORMATTER.parse("ONE2012 07 XX",
-                                                     toTemporalQuery(LocalDate.from)
-      )
+      try
+        TestDateTimeFormatter.DATE_FORMATTER.parse("ONE2012 07 XX", toTemporalQuery(LocalDate.from))
       catch {
         case ex: DateTimeParseException =>
           assertEquals(ex.getMessage.contains("could not be parsed"), true)
@@ -189,10 +188,11 @@ class TestDateTimeFormatter
 
   test("test_parse_Class_String_parseErrorLongText") {
     assertThrows[DateTimeParseException] {
-      try TestDateTimeFormatter.DATE_FORMATTER.parse(
-        "ONEXXX67890123456789012345678901234567890123456789012345678901234567890123456789",
-        toTemporalQuery(LocalDate.from)
-      )
+      try
+        TestDateTimeFormatter.DATE_FORMATTER.parse(
+          "ONEXXX67890123456789012345678901234567890123456789012345678901234567890123456789",
+          toTemporalQuery(LocalDate.from)
+        )
       catch {
         case ex: DateTimeParseException =>
           assertEquals(ex.getMessage.contains("could not be parsed"), true)
@@ -213,9 +213,10 @@ class TestDateTimeFormatter
 
   test("test_parse_Class_String_parseIncomplete") {
     assertThrows[DateTimeParseException] {
-      try TestDateTimeFormatter.DATE_FORMATTER.parse("ONE2012 07 27SomethingElse",
-                                                     toTemporalQuery(LocalDate.from)
-      )
+      try
+        TestDateTimeFormatter.DATE_FORMATTER.parse("ONE2012 07 27SomethingElse",
+                                                   toTemporalQuery(LocalDate.from)
+        )
       catch {
         case ex: DateTimeParseException =>
           assertEquals(ex.getMessage.contains("could not be parsed"), true)
@@ -260,10 +261,11 @@ class TestDateTimeFormatter
   test("test_parseBest_String_parseError") {
     assertThrows[DateTimeParseException] {
       val test: DateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM[-dd]")
-      try test.parseBest("2011-XX-30",
-                         toTemporalQuery(LocalDate.from),
-                         toTemporalQuery(YearMonth.from)
-      )
+      try
+        test.parseBest("2011-XX-30",
+                       toTemporalQuery(LocalDate.from),
+                       toTemporalQuery(YearMonth.from)
+        )
       catch {
         case ex: DateTimeParseException =>
           assertEquals(ex.getMessage.contains("could not be parsed"), true)
@@ -279,11 +281,12 @@ class TestDateTimeFormatter
     assertThrows[DateTimeParseException] {
       val test: DateTimeFormatter =
         fmt.withLocale(Locale.ENGLISH).withDecimalStyle(DecimalStyle.STANDARD)
-      try test.parseBest(
-        "ONEXXX67890123456789012345678901234567890123456789012345678901234567890123456789",
-        toTemporalQuery(LocalDate.from),
-        toTemporalQuery(YearMonth.from)
-      )
+      try
+        test.parseBest(
+          "ONEXXX67890123456789012345678901234567890123456789012345678901234567890123456789",
+          toTemporalQuery(LocalDate.from),
+          toTemporalQuery(YearMonth.from)
+        )
       catch {
         case ex: DateTimeParseException =>
           assertEquals(ex.getMessage.contains("could not be parsed"), true)
@@ -306,10 +309,11 @@ class TestDateTimeFormatter
     assertThrows[DateTimeParseException] {
       val test: DateTimeFormatter =
         fmt.withLocale(Locale.ENGLISH).withDecimalStyle(DecimalStyle.STANDARD)
-      try test.parseBest("ONE30SomethingElse",
-                         toTemporalQuery(YearMonth.from),
-                         toTemporalQuery(LocalDate.from)
-      )
+      try
+        test.parseBest("ONE30SomethingElse",
+                       toTemporalQuery(YearMonth.from),
+                       toTemporalQuery(LocalDate.from)
+        )
       catch {
         case ex: DateTimeParseException =>
           assertEquals(ex.getMessage.contains("could not be parsed"), true)
@@ -456,9 +460,10 @@ class TestDateTimeFormatter
       val test: DateTimeFormatter =
         fmt.withLocale(Locale.ENGLISH).withDecimalStyle(DecimalStyle.STANDARD)
       val format: Format          = test.toFormat
-      try format.parseObject(
-        "ONEXXX67890123456789012345678901234567890123456789012345678901234567890123456789"
-      )
+      try
+        format.parseObject(
+          "ONEXXX67890123456789012345678901234567890123456789012345678901234567890123456789"
+        )
       catch {
         case ex: DateTimeParseException =>
           assertEquals(ex.getMessage.contains(

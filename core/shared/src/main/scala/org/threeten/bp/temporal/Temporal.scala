@@ -251,7 +251,7 @@ trait Temporal extends TemporalAccessor {
    *
    * Some example code indicating how and why this method is used: <pre> date = date.minus(period);
    * // subtract a Period instance date = date.minus(duration); // subtract a Duration instance date
-   * = date.minus(workingDays(6)); // example user-written workingDays method </pre>
+   * \= date.minus(workingDays(6)); // example user-written workingDays method </pre>
    *
    * Note that calling {@code plus} followed by {@code minus} is not guaranteed to return the same
    * date-time.

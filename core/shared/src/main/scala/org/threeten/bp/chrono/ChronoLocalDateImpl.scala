@@ -65,8 +65,8 @@ import org.threeten.bp.temporal.TemporalUnit
  *
  * // Print the Hijrah date and calendar ChronoLocalDate date = Chrono.of("Hijrah").dateNow(); int
  * day = date.get(ChronoField.DAY_OF_MONTH); int dow = date.get(ChronoField.DAY_OF_WEEK); int month
- * = date.get(ChronoField.MONTH_OF_YEAR); int year = date.get(ChronoField.YEAR); System.out.printf("
- * Today is %s %s %d-%s-%d%n", date.getChrono().getID(), dow, day, month, year);
+ * \= date.get(ChronoField.MONTH_OF_YEAR); int year = date.get(ChronoField.YEAR);
+ * System.out.printf(" Today is %s %s %d-%s-%d%n", date.getChrono().getID(), dow, day, month, year);
  *
  * // Print today's date and the last day of the year ChronoLocalDate now1 =
  * Chrono.of("Hijrah").dateNow(); ChronoLocalDate first = now1.with(ChronoField.DAY_OF_MONTH, 1)

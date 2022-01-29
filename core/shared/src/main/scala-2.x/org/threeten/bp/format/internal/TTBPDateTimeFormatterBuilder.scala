@@ -44,12 +44,15 @@ object TTBPDateTimeFormatterBuilder {
       val length: Int = buf.length
       if (optional)
         context.startOptional()
-      try for (pp <- printerParsers)
-        if (!pp.print(context, buf)) {
-          buf.setLength(length)
-          return true
-        } finally if (optional)
-        context.endOptional()
+      try
+        for (pp <- printerParsers)
+          if (!pp.print(context, buf)) {
+            buf.setLength(length)
+            return true
+          }
+      finally
+        if (optional)
+          context.endOptional()
       true
     }
 

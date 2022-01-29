@@ -491,7 +491,7 @@ trait ChronoLocalDate extends Temporal with TemporalAdjuster with Ordered[Chrono
    * This method differs from the comparison in {@link #compareTo} in that it only compares the
    * underlying date and not the chronology. This allows dates in different calendar systems to be
    * compared based on the time-line position. This is equivalent to using {@code date1.toEpochDay()
-   * == date2.toEpochDay()}.
+   * \== date2.toEpochDay()}.
    *
    * @param other
    *   the other date to compare to, not null

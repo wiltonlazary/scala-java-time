@@ -57,8 +57,9 @@ object HijrahDateConfigurator {
           line = line.trim
           parseLine(line, num)
         }
-      } finally if (br != null)
-        br.close()
+      } finally
+        if (br != null)
+          br.close()
     }
   }
 
@@ -183,9 +184,10 @@ object HijrahDateConfigurator {
           if (file.isDirectory) {
             val f: File = new File(path + FILE_SEP + DEFAULT_CONFIG_PATH, fileName)
             if (f.exists)
-              try return new FileInputStream(
-                path + FILE_SEP + DEFAULT_CONFIG_PATH + FILE_SEP + fileName
-              )
+              try
+                return new FileInputStream(
+                  path + FILE_SEP + DEFAULT_CONFIG_PATH + FILE_SEP + fileName
+                )
               catch {
                 case ioe: IOException => throw ioe
               }

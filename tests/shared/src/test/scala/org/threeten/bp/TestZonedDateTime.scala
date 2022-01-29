@@ -675,10 +675,11 @@ class TestZonedDateTime
 
   test("factory_ofStrict_LDT_ZI_ZO_inGap") {
     assertThrows[DateTimeException] {
-      try ZonedDateTime.ofStrict(TEST_PARIS_GAP_2008_03_30_02_30,
-                                 TestZonedDateTime.OFFSET_0100,
-                                 TestZonedDateTime.ZONE_PARIS
-      )
+      try
+        ZonedDateTime.ofStrict(TEST_PARIS_GAP_2008_03_30_02_30,
+                               TestZonedDateTime.OFFSET_0100,
+                               TestZonedDateTime.ZONE_PARIS
+        )
       catch {
         case ex: DateTimeException =>
           assertEquals(ex.getMessage.contains(" gap"), true)
@@ -689,10 +690,11 @@ class TestZonedDateTime
 
   test("factory_ofStrict_LDT_ZI_ZO_inOverlap_invalidOfset") {
     assertThrows[DateTimeException] {
-      try ZonedDateTime.ofStrict(TEST_PARIS_OVERLAP_2008_10_26_02_30,
-                                 TestZonedDateTime.OFFSET_0130,
-                                 TestZonedDateTime.ZONE_PARIS
-      )
+      try
+        ZonedDateTime.ofStrict(TEST_PARIS_OVERLAP_2008_10_26_02_30,
+                               TestZonedDateTime.OFFSET_0130,
+                               TestZonedDateTime.ZONE_PARIS
+        )
       catch {
         case ex: DateTimeException =>
           assertEquals(ex.getMessage.contains(" is not valid for "), true)
@@ -703,10 +705,11 @@ class TestZonedDateTime
 
   test("factory_ofStrict_LDT_ZI_ZO_invalidOffset") {
     assertThrows[DateTimeException] {
-      try ZonedDateTime.ofStrict(TEST_LOCAL_2008_06_30_11_30_59_500,
-                                 TestZonedDateTime.OFFSET_0130,
-                                 TestZonedDateTime.ZONE_PARIS
-      )
+      try
+        ZonedDateTime.ofStrict(TEST_LOCAL_2008_06_30_11_30_59_500,
+                               TestZonedDateTime.OFFSET_0130,
+                               TestZonedDateTime.ZONE_PARIS
+        )
       catch {
         case ex: DateTimeException =>
           assertEquals(ex.getMessage.contains(" is not valid for "), true)

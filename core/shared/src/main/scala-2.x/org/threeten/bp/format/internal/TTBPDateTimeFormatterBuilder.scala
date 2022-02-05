@@ -1753,7 +1753,7 @@ object TTBPDateTimeFormatterBuilder {
 
     override def toString: String =
       s"Localized(${if (dateStyle != null) dateStyle else ""},${if (timeStyle != null) timeStyle
-      else ""})"
+        else ""})"
   }
 
   /** Prints or parses a localized pattern. */

@@ -191,7 +191,6 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     )
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     Compile / sourceGenerators += Def.task {
       val srcDirs        = (Compile / sourceDirectories).value
       val destinationDir = (Compile / sourceManaged).value
@@ -219,7 +218,6 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform, NativePlatfor
     }.taskValue
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     dbVersion    := TzdbPlugin.Version(tzdbVersion),
     includeTTBP  := true,
     tzdbPlatform := TzdbPlugin.Platform.Native,
@@ -281,7 +279,6 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatfo
     )
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     Test / parallelExecution := false,
     Test / sourceGenerators += Def.task {
       val srcDirs        = (Test / sourceDirectories).value

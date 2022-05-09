@@ -158,7 +158,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .settings(commonSettings: _*)
   .settings(
     name := "scala-java-time",
-    libraryDependencies += ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1")
+    libraryDependencies += ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.2")
       .cross(CrossVersion.for3Use2_13)
   )
   .jsSettings(

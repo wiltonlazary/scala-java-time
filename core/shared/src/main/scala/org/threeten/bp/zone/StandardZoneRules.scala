@@ -252,40 +252,40 @@ final class StandardZoneRules private (
 
   def getOffset(localDateTime: LocalDateTime): ZoneOffset =
     getOffsetInfo(localDateTime) match {
-      case transition: ZoneOffsetTransition => transition.getOffsetBefore
-      case offset: ZoneOffset               => offset
+      case Left(transition) => transition.getOffsetBefore
+      case Right(offset)    => offset
     }
 
   def getValidOffsets(localDateTime: LocalDateTime): java.util.List[ZoneOffset] =
     getOffsetInfo(localDateTime) match {
-      case transition: ZoneOffsetTransition => transition.getValidOffsets
-      case offset: ZoneOffset               => Collections.singletonList(offset)
+      case Left(transition) => transition.getValidOffsets
+      case Right(offset)    => Collections.singletonList(offset)
     }
 
   def getTransition(localDateTime: LocalDateTime): ZoneOffsetTransition =
     getOffsetInfo(localDateTime) match {
-      case transition: ZoneOffsetTransition => transition
-      case _                                => null
+      case Left(transition) => transition
+      case _                => null
     }
 
-  private def getOffsetInfo(dt: LocalDateTime): AnyRef = {
+  private def getOffsetInfo(dt: LocalDateTime): Either[ZoneOffsetTransition, ZoneOffset] = {
     if (
       lastRules.length > 0 && dt.isAfter(
         savingsLocalTransitions(savingsLocalTransitions.length - 1)
       )
     ) {
-      val transArray: Array[ZoneOffsetTransition] = findTransitionArray(dt.getYear)
-      var info: AnyRef                            = null
+      val transArray: Array[ZoneOffsetTransition]        = findTransitionArray(dt.getYear)
+      var info: Either[ZoneOffsetTransition, ZoneOffset] = null
       for (trans <- transArray) {
         info = findOffsetInfo(dt, trans)
-        if (info.isInstanceOf[ZoneOffsetTransition] || (info == trans.getOffsetBefore))
+        if (info.isLeft || (info == Right(trans.getOffsetBefore)))
           return info
       }
       return info
     }
     var index: Int = Arrays.binarySearch(savingsLocalTransitions.asInstanceOf[Array[AnyRef]], dt)
     if (index == -1)
-      return wallOffsets(0)
+      return Right(wallOffsets(0))
     if (index < 0)
       index = -index - 2
     else if (
@@ -302,11 +302,11 @@ final class StandardZoneRules private (
       val offsetBefore: ZoneOffset = wallOffsets(index / 2)
       val offsetAfter: ZoneOffset  = wallOffsets(index / 2 + 1)
       if (offsetAfter.getTotalSeconds > offsetBefore.getTotalSeconds)
-        new ZoneOffsetTransition(dtBefore, offsetBefore, offsetAfter)
+        Left(new ZoneOffsetTransition(dtBefore, offsetBefore, offsetAfter))
       else
-        new ZoneOffsetTransition(dtAfter, offsetBefore, offsetAfter)
+        Left(new ZoneOffsetTransition(dtAfter, offsetBefore, offsetAfter))
     } else
-      wallOffsets(index / 2 + 1)
+      Right(wallOffsets(index / 2 + 1))
   }
 
   /**
@@ -319,21 +319,24 @@ final class StandardZoneRules private (
    * @return
    *   the offset info, not null
    */
-  private def findOffsetInfo(dt: LocalDateTime, trans: ZoneOffsetTransition): AnyRef = {
+  private def findOffsetInfo(
+    dt:    LocalDateTime,
+    trans: ZoneOffsetTransition
+  ): Either[ZoneOffsetTransition, ZoneOffset] = {
     val localTransition: LocalDateTime = trans.getDateTimeBefore
     if (trans.isGap)
       if (dt.isBefore(localTransition))
-        trans.getOffsetBefore
+        Right(trans.getOffsetBefore)
       else if (dt.isBefore(trans.getDateTimeAfter))
-        trans
+        Left(trans)
       else
-        trans.getOffsetAfter
+        Right(trans.getOffsetAfter)
     else if (!dt.isBefore(localTransition))
-      trans.getOffsetAfter
+      Right(trans.getOffsetAfter)
     else if (dt.isBefore(trans.getDateTimeAfter))
-      trans.getOffsetBefore
+      Right(trans.getOffsetBefore)
     else
-      trans
+      Left(trans)
   }
 
   def isValidOffset(localDateTime: LocalDateTime, offset: ZoneOffset): Boolean =

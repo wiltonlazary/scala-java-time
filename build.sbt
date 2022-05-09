@@ -72,7 +72,7 @@ lazy val commonSettings = Seq(
   scalaVersion                    := scalaVer,
   crossScalaVersions              := versions.toList.map(_._2),
   // Don't include threeten on the binaries
-  Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter { case (f, s) =>
+  Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter { case (_, s) =>
     !s.contains("threeten")
   },
   Compile / scalacOptions ++= {
@@ -158,7 +158,7 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .settings(commonSettings: _*)
   .settings(
     name := "scala-java-time",
-    libraryDependencies += ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1")
+    libraryDependencies += ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.2")
       .cross(CrossVersion.for3Use2_13)
   )
   .jsSettings(
@@ -191,7 +191,6 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     )
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     Compile / sourceGenerators += Def.task {
       val srcDirs        = (Compile / sourceDirectories).value
       val destinationDir = (Compile / sourceManaged).value
@@ -219,7 +218,6 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform, NativePlatfor
     }.taskValue
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     dbVersion    := TzdbPlugin.Version(tzdbVersion),
     includeTTBP  := true,
     tzdbPlatform := TzdbPlugin.Platform.Native,
@@ -281,7 +279,6 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatfo
     )
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     Test / parallelExecution := false,
     Test / sourceGenerators += Def.task {
       val srcDirs        = (Test / sourceDirectories).value

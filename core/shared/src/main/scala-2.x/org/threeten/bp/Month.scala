@@ -75,73 +75,73 @@ object Month {
    * The singleton instance for the month of January with 31 days. This has the numeric value of
    * {@code 1}.
    */
-  object JANUARY extends Month("JANUARY", 0)
+  lazy val JANUARY = new Month("JANUARY", 0)
 
   /**
    * The singleton instance for the month of February with 28 days, or 29 in a leap year. This has
    * the numeric value of {@code 2}.
    */
-  object FEBRUARY extends Month("FEBRUARY", 1)
+  lazy val FEBRUARY = new Month("FEBRUARY", 1)
 
   /**
    * The singleton instance for the month of March with 31 days. This has the numeric value of
    * {@code 3}.
    */
-  object MARCH extends Month("MARCH", 2)
+  lazy val MARCH = new Month("MARCH", 2)
 
   /**
    * The singleton instance for the month of April with 30 days. This has the numeric value of
    * {@code 4}.
    */
-  object APRIL extends Month("APRIL", 3)
+  lazy val APRIL = new Month("APRIL", 3)
 
   /**
    * The singleton instance for the month of May with 31 days. This has the numeric value of {@code
    * 5}.
    */
-  object MAY extends Month("MAY", 4)
+  lazy val MAY = new Month("MAY", 4)
 
   /**
    * The singleton instance for the month of June with 30 days. This has the numeric value of {@code
    * 6}.
    */
-  object JUNE extends Month("JUNE", 5)
+  lazy val JUNE = new Month("JUNE", 5)
 
   /**
    * The singleton instance for the month of July with 31 days. This has the numeric value of {@code
    * 7}.
    */
-  object JULY extends Month("JULY", 6)
+  lazy val JULY = new Month("JULY", 6)
 
   /**
    * The singleton instance for the month of August with 31 days. This has the numeric value of
    * {@code 8}.
    */
-  object AUGUST extends Month("AUGUST", 7)
+  lazy val AUGUST = new Month("AUGUST", 7)
 
   /**
    * The singleton instance for the month of September with 30 days. This has the numeric value of
    * {@code 9}.
    */
-  object SEPTEMBER extends Month("SEPTEMBER", 8)
+  lazy val SEPTEMBER = new Month("SEPTEMBER", 8)
 
   /**
    * The singleton instance for the month of October with 31 days. This has the numeric value of
    * {@code 10}.
    */
-  object OCTOBER extends Month("OCTOBER", 9)
+  lazy val OCTOBER = new Month("OCTOBER", 9)
 
   /**
    * The singleton instance for the month of November with 30 days. This has the numeric value of
    * {@code 11}.
    */
-  object NOVEMBER extends Month("NOVEMBER", 10)
+  lazy val NOVEMBER = new Month("NOVEMBER", 10)
 
   /**
    * The singleton instance for the month of December with 31 days. This has the numeric value of
    * {@code 12}.
    */
-  object DECEMBER extends Month("DECEMBER", 11)
+  lazy val DECEMBER = new Month("DECEMBER", 11)
 
   lazy val values: Array[Month] = Array(JANUARY,
                                         FEBRUARY,
@@ -227,7 +227,7 @@ object Month {
   }
 }
 
-sealed abstract class Month private (name: String, ordinal: Int)
+final class Month private (name: String, ordinal: Int)
     extends Enum[Month](name, ordinal)
     with TemporalAccessor
     with TemporalAdjuster {
@@ -492,6 +492,7 @@ sealed abstract class Month private (name: String, ordinal: Int)
       case OCTOBER   => 274 + leap
       case NOVEMBER  => 305 + leap
       case DECEMBER  => 335 + leap
+      case _         => throw new IllegalArgumentException // should never happen
     }
   }
 

@@ -258,14 +258,15 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatfo
   )
   .jvmSettings(
     // Fork the JVM test to ensure that the custom flags are set
-    Test / fork          := true,
-    Test / baseDirectory := baseDirectory.value.getParentFile,
+    Test / fork                        := true,
+    Test / baseDirectory               := baseDirectory.value.getParentFile,
     // Use CLDR provider for locales
     // https://docs.oracle.com/javase/8/docs/technotes/guides/intl/enhancements.8.html#cldr
     Test / javaOptions ++= Seq("-Duser.language=en",
                                "-Duser.country=US",
                                "-Djava.locale.providers=CLDR"
-    )
+    ),
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.ScalaLibrary
   )
   .jsSettings(
     Test / parallelExecution := false,

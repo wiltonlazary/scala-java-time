@@ -266,7 +266,7 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatfo
                                "-Duser.country=US",
                                "-Djava.locale.providers=CLDR"
     ),
-    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.ScalaLibrary
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
   )
   .jsSettings(
     Test / parallelExecution := false,

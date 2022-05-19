@@ -22,7 +22,7 @@ val versions: Map[String, String] = {
 val scalaVer                = versions("2.13")
 val scala3Ver               = versions("3")
 val tzdbVersion             = "2019c"
-val scalajavaLocalesVersion = "1.4.0-RC3"
+val scalajavaLocalesVersion = "1.4.0"
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val downloadFromZip: TaskKey[Unit] =

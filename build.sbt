@@ -98,6 +98,15 @@ lazy val commonSettings = Seq(
     }
   },
   scalacOptions ++= { if (isDotty.value) Seq.empty else Seq("-target:jvm-1.8") },
+  scalacOptions --= {
+    if (isDotty.value)
+      List(
+        "-Xfatal-warnings"
+      )
+    else
+      List(
+      )
+  },
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
   autoAPIMappings                 := true,
   Compile / doc / sources         := { if (isDotty.value) Seq() else (Compile / doc / sources).value },

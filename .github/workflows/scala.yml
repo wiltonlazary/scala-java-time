@@ -41,7 +41,7 @@ jobs:
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
       - name: Run tests
-        run: sbt ++${{ matrix.scala }}! scalajavatimeTests${{ matrix.platform }}/test
+        run: sbt ++${{ matrix.scala }}! tests${{ matrix.platform }}/test
       - name: Run demo
         run: sbt ++${{ matrix.scala }}! demo${{ matrix.platform }}/run
 

@@ -123,7 +123,7 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
             false
     )
 
-  val onlyScalaDirs                      = srcDirs.filter(_.getName.matches(".*scala(-\\d(\\.x)?)?"))
+  val onlyScalaDirs                      = srcDirs.filter(_.getName.matches(".*scala(-\\d)?"))
   // Copy the source files from the base project, exclude classes on java.util and dirs
   val generatedFiles: List[java.io.File] = onlyScalaDirs
     .foldLeft(Set.empty[File]) { (files, sourceDir) =>

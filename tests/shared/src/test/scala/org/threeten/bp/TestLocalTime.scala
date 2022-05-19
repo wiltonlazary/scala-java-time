@@ -1840,6 +1840,14 @@ class TestLocalTime
         assertEquals(min, t.getMinute)
         assertEquals(sec, t.getSecond)
         assertEquals(nanos, t.getNano)
+      // for Scala 3
+      case (nanoseconds: Long) :: (hour: Int) :: (min: Int) :: (sec: Int) :: (nanos: Long) :: Nil    =>
+        val base: LocalTime = LocalTime.MIDNIGHT
+        val t: LocalTime    = base.minusNanos(nanoseconds)
+        assertEquals(hour, t.getHour)
+        assertEquals(min, t.getMinute)
+        assertEquals(sec, t.getSecond)
+        assertEquals(nanos, t.getNano)
       case _                                                                                         =>
         fail()
     }

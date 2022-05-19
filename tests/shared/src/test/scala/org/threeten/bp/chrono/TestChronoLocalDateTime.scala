@@ -363,19 +363,19 @@ class TestChronoLocalDateTime extends AnyFunSuite with AssertionsHelper {
               val cmp: Int                                     = ChronoLocalDateTime.timeLineOrder.compare(a, b)
               if (i < j) {
                 assertTrue(cmp < 0)
-                assertEquals(a.isBefore(b), true, a + " isBefore " + b)
-                assertEquals(a.isAfter(b), false, a + " isAfter " + b)
-                assertEquals(a.isEqual(b), false, a + " isEqual " + b)
+                assertEquals(a.isBefore(b), true, s"$a isBefore $b")
+                assertEquals(a.isAfter(b), false, s"$a isAfter $b")
+                assertEquals(a.isEqual(b), false, s"$a isEqual $b")
               } else if (i > j) {
                 assertTrue(cmp > 0)
-                assertEquals(a.isBefore(b), false, a + " isBefore " + b)
-                assertEquals(a.isAfter(b), true, a + " isAfter " + b)
-                assertEquals(a.isEqual(b), false, a + " isEqual " + b)
+                assertEquals(a.isBefore(b), false, s"$a isBefore $b")
+                assertEquals(a.isAfter(b), true, s"$a isAfter $b")
+                assertEquals(a.isEqual(b), false, s"$a isEqual $b")
               } else {
                 assertTrue(cmp == 0)
-                assertEquals(a.isBefore(b), false, a + " isBefore " + b)
-                assertEquals(a.isAfter(b), false, a + " isAfter " + b)
-                assertEquals(a.isEqual(b), true, a + " isEqual " + b)
+                assertEquals(a.isBefore(b), false, s"$a isBefore $b")
+                assertEquals(a.isAfter(b), false, s"$a isAfter $b")
+                assertEquals(a.isEqual(b), true, s"$a isEqual $b")
               }
               j += 1
             }

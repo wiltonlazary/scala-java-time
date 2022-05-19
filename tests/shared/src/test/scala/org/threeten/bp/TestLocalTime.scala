@@ -2017,19 +2017,19 @@ class TestLocalTime
         val b: LocalTime = localTimes(j)
         if (i < j) {
           assertTrue(a.compareTo(b) < 0)
-          assertEquals(a.isBefore(b), true, a + " <=> " + b)
-          assertEquals(a.isAfter(b), false, a + " <=> " + b)
-          assertEquals(a == b, false, a + " <=> " + b)
+          assertEquals(a.isBefore(b), true, s"$a <=> $b")
+          assertEquals(a.isAfter(b), false, s"$a <=> $b")
+          assertEquals(a == b, false, s"$a <=> $b")
         } else if (i > j) {
           assertTrue(a.compareTo(b) > 0)
-          assertEquals(a.isBefore(b), false, a + " <=> " + b)
-          assertEquals(a.isAfter(b), true, a + " <=> " + b)
-          assertEquals(a == b, false, a + " <=> " + b)
+          assertEquals(a.isBefore(b), false, s"$a <=> $b")
+          assertEquals(a.isAfter(b), true, s"$a <=> $b")
+          assertEquals(a == b, false, s"$a <=> $b")
         } else {
-          assertEquals(a.compareTo(b), 0, a + " <=> " + b)
-          assertEquals(a.isBefore(b), false, a + " <=> " + b)
-          assertEquals(a.isAfter(b), false, a + " <=> " + b)
-          assertEquals(a == b, true, a + " <=> " + b)
+          assertEquals(a.compareTo(b), 0, s"$a <=> $b")
+          assertEquals(a.isBefore(b), false, s"$a <=> $b")
+          assertEquals(a.isAfter(b), false, s"$a <=> $b")
+          assertEquals(a == b, true, s"$a <=> $b")
         }
         j += 1
       }

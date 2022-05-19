@@ -241,7 +241,6 @@ lazy val tests = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     name               := "tests",
     publish / skip     := true,
     Keys.`package`     := file(""),
-    Compile / skip     := isDotty.value,
     libraryDependencies +=
       "org.scalatest" %%% "scalatest" % "3.2.12" % Test,
     scalacOptions ~= (_.filterNot(

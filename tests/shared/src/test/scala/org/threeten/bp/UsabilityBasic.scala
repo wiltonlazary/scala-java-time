@@ -97,13 +97,13 @@ class UsabilityBasic {
   }
 
   protected def output(date: LocalDate, field: TemporalField): Unit =
-    System.out.println(field + " " + date.getLong(field))
+    System.out.println(s"$field ${date.getLong(field)}")
 
   protected def output(dateTime: LocalDateTime, field: TemporalField): Unit =
-    System.out.println(field + " " + dateTime.getLong(field))
+    System.out.println(s"$field ${dateTime.getLong(field)}")
 
   protected def output(time: LocalTime, field: TemporalField): Unit =
-    System.out.println(field + " " + time.getLong(field))
+    System.out.println(s"$field ${time.getLong(field)}")
 
   private def period(): Unit = {
     var date1: LocalDate = LocalDate.now

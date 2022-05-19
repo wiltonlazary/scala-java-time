@@ -83,7 +83,7 @@ object Performance {
       while (loop < 5) {
         {
           System.out.println("-------------------------------------")
-          process
+          process()
         }
         {
           loop += 1

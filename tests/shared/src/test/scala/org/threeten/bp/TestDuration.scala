@@ -1902,14 +1902,14 @@ class TestDuration extends AnyFunSuite with AssertionsHelper {
       while (j < durations.length) {
         val b: Duration = durations(j)
         if (i < j) {
-          assertEquals(a.compareTo(b) < 0, true, a + " <=> " + b)
-          assertEquals(a == b, false, a + " <=> " + b)
+          assertEquals(a.compareTo(b) < 0, true, s"$a <=> $b")
+          assertEquals(a == b, false, s"$a <=> $b")
         } else if (i > j) {
-          assertEquals(a.compareTo(b) > 0, true, a + " <=> " + b)
-          assertEquals(a == b, false, a + " <=> " + b)
+          assertEquals(a.compareTo(b) > 0, true, s"$a <=> $b")
+          assertEquals(a == b, false, s"$a <=> $b")
         } else {
-          assertEquals(a.compareTo(b), 0, a + " <=> " + b)
-          assertEquals(a == b, true, a + " <=> " + b)
+          assertEquals(a.compareTo(b), 0, s"$a <=> $b")
+          assertEquals(a == b, true, s"$a <=> $b")
         }
         j += 1
       }

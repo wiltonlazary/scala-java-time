@@ -125,7 +125,7 @@ object TestDateTimeFormatters {
 
     override def range(field: TemporalField): ValueRange = field.range
 
-    override def toString: String = fields + (if (zoneId != null) " " + zoneId else "")
+    override def toString: String = fields.toString + (if (zoneId != null) s" $zoneId" else "")
   }
 
   private[format] class Expected private[format] () {
@@ -237,7 +237,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_LOCAL_DATE.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
@@ -333,7 +333,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_OFFSET_DATE.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
@@ -385,7 +385,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_DATE.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
@@ -448,7 +448,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_LOCAL_TIME.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
@@ -510,7 +510,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_OFFSET_TIME.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
@@ -573,7 +573,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_TIME.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
@@ -667,7 +667,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
@@ -783,7 +783,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))
@@ -1079,7 +1079,7 @@ class TestDateTimeFormatters extends AnyFunSuite with GenTestPrinterParser with 
         else
           try {
             DateTimeFormatter.ISO_DATE_TIME.format(test)
-            fail
+            fail()
           } catch {
             case ex: Exception =>
               assertTrue(expectedEx.isInstance(ex))

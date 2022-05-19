@@ -63,7 +63,7 @@ trait GenTestPrinterParser extends BeforeAndAfterEach { this: AnyFunSuite =>
   protected var parseContext: TTBPDateTimeParseContext      = null
   protected var buf: StringBuilder                          = null
 
-  override def beforeEach() {
+  override def beforeEach() = {
     printEmptyContext = new TTBPDateTimePrintContext(GenTestPrinterParser.EMPTY,
                                                      Locale.ENGLISH,
                                                      DecimalStyle.STANDARD

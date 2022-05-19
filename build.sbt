@@ -109,10 +109,7 @@ lazy val commonSettings = Seq(
   },
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
   autoAPIMappings                 := true,
-  Compile / doc / sources         := { if (isDotty.value) Seq() else (Compile / doc / sources).value },
-  resolvers += "Sonatype OSS Snapshots".at( // TODO: remove
-    "https://oss.sonatype.org/content/repositories/snapshots"
-  )
+  Compile / doc / sources         := { if (isDotty.value) Seq() else (Compile / doc / sources).value }
 )
 
 /**

@@ -22,10 +22,8 @@ val versions: Map[String, String] = {
 val scalaVer                = versions("2.13")
 val scala3Ver               = versions("3")
 val tzdbVersion             = "2019c"
-val scalajavaLocalesVersion = "1.3.0"
+val scalajavaLocalesVersion = "1.4.0"
 Global / onChangedBuildSource := ReloadOnSourceChanges
-
-Global / resolvers += Resolver.sonatypeRepo("public")
 
 lazy val downloadFromZip: TaskKey[Unit] =
   taskKey[Unit]("Download the tzdb tarball and extract it")
@@ -54,25 +52,33 @@ inThisBuild(
   )
 )
 
-publish / skip := true
-
-def scalaVersionSpecificFolders(srcName: String, srcBaseDir: java.io.File, scalaVersion: String) = {
-  def extraDirs(suffix: String) =
-    List(CrossType.Pure, CrossType.Full)
-      .flatMap(_.sharedSrcDir(srcBaseDir, srcName).toList.map(f => file(f.getPath + suffix)))
-  CrossVersion.partialVersion(scalaVersion) match {
-    case Some((2, y))     => extraDirs("-2.x") ++ (if (y >= 13) extraDirs("-2.13+") else Nil)
-    case Some((0 | 3, _)) => extraDirs("-2.13+") ++ extraDirs("-3.x")
-    case _                => Nil
-  }
-}
+lazy val root = project
+  .in(file("."))
+  .settings(commonSettings)
+  .settings(
+    publish / skip := true
+  )
+  .aggregate(
+    core.js,
+    core.jvm,
+    core.native,
+    tzdb.js,
+    tzdb.jvm,
+    tzdb.native,
+    tests.js,
+    tests.jvm,
+    tests.native,
+    demo.js,
+    demo.jvm,
+    demo.native
+  )
 
 lazy val commonSettings = Seq(
   description                     := "java.time API implementation in Scala and Scala.js",
   scalaVersion                    := scalaVer,
   crossScalaVersions              := versions.toList.map(_._2),
   // Don't include threeten on the binaries
-  Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter { case (f, s) =>
+  Compile / packageBin / mappings := (Compile / packageBin / mappings).value.filter { case (_, s) =>
     !s.contains("threeten")
   },
   Compile / scalacOptions ++= {
@@ -91,15 +97,16 @@ lazy val commonSettings = Seq(
         Seq.empty
     }
   },
-  Compile / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("main",
-                                                                       baseDirectory.value,
-                                                                       scalaVersion.value
-  ),
-  Test / unmanagedSourceDirectories ++= scalaVersionSpecificFolders("test",
-                                                                    baseDirectory.value,
-                                                                    scalaVersion.value
-  ),
   scalacOptions ++= { if (isDotty.value) Seq.empty else Seq("-target:jvm-1.8") },
+  scalacOptions --= {
+    if (isDotty.value)
+      List(
+        "-Xfatal-warnings"
+      )
+    else
+      List(
+      )
+  },
   javaOptions ++= Seq("-Dfile.encoding=UTF8"),
   autoAPIMappings                 := true,
   Compile / doc / sources         := { if (isDotty.value) Seq() else (Compile / doc / sources).value }
@@ -122,7 +129,7 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
             false
     )
 
-  val onlyScalaDirs                      = srcDirs.filter(_.getName.matches(".*scala(-\\d\\.x)?"))
+  val onlyScalaDirs                      = srcDirs.filter(_.getName.matches(".*scala(-\\d)?"))
   // Copy the source files from the base project, exclude classes on java.util and dirs
   val generatedFiles: List[java.io.File] = onlyScalaDirs
     .foldLeft(Set.empty[File]) { (files, sourceDir) =>
@@ -152,10 +159,10 @@ def copyAndReplace(srcDirs: Seq[File], destinationDir: File): Seq[File] = {
   generatedFiles
 }
 
-lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
+lazy val core = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("core"))
-  .settings(commonSettings: _*)
+  .settings(commonSettings)
   .settings(
     name := "scala-java-time",
     libraryDependencies += ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.2")
@@ -191,7 +198,6 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     )
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     Compile / sourceGenerators += Def.task {
       val srcDirs        = (Compile / sourceDirectories).value
       val destinationDir = (Compile / sourceManaged).value
@@ -202,16 +208,16 @@ lazy val scalajavatime = crossProject(JVMPlatform, JSPlatform, NativePlatform)
     )
   )
 
-lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform, NativePlatform)
+lazy val tzdb = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("tzdb"))
   .settings(commonSettings)
   .settings(
-    name := "scala-java-time-tzdb"
+    name        := "scala-java-time-tzdb",
+    includeTTBP := true
   )
   .jsSettings(
-    dbVersion   := TzdbPlugin.Version(tzdbVersion),
-    includeTTBP := true,
+    dbVersion := TzdbPlugin.Version(tzdbVersion),
     Compile / sourceGenerators += Def.task {
       val srcDirs        = (Compile / sourceManaged).value
       val destinationDir = (Compile / sourceManaged).value
@@ -219,9 +225,7 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform, NativePlatfor
     }.taskValue
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     dbVersion    := TzdbPlugin.Version(tzdbVersion),
-    includeTTBP  := true,
     tzdbPlatform := TzdbPlugin.Platform.Native,
     Compile / sourceGenerators += Def.task {
       val srcDirs        = (Compile / sourceManaged).value
@@ -230,44 +234,36 @@ lazy val scalajavatimeTZDB = crossProject(JVMPlatform, JSPlatform, NativePlatfor
     }.taskValue
   )
   .jvmSettings(
-    includeTTBP  := true,
     tzdbPlatform := TzdbPlugin.Platform.Jvm
   )
-  .dependsOn(scalajavatime)
+  .dependsOn(core)
+  .enablePlugins(TzdbPlugin)
 
-lazy val scalajavatimeTZDBJVM    = scalajavatimeTZDB.jvm.enablePlugins(TzdbPlugin)
-lazy val scalajavatimeTZDBJS     = scalajavatimeTZDB.js.enablePlugins(TzdbPlugin)
-lazy val scalajavatimeTZDBNative = scalajavatimeTZDB.native.enablePlugins(TzdbPlugin)
-
-lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatform)
+lazy val tests = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   .crossType(CrossType.Full)
   .in(file("tests"))
-  .settings(commonSettings: _*)
+  .settings(commonSettings)
   .settings(
-    name               := "scala-java-time-tests",
-    // No, SBT, we don't want any artifacts for root.
-    // No, not even an empty jar.
-    publish            := {},
-    publishLocal       := {},
-    publishArtifact    := false,
+    name               := "tests",
+    publish / skip     := true,
     Keys.`package`     := file(""),
-    Compile / skip     := isDotty.value,
     libraryDependencies +=
-      "org.scalatest" %%% "scalatest" % "3.2.12" % "test",
+      "org.scalatest" %%% "scalatest" % "3.2.12" % Test,
     scalacOptions ~= (_.filterNot(
       Set("-Wnumeric-widen", "-Ywarn-numeric-widen", "-Ywarn-value-discard", "-Wvalue-discard")
     ))
   )
   .jvmSettings(
     // Fork the JVM test to ensure that the custom flags are set
-    Test / fork          := true,
-    Test / baseDirectory := baseDirectory.value.getParentFile,
+    Test / fork                        := true,
+    Test / baseDirectory               := baseDirectory.value.getParentFile,
     // Use CLDR provider for locales
     // https://docs.oracle.com/javase/8/docs/technotes/guides/intl/enhancements.8.html#cldr
     Test / javaOptions ++= Seq("-Duser.language=en",
                                "-Duser.country=US",
                                "-Djava.locale.providers=CLDR"
-    )
+    ),
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
   )
   .jsSettings(
     Test / parallelExecution := false,
@@ -281,7 +277,6 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatfo
     )
   )
   .nativeSettings(
-    crossScalaVersions -= scala3Ver,
     Test / parallelExecution := false,
     Test / sourceGenerators += Def.task {
       val srcDirs        = (Test / sourceDirectories).value
@@ -292,22 +287,20 @@ lazy val scalajavatimeTests = crossProject(JVMPlatform, JSPlatform, NativePlatfo
       "io.github.cquiroz" %%% "locales-full-db" % scalajavaLocalesVersion
     )
   )
-  .dependsOn(scalajavatime, scalajavatimeTZDB)
+  .dependsOn(core, tzdb)
 
 val zonesFilterFn = (x: String) => x == "Europe/Helsinki" || x == "America/Santiago"
 
 lazy val demo = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("demo"))
-  .dependsOn(scalajavatime)
+  .dependsOn(core)
   .enablePlugins(TzdbPlugin)
   .settings(
-    scalaVersion    := scalaVer,
-    name            := "demo",
-    publish         := {},
-    publishLocal    := {},
-    publishArtifact := false,
-    Keys.`package`  := file(""),
-    zonesFilter     := zonesFilterFn
+    scalaVersion   := scalaVer,
+    name           := "demo",
+    publish / skip := true,
+    Keys.`package` := file(""),
+    zonesFilter    := zonesFilterFn
   )
   .jsSettings(
     // scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
@@ -325,10 +318,6 @@ lazy val demo = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     //                           ^
     Compile / scalacOptions -= "-Xfatal-warnings"
   )
-
-lazy val demoJS     = demo.js
-lazy val demoJVM    = demo.jvm
-lazy val demoNative = demo.native
 
 // lazy val docs = project
 //   .in(file("docs"))

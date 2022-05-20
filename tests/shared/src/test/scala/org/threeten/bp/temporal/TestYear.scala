@@ -631,7 +631,7 @@ class TestYear extends GenDateTimeTest {
 
   test("test_equals_incorrectType") {
     val test: Year = Year.of(1)
-    assertEquals(test == "Incorrect type", false)
+    assertEquals(test.equals("Incorrect type"), false)
   }
 
   test("test_toString") {

@@ -108,7 +108,7 @@ class TestZoneOffsetPrinter extends AnyFunSuite with GenTestPrinterParser with A
   test("test_print") {
     provider_offsets.foreach {
       case (pattern: String) :: (expected: String) :: (offset: ZoneOffset) :: Nil =>
-        super.beforeEach
+        super.beforeEach()
         buf.append("EXISTING")
         printContext.setDateTime(new DateTimeBuilder(OFFSET_SECONDS, offset.getTotalSeconds))
         val pp: TTBPDateTimeFormatterBuilder.OffsetIdPrinterParser =

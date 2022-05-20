@@ -135,7 +135,7 @@ object Month {
    * The singleton instance for the month of November with 30 days. This has the numeric value of
    * {@code 11}.
    */
-  val NOVEMBER = new Month("NOVEMBER", 10)
+  lazy val NOVEMBER = new Month("NOVEMBER", 10)
 
   /**
    * The singleton instance for the month of December with 31 days. This has the numeric value of
@@ -492,6 +492,7 @@ final class Month private (name: String, ordinal: Int)
       case OCTOBER   => 274 + leap
       case NOVEMBER  => 305 + leap
       case DECEMBER  => 335 + leap
+      case _         => throw new IllegalArgumentException // should never happen
     }
   }
 

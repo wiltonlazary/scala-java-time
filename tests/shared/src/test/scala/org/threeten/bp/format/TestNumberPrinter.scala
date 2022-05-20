@@ -144,7 +144,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
   test("pad_NOT_NEGATIVE") {
     provider_pad.foreach {
       case (minPad, maxPad, value, result) =>
-        super.beforeEach
+        super.beforeEach()
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
@@ -172,7 +172,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
   test("pad_NEVER") {
     provider_pad.foreach {
       case (minPad, maxPad, value, result) =>
-        super.beforeEach
+        super.beforeEach()
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
@@ -199,7 +199,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
   test("pad_NORMAL") {
     provider_pad.foreach {
       case (minPad, maxPad, value, result) =>
-        super.beforeEach
+        super.beforeEach()
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
@@ -226,7 +226,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
   test("pad_ALWAYS") {
     provider_pad.foreach {
       case (minPad, maxPad, value, result) =>
-        super.beforeEach
+        super.beforeEach()
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =
           new TTBPDateTimeFormatterBuilder.NumberPrinterParser(DAY_OF_MONTH,
@@ -253,7 +253,7 @@ class TestNumberPrinter extends AnyFunSuite with GenTestPrinterParser with Asser
   test("pad_EXCEEDS_PAD") {
     provider_pad.foreach {
       case (minPad, maxPad, value, result) =>
-        super.beforeEach
+        super.beforeEach()
         var _result                                              = result
         printContext.setDateTime(new MockFieldValue(DAY_OF_MONTH, value))
         val pp: TTBPDateTimeFormatterBuilder.NumberPrinterParser =

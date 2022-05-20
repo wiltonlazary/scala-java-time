@@ -59,9 +59,8 @@ class TestDateTimeFormatterBuilder
 
   private var builder: DateTimeFormatterBuilder = null
 
-  override def beforeEach() {
+  override def beforeEach() =
     builder = new DateTimeFormatterBuilder
-  }
 
   test("test_toFormatter_empty") {
     val f: DateTimeFormatter = builder.toFormatter
@@ -447,9 +446,9 @@ class TestDateTimeFormatterBuilder
     builder
       .appendValue(MONTH_OF_YEAR)
       .padNext(5)
-      .optionalStart
+      .optionalStart()
       .appendValue(DAY_OF_MONTH)
-      .optionalEnd
+      .optionalEnd()
       .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)Pad([Value(DayOfMonth)],5)Value(DayOfWeek)")
@@ -458,7 +457,7 @@ class TestDateTimeFormatterBuilder
   test("test_optionalStart_noEnd") {
     builder
       .appendValue(MONTH_OF_YEAR)
-      .optionalStart
+      .optionalStart()
       .appendValue(DAY_OF_MONTH)
       .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
@@ -468,16 +467,16 @@ class TestDateTimeFormatterBuilder
   test("test_optionalStart2_noEnd") {
     builder
       .appendValue(MONTH_OF_YEAR)
-      .optionalStart
+      .optionalStart()
       .appendValue(DAY_OF_MONTH)
-      .optionalStart
+      .optionalStart()
       .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[Value(DayOfMonth)[Value(DayOfWeek)]]")
   }
 
   test("test_optionalStart_doubleStart") {
-    builder.appendValue(MONTH_OF_YEAR).optionalStart.optionalStart.appendValue(DAY_OF_MONTH)
+    builder.appendValue(MONTH_OF_YEAR).optionalStart().optionalStart().appendValue(DAY_OF_MONTH)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[[Value(DayOfMonth)]]")
   }
@@ -485,9 +484,9 @@ class TestDateTimeFormatterBuilder
   test("test_optionalEnd") {
     builder
       .appendValue(MONTH_OF_YEAR)
-      .optionalStart
+      .optionalStart()
       .appendValue(DAY_OF_MONTH)
-      .optionalEnd
+      .optionalEnd()
       .appendValue(DAY_OF_WEEK)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[Value(DayOfMonth)]Value(DayOfWeek)")
@@ -496,13 +495,13 @@ class TestDateTimeFormatterBuilder
   test("test_optionalEnd2") {
     builder
       .appendValue(MONTH_OF_YEAR)
-      .optionalStart
+      .optionalStart()
       .appendValue(DAY_OF_MONTH)
-      .optionalStart
+      .optionalStart()
       .appendValue(DAY_OF_WEEK)
-      .optionalEnd
+      .optionalEnd()
       .appendValue(DAY_OF_MONTH)
-      .optionalEnd
+      .optionalEnd()
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString,
                  "Value(MonthOfYear)[Value(DayOfMonth)[Value(DayOfWeek)]Value(DayOfMonth)]"
@@ -512,10 +511,10 @@ class TestDateTimeFormatterBuilder
   test("test_optionalEnd_doubleStartSingleEnd") {
     builder
       .appendValue(MONTH_OF_YEAR)
-      .optionalStart
-      .optionalStart
+      .optionalStart()
+      .optionalStart()
       .appendValue(DAY_OF_MONTH)
-      .optionalEnd
+      .optionalEnd()
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[[Value(DayOfMonth)]]")
   }
@@ -523,24 +522,24 @@ class TestDateTimeFormatterBuilder
   test("test_optionalEnd_doubleStartDoubleEnd") {
     builder
       .appendValue(MONTH_OF_YEAR)
-      .optionalStart
-      .optionalStart
+      .optionalStart()
+      .optionalStart()
       .appendValue(DAY_OF_MONTH)
-      .optionalEnd
-      .optionalEnd
+      .optionalEnd()
+      .optionalEnd()
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)[[Value(DayOfMonth)]]")
   }
 
   test("test_optionalStartEnd_immediateStartEnd") {
-    builder.appendValue(MONTH_OF_YEAR).optionalStart.optionalEnd.appendValue(DAY_OF_MONTH)
+    builder.appendValue(MONTH_OF_YEAR).optionalStart().optionalEnd().appendValue(DAY_OF_MONTH)
     val f: DateTimeFormatter = builder.toFormatter
     assertEquals(f.toString, "Value(MonthOfYear)Value(DayOfMonth)")
   }
 
   test("test_optionalEnd_noStart") {
     assertThrows[IllegalStateException] {
-      builder.optionalEnd
+      builder.optionalEnd()
     }
   }
 
